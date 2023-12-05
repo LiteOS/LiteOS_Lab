@@ -1,0 +1,311 @@
+GAS LISTING /tmp/ccrcijIq.s 			page 1
+
+
+   1              		.file	"vswscanf_s.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.SecWcslen,"ax",@progbits
+   6              	SecWcslen:
+   7              	.LFB6:
+   8              		.file 1 "/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c"
+   1:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** /*
+   2:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+   3:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *
+   4:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *
+   8:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *
+  10:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  */
+  15:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** 
+  16:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** #include "secinput.h"
+  17:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** 
+  18:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** static size_t SecWcslen(const wchar_t *s)
+  19:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** {
+   9              		.loc 1 19 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC20 		subq	$32, %rsp
+  20 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  21              		.loc 1 19 1
+  22 0010 64488B04 		movq	%fs:40, %rax
+  22      25280000 
+  22      00
+  23 0019 488945F8 		movq	%rax, -8(%rbp)
+  24 001d 31C0     		xorl	%eax, %eax
+  20:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     const wchar_t *end = s;
+  25              		.loc 1 20 20
+  26 001f 488B45E8 		movq	-24(%rbp), %rax
+  27 0023 488945F0 		movq	%rax, -16(%rbp)
+  21:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     while (*end != L'\0') {
+  28              		.loc 1 21 11
+  29 0027 EB05     		jmp	.L2
+  30              	.L3:
+  22:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         ++end;
+  31              		.loc 1 22 9
+  32 0029 488345F0 		addq	$4, -16(%rbp)
+  32      04
+  33              	.L2:
+GAS LISTING /tmp/ccrcijIq.s 			page 2
+
+
+  21:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     while (*end != L'\0') {
+  34              		.loc 1 21 12
+  35 002e 488B45F0 		movq	-16(%rbp), %rax
+  36 0032 8B00     		movl	(%rax), %eax
+  21:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     while (*end != L'\0') {
+  37              		.loc 1 21 11
+  38 0034 85C0     		testl	%eax, %eax
+  39 0036 75F1     		jne	.L3
+  23:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     }
+  24:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     return ((size_t)((end - s)));
+  40              		.loc 1 24 27
+  41 0038 488B45F0 		movq	-16(%rbp), %rax
+  42 003c 482B45E8 		subq	-24(%rbp), %rax
+  43 0040 48C1F802 		sarq	$2, %rax
+  25:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** }
+  44              		.loc 1 25 1
+  45 0044 488B55F8 		movq	-8(%rbp), %rdx
+  46 0048 64483314 		xorq	%fs:40, %rdx
+  46      25280000 
+  46      00
+  47 0051 7405     		je	.L5
+  48 0053 E8000000 		call	__stack_chk_fail@PLT
+  48      00
+  49              	.L5:
+  50 0058 C9       		leave
+  51              	.LCFI2:
+  52              		.cfi_def_cfa 7, 8
+  53 0059 C3       		ret
+  54              		.cfi_endproc
+  55              	.LFE6:
+  57              		.section	.text.vswscanf_s,"ax",@progbits
+  58              		.globl	vswscanf_s
+  60              	vswscanf_s:
+  61              	.LFB7:
+  26:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** 
+  27:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** /*
+  28:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * <FUNCTION DESCRIPTION>
+  29:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    The  vswscanf_s  function  is  the  wide-character  equivalent  of the vsscanf_s function
+  30:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    The vsscanf_s function reads data from buffer into the location given by
+  31:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    each argument. Every argument must be a pointer to a variable with a type
+  32:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    that corresponds to a type specifier in format.
+  33:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    The format argument controls the interpretation of the input fields and
+  34:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    has the same form and function as the format argument for the scanf function.
+  35:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    If copying takes place between strings that overlap, the behavior is undefined.
+  36:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *
+  37:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * <INPUT PARAMETERS>
+  38:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    buffer                Stored data
+  39:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    format                Format control string, see Format Specifications.
+  40:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    argList               pointer to list of arguments
+  41:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *
+  42:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * <OUTPUT PARAMETERS>
+  43:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    argList               the converted value stored in user assigned address
+  44:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *
+  45:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  * <RETURN VALUE>
+  46:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    Each of these functions returns the number of fields successfully converted
+  47:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    and assigned; the return value does not include fields that were read but
+  48:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    not assigned. A return value of 0 indicates that no fields were assigned.
+GAS LISTING /tmp/ccrcijIq.s 			page 3
+
+
+  49:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  *    return -1 if an error occurs.
+  50:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****  */
+  51:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** int vswscanf_s(const wchar_t *buffer, const wchar_t *format, va_list argList)
+  52:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** {
+  62              		.loc 1 52 1
+  63              		.cfi_startproc
+  64 0000 F30F1EFA 		endbr64
+  65 0004 55       		pushq	%rbp
+  66              	.LCFI3:
+  67              		.cfi_def_cfa_offset 16
+  68              		.cfi_offset 6, -16
+  69 0005 4889E5   		movq	%rsp, %rbp
+  70              	.LCFI4:
+  71              		.cfi_def_cfa_register 6
+  72 0008 4883EC70 		subq	$112, %rsp
+  73 000c 48897DA8 		movq	%rdi, -88(%rbp)
+  74 0010 488975A0 		movq	%rsi, -96(%rbp)
+  75 0014 48895598 		movq	%rdx, -104(%rbp)
+  76              		.loc 1 52 1
+  77 0018 64488B04 		movq	%fs:40, %rax
+  77      25280000 
+  77      00
+  78 0021 488945F8 		movq	%rax, -8(%rbp)
+  79 0025 31C0     		xorl	%eax, %eax
+  53:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     size_t count; /* If initialization causes  e838 */
+  54:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     SecFileStream fStr;
+  55:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     int retVal;
+  56:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** 
+  57:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     /* validation section */
+  58:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     if (buffer == NULL || format == NULL) {
+  80              		.loc 1 58 8
+  81 0027 48837DA8 		cmpq	$0, -88(%rbp)
+  81      00
+  82 002c 7407     		je	.L7
+  83              		.loc 1 58 24 discriminator 1
+  84 002e 48837DA0 		cmpq	$0, -96(%rbp)
+  84      00
+  85 0033 750A     		jne	.L8
+  86              	.L7:
+  59:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vswscanf_s");
+  60:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         return SECUREC_SCANF_EINVAL;
+  87              		.loc 1 60 16
+  88 0035 B8FFFFFF 		movl	$-1, %eax
+  88      FF
+  89 003a E9A10000 		jmp	.L13
+  89      00
+  90              	.L8:
+  61:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     }
+  62:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     count = SecWcslen(buffer);
+  91              		.loc 1 62 13
+  92 003f 488B45A8 		movq	-88(%rbp), %rax
+  93 0043 4889C7   		movq	%rax, %rdi
+  94 0046 E8000000 		call	SecWcslen
+  94      00
+  95 004b 488945B8 		movq	%rax, -72(%rbp)
+  63:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     if (count == 0 || count > SECUREC_WCHAR_STRING_MAX_LEN) {
+  96              		.loc 1 63 8
+GAS LISTING /tmp/ccrcijIq.s 			page 4
+
+
+  97 004f 48837DB8 		cmpq	$0, -72(%rbp)
+  97      00
+  98 0054 740A     		je	.L10
+  99              		.loc 1 63 20 discriminator 1
+ 100 0056 48817DB8 		cmpq	$536870911, -72(%rbp)
+ 100      FFFFFF1F 
+ 101 005e 761E     		jbe	.L11
+ 102              	.L10:
+  64:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         SecClearDestBufW(buffer, format, argList);
+ 103              		.loc 1 64 9
+ 104 0060 488B5598 		movq	-104(%rbp), %rdx
+ 105 0064 488B4DA0 		movq	-96(%rbp), %rcx
+ 106 0068 488B45A8 		movq	-88(%rbp), %rax
+ 107 006c 4889CE   		movq	%rcx, %rsi
+ 108 006f 4889C7   		movq	%rax, %rdi
+ 109 0072 E8000000 		call	SecClearDestBufW@PLT
+ 109      00
+  65:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vswscanf_s");
+  66:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         return SECUREC_SCANF_EINVAL;
+ 110              		.loc 1 66 16
+ 111 0077 B8FFFFFF 		movl	$-1, %eax
+ 111      FF
+ 112 007c EB62     		jmp	.L13
+ 113              	.L11:
+  67:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     }
+  68:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     SECUREC_INIT_SEC_FILE_STREAM(fStr, SECUREC_MEM_STR_FLAG, NULL, 0,\
+ 114              		.loc 1 68 5
+ 115 007e C745C001 		movl	$1, -64(%rbp)
+ 115      000000
+ 116 0085 488B45B8 		movq	-72(%rbp), %rax
+ 117 0089 C1E002   		sall	$2, %eax
+ 118 008c 8945C4   		movl	%eax, -60(%rbp)
+ 119 008f 488B45A8 		movq	-88(%rbp), %rax
+ 120 0093 488945C8 		movq	%rax, -56(%rbp)
+ 121 0097 48C745D0 		movq	$0, -48(%rbp)
+ 121      00000000 
+ 122 009f 48C745D8 		movq	$0, -40(%rbp)
+ 122      00000000 
+ 123 00a7 48C745E0 		movq	$0, -32(%rbp)
+ 123      00000000 
+ 124 00af C745E800 		movl	$0, -24(%rbp)
+ 124      000000
+  69:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****                                  (const char *)buffer, (int)count * ((int)sizeof(wchar_t)));
+  70:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     retVal = SecInputSW(&fStr, format, argList);
+ 125              		.loc 1 70 14
+ 126 00b6 488B5598 		movq	-104(%rbp), %rdx
+ 127 00ba 488B4DA0 		movq	-96(%rbp), %rcx
+ 128 00be 488D45C0 		leaq	-64(%rbp), %rax
+ 129 00c2 4889CE   		movq	%rcx, %rsi
+ 130 00c5 4889C7   		movq	%rax, %rdi
+ 131 00c8 E8000000 		call	SecInputSW@PLT
+ 131      00
+ 132 00cd 8945B4   		movl	%eax, -76(%rbp)
+  71:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     if (retVal < 0) {
+ 133              		.loc 1 71 8
+ 134 00d0 837DB400 		cmpl	$0, -76(%rbp)
+ 135 00d4 7907     		jns	.L12
+GAS LISTING /tmp/ccrcijIq.s 			page 5
+
+
+  72:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vswscanf_s");
+  73:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****         return SECUREC_SCANF_EINVAL;
+ 136              		.loc 1 73 16
+ 137 00d6 B8FFFFFF 		movl	$-1, %eax
+ 137      FF
+ 138 00db EB03     		jmp	.L13
+ 139              	.L12:
+  74:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     }
+  75:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c ****     return retVal;
+ 140              		.loc 1 75 12
+ 141 00dd 8B45B4   		movl	-76(%rbp), %eax
+ 142              	.L13:
+  76:/home/xingli/share/1205tiny/secure_c/src/vswscanf_s.c **** }
+ 143              		.loc 1 76 1 discriminator 1
+ 144 00e0 488B75F8 		movq	-8(%rbp), %rsi
+ 145 00e4 64483334 		xorq	%fs:40, %rsi
+ 145      25280000 
+ 145      00
+ 146 00ed 7405     		je	.L14
+ 147              		.loc 1 76 1 is_stmt 0
+ 148 00ef E8000000 		call	__stack_chk_fail@PLT
+ 148      00
+ 149              	.L14:
+ 150 00f4 C9       		leave
+ 151              	.LCFI5:
+ 152              		.cfi_def_cfa 7, 8
+ 153 00f5 C3       		ret
+ 154              		.cfi_endproc
+ 155              	.LFE7:
+ 157              		.text
+ 158              	.Letext0:
+ 159              		.file 2 "<built-in>"
+ 160              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 161              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 162              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 163              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 164              		.file 7 "/usr/include/stdio.h"
+ 165              		.file 8 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 166              		.file 9 "/home/xingli/share/1205tiny/secure_c/src/secinput.h"
+ 1464              		.section	.note.gnu.property,"a"
+ 1465              		.align 8
+ 1466 0000 04000000 		.long	 1f - 0f
+ 1467 0004 10000000 		.long	 4f - 1f
+ 1468 0008 05000000 		.long	 5
+ 1469              	0:
+ 1470 000c 474E5500 		.string	 "GNU"
+ 1471              	1:
+ 1472              		.align 8
+ 1473 0010 020000C0 		.long	 0xc0000002
+ 1474 0014 04000000 		.long	 3f - 2f
+ 1475              	2:
+ 1476 0018 03000000 		.long	 0x3
+ 1477              	3:
+ 1478 001c 00000000 		.align 8
+ 1479              	4:
+GAS LISTING /tmp/ccrcijIq.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 vswscanf_s.c
+     /tmp/ccrcijIq.s:6      .text.SecWcslen:0000000000000000 SecWcslen
+     /tmp/ccrcijIq.s:60     .text.vswscanf_s:0000000000000000 vswscanf_s
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+SecClearDestBufW
+SecInputSW

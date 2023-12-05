@@ -1,0 +1,1254 @@
+GAS LISTING /tmp/ccMVv3hw.s 			page 1
+
+
+   1              		.file	"strncpy_s.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.SecDoMemcpy,"ax",@progbits
+   6              	SecDoMemcpy:
+   7              	.LFB6:
+   8              		.file 1 "/home/xingli/share/1205tiny/secure_c/src/securecutil.h"
+   1:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /*
+   2:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+   3:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  *
+   4:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  *
+   8:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  *
+  10:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  */
+  15:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+  16:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECURECUTIL_H_46C86578_F8FF_4E49_8E64_9B175241761F
+  17:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECURECUTIL_H_46C86578_F8FF_4E49_8E64_9B175241761F
+  18:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #include "securec.h"
+  19:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+  20:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if (defined(_MSC_VER)) && (_MSC_VER >= 1400)
+  21:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MASK_MSVC_CRT_WARNING __pragma(warning(push)) \
+  22:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     __pragma(warning(disable:4996 4127))
+  23:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_END_MASK_MSVC_CRT_WARNING  __pragma(warning(pop))
+  24:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+  25:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MASK_MSVC_CRT_WARNING
+  26:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_END_MASK_MSVC_CRT_WARNING
+  27:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  28:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_WHILE_ZERO SECUREC_MASK_MSVC_CRT_WARNING while (0) SECUREC_END_MASK_MSVC_CRT_WARNIN
+  29:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+  30:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_STRNLEN
+  31:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if (defined(_XOPEN_SOURCE) && _XOPEN_SOURCE >= 700) || (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURC
+  32:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if SECUREC_IN_KERNEL
+  33:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 0
+  34:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+  35:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(__GLIBC__) && __GLIBC__ >= 2 && defined(__GLIBC_MINOR__) && __GLIBC_MINOR__ >= 10
+  36:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 1
+  37:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+  38:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 0
+  39:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  40:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  41:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+  42:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_STRNLEN 0
+  43:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  44:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  45:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+  46:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if SECUREC_IN_KERNEL
+  47:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* in kernel disbale functions */
+  48:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FILE
+  49:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FILE 0
+  50:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+GAS LISTING /tmp/ccMVv3hw.s 			page 2
+
+
+  51:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FLOAT
+  52:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FLOAT 0
+  53:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  54:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SPRINTF_FLOAT
+  55:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SPRINTF_FLOAT 0
+  56:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  57:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_MBTOWC
+  58:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_MBTOWC 0
+  59:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  60:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCTOMB
+  61:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCTOMB 0
+  62:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  63:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCHART
+  64:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCHART 0
+  65:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  66:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else /* no in kernel */
+  67:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* Systems that do not support file, can define this macro to 0. */
+  68:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FILE
+  69:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FILE 1
+  70:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  71:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SCANF_FLOAT
+  72:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SCANF_FLOAT 1
+  73:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  74:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* Systems that do not support float, can define this macro to 0. */
+  75:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_ENABLE_SPRINTF_FLOAT
+  76:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ENABLE_SPRINTF_FLOAT 1
+  77:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  78:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_MBTOWC
+  79:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_MBTOWC 1
+  80:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  81:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCTOMB
+  82:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCTOMB 1
+  83:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  84:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_HAVE_WCHART
+  85:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_HAVE_WCHART 1
+  86:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  87:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+  88:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+  89:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+  90:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_INT_MAX                     2147483647
+  91:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MUL_SIXTEEN(x)              ((x) << 4)
+  92:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MUL_EIGHT(x)                ((x) << 3)
+  93:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MUL_TEN(x)                  ((((x) << 2) + (x)) << 1)
+  94:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* Limited format input and output width */
+  95:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MAX_WIDTH_LEN_DIV_TEN       21474836
+  96:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MAX_WIDTH_LEN               SECUREC_MUL_TEN(SECUREC_MAX_WIDTH_LEN_DIV_TEN)
+  97:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* Is the x multiplied by 10 greater than */
+  98:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MUL_TEN_ADD_BEYOND_MAX(x)   (((x) > SECUREC_MAX_WIDTH_LEN_DIV_TEN))
+  99:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 100:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_FLOAT_BUFSIZE               (309 + 40)  /* Max length of double value */
+ 101:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_FLOAT_BUFSIZE_LB            (4932 + 40) /* Max length of long double value */
+ 102:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_FLOAT_DEFAULT_PRECISION     6
+ 103:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 104:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* This macro does not handle pointer equality or integer overflow */
+ 105:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MEMORY_NO_OVERLAP(dest, src, count) \
+ 106:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (((src) < (dest) && ((const char *)(src) + (count)) <= (char *)(dest)) || \
+ 107:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     ((dest) < (src) && ((char *)(dest) + (count)) <= (const char *)(src)))
+GAS LISTING /tmp/ccMVv3hw.s 			page 3
+
+
+ 108:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 109:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MEMORY_IS_OVERLAP(dest, src, count) \
+ 110:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (((src) < (dest) && ((const char *)(src) + (count)) > (char *)(dest)) || \
+ 111:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     ((dest) < (src) && ((char *)(dest) + (count)) > (const char *)(src)))
+ 112:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 113:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /*
+ 114:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Check whether the strings overlap, len is the length of the string not include terminator
+ 115:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Length is related to data type char or wchar , do not force conversion of types
+ 116:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  */
+ 117:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_STRING_NO_OVERLAP(dest, src, len) \
+ 118:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (((src) < (dest) && ((src) + (len)) < (dest)) || \
+ 119:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     ((dest) < (src) && ((dest) + (len)) < (src)))
+ 120:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 121:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /*
+ 122:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Check whether the strings overlap for strcpy wcscpy function, dest len and src Len are not inclu
+ 123:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Length is related to data type char or wchar , do not force conversion of types
+ 124:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  */
+ 125:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_STRING_IS_OVERLAP(dest, src, len) \
+ 126:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (((src) < (dest) && ((src) + (len)) >= (dest)) || \
+ 127:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     ((dest) < (src) && ((dest) + (len)) >= (src)))
+ 128:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 129:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /*
+ 130:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Check whether the strings overlap for strcat wcscat function, dest len and src Len are not inclu
+ 131:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Length is related to data type char or wchar , do not force conversion of types
+ 132:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  */
+ 133:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_CAT_STRING_IS_OVERLAP(dest, destLen, src, srcLen) \
+ 134:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (((dest) < (src) && ((dest) + (destLen) + (srcLen)) >= (src)) || \
+ 135:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     ((src) < (dest) && ((src) + (srcLen)) >= (dest)))
+ 136:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 137:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 138:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if SECUREC_HAVE_STRNLEN
+ 139:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN(str, maxLen, outLen) do { \
+ 140:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     *(outLen) = strnlen((str), (maxLen)); \
+ 141:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 142:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN_OPT(str, maxLen, outLen) do { \
+ 143:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     if ((maxLen) > 8) { \
+ 144:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         /* Optimization or len less then 8 */ \
+ 145:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         if (*((str) + 0) == '\0') { \
+ 146:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 0; \
+ 147:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 1) == '\0') { \
+ 148:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 1; \
+ 149:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 2) == '\0') { \
+ 150:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 2; \
+ 151:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 3) == '\0') { \
+ 152:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 3; \
+ 153:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 4) == '\0') { \
+ 154:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 4; \
+ 155:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 5) == '\0') { \
+ 156:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 5; \
+ 157:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 6) == '\0') { \
+ 158:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 6; \
+ 159:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 7) == '\0') { \
+ 160:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 7; \
+ 161:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else if (*((str) + 8) == '\0') { \
+ 162:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             /* Optimization with a length of 8 */ \
+ 163:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 8; \
+ 164:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } else { \
+GAS LISTING /tmp/ccMVv3hw.s 			page 4
+
+
+ 165:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             /* The offset is 8 because the performance of 8 byte alignment is high */ \
+ 166:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****             *(outLen) = 8 + strnlen((str) + 8, (maxLen) - 8); \
+ 167:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         } \
+ 168:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     } else { \
+ 169:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         SECUREC_CALC_STR_LEN((str), (maxLen), (outLen)); \
+ 170:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     } \
+ 171:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 172:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+ 173:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN(str, maxLen, outLen) do { \
+ 174:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     const char *strEnd = (const char *)(str); \
+ 175:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     size_t availableSize = (size_t)(maxLen); \
+ 176:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     while (availableSize > 0 && *strEnd != '\0') { \
+ 177:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         --availableSize; \
+ 178:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         ++strEnd; \
+ 179:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     } \
+ 180:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     *(outLen) = (size_t)(strEnd - (str)); \
+ 181:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 182:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_CALC_STR_LEN_OPT SECUREC_CALC_STR_LEN
+ 183:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 184:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 185:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_CALC_WSTR_LEN(str, maxLen, outLen) do { \
+ 186:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     const wchar_t *strEnd = (const wchar_t *)(str); \
+ 187:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     *(outLen) = 0; \
+ 188:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     while (*(outLen) < (maxLen) && *strEnd != L'\0') { \
+ 189:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         *(outLen) = *(outLen) + 1; \
+ 190:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****         ++strEnd; \
+ 191:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     } \
+ 192:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SECUREC_WHILE_ZERO
+ 193:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 194:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 195:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_FORMAT_OUTPUT_INPUT
+ 196:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(SECUREC_COMPATIBLE_WIN_FORMAT) || defined(__ARMCC_VERSION)
+ 197:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef __int64 SecInt64;
+ 198:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef unsigned __int64 SecUnsignedInt64;
+ 199:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(__ARMCC_VERSION)
+ 200:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef unsigned int SecUnsignedInt32;
+ 201:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+ 202:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef unsigned __int32 SecUnsignedInt32;
+ 203:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 204:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+ 205:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef unsigned int SecUnsignedInt32;
+ 206:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef long long SecInt64;
+ 207:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef unsigned long long SecUnsignedInt64;
+ 208:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 209:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 210:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_FOR_WCHAR
+ 211:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(SECUREC_VXWORKS_PLATFORM) && !defined(__WINT_TYPE__)
+ 212:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef wchar_t wint_t;
+ 213:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 214:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef wchar_t SecChar;
+ 215:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef wchar_t SecUnsignedChar;
+ 216:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef wint_t SecInt;
+ 217:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef wint_t SecUnsignedInt;
+ 218:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else /*  no SECUREC_FOR_WCHAR */
+ 219:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef char SecChar;
+ 220:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef unsigned char SecUnsignedChar;
+ 221:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef int SecInt;
+GAS LISTING /tmp/ccMVv3hw.s 			page 5
+
+
+ 222:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef unsigned int SecUnsignedInt;
+ 223:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 224:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 225:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 226:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* Determine whether the address is 8-byte aligned
+ 227:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * Some systems do not have uintptr_t type, so  use NULL to clear tool alarm 507
+ 228:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  */
+ 229:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ADDR_ALIGNED_8(addr) (SecIsAddrAligned8((addr), NULL) == 0)
+ 230:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 231:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* If you define the memory allocation function,
+ 232:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * you need to define the function prototype. You can define this macro as a header file.
+ 233:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  */
+ 234:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(SECUREC_MALLOC_PROTOTYPE)
+ 235:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** SECUREC_MALLOC_PROTOTYPE
+ 236:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 237:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 238:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_MALLOC
+ 239:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_MALLOC(x) malloc((size_t)(x))
+ 240:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 241:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 242:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifndef SECUREC_FREE
+ 243:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_FREE(x)   free((void *)(x))
+ 244:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 245:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 246:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* struct for performance */
+ 247:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 248:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[1]; /* Performance optimization code structure assignment length 1 bytes */
+ 249:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf1;
+ 250:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 251:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[2]; /* Performance optimization code structure assignment length 2 bytes */
+ 252:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf2;
+ 253:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 254:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[3]; /* Performance optimization code structure assignment length 3 bytes */
+ 255:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf3;
+ 256:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 257:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[4]; /* Performance optimization code structure assignment length 4 bytes */
+ 258:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf4;
+ 259:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 260:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[5]; /* Performance optimization code structure assignment length 5 bytes */
+ 261:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf5;
+ 262:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 263:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[6]; /* Performance optimization code structure assignment length 6 bytes */
+ 264:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf6;
+ 265:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 266:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[7]; /* Performance optimization code structure assignment length 7 bytes */
+ 267:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf7;
+ 268:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 269:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[8]; /* Performance optimization code structure assignment length 8 bytes */
+ 270:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf8;
+ 271:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 272:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[9]; /* Performance optimization code structure assignment length 9 bytes */
+ 273:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf9;
+ 274:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 275:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[10]; /* Performance optimization code structure assignment length 10 bytes */
+ 276:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf10;
+ 277:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 278:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[11]; /* Performance optimization code structure assignment length 11 bytes */
+GAS LISTING /tmp/ccMVv3hw.s 			page 6
+
+
+ 279:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf11;
+ 280:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 281:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[12]; /* Performance optimization code structure assignment length 12 bytes */
+ 282:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf12;
+ 283:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 284:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[13]; /* Performance optimization code structure assignment length 13 bytes */
+ 285:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf13;
+ 286:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 287:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[14]; /* Performance optimization code structure assignment length 14 bytes */
+ 288:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf14;
+ 289:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 290:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[15]; /* Performance optimization code structure assignment length 15 bytes */
+ 291:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf15;
+ 292:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 293:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[16]; /* Performance optimization code structure assignment length 16 bytes */
+ 294:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf16;
+ 295:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 296:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[17]; /* Performance optimization code structure assignment length 17 bytes */
+ 297:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf17;
+ 298:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 299:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[18]; /* Performance optimization code structure assignment length 18 bytes */
+ 300:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf18;
+ 301:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 302:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[19]; /* Performance optimization code structure assignment length 19 bytes */
+ 303:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf19;
+ 304:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 305:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[20]; /* Performance optimization code structure assignment length 20 bytes */
+ 306:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf20;
+ 307:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 308:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[21]; /* Performance optimization code structure assignment length 21 bytes */
+ 309:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf21;
+ 310:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 311:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[22]; /* Performance optimization code structure assignment length 22 bytes */
+ 312:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf22;
+ 313:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 314:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[23]; /* Performance optimization code structure assignment length 23 bytes */
+ 315:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf23;
+ 316:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 317:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[24]; /* Performance optimization code structure assignment length 24 bytes */
+ 318:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf24;
+ 319:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 320:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[25]; /* Performance optimization code structure assignment length 25 bytes */
+ 321:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf25;
+ 322:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 323:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[26]; /* Performance optimization code structure assignment length 26 bytes */
+ 324:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf26;
+ 325:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 326:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[27]; /* Performance optimization code structure assignment length 27 bytes */
+ 327:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf27;
+ 328:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 329:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[28]; /* Performance optimization code structure assignment length 28 bytes */
+ 330:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf28;
+ 331:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 332:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[29]; /* Performance optimization code structure assignment length 29 bytes */
+ 333:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf29;
+ 334:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 335:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[30]; /* Performance optimization code structure assignment length 30 bytes */
+GAS LISTING /tmp/ccMVv3hw.s 			page 7
+
+
+ 336:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf30;
+ 337:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 338:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[31]; /* Performance optimization code structure assignment length 31 bytes */
+ 339:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf31;
+ 340:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 341:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[32]; /* Performance optimization code structure assignment length 32 bytes */
+ 342:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf32;
+ 343:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 344:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[33]; /* Performance optimization code structure assignment length 33 bytes */
+ 345:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf33;
+ 346:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 347:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[34]; /* Performance optimization code structure assignment length 34 bytes */
+ 348:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf34;
+ 349:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 350:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[35]; /* Performance optimization code structure assignment length 35 bytes */
+ 351:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf35;
+ 352:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 353:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[36]; /* Performance optimization code structure assignment length 36 bytes */
+ 354:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf36;
+ 355:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 356:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[37]; /* Performance optimization code structure assignment length 37 bytes */
+ 357:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf37;
+ 358:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 359:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[38]; /* Performance optimization code structure assignment length 38 bytes */
+ 360:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf38;
+ 361:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 362:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[39]; /* Performance optimization code structure assignment length 39 bytes */
+ 363:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf39;
+ 364:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 365:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[40]; /* Performance optimization code structure assignment length 40 bytes */
+ 366:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf40;
+ 367:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 368:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[41]; /* Performance optimization code structure assignment length 41 bytes */
+ 369:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf41;
+ 370:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 371:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[42]; /* Performance optimization code structure assignment length 42 bytes */
+ 372:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf42;
+ 373:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 374:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[43]; /* Performance optimization code structure assignment length 43 bytes */
+ 375:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf43;
+ 376:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 377:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[44]; /* Performance optimization code structure assignment length 44 bytes */
+ 378:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf44;
+ 379:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 380:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[45]; /* Performance optimization code structure assignment length 45 bytes */
+ 381:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf45;
+ 382:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 383:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[46]; /* Performance optimization code structure assignment length 46 bytes */
+ 384:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf46;
+ 385:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 386:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[47]; /* Performance optimization code structure assignment length 47 bytes */
+ 387:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf47;
+ 388:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 389:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[48]; /* Performance optimization code structure assignment length 48 bytes */
+ 390:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf48;
+ 391:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 392:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[49]; /* Performance optimization code structure assignment length 49 bytes */
+GAS LISTING /tmp/ccMVv3hw.s 			page 8
+
+
+ 393:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf49;
+ 394:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 395:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[50]; /* Performance optimization code structure assignment length 50 bytes */
+ 396:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf50;
+ 397:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 398:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[51]; /* Performance optimization code structure assignment length 51 bytes */
+ 399:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf51;
+ 400:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 401:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[52]; /* Performance optimization code structure assignment length 52 bytes */
+ 402:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf52;
+ 403:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 404:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[53]; /* Performance optimization code structure assignment length 53 bytes */
+ 405:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf53;
+ 406:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 407:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[54]; /* Performance optimization code structure assignment length 54 bytes */
+ 408:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf54;
+ 409:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 410:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[55]; /* Performance optimization code structure assignment length 55 bytes */
+ 411:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf55;
+ 412:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 413:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[56]; /* Performance optimization code structure assignment length 56 bytes */
+ 414:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf56;
+ 415:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 416:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[57]; /* Performance optimization code structure assignment length 57 bytes */
+ 417:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf57;
+ 418:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 419:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[58]; /* Performance optimization code structure assignment length 58 bytes */
+ 420:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf58;
+ 421:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 422:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[59]; /* Performance optimization code structure assignment length 59 bytes */
+ 423:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf59;
+ 424:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 425:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[60]; /* Performance optimization code structure assignment length 60 bytes */
+ 426:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf60;
+ 427:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 428:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[61]; /* Performance optimization code structure assignment length 61 bytes */
+ 429:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf61;
+ 430:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 431:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[62]; /* Performance optimization code structure assignment length 62 bytes */
+ 432:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf62;
+ 433:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 434:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[63]; /* Performance optimization code structure assignment length 63 bytes */
+ 435:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf63;
+ 436:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** typedef struct {
+ 437:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     unsigned char buf[64]; /* Performance optimization code structure assignment length 64 bytes */
+ 438:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** } SecStrBuf64;
+ 439:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 440:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 441:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 442:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 443:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* User can change the error handler by modify the following definition,
+ 444:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  * such as logging the detail error in file.
+ 445:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****  */
+ 446:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(_DEBUG) || defined(DEBUG)
+ 447:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(SECUREC_ERROR_HANDLER_BY_ASSERT)
+ 448:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) assert(msg "invalid argument" == NULL)
+ 449:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    assert(msg "invalid dest buffer size" == NULL)
+GAS LISTING /tmp/ccMVv3hw.s 			page 9
+
+
+ 450:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   assert(msg "buffer overlap" == NULL)
+ 451:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #elif defined(SECUREC_ERROR_HANDLER_BY_PRINTF)
+ 452:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if SECUREC_IN_KERNEL
+ 453:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) printk("%s invalid argument\n", msg)
+ 454:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    printk("%s invalid dest buffer size\n", msg)
+ 455:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   printk("%s buffer overlap\n", msg)
+ 456:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+ 457:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) printf("%s invalid argument\n", msg)
+ 458:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    printf("%s invalid dest buffer size\n", msg)
+ 459:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   printf("%s buffer overlap\n", msg)
+ 460:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 461:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #elif defined(SECUREC_ERROR_HANDLER_BY_FILE_LOG)
+ 462:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) LogSecureCRuntimeError(msg " EINVAL\n")
+ 463:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    LogSecureCRuntimeError(msg " ERANGE\n")
+ 464:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   LogSecureCRuntimeError(msg " EOVERLAP\n")
+ 465:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else /* no HANDLER is defined */
+ 466:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) ((void)0)
+ 467:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    ((void)0)
+ 468:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   ((void)0)
+ 469:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 470:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else /* no DEBUG */
+ 471:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_PARAMTER(msg) ((void)0)
+ 472:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_INVALID_RANGE(msg)    ((void)0)
+ 473:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #define SECUREC_ERROR_BUFFER_OVERLAP(msg)   ((void)0)
+ 474:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 475:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 476:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef __cplusplus
+ 477:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** extern "C" {
+ 478:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 479:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 480:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* assembly language memory copy and memory set for X86 or MIPS ... */
+ 481:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_USE_ASM
+ 482:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     extern void *memcpy_opt(void *, const void *, size_t);
+ 483:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     extern void *memset_opt(void *, int, size_t);
+ 484:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 485:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 486:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #if defined(SECUREC_ERROR_HANDLER_BY_FILE_LOG)
+ 487:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     extern void LogSecureCRuntimeError(const char *errDetail);
+ 488:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 489:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 490:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_INLINE_DO_MEMCPY
+ 491:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** static void SecDoMemcpy(void *dest, const void *src, size_t count)
+ 492:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** {
+   9              		.loc 1 492 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC30 		subq	$48, %rsp
+  20 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  21 0010 488975E0 		movq	%rsi, -32(%rbp)
+  22 0014 488955D8 		movq	%rdx, -40(%rbp)
+GAS LISTING /tmp/ccMVv3hw.s 			page 10
+
+
+  23              		.loc 1 492 1
+  24 0018 64488B04 		movq	%fs:40, %rax
+  24      25280000 
+  24      00
+  25 0021 488945F8 		movq	%rax, -8(%rbp)
+  26 0025 31C0     		xorl	%eax, %eax
+ 493:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     /*
+ 494:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****      * if SECUREC_USE_ASM macro is enabled, it will call assembly language function to improve perf
+ 495:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****      */
+ 496:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_USE_ASM
+ 497:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (void)memcpy_opt(dest, src, count);
+ 498:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+ 499:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     /* large enough, let system API do it */
+ 500:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (void)memcpy(dest, src, count);
+  27              		.loc 1 500 11
+  28 0027 488B55D8 		movq	-40(%rbp), %rdx
+  29 002b 488B4DE0 		movq	-32(%rbp), %rcx
+  30 002f 488B45E8 		movq	-24(%rbp), %rax
+  31 0033 4889CE   		movq	%rcx, %rsi
+  32 0036 4889C7   		movq	%rax, %rdi
+  33 0039 E8000000 		call	memcpy@PLT
+  33      00
+ 501:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 502:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** }
+  34              		.loc 1 502 1
+  35 003e 90       		nop
+  36 003f 488B45F8 		movq	-8(%rbp), %rax
+  37 0043 64483304 		xorq	%fs:40, %rax
+  37      25280000 
+  37      00
+  38 004c 7405     		je	.L2
+  39 004e E8000000 		call	__stack_chk_fail@PLT
+  39      00
+  40              	.L2:
+  41 0053 C9       		leave
+  42              	.LCFI2:
+  43              		.cfi_def_cfa 7, 8
+  44 0054 C3       		ret
+  45              		.cfi_endproc
+  46              	.LFE6:
+  48              		.section	.text.SecStrMinLen,"ax",@progbits
+  50              	SecStrMinLen:
+  51              	.LFB7:
+ 503:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 504:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 505:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_INLINE_DO_MEMSET
+ 506:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** static void SecDoMemset(void *dest, int c, size_t count)
+ 507:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** {
+ 508:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_USE_ASM
+ 509:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (void)memset_opt(dest, c, count);
+ 510:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #else
+ 511:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     (void)memset(dest, c, count);
+ 512:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 513:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** }
+ 514:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #endif
+ 515:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** 
+ 516:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** #ifdef SECUREC_INLINE_STR_LEN
+GAS LISTING /tmp/ccMVv3hw.s 			page 11
+
+
+ 517:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** /* The function compiler will be inlined and not placed in other files */
+ 518:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** static size_t SecStrMinLen(const char *str, size_t maxLen)
+ 519:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** {
+  52              		.loc 1 519 1
+  53              		.cfi_startproc
+  54 0000 F30F1EFA 		endbr64
+  55 0004 55       		pushq	%rbp
+  56              	.LCFI3:
+  57              		.cfi_def_cfa_offset 16
+  58              		.cfi_offset 6, -16
+  59 0005 4889E5   		movq	%rsp, %rbp
+  60              	.LCFI4:
+  61              		.cfi_def_cfa_register 6
+  62 0008 4883EC20 		subq	$32, %rsp
+  63 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  64 0010 488975E0 		movq	%rsi, -32(%rbp)
+  65              		.loc 1 519 1
+  66 0014 64488B04 		movq	%fs:40, %rax
+  66      25280000 
+  66      00
+  67 001d 488945F8 		movq	%rax, -8(%rbp)
+  68 0021 31C0     		xorl	%eax, %eax
+ 520:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     size_t len;
+ 521:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     SECUREC_CALC_STR_LEN(str, maxLen, &len);
+  69              		.loc 1 521 5
+  70 0023 488B55E0 		movq	-32(%rbp), %rdx
+  71 0027 488B45E8 		movq	-24(%rbp), %rax
+  72 002b 4889D6   		movq	%rdx, %rsi
+  73 002e 4889C7   		movq	%rax, %rdi
+  74 0031 E8000000 		call	strnlen@PLT
+  74      00
+  75 0036 488945F0 		movq	%rax, -16(%rbp)
+ 522:/home/xingli/share/1205tiny/secure_c/src/securecutil.h ****     return len;
+  76              		.loc 1 522 12
+  77 003a 488B45F0 		movq	-16(%rbp), %rax
+ 523:/home/xingli/share/1205tiny/secure_c/src/securecutil.h **** }
+  78              		.loc 1 523 1
+  79 003e 488B4DF8 		movq	-8(%rbp), %rcx
+  80 0042 6448330C 		xorq	%fs:40, %rcx
+  80      25280000 
+  80      00
+  81 004b 7405     		je	.L5
+  82 004d E8000000 		call	__stack_chk_fail@PLT
+  82      00
+  83              	.L5:
+  84 0052 C9       		leave
+  85              	.LCFI5:
+  86              		.cfi_def_cfa 7, 8
+  87 0053 C3       		ret
+  88              		.cfi_endproc
+  89              	.LFE7:
+  91              		.section	.text.CheckSrcCountRange,"ax",@progbits
+  93              	CheckSrcCountRange:
+  94              	.LFB8:
+  95              		.file 2 "/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c"
+   1:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** /*
+   2:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+GAS LISTING /tmp/ccMVv3hw.s 			page 12
+
+
+   3:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *
+   4:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *
+   8:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *
+  10:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  */
+  15:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** /* [Standardize-exceptions] Use unsafe function: Performance-sensitive
+  16:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * [reason] Always used in the performance critical path,
+  17:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *          and sufficient input validation is performed before calling
+  18:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  */
+  19:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #define SECUREC_INLINE_STR_LEN 1
+  20:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #define SECUREC_INLINE_DO_MEMCPY 1
+  21:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** 
+  22:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #include "securecutil.h"
+  23:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** 
+  24:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #if defined(SECUREC_COMPATIBLE_WIN_FORMAT)
+  25:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #define SECUREC_STRNCPY_PARAM_OK(strDest, destMax, strSrc, count) \
+  26:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     (((destMax) > 0 && (destMax) <= SECUREC_STRING_MAX_LEN && (strDest) != NULL && (strSrc) != NULL
+  27:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     ((count) <= SECUREC_STRING_MAX_LEN || (count) == ((size_t)(-1))) && (count) > 0))
+  28:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #else
+  29:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #define SECUREC_STRNCPY_PARAM_OK(strDest, destMax, strSrc, count) \
+  30:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     (((destMax) > 0 && (destMax) <= SECUREC_STRING_MAX_LEN && (strDest) != NULL && (strSrc) != NULL
+  31:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     (count) <= SECUREC_STRING_MAX_LEN && (count) > 0))
+  32:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #endif
+  33:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** 
+  34:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** /*
+  35:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * Check Src Count Range
+  36:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  */
+  37:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** static errno_t CheckSrcCountRange(char *strDest, size_t destMax, const char *strSrc, size_t count)
+  38:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** {
+  96              		.loc 2 38 1
+  97              		.cfi_startproc
+  98 0000 F30F1EFA 		endbr64
+  99 0004 55       		pushq	%rbp
+ 100              	.LCFI6:
+ 101              		.cfi_def_cfa_offset 16
+ 102              		.cfi_offset 6, -16
+ 103 0005 4889E5   		movq	%rsp, %rbp
+ 104              	.LCFI7:
+ 105              		.cfi_def_cfa_register 6
+ 106 0008 4883EC40 		subq	$64, %rsp
+ 107 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 108 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 109 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 110 0018 48894DC0 		movq	%rcx, -64(%rbp)
+ 111              		.loc 2 38 1
+ 112 001c 64488B04 		movq	%fs:40, %rax
+ 112      25280000 
+ 112      00
+ 113 0025 488945F8 		movq	%rax, -8(%rbp)
+ 114 0029 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/ccMVv3hw.s 			page 13
+
+
+  39:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     size_t tmpDestMax = destMax;
+ 115              		.loc 2 39 12
+ 116 002b 488B45D0 		movq	-48(%rbp), %rax
+ 117 002f 488945E0 		movq	%rax, -32(%rbp)
+  40:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     size_t tmpCount = count;
+ 118              		.loc 2 40 12
+ 119 0033 488B45C0 		movq	-64(%rbp), %rax
+ 120 0037 488945E8 		movq	%rax, -24(%rbp)
+  41:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     const char *endPos = strSrc;
+ 121              		.loc 2 41 17
+ 122 003b 488B45C8 		movq	-56(%rbp), %rax
+ 123 003f 488945F0 		movq	%rax, -16(%rbp)
+  42:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** 
+  43:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     /* use destMax and  count as boundary checker and destMax must be greater than zero */
+  44:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     while (*(endPos) != '\0' && tmpDestMax > 0 && tmpCount > 0) {
+ 124              		.loc 2 44 11
+ 125 0043 EB0F     		jmp	.L7
+ 126              	.L9:
+  45:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         ++endPos;
+ 127              		.loc 2 45 9
+ 128 0045 488345F0 		addq	$1, -16(%rbp)
+ 128      01
+  46:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         --tmpCount;
+ 129              		.loc 2 46 9
+ 130 004a 48836DE8 		subq	$1, -24(%rbp)
+ 130      01
+  47:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         --tmpDestMax;
+ 131              		.loc 2 47 9
+ 132 004f 48836DE0 		subq	$1, -32(%rbp)
+ 132      01
+ 133              	.L7:
+  44:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         ++endPos;
+ 134              		.loc 2 44 12
+ 135 0054 488B45F0 		movq	-16(%rbp), %rax
+ 136 0058 0FB600   		movzbl	(%rax), %eax
+  44:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         ++endPos;
+ 137              		.loc 2 44 11
+ 138 005b 84C0     		testb	%al, %al
+ 139 005d 740E     		je	.L8
+  44:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         ++endPos;
+ 140              		.loc 2 44 30 discriminator 1
+ 141 005f 48837DE0 		cmpq	$0, -32(%rbp)
+ 141      00
+ 142 0064 7407     		je	.L8
+  44:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         ++endPos;
+ 143              		.loc 2 44 48 discriminator 2
+ 144 0066 48837DE8 		cmpq	$0, -24(%rbp)
+ 144      00
+ 145 006b 75D8     		jne	.L9
+ 146              	.L8:
+  48:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     }
+  49:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     if (tmpDestMax == 0) {
+ 147              		.loc 2 49 8
+ 148 006d 48837DE0 		cmpq	$0, -32(%rbp)
+ 148      00
+ 149 0072 750E     		jne	.L10
+  50:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         strDest[0] = '\0';
+GAS LISTING /tmp/ccMVv3hw.s 			page 14
+
+
+ 150              		.loc 2 50 20
+ 151 0074 488B45D8 		movq	-40(%rbp), %rax
+ 152 0078 C60000   		movb	$0, (%rax)
+  51:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         SECUREC_ERROR_INVALID_RANGE("strncpy_s");
+  52:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         return ERANGE_AND_RESET;
+ 153              		.loc 2 52 16
+ 154 007b B8A20000 		movl	$162, %eax
+ 154      00
+ 155 0080 EB05     		jmp	.L11
+ 156              	.L10:
+  53:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     }
+  54:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     return EOK;
+ 157              		.loc 2 54 12
+ 158 0082 B8000000 		movl	$0, %eax
+ 158      00
+ 159              	.L11:
+  55:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** }
+ 160              		.loc 2 55 1
+ 161 0087 488B55F8 		movq	-8(%rbp), %rdx
+ 162 008b 64483314 		xorq	%fs:40, %rdx
+ 162      25280000 
+ 162      00
+ 163 0094 7405     		je	.L12
+ 164 0096 E8000000 		call	__stack_chk_fail@PLT
+ 164      00
+ 165              	.L12:
+ 166 009b C9       		leave
+ 167              	.LCFI8:
+ 168              		.cfi_def_cfa 7, 8
+ 169 009c C3       		ret
+ 170              		.cfi_endproc
+ 171              	.LFE8:
+ 173              		.section	.text.strncpy_error,"ax",@progbits
+ 174              		.globl	strncpy_error
+ 176              	strncpy_error:
+ 177              	.LFB9:
+  56:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** 
+  57:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** /*
+  58:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * Handling errors, when dest euqal src return EOK
+  59:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  */
+  60:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** errno_t strncpy_error(char *strDest, size_t destMax, const char *strSrc, size_t count)
+  61:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** {
+ 178              		.loc 2 61 1
+ 179              		.cfi_startproc
+ 180 0000 F30F1EFA 		endbr64
+ 181 0004 55       		pushq	%rbp
+ 182              	.LCFI9:
+ 183              		.cfi_def_cfa_offset 16
+ 184              		.cfi_offset 6, -16
+ 185 0005 4889E5   		movq	%rsp, %rbp
+ 186              	.LCFI10:
+ 187              		.cfi_def_cfa_register 6
+ 188 0008 4883EC30 		subq	$48, %rsp
+ 189 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 190 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 191 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 192 0018 48894DD0 		movq	%rcx, -48(%rbp)
+GAS LISTING /tmp/ccMVv3hw.s 			page 15
+
+
+ 193              		.loc 2 61 1
+ 194 001c 64488B04 		movq	%fs:40, %rax
+ 194      25280000 
+ 194      00
+ 195 0025 488945F8 		movq	%rax, -8(%rbp)
+ 196 0029 31C0     		xorl	%eax, %eax
+  62:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     if (destMax == 0 || destMax > SECUREC_STRING_MAX_LEN) {
+ 197              		.loc 2 62 8
+ 198 002b 48837DE0 		cmpq	$0, -32(%rbp)
+ 198      00
+ 199 0030 740B     		je	.L14
+ 200              		.loc 2 62 22 discriminator 1
+ 201 0032 B8000000 		movl	$2147483648, %eax
+ 201      80
+ 202 0037 483945E0 		cmpq	%rax, -32(%rbp)
+ 203 003b 7207     		jb	.L15
+ 204              	.L14:
+  63:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         SECUREC_ERROR_INVALID_RANGE("strncpy_s");
+  64:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         return ERANGE;
+ 205              		.loc 2 64 16
+ 206 003d B8220000 		movl	$34, %eax
+ 206      00
+ 207 0042 EB70     		jmp	.L16
+ 208              	.L15:
+  65:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     } else if (strDest == NULL || strSrc == NULL) {
+ 209              		.loc 2 65 15
+ 210 0044 48837DE8 		cmpq	$0, -24(%rbp)
+ 210      00
+ 211 0049 7407     		je	.L17
+ 212              		.loc 2 65 32 discriminator 1
+ 213 004b 48837DD8 		cmpq	$0, -40(%rbp)
+ 213      00
+ 214 0050 751C     		jne	.L18
+ 215              	.L17:
+  66:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("strncpy_s");
+  67:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         if (strDest != NULL) {
+ 216              		.loc 2 67 12
+ 217 0052 48837DE8 		cmpq	$0, -24(%rbp)
+ 217      00
+ 218 0057 740E     		je	.L19
+  68:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             strDest[0] = '\0';
+ 219              		.loc 2 68 24
+ 220 0059 488B45E8 		movq	-24(%rbp), %rax
+ 221 005d C60000   		movb	$0, (%rax)
+  69:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             return EINVAL_AND_RESET;
+ 222              		.loc 2 69 20
+ 223 0060 B8960000 		movl	$150, %eax
+ 223      00
+ 224 0065 EB4D     		jmp	.L16
+ 225              	.L19:
+  70:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         }
+  71:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         return EINVAL;
+ 226              		.loc 2 71 16
+ 227 0067 B8160000 		movl	$22, %eax
+ 227      00
+ 228 006c EB46     		jmp	.L16
+ 229              	.L18:
+GAS LISTING /tmp/ccMVv3hw.s 			page 16
+
+
+  72:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     } else if (count > SECUREC_STRING_MAX_LEN) {
+ 230              		.loc 2 72 15
+ 231 006e B8000000 		movl	$2147483648, %eax
+ 231      80
+ 232 0073 483945D0 		cmpq	%rax, -48(%rbp)
+ 233 0077 720E     		jb	.L20
+  73:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         strDest[0] = '\0';      /* clear dest string */
+ 234              		.loc 2 73 20
+ 235 0079 488B45E8 		movq	-24(%rbp), %rax
+ 236 007d C60000   		movb	$0, (%rax)
+  74:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         SECUREC_ERROR_INVALID_RANGE("strncpy_s");
+  75:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         return ERANGE_AND_RESET;
+ 237              		.loc 2 75 16
+ 238 0080 B8A20000 		movl	$162, %eax
+ 238      00
+ 239 0085 EB2D     		jmp	.L16
+ 240              	.L20:
+  76:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     } else if (count == 0) {
+ 241              		.loc 2 76 15
+ 242 0087 48837DD0 		cmpq	$0, -48(%rbp)
+ 242      00
+ 243 008c 750E     		jne	.L21
+  77:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         strDest[0] = '\0';
+ 244              		.loc 2 77 20
+ 245 008e 488B45E8 		movq	-24(%rbp), %rax
+ 246 0092 C60000   		movb	$0, (%rax)
+  78:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         return EOK;
+ 247              		.loc 2 78 16
+ 248 0095 B8000000 		movl	$0, %eax
+ 248      00
+ 249 009a EB18     		jmp	.L16
+ 250              	.L21:
+  79:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     }
+  80:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** 
+  81:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     return CheckSrcCountRange(strDest, destMax, strSrc, count);
+ 251              		.loc 2 81 12
+ 252 009c 488B4DD0 		movq	-48(%rbp), %rcx
+ 253 00a0 488B55D8 		movq	-40(%rbp), %rdx
+ 254 00a4 488B75E0 		movq	-32(%rbp), %rsi
+ 255 00a8 488B45E8 		movq	-24(%rbp), %rax
+ 256 00ac 4889C7   		movq	%rax, %rdi
+ 257 00af E8000000 		call	CheckSrcCountRange
+ 257      00
+ 258              	.L16:
+  82:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** }
+ 259              		.loc 2 82 1
+ 260 00b4 488B7DF8 		movq	-8(%rbp), %rdi
+ 261 00b8 6448333C 		xorq	%fs:40, %rdi
+ 261      25280000 
+ 261      00
+ 262 00c1 7405     		je	.L22
+ 263 00c3 E8000000 		call	__stack_chk_fail@PLT
+ 263      00
+ 264              	.L22:
+ 265 00c8 C9       		leave
+ 266              	.LCFI11:
+ 267              		.cfi_def_cfa 7, 8
+GAS LISTING /tmp/ccMVv3hw.s 			page 17
+
+
+ 268 00c9 C3       		ret
+ 269              		.cfi_endproc
+ 270              	.LFE9:
+ 272              		.section	.text.strncpy_s,"ax",@progbits
+ 273              		.globl	strncpy_s
+ 275              	strncpy_s:
+ 276              	.LFB10:
+  83:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** 
+  84:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** /*
+  85:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * <FUNCTION DESCRIPTION>
+  86:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *   The strncpy_s function copies not more than n successive characters (not including the termina
+  87:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *                     from the array pointed to by strSrc to the array pointed to by strDest.
+  88:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *
+  89:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * <INPUT PARAMETERS>
+  90:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    strDest                          Destination string.
+  91:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    destMax                          The size of the destination string, in characters.
+  92:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    strSrc                            Source string.
+  93:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    count                              Number of characters to be copied.
+  94:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *
+  95:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * <OUTPUT PARAMETERS>
+  96:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    strDest                           is updated
+  97:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *
+  98:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  * <RETURN VALUE>
+  99:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    EOK                               Success
+ 100:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    EINVAL                          strDest is  NULL and destMax != 0 and destMax <= SECUREC_STRI
+ 101:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    EINVAL_AND_RESET       strDest !=  NULL and strSrc is NULL and destMax != 0 and destMax <= SE
+ 102:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    ERANGE                         destMax is 0 and destMax > SECUREC_STRING_MAX_LEN
+ 103:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    ERANGE_AND_RESET      strDest have not enough space  and all other parameters are valid  and 
+ 104:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    EOVERLAP_AND_RESET   dest buffer and source buffer are overlapped and all  parameters are val
+ 105:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *
+ 106:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  *    If there is a runtime-constraint violation, strDest[0] will be set to the '\0' when strDest a
+ 107:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****  */
+ 108:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** errno_t strncpy_s(char *strDest, size_t destMax, const char *strSrc, size_t count)
+ 109:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** {
+ 277              		.loc 2 109 1
+ 278              		.cfi_startproc
+ 279 0000 F30F1EFA 		endbr64
+ 280 0004 55       		pushq	%rbp
+ 281              	.LCFI12:
+ 282              		.cfi_def_cfa_offset 16
+ 283              		.cfi_offset 6, -16
+ 284 0005 4889E5   		movq	%rsp, %rbp
+ 285              	.LCFI13:
+ 286              		.cfi_def_cfa_register 6
+ 287 0008 4883EC40 		subq	$64, %rsp
+ 288 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 289 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 290 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 291 0018 48894DC0 		movq	%rcx, -64(%rbp)
+ 292              		.loc 2 109 1
+ 293 001c 64488B04 		movq	%fs:40, %rax
+ 293      25280000 
+ 293      00
+ 294 0025 488945F8 		movq	%rax, -8(%rbp)
+ 295 0029 31C0     		xorl	%eax, %eax
+ 110:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     if (SECUREC_STRNCPY_PARAM_OK(strDest, destMax, strSrc, count)) {
+ 296              		.loc 2 110 8
+GAS LISTING /tmp/ccMVv3hw.s 			page 18
+
+
+ 297 002b 48837DD0 		cmpq	$0, -48(%rbp)
+ 297      00
+ 298 0030 0F841601 		je	.L24
+ 298      0000
+ 299              		.loc 2 110 9 discriminator 1
+ 300 0036 B8000000 		movl	$2147483648, %eax
+ 300      80
+ 301 003b 483945D0 		cmpq	%rax, -48(%rbp)
+ 302 003f 0F830701 		jnb	.L24
+ 302      0000
+ 303              		.loc 2 110 9 is_stmt 0 discriminator 2
+ 304 0045 48837DD8 		cmpq	$0, -40(%rbp)
+ 304      00
+ 305 004a 0F84FC00 		je	.L24
+ 305      0000
+ 306              		.loc 2 110 9 discriminator 3
+ 307 0050 48837DC8 		cmpq	$0, -56(%rbp)
+ 307      00
+ 308 0055 0F84F100 		je	.L24
+ 308      0000
+ 309              		.loc 2 110 9 discriminator 4
+ 310 005b B8000000 		movl	$2147483648, %eax
+ 310      80
+ 311 0060 483945C0 		cmpq	%rax, -64(%rbp)
+ 312 0064 0F83E200 		jnb	.L24
+ 312      0000
+ 313              		.loc 2 110 9 discriminator 5
+ 314 006a 48837DC0 		cmpq	$0, -64(%rbp)
+ 314      00
+ 315 006f 0F84D700 		je	.L24
+ 315      0000
+ 316              	.LBB2:
+ 111:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         size_t minCpLen;        /* use it to store the maxi length limit */
+ 112:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         if (count < destMax) {
+ 317              		.loc 2 112 12 is_stmt 1
+ 318 0075 488B45C0 		movq	-64(%rbp), %rax
+ 319 0079 483B45D0 		cmpq	-48(%rbp), %rax
+ 320 007d 7319     		jnb	.L25
+ 113:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             minCpLen = SecStrMinLen(strSrc, count); /* no ending terminator */
+ 321              		.loc 2 113 24
+ 322 007f 488B55C0 		movq	-64(%rbp), %rdx
+ 323 0083 488B45C8 		movq	-56(%rbp), %rax
+ 324 0087 4889D6   		movq	%rdx, %rsi
+ 325 008a 4889C7   		movq	%rax, %rdi
+ 326 008d E8000000 		call	SecStrMinLen
+ 326      00
+ 327 0092 488945E8 		movq	%rax, -24(%rbp)
+ 328 0096 EB3A     		jmp	.L26
+ 329              	.L25:
+ 330              	.LBB3:
+ 114:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         } else {
+ 115:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             size_t tmpCount = destMax;
+ 331              		.loc 2 115 20
+ 332 0098 488B45D0 		movq	-48(%rbp), %rax
+ 333 009c 488945F0 		movq	%rax, -16(%rbp)
+ 116:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #ifdef  SECUREC_COMPATIBLE_WIN_FORMAT
+ 117:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             if (count == ((size_t)(-1))) {
+GAS LISTING /tmp/ccMVv3hw.s 			page 19
+
+
+ 118:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****                 tmpCount = destMax - 1;
+ 119:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             }
+ 120:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** #endif
+ 121:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             minCpLen = SecStrMinLen(strSrc, tmpCount);
+ 334              		.loc 2 121 24
+ 335 00a0 488B55F0 		movq	-16(%rbp), %rdx
+ 336 00a4 488B45C8 		movq	-56(%rbp), %rax
+ 337 00a8 4889D6   		movq	%rdx, %rsi
+ 338 00ab 4889C7   		movq	%rax, %rdi
+ 339 00ae E8000000 		call	SecStrMinLen
+ 339      00
+ 340 00b3 488945E8 		movq	%rax, -24(%rbp)
+ 122:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             if (minCpLen == destMax) {
+ 341              		.loc 2 122 16
+ 342 00b7 488B45E8 		movq	-24(%rbp), %rax
+ 343 00bb 483B45D0 		cmpq	-48(%rbp), %rax
+ 344 00bf 7511     		jne	.L26
+ 123:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****                 strDest[0] = '\0';
+ 345              		.loc 2 123 28
+ 346 00c1 488B45D8 		movq	-40(%rbp), %rax
+ 347 00c5 C60000   		movb	$0, (%rax)
+ 124:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****                 SECUREC_ERROR_INVALID_RANGE("strncpy_s");
+ 125:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****                 return ERANGE_AND_RESET;
+ 348              		.loc 2 125 24
+ 349 00c8 B8A20000 		movl	$162, %eax
+ 349      00
+ 350 00cd E9920000 		jmp	.L27
+ 350      00
+ 351              	.L26:
+ 352              	.LBE3:
+ 126:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             }
+ 127:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         }
+ 128:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         if (SECUREC_STRING_NO_OVERLAP(strDest, strSrc, minCpLen) || strDest == strSrc) {
+ 353              		.loc 2 128 12
+ 354 00d2 488B45C8 		movq	-56(%rbp), %rax
+ 355 00d6 483B45D8 		cmpq	-40(%rbp), %rax
+ 356 00da 7311     		jnb	.L28
+ 357              		.loc 2 128 13 discriminator 1
+ 358 00dc 488B55C8 		movq	-56(%rbp), %rdx
+ 359 00e0 488B45E8 		movq	-24(%rbp), %rax
+ 360 00e4 4801D0   		addq	%rdx, %rax
+ 361 00e7 483945D8 		cmpq	%rax, -40(%rbp)
+ 362 00eb 7725     		ja	.L29
+ 363              	.L28:
+ 364              		.loc 2 128 13 is_stmt 0 discriminator 3
+ 365 00ed 488B45D8 		movq	-40(%rbp), %rax
+ 366 00f1 483B45C8 		cmpq	-56(%rbp), %rax
+ 367 00f5 7311     		jnb	.L30
+ 368              		.loc 2 128 13 discriminator 4
+ 369 00f7 488B55D8 		movq	-40(%rbp), %rdx
+ 370 00fb 488B45E8 		movq	-24(%rbp), %rax
+ 371 00ff 4801D0   		addq	%rdx, %rax
+ 372 0102 483945C8 		cmpq	%rax, -56(%rbp)
+ 373 0106 770A     		ja	.L29
+ 374              	.L30:
+ 375              		.loc 2 128 66 is_stmt 1 discriminator 6
+ 376 0108 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/ccMVv3hw.s 			page 20
+
+
+ 377 010c 483B45C8 		cmpq	-56(%rbp), %rax
+ 378 0110 752C     		jne	.L31
+ 379              	.L29:
+ 129:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             /* Not overlap */
+ 130:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             SecDoMemcpy(strDest, strSrc, minCpLen);    /* copy string without terminator */
+ 380              		.loc 2 130 13
+ 381 0112 488B55E8 		movq	-24(%rbp), %rdx
+ 382 0116 488B4DC8 		movq	-56(%rbp), %rcx
+ 383 011a 488B45D8 		movq	-40(%rbp), %rax
+ 384 011e 4889CE   		movq	%rcx, %rsi
+ 385 0121 4889C7   		movq	%rax, %rdi
+ 386 0124 E8000000 		call	SecDoMemcpy
+ 386      00
+ 131:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             strDest[minCpLen] = '\0';
+ 387              		.loc 2 131 20
+ 388 0129 488B55D8 		movq	-40(%rbp), %rdx
+ 389 012d 488B45E8 		movq	-24(%rbp), %rax
+ 390 0131 4801D0   		addq	%rdx, %rax
+ 391              		.loc 2 131 31
+ 392 0134 C60000   		movb	$0, (%rax)
+ 132:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             return EOK;
+ 393              		.loc 2 132 20
+ 394 0137 B8000000 		movl	$0, %eax
+ 394      00
+ 395 013c EB26     		jmp	.L27
+ 396              	.L31:
+ 133:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         } else {
+ 134:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             strDest[0] = '\0';
+ 397              		.loc 2 134 24
+ 398 013e 488B45D8 		movq	-40(%rbp), %rax
+ 399 0142 C60000   		movb	$0, (%rax)
+ 135:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             SECUREC_ERROR_BUFFER_OVERLAP("strncpy_s");
+ 136:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****             return EOVERLAP_AND_RESET;
+ 400              		.loc 2 136 20
+ 401 0145 B8B60000 		movl	$182, %eax
+ 401      00
+ 402 014a EB18     		jmp	.L27
+ 403              	.L24:
+ 404              	.LBE2:
+ 137:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****         }
+ 138:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     }
+ 139:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c ****     return strncpy_error(strDest, destMax, strSrc, count);
+ 405              		.loc 2 139 12
+ 406 014c 488B4DC0 		movq	-64(%rbp), %rcx
+ 407 0150 488B55C8 		movq	-56(%rbp), %rdx
+ 408 0154 488B75D0 		movq	-48(%rbp), %rsi
+ 409 0158 488B45D8 		movq	-40(%rbp), %rax
+ 410 015c 4889C7   		movq	%rax, %rdi
+ 411 015f E8000000 		call	strncpy_error
+ 411      00
+ 412              	.L27:
+ 140:/home/xingli/share/1205tiny/secure_c/src/strncpy_s.c **** }
+ 413              		.loc 2 140 1
+ 414 0164 488B7DF8 		movq	-8(%rbp), %rdi
+ 415 0168 6448333C 		xorq	%fs:40, %rdi
+ 415      25280000 
+ 415      00
+GAS LISTING /tmp/ccMVv3hw.s 			page 21
+
+
+ 416 0171 7405     		je	.L32
+ 417 0173 E8000000 		call	__stack_chk_fail@PLT
+ 417      00
+ 418              	.L32:
+ 419 0178 C9       		leave
+ 420              	.LCFI14:
+ 421              		.cfi_def_cfa 7, 8
+ 422 0179 C3       		ret
+ 423              		.cfi_endproc
+ 424              	.LFE10:
+ 426              		.text
+ 427              	.Letext0:
+ 428              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 429              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 430              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 431              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 432              		.file 7 "/usr/include/stdio.h"
+ 433              		.file 8 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 434              		.file 9 "/home/xingli/share/1205tiny/secure_c/include/securec.h"
+ 1876              		.section	.note.gnu.property,"a"
+ 1877              		.align 8
+ 1878 0000 04000000 		.long	 1f - 0f
+ 1879 0004 10000000 		.long	 4f - 1f
+ 1880 0008 05000000 		.long	 5
+ 1881              	0:
+ 1882 000c 474E5500 		.string	 "GNU"
+ 1883              	1:
+ 1884              		.align 8
+ 1885 0010 020000C0 		.long	 0xc0000002
+ 1886 0014 04000000 		.long	 3f - 2f
+ 1887              	2:
+ 1888 0018 03000000 		.long	 0x3
+ 1889              	3:
+ 1890 001c 00000000 		.align 8
+ 1891              	4:
+GAS LISTING /tmp/ccMVv3hw.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 strncpy_s.c
+     /tmp/ccMVv3hw.s:6      .text.SecDoMemcpy:0000000000000000 SecDoMemcpy
+     /tmp/ccMVv3hw.s:50     .text.SecStrMinLen:0000000000000000 SecStrMinLen
+     /tmp/ccMVv3hw.s:93     .text.CheckSrcCountRange:0000000000000000 CheckSrcCountRange
+     /tmp/ccMVv3hw.s:176    .text.strncpy_error:0000000000000000 strncpy_error
+     /tmp/ccMVv3hw.s:275    .text.strncpy_s:0000000000000000 strncpy_s
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+memcpy
+__stack_chk_fail
+strnlen

@@ -1,0 +1,212 @@
+GAS LISTING /tmp/ccA3xij8.s 			page 1
+
+
+   1              		.file	"crc16.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.globl	crc16_ccitt_table
+   5              		.section	.data.crc16_ccitt_table,"aw"
+   6              		.align 32
+   9              	crc16_ccitt_table:
+ 266              		.section	.text.calc_crc16,"ax",@progbits
+ 267              		.globl	calc_crc16
+ 269              	calc_crc16:
+ 270              	.LFB0:
+ 271              		.file 1 "/home/xingli/share/1205tiny/crc/crc16.c"
+   1:/home/xingli/share/1205tiny/crc/crc16.c **** /*----------------------------------------------------------------------------
+   2:/home/xingli/share/1205tiny/crc/crc16.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/1205tiny/crc/crc16.c ****  * All rights reserved.
+   4:/home/xingli/share/1205tiny/crc/crc16.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/1205tiny/crc/crc16.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/1205tiny/crc/crc16.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/1205tiny/crc/crc16.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/1205tiny/crc/crc16.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/1205tiny/crc/crc16.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/1205tiny/crc/crc16.c ****  * provided with the distribution.
+  11:/home/xingli/share/1205tiny/crc/crc16.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/1205tiny/crc/crc16.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/1205tiny/crc/crc16.c ****  * permission.
+  14:/home/xingli/share/1205tiny/crc/crc16.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/1205tiny/crc/crc16.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/1205tiny/crc/crc16.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/1205tiny/crc/crc16.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/1205tiny/crc/crc16.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/1205tiny/crc/crc16.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/1205tiny/crc/crc16.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/1205tiny/crc/crc16.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/1205tiny/crc/crc16.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/1205tiny/crc/crc16.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/1205tiny/crc/crc16.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/1205tiny/crc/crc16.c ****  *---------------------------------------------------------------------------*/
+  26:/home/xingli/share/1205tiny/crc/crc16.c **** /*----------------------------------------------------------------------------
+  27:/home/xingli/share/1205tiny/crc/crc16.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/1205tiny/crc/crc16.c ****  * ===============================================
+  29:/home/xingli/share/1205tiny/crc/crc16.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/1205tiny/crc/crc16.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/1205tiny/crc/crc16.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/1205tiny/crc/crc16.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/1205tiny/crc/crc16.c ****  *---------------------------------------------------------------------------*/
+  34:/home/xingli/share/1205tiny/crc/crc16.c **** 
+  35:/home/xingli/share/1205tiny/crc/crc16.c **** 
+  36:/home/xingli/share/1205tiny/crc/crc16.c **** #include <stdint.h>
+  37:/home/xingli/share/1205tiny/crc/crc16.c **** #include <stddef.h>
+  38:/home/xingli/share/1205tiny/crc/crc16.c **** 
+  39:/home/xingli/share/1205tiny/crc/crc16.c **** uint16_t crc16_ccitt_table[] = { 0x0000, 0x1021, 0x2042, 0x3063, 0x4084, 0x50a5, 0x60c6, 0x70e7, 0x
+  40:/home/xingli/share/1205tiny/crc/crc16.c ****                             0xb16b, 0xc18c, 0xd1ad, 0xe1ce, 0xf1ef, 0x1231, 0x0210, 0x3273, 0x2252,
+  41:/home/xingli/share/1205tiny/crc/crc16.c ****                             0xa35a, 0xd3bd, 0xc39c, 0xf3ff, 0xe3de, 0x2462, 0x3443, 0x0420, 0x1401,
+  42:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x9509, 0xe5ee, 0xf5cf, 0xc5ac, 0xd58d, 0x3653, 0x2672, 0x1611, 0x0630,
+  43:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x8738, 0xf7df, 0xe7fe, 0xd79d, 0xc7bc, 0x48c4, 0x58e5, 0x6886, 0x78a7,
+  44:/home/xingli/share/1205tiny/crc/crc16.c ****                             0xf9af, 0x8948, 0x9969, 0xa90a, 0xb92b, 0x5af5, 0x4ad4, 0x7ab7, 0x6a96,
+  45:/home/xingli/share/1205tiny/crc/crc16.c ****                             0xeb9e, 0x9b79, 0x8b58, 0xbb3b, 0xab1a, 0x6ca6, 0x7c87, 0x4ce4, 0x5cc5,
+GAS LISTING /tmp/ccA3xij8.s 			page 2
+
+
+  46:/home/xingli/share/1205tiny/crc/crc16.c ****                             0xddcd, 0xad2a, 0xbd0b, 0x8d68, 0x9d49, 0x7e97, 0x6eb6, 0x5ed5, 0x4ef4,
+  47:/home/xingli/share/1205tiny/crc/crc16.c ****                             0xcffc, 0xbf1b, 0xaf3a, 0x9f59, 0x8f78, 0x9188, 0x81a9, 0xb1ca, 0xa1eb,
+  48:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x20e3, 0x5004, 0x4025, 0x7046, 0x6067, 0x83b9, 0x9398, 0xa3fb, 0xb3da,
+  49:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x32d2, 0x4235, 0x5214, 0x6277, 0x7256, 0xb5ea, 0xa5cb, 0x95a8, 0x8589,
+  50:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x0481, 0x7466, 0x6447, 0x5424, 0x4405, 0xa7db, 0xb7fa, 0x8799, 0x97b8,
+  51:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x16b0, 0x6657, 0x7676, 0x4615, 0x5634, 0xd94c, 0xc96d, 0xf90e, 0xe92f,
+  52:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x6827, 0x18c0, 0x08e1, 0x3882, 0x28a3, 0xcb7d, 0xdb5c, 0xeb3f, 0xfb1e,
+  53:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x7a16, 0x0af1, 0x1ad0, 0x2ab3, 0x3a92, 0xfd2e, 0xed0f, 0xdd6c, 0xcd4d,
+  54:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x4c45, 0x3ca2, 0x2c83, 0x1ce0, 0x0cc1, 0xef1f, 0xff3e, 0xcf5d, 0xdf7c,
+  55:/home/xingli/share/1205tiny/crc/crc16.c ****                             0x5e74, 0x2e93, 0x3eb2, 0x0ed1, 0x1ef0
+  56:/home/xingli/share/1205tiny/crc/crc16.c ****                           };
+  57:/home/xingli/share/1205tiny/crc/crc16.c **** 
+  58:/home/xingli/share/1205tiny/crc/crc16.c **** uint16_t calc_crc16(uint16_t reg_init, const unsigned char *massage, int len)
+  59:/home/xingli/share/1205tiny/crc/crc16.c **** {
+ 272              		.loc 1 59 1
+ 273              		.cfi_startproc
+ 274 0000 F30F1EFA 		endbr64
+ 275 0004 55       		pushq	%rbp
+ 276              	.LCFI0:
+ 277              		.cfi_def_cfa_offset 16
+ 278              		.cfi_offset 6, -16
+ 279 0005 4889E5   		movq	%rsp, %rbp
+ 280              	.LCFI1:
+ 281              		.cfi_def_cfa_register 6
+ 282 0008 4883EC20 		subq	$32, %rsp
+ 283 000c 89F8     		movl	%edi, %eax
+ 284 000e 488975E0 		movq	%rsi, -32(%rbp)
+ 285 0012 8955E8   		movl	%edx, -24(%rbp)
+ 286 0015 668945EC 		movw	%ax, -20(%rbp)
+ 287              		.loc 1 59 1
+ 288 0019 64488B04 		movq	%fs:40, %rax
+ 288      25280000 
+ 288      00
+ 289 0022 488945F8 		movq	%rax, -8(%rbp)
+ 290 0026 31C0     		xorl	%eax, %eax
+  60:/home/xingli/share/1205tiny/crc/crc16.c ****     uint16_t crc_reg = 0;
+ 291              		.loc 1 60 14
+ 292 0028 66C745F2 		movw	$0, -14(%rbp)
+ 292      0000
+  61:/home/xingli/share/1205tiny/crc/crc16.c ****     int i = 0;
+ 293              		.loc 1 61 9
+ 294 002e C745F400 		movl	$0, -12(%rbp)
+ 294      000000
+  62:/home/xingli/share/1205tiny/crc/crc16.c ****     crc_reg = reg_init;
+ 295              		.loc 1 62 13
+ 296 0035 0FB745EC 		movzwl	-20(%rbp), %eax
+ 297 0039 668945F2 		movw	%ax, -14(%rbp)
+  63:/home/xingli/share/1205tiny/crc/crc16.c **** 
+  64:/home/xingli/share/1205tiny/crc/crc16.c ****     for(i = 0; i < len; i++)
+ 298              		.loc 1 64 11
+ 299 003d C745F400 		movl	$0, -12(%rbp)
+ 299      000000
+ 300              		.loc 1 64 5
+ 301 0044 EB41     		jmp	.L2
+ 302              	.L3:
+  65:/home/xingli/share/1205tiny/crc/crc16.c ****     {
+  66:/home/xingli/share/1205tiny/crc/crc16.c ****         crc_reg = (crc_reg >> 8) ^ crc16_ccitt_table[(crc_reg ^ massage[i]) & 0xff];
+GAS LISTING /tmp/ccA3xij8.s 			page 3
+
+
+ 303              		.loc 1 66 17 discriminator 3
+ 304 0046 0FB745F2 		movzwl	-14(%rbp), %eax
+ 305 004a 66C1E808 		shrw	$8, %ax
+ 306 004e 89C6     		movl	%eax, %esi
+ 307              		.loc 1 66 63 discriminator 3
+ 308 0050 0FB755F2 		movzwl	-14(%rbp), %edx
+ 309              		.loc 1 66 72 discriminator 3
+ 310 0054 8B45F4   		movl	-12(%rbp), %eax
+ 311 0057 4863C8   		movslq	%eax, %rcx
+ 312 005a 488B45E0 		movq	-32(%rbp), %rax
+ 313 005e 4801C8   		addq	%rcx, %rax
+ 314 0061 0FB600   		movzbl	(%rax), %eax
+ 315 0064 0FB6C0   		movzbl	%al, %eax
+ 316              		.loc 1 66 63 discriminator 3
+ 317 0067 31D0     		xorl	%edx, %eax
+ 318              		.loc 1 66 77 discriminator 3
+ 319 0069 0FB6C0   		movzbl	%al, %eax
+ 320              		.loc 1 66 53 discriminator 3
+ 321 006c 4898     		cltq
+ 322 006e 488D1400 		leaq	(%rax,%rax), %rdx
+ 323 0072 488D0500 		leaq	crc16_ccitt_table(%rip), %rax
+ 323      000000
+ 324 0079 0FB70402 		movzwl	(%rdx,%rax), %eax
+ 325              		.loc 1 66 17 discriminator 3
+ 326 007d 31F0     		xorl	%esi, %eax
+ 327 007f 668945F2 		movw	%ax, -14(%rbp)
+  64:/home/xingli/share/1205tiny/crc/crc16.c ****     {
+ 328              		.loc 1 64 26 discriminator 3
+ 329 0083 8345F401 		addl	$1, -12(%rbp)
+ 330              	.L2:
+  64:/home/xingli/share/1205tiny/crc/crc16.c ****     {
+ 331              		.loc 1 64 5 discriminator 1
+ 332 0087 8B45F4   		movl	-12(%rbp), %eax
+ 333 008a 3B45E8   		cmpl	-24(%rbp), %eax
+ 334 008d 7CB7     		jl	.L3
+  67:/home/xingli/share/1205tiny/crc/crc16.c ****     }
+  68:/home/xingli/share/1205tiny/crc/crc16.c ****     return crc_reg;
+ 335              		.loc 1 68 12
+ 336 008f 0FB745F2 		movzwl	-14(%rbp), %eax
+  69:/home/xingli/share/1205tiny/crc/crc16.c **** }
+ 337              		.loc 1 69 1
+ 338 0093 488B7DF8 		movq	-8(%rbp), %rdi
+ 339 0097 6448333C 		xorq	%fs:40, %rdi
+ 339      25280000 
+ 339      00
+ 340 00a0 7405     		je	.L5
+ 341 00a2 E8000000 		call	__stack_chk_fail@PLT
+ 341      00
+ 342              	.L5:
+ 343 00a7 C9       		leave
+ 344              	.LCFI2:
+ 345              		.cfi_def_cfa 7, 8
+ 346 00a8 C3       		ret
+ 347              		.cfi_endproc
+ 348              	.LFE0:
+ 350              		.text
+ 351              	.Letext0:
+GAS LISTING /tmp/ccA3xij8.s 			page 4
+
+
+ 352              		.file 2 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 353              		.file 3 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 806              		.section	.note.gnu.property,"a"
+ 807              		.align 8
+ 808 0000 04000000 		.long	 1f - 0f
+ 809 0004 10000000 		.long	 4f - 1f
+ 810 0008 05000000 		.long	 5
+ 811              	0:
+ 812 000c 474E5500 		.string	 "GNU"
+ 813              	1:
+ 814              		.align 8
+ 815 0010 020000C0 		.long	 0xc0000002
+ 816 0014 04000000 		.long	 3f - 2f
+ 817              	2:
+ 818 0018 03000000 		.long	 0x3
+ 819              	3:
+ 820 001c 00000000 		.align 8
+ 821              	4:
+GAS LISTING /tmp/ccA3xij8.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 crc16.c
+     /tmp/ccA3xij8.s:9      .data.crc16_ccitt_table:0000000000000000 crc16_ccitt_table
+     /tmp/ccA3xij8.s:269    .text.calc_crc16:0000000000000000 calc_crc16
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail

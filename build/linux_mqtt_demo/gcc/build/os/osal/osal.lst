@@ -1,0 +1,2994 @@
+GAS LISTING /tmp/ccaBVwM7.s 			page 1
+
+
+   1              		.file	"osal.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.bss.s_os_cb,"aw",@nobits
+   5              		.align 8
+   8              	s_os_cb:
+   9 0000 00000000 		.zero	8
+   9      00000000 
+  10              		.section	.text.osal_install,"ax",@progbits
+  11              		.globl	osal_install
+  13              	osal_install:
+  14              	.LFB6:
+  15              		.file 1 "/home/xingli/share/1205tiny/os/osal/osal.c"
+   1:/home/xingli/share/1205tiny/os/osal/osal.c **** /*----------------------------------------------------------------------------
+   2:/home/xingli/share/1205tiny/os/osal/osal.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/1205tiny/os/osal/osal.c ****  * All rights reserved.
+   4:/home/xingli/share/1205tiny/os/osal/osal.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/1205tiny/os/osal/osal.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/1205tiny/os/osal/osal.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/1205tiny/os/osal/osal.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/1205tiny/os/osal/osal.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/1205tiny/os/osal/osal.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/1205tiny/os/osal/osal.c ****  * provided with the distribution.
+  11:/home/xingli/share/1205tiny/os/osal/osal.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/1205tiny/os/osal/osal.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/1205tiny/os/osal/osal.c ****  * permission.
+  14:/home/xingli/share/1205tiny/os/osal/osal.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/1205tiny/os/osal/osal.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/1205tiny/os/osal/osal.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/1205tiny/os/osal/osal.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/1205tiny/os/osal/osal.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/1205tiny/os/osal/osal.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/1205tiny/os/osal/osal.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/1205tiny/os/osal/osal.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/1205tiny/os/osal/osal.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/1205tiny/os/osal/osal.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/1205tiny/os/osal/osal.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/1205tiny/os/osal/osal.c ****  *---------------------------------------------------------------------------*/
+  26:/home/xingli/share/1205tiny/os/osal/osal.c **** /*----------------------------------------------------------------------------
+  27:/home/xingli/share/1205tiny/os/osal/osal.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/1205tiny/os/osal/osal.c ****  * ===============================================
+  29:/home/xingli/share/1205tiny/os/osal/osal.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/1205tiny/os/osal/osal.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/1205tiny/os/osal/osal.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/1205tiny/os/osal/osal.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/1205tiny/os/osal/osal.c ****  *---------------------------------------------------------------------------*/
+  34:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  35:/home/xingli/share/1205tiny/os/osal/osal.c **** #include <stddef.h>
+  36:/home/xingli/share/1205tiny/os/osal/osal.c **** #include <stdint.h>
+  37:/home/xingli/share/1205tiny/os/osal/osal.c **** #include <stdlib.h>
+  38:/home/xingli/share/1205tiny/os/osal/osal.c **** #include <unistd.h>
+  39:/home/xingli/share/1205tiny/os/osal/osal.c **** #include <string.h>
+  40:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  41:/home/xingli/share/1205tiny/os/osal/osal.c **** #include "osal_imp.h"
+  42:/home/xingli/share/1205tiny/os/osal/osal.c **** #include "osal.h"
+  43:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  44:/home/xingli/share/1205tiny/os/osal/osal.c **** static const tag_os *s_os_cb = NULL;
+GAS LISTING /tmp/ccaBVwM7.s 			page 2
+
+
+  45:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  46:/home/xingli/share/1205tiny/os/osal/osal.c **** int osal_install(const tag_os *os)
+  47:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+  16              		.loc 1 47 1
+  17              		.cfi_startproc
+  18 0000 F30F1EFA 		endbr64
+  19 0004 55       		pushq	%rbp
+  20              	.LCFI0:
+  21              		.cfi_def_cfa_offset 16
+  22              		.cfi_offset 6, -16
+  23 0005 4889E5   		movq	%rsp, %rbp
+  24              	.LCFI1:
+  25              		.cfi_def_cfa_register 6
+  26 0008 4883EC20 		subq	$32, %rsp
+  27 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  28              		.loc 1 47 1
+  29 0010 64488B04 		movq	%fs:40, %rax
+  29      25280000 
+  29      00
+  30 0019 488945F8 		movq	%rax, -8(%rbp)
+  31 001d 31C0     		xorl	%eax, %eax
+  48:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = -1;
+  32              		.loc 1 48 9
+  33 001f C745F4FF 		movl	$-1, -12(%rbp)
+  33      FFFFFF
+  49:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  50:/home/xingli/share/1205tiny/os/osal/osal.c ****     if(NULL == s_os_cb)
+  34              		.loc 1 50 13
+  35 0026 488B0500 		movq	s_os_cb(%rip), %rax
+  35      000000
+  36              		.loc 1 50 7
+  37 002d 4885C0   		testq	%rax, %rax
+  38 0030 7512     		jne	.L2
+  51:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+  52:/home/xingli/share/1205tiny/os/osal/osal.c ****         s_os_cb = os;
+  39              		.loc 1 52 17
+  40 0032 488B45E8 		movq	-24(%rbp), %rax
+  41 0036 48890500 		movq	%rax, s_os_cb(%rip)
+  41      000000
+  53:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = 0;
+  42              		.loc 1 53 13
+  43 003d C745F400 		movl	$0, -12(%rbp)
+  43      000000
+  44              	.L2:
+  54:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+  55:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  56:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+  45              		.loc 1 56 12
+  46 0044 8B45F4   		movl	-12(%rbp), %eax
+  57:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+  47              		.loc 1 57 1
+  48 0047 488B55F8 		movq	-8(%rbp), %rdx
+  49 004b 64483314 		xorq	%fs:40, %rdx
+  49      25280000 
+  49      00
+  50 0054 7405     		je	.L4
+  51 0056 E8000000 		call	__stack_chk_fail@PLT
+GAS LISTING /tmp/ccaBVwM7.s 			page 3
+
+
+  51      00
+  52              	.L4:
+  53 005b C9       		leave
+  54              	.LCFI2:
+  55              		.cfi_def_cfa 7, 8
+  56 005c C3       		ret
+  57              		.cfi_endproc
+  58              	.LFE6:
+  60              		.section	.text.osal_task_create,"ax",@progbits
+  61              		.globl	osal_task_create
+  63              	osal_task_create:
+  64              	.LFB7:
+  58:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  59:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  60:/home/xingli/share/1205tiny/os/osal/osal.c **** void* osal_task_create(const char *name,int (*task_entry)(void *args),\
+  61:/home/xingli/share/1205tiny/os/osal/osal.c ****                       void *args,int stack_size,void *stack,int prior)
+  62:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+  65              		.loc 1 62 1
+  66              		.cfi_startproc
+  67 0000 F30F1EFA 		endbr64
+  68 0004 55       		pushq	%rbp
+  69              	.LCFI3:
+  70              		.cfi_def_cfa_offset 16
+  71              		.cfi_offset 6, -16
+  72 0005 4889E5   		movq	%rsp, %rbp
+  73              	.LCFI4:
+  74              		.cfi_def_cfa_register 6
+  75 0008 4883EC40 		subq	$64, %rsp
+  76 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  77 0010 488975E0 		movq	%rsi, -32(%rbp)
+  78 0014 488955D8 		movq	%rdx, -40(%rbp)
+  79 0018 894DD4   		movl	%ecx, -44(%rbp)
+  80 001b 4C8945C8 		movq	%r8, -56(%rbp)
+  81 001f 44894DD0 		movl	%r9d, -48(%rbp)
+  82              		.loc 1 62 1
+  83 0023 64488B04 		movq	%fs:40, %rax
+  83      25280000 
+  83      00
+  84 002c 488945F8 		movq	%rax, -8(%rbp)
+  85 0030 31C0     		xorl	%eax, %eax
+  63:/home/xingli/share/1205tiny/os/osal/osal.c ****     void *ret = NULL;
+  86              		.loc 1 63 11
+  87 0032 48C745F0 		movq	$0, -16(%rbp)
+  87      00000000 
+  64:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  65:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_create))
+  88              		.loc 1 65 14
+  89 003a 488B0500 		movq	s_os_cb(%rip), %rax
+  89      000000
+  90              		.loc 1 65 7
+  91 0041 4885C0   		testq	%rax, %rax
+  92 0044 7458     		je	.L6
+  93              		.loc 1 65 44 discriminator 1
+  94 0046 488B0500 		movq	s_os_cb(%rip), %rax
+  94      000000
+  95 004d 488B4008 		movq	8(%rax), %rax
+  96              		.loc 1 65 26 discriminator 1
+GAS LISTING /tmp/ccaBVwM7.s 			page 4
+
+
+  97 0051 4885C0   		testq	%rax, %rax
+  98 0054 7448     		je	.L6
+  99              		.loc 1 65 69 discriminator 2
+ 100 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 100      000000
+ 101 005d 488B4008 		movq	8(%rax), %rax
+ 102              		.loc 1 65 74 discriminator 2
+ 103 0061 488B00   		movq	(%rax), %rax
+ 104              		.loc 1 65 51 discriminator 2
+ 105 0064 4885C0   		testq	%rax, %rax
+ 106 0067 7435     		je	.L6
+  66:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+  67:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->task_create(name, task_entry,args,stack_size,stack,prior);
+ 107              		.loc 1 67 22
+ 108 0069 488B0500 		movq	s_os_cb(%rip), %rax
+ 108      000000
+ 109 0070 488B4008 		movq	8(%rax), %rax
+ 110              		.loc 1 67 27
+ 111 0074 4C8B10   		movq	(%rax), %r10
+ 112              		.loc 1 67 15
+ 113 0077 448B45D0 		movl	-48(%rbp), %r8d
+ 114 007b 488B7DC8 		movq	-56(%rbp), %rdi
+ 115 007f 8B4DD4   		movl	-44(%rbp), %ecx
+ 116 0082 488B55D8 		movq	-40(%rbp), %rdx
+ 117 0086 488B75E0 		movq	-32(%rbp), %rsi
+ 118 008a 488B45E8 		movq	-24(%rbp), %rax
+ 119 008e 4589C1   		movl	%r8d, %r9d
+ 120 0091 4989F8   		movq	%rdi, %r8
+ 121 0094 4889C7   		movq	%rax, %rdi
+ 122 0097 41FFD2   		call	*%r10
+ 123              	.LVL0:
+ 124 009a 488945F0 		movq	%rax, -16(%rbp)
+ 125              	.L6:
+  68:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+  69:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  70:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 126              		.loc 1 70 12
+ 127 009e 488B45F0 		movq	-16(%rbp), %rax
+  71:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 128              		.loc 1 71 1
+ 129 00a2 488B55F8 		movq	-8(%rbp), %rdx
+ 130 00a6 64483314 		xorq	%fs:40, %rdx
+ 130      25280000 
+ 130      00
+ 131 00af 7405     		je	.L8
+ 132 00b1 E8000000 		call	__stack_chk_fail@PLT
+ 132      00
+ 133              	.L8:
+ 134 00b6 C9       		leave
+ 135              	.LCFI5:
+ 136              		.cfi_def_cfa 7, 8
+ 137 00b7 C3       		ret
+ 138              		.cfi_endproc
+ 139              	.LFE7:
+ 141              		.section	.text.osal_task_kill,"ax",@progbits
+ 142              		.globl	osal_task_kill
+ 144              	osal_task_kill:
+GAS LISTING /tmp/ccaBVwM7.s 			page 5
+
+
+ 145              	.LFB8:
+  72:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  73:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  74:/home/xingli/share/1205tiny/os/osal/osal.c **** int osal_task_kill(void *task)
+  75:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 146              		.loc 1 75 1
+ 147              		.cfi_startproc
+ 148 0000 F30F1EFA 		endbr64
+ 149 0004 55       		pushq	%rbp
+ 150              	.LCFI6:
+ 151              		.cfi_def_cfa_offset 16
+ 152              		.cfi_offset 6, -16
+ 153 0005 4889E5   		movq	%rsp, %rbp
+ 154              	.LCFI7:
+ 155              		.cfi_def_cfa_register 6
+ 156 0008 4883EC20 		subq	$32, %rsp
+ 157 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 158              		.loc 1 75 1
+ 159 0010 64488B04 		movq	%fs:40, %rax
+ 159      25280000 
+ 159      00
+ 160 0019 488945F8 		movq	%rax, -8(%rbp)
+ 161 001d 31C0     		xorl	%eax, %eax
+  76:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = -1;
+ 162              		.loc 1 76 9
+ 163 001f C745F4FF 		movl	$-1, -12(%rbp)
+ 163      FFFFFF
+  77:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  78:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_kill))
+ 164              		.loc 1 78 14
+ 165 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 165      000000
+ 166              		.loc 1 78 7
+ 167 002d 4885C0   		testq	%rax, %rax
+ 168 0030 743F     		je	.L10
+ 169              		.loc 1 78 44 discriminator 1
+ 170 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 170      000000
+ 171 0039 488B4008 		movq	8(%rax), %rax
+ 172              		.loc 1 78 26 discriminator 1
+ 173 003d 4885C0   		testq	%rax, %rax
+ 174 0040 742F     		je	.L10
+ 175              		.loc 1 78 69 discriminator 2
+ 176 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 176      000000
+ 177 0049 488B4008 		movq	8(%rax), %rax
+ 178              		.loc 1 78 74 discriminator 2
+ 179 004d 488B4008 		movq	8(%rax), %rax
+ 180              		.loc 1 78 51 discriminator 2
+ 181 0051 4885C0   		testq	%rax, %rax
+ 182 0054 741B     		je	.L10
+  79:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+  80:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->task_kill(task);
+ 183              		.loc 1 80 22
+ 184 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 184      000000
+ 185 005d 488B4008 		movq	8(%rax), %rax
+GAS LISTING /tmp/ccaBVwM7.s 			page 6
+
+
+ 186              		.loc 1 80 27
+ 187 0061 488B5008 		movq	8(%rax), %rdx
+ 188              		.loc 1 80 15
+ 189 0065 488B45E8 		movq	-24(%rbp), %rax
+ 190 0069 4889C7   		movq	%rax, %rdi
+ 191 006c FFD2     		call	*%rdx
+ 192              	.LVL1:
+ 193 006e 8945F4   		movl	%eax, -12(%rbp)
+ 194              	.L10:
+  81:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+  82:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  83:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 195              		.loc 1 83 12
+ 196 0071 8B45F4   		movl	-12(%rbp), %eax
+  84:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  85:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 197              		.loc 1 85 1
+ 198 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 199 0078 6448330C 		xorq	%fs:40, %rcx
+ 199      25280000 
+ 199      00
+ 200 0081 7405     		je	.L12
+ 201 0083 E8000000 		call	__stack_chk_fail@PLT
+ 201      00
+ 202              	.L12:
+ 203 0088 C9       		leave
+ 204              	.LCFI8:
+ 205              		.cfi_def_cfa 7, 8
+ 206 0089 C3       		ret
+ 207              		.cfi_endproc
+ 208              	.LFE8:
+ 210              		.section	.text.osal_task_exit,"ax",@progbits
+ 211              		.globl	osal_task_exit
+ 213              	osal_task_exit:
+ 214              	.LFB9:
+  86:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  87:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  88:/home/xingli/share/1205tiny/os/osal/osal.c **** void osal_task_exit(void)
+  89:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 215              		.loc 1 89 1
+ 216              		.cfi_startproc
+ 217 0000 F30F1EFA 		endbr64
+ 218 0004 55       		pushq	%rbp
+ 219              	.LCFI9:
+ 220              		.cfi_def_cfa_offset 16
+ 221              		.cfi_offset 6, -16
+ 222 0005 4889E5   		movq	%rsp, %rbp
+ 223              	.LCFI10:
+ 224              		.cfi_def_cfa_register 6
+ 225 0008 4883EC10 		subq	$16, %rsp
+ 226              		.loc 1 89 1
+ 227 000c 64488B04 		movq	%fs:40, %rax
+ 227      25280000 
+ 227      00
+ 228 0015 488945F8 		movq	%rax, -8(%rbp)
+ 229 0019 31C0     		xorl	%eax, %eax
+  90:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+GAS LISTING /tmp/ccaBVwM7.s 			page 7
+
+
+  91:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_exit))
+ 230              		.loc 1 91 14
+ 231 001b 488B0500 		movq	s_os_cb(%rip), %rax
+ 231      000000
+ 232              		.loc 1 91 7
+ 233 0022 4885C0   		testq	%rax, %rax
+ 234 0025 7436     		je	.L17
+ 235              		.loc 1 91 44 discriminator 1
+ 236 0027 488B0500 		movq	s_os_cb(%rip), %rax
+ 236      000000
+ 237 002e 488B4008 		movq	8(%rax), %rax
+ 238              		.loc 1 91 26 discriminator 1
+ 239 0032 4885C0   		testq	%rax, %rax
+ 240 0035 7426     		je	.L17
+ 241              		.loc 1 91 69 discriminator 2
+ 242 0037 488B0500 		movq	s_os_cb(%rip), %rax
+ 242      000000
+ 243 003e 488B4008 		movq	8(%rax), %rax
+ 244              		.loc 1 91 74 discriminator 2
+ 245 0042 488B4010 		movq	16(%rax), %rax
+ 246              		.loc 1 91 51 discriminator 2
+ 247 0046 4885C0   		testq	%rax, %rax
+ 248 0049 7412     		je	.L17
+  92:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+  93:/home/xingli/share/1205tiny/os/osal/osal.c ****         s_os_cb->ops->task_exit();
+ 249              		.loc 1 93 16
+ 250 004b 488B0500 		movq	s_os_cb(%rip), %rax
+ 250      000000
+ 251 0052 488B4008 		movq	8(%rax), %rax
+ 252              		.loc 1 93 21
+ 253 0056 488B4010 		movq	16(%rax), %rax
+ 254              		.loc 1 93 9
+ 255 005a FFD0     		call	*%rax
+ 256              	.LVL2:
+  94:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+  95:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ;
+ 257              		.loc 1 95 5
+ 258 005c 90       		nop
+ 259              	.L17:
+ 260 005d 90       		nop
+  96:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  97:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 261              		.loc 1 97 1
+ 262 005e 488B45F8 		movq	-8(%rbp), %rax
+ 263 0062 64483304 		xorq	%fs:40, %rax
+ 263      25280000 
+ 263      00
+ 264 006b 7405     		je	.L16
+ 265 006d E8000000 		call	__stack_chk_fail@PLT
+ 265      00
+ 266              	.L16:
+ 267 0072 C9       		leave
+ 268              	.LCFI11:
+ 269              		.cfi_def_cfa 7, 8
+ 270 0073 C3       		ret
+ 271              		.cfi_endproc
+ 272              	.LFE9:
+GAS LISTING /tmp/ccaBVwM7.s 			page 8
+
+
+ 274              		.section	.text.osal_task_sleep,"ax",@progbits
+ 275              		.globl	osal_task_sleep
+ 277              	osal_task_sleep:
+ 278              	.LFB10:
+  98:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+  99:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 100:/home/xingli/share/1205tiny/os/osal/osal.c **** void osal_task_sleep(int ms)
+ 101:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 279              		.loc 1 101 1
+ 280              		.cfi_startproc
+ 281 0000 F30F1EFA 		endbr64
+ 282 0004 55       		pushq	%rbp
+ 283              	.LCFI12:
+ 284              		.cfi_def_cfa_offset 16
+ 285              		.cfi_offset 6, -16
+ 286 0005 4889E5   		movq	%rsp, %rbp
+ 287              	.LCFI13:
+ 288              		.cfi_def_cfa_register 6
+ 289 0008 4883EC20 		subq	$32, %rsp
+ 290 000c 897DEC   		movl	%edi, -20(%rbp)
+ 291              		.loc 1 101 1
+ 292 000f 64488B04 		movq	%fs:40, %rax
+ 292      25280000 
+ 292      00
+ 293 0018 488945F8 		movq	%rax, -8(%rbp)
+ 294 001c 31C0     		xorl	%eax, %eax
+ 102:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->task_sleep))
+ 295              		.loc 1 102 14
+ 296 001e 488B0500 		movq	s_os_cb(%rip), %rax
+ 296      000000
+ 297              		.loc 1 102 7
+ 298 0025 4885C0   		testq	%rax, %rax
+ 299 0028 743B     		je	.L22
+ 300              		.loc 1 102 44 discriminator 1
+ 301 002a 488B0500 		movq	s_os_cb(%rip), %rax
+ 301      000000
+ 302 0031 488B4008 		movq	8(%rax), %rax
+ 303              		.loc 1 102 26 discriminator 1
+ 304 0035 4885C0   		testq	%rax, %rax
+ 305 0038 742B     		je	.L22
+ 306              		.loc 1 102 69 discriminator 2
+ 307 003a 488B0500 		movq	s_os_cb(%rip), %rax
+ 307      000000
+ 308 0041 488B4008 		movq	8(%rax), %rax
+ 309              		.loc 1 102 74 discriminator 2
+ 310 0045 488B4018 		movq	24(%rax), %rax
+ 311              		.loc 1 102 51 discriminator 2
+ 312 0049 4885C0   		testq	%rax, %rax
+ 313 004c 7417     		je	.L22
+ 103:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 104:/home/xingli/share/1205tiny/os/osal/osal.c ****         s_os_cb->ops->task_sleep(ms);
+ 314              		.loc 1 104 16
+ 315 004e 488B0500 		movq	s_os_cb(%rip), %rax
+ 315      000000
+ 316 0055 488B4008 		movq	8(%rax), %rax
+ 317              		.loc 1 104 21
+ 318 0059 488B5018 		movq	24(%rax), %rdx
+GAS LISTING /tmp/ccaBVwM7.s 			page 9
+
+
+ 319              		.loc 1 104 9
+ 320 005d 8B45EC   		movl	-20(%rbp), %eax
+ 321 0060 89C7     		movl	%eax, %edi
+ 322 0062 FFD2     		call	*%rdx
+ 323              	.LVL3:
+ 105:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 106:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 107:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ;
+ 324              		.loc 1 107 5
+ 325 0064 90       		nop
+ 326              	.L22:
+ 327 0065 90       		nop
+ 108:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 109:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 328              		.loc 1 109 1
+ 329 0066 488B45F8 		movq	-8(%rbp), %rax
+ 330 006a 64483304 		xorq	%fs:40, %rax
+ 330      25280000 
+ 330      00
+ 331 0073 7405     		je	.L21
+ 332 0075 E8000000 		call	__stack_chk_fail@PLT
+ 332      00
+ 333              	.L21:
+ 334 007a C9       		leave
+ 335              	.LCFI14:
+ 336              		.cfi_def_cfa 7, 8
+ 337 007b C3       		ret
+ 338              		.cfi_endproc
+ 339              	.LFE10:
+ 341              		.section	.text.osal_mutex_create,"ax",@progbits
+ 342              		.globl	osal_mutex_create
+ 344              	osal_mutex_create:
+ 345              	.LFB11:
+ 110:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 111:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 112:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_mutex_create(osal_mutex_t *mutex)
+ 113:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 346              		.loc 1 113 1
+ 347              		.cfi_startproc
+ 348 0000 F30F1EFA 		endbr64
+ 349 0004 55       		pushq	%rbp
+ 350              	.LCFI15:
+ 351              		.cfi_def_cfa_offset 16
+ 352              		.cfi_offset 6, -16
+ 353 0005 4889E5   		movq	%rsp, %rbp
+ 354              	.LCFI16:
+ 355              		.cfi_def_cfa_register 6
+ 356 0008 4883EC20 		subq	$32, %rsp
+ 357 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 358              		.loc 1 113 1
+ 359 0010 64488B04 		movq	%fs:40, %rax
+ 359      25280000 
+ 359      00
+ 360 0019 488945F8 		movq	%rax, -8(%rbp)
+ 361 001d 31C0     		xorl	%eax, %eax
+ 114:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 362              		.loc 1 114 12
+GAS LISTING /tmp/ccaBVwM7.s 			page 10
+
+
+ 363 001f C745F400 		movl	$0, -12(%rbp)
+ 363      000000
+ 115:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 116:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_create))
+ 364              		.loc 1 116 14
+ 365 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 365      000000
+ 366              		.loc 1 116 7
+ 367 002d 4885C0   		testq	%rax, %rax
+ 368 0030 743F     		je	.L24
+ 369              		.loc 1 116 44 discriminator 1
+ 370 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 370      000000
+ 371 0039 488B4008 		movq	8(%rax), %rax
+ 372              		.loc 1 116 26 discriminator 1
+ 373 003d 4885C0   		testq	%rax, %rax
+ 374 0040 742F     		je	.L24
+ 375              		.loc 1 116 69 discriminator 2
+ 376 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 376      000000
+ 377 0049 488B4008 		movq	8(%rax), %rax
+ 378              		.loc 1 116 74 discriminator 2
+ 379 004d 488B4020 		movq	32(%rax), %rax
+ 380              		.loc 1 116 51 discriminator 2
+ 381 0051 4885C0   		testq	%rax, %rax
+ 382 0054 741B     		je	.L24
+ 117:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 118:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->mutex_create(mutex);
+ 383              		.loc 1 118 22
+ 384 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 384      000000
+ 385 005d 488B4008 		movq	8(%rax), %rax
+ 386              		.loc 1 118 27
+ 387 0061 488B5020 		movq	32(%rax), %rdx
+ 388              		.loc 1 118 15
+ 389 0065 488B45E8 		movq	-24(%rbp), %rax
+ 390 0069 4889C7   		movq	%rax, %rdi
+ 391 006c FFD2     		call	*%rdx
+ 392              	.LVL4:
+ 393 006e 8945F4   		movl	%eax, -12(%rbp)
+ 394              	.L24:
+ 119:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 120:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 121:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 395              		.loc 1 121 12
+ 396 0071 8B45F4   		movl	-12(%rbp), %eax
+ 122:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 123:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 397              		.loc 1 123 1
+ 398 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 399 0078 6448330C 		xorq	%fs:40, %rcx
+ 399      25280000 
+ 399      00
+ 400 0081 7405     		je	.L26
+ 401 0083 E8000000 		call	__stack_chk_fail@PLT
+ 401      00
+ 402              	.L26:
+GAS LISTING /tmp/ccaBVwM7.s 			page 11
+
+
+ 403 0088 C9       		leave
+ 404              	.LCFI17:
+ 405              		.cfi_def_cfa 7, 8
+ 406 0089 C3       		ret
+ 407              		.cfi_endproc
+ 408              	.LFE11:
+ 410              		.section	.text.osal_mutex_lock,"ax",@progbits
+ 411              		.globl	osal_mutex_lock
+ 413              	osal_mutex_lock:
+ 414              	.LFB12:
+ 124:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 125:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 126:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_mutex_lock(osal_mutex_t mutex)
+ 127:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 415              		.loc 1 127 1
+ 416              		.cfi_startproc
+ 417 0000 F30F1EFA 		endbr64
+ 418 0004 55       		pushq	%rbp
+ 419              	.LCFI18:
+ 420              		.cfi_def_cfa_offset 16
+ 421              		.cfi_offset 6, -16
+ 422 0005 4889E5   		movq	%rsp, %rbp
+ 423              	.LCFI19:
+ 424              		.cfi_def_cfa_register 6
+ 425 0008 4883EC20 		subq	$32, %rsp
+ 426 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 427              		.loc 1 127 1
+ 428 0010 64488B04 		movq	%fs:40, %rax
+ 428      25280000 
+ 428      00
+ 429 0019 488945F8 		movq	%rax, -8(%rbp)
+ 430 001d 31C0     		xorl	%eax, %eax
+ 128:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 431              		.loc 1 128 12
+ 432 001f C745F400 		movl	$0, -12(%rbp)
+ 432      000000
+ 129:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 130:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_lock))
+ 433              		.loc 1 130 14
+ 434 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 434      000000
+ 435              		.loc 1 130 7
+ 436 002d 4885C0   		testq	%rax, %rax
+ 437 0030 743F     		je	.L28
+ 438              		.loc 1 130 44 discriminator 1
+ 439 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 439      000000
+ 440 0039 488B4008 		movq	8(%rax), %rax
+ 441              		.loc 1 130 26 discriminator 1
+ 442 003d 4885C0   		testq	%rax, %rax
+ 443 0040 742F     		je	.L28
+ 444              		.loc 1 130 69 discriminator 2
+ 445 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 445      000000
+ 446 0049 488B4008 		movq	8(%rax), %rax
+ 447              		.loc 1 130 74 discriminator 2
+ 448 004d 488B4028 		movq	40(%rax), %rax
+GAS LISTING /tmp/ccaBVwM7.s 			page 12
+
+
+ 449              		.loc 1 130 51 discriminator 2
+ 450 0051 4885C0   		testq	%rax, %rax
+ 451 0054 741B     		je	.L28
+ 131:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 132:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->mutex_lock(mutex);
+ 452              		.loc 1 132 22
+ 453 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 453      000000
+ 454 005d 488B4008 		movq	8(%rax), %rax
+ 455              		.loc 1 132 27
+ 456 0061 488B5028 		movq	40(%rax), %rdx
+ 457              		.loc 1 132 15
+ 458 0065 488B45E8 		movq	-24(%rbp), %rax
+ 459 0069 4889C7   		movq	%rax, %rdi
+ 460 006c FFD2     		call	*%rdx
+ 461              	.LVL5:
+ 462 006e 8945F4   		movl	%eax, -12(%rbp)
+ 463              	.L28:
+ 133:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 134:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 135:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 464              		.loc 1 135 12
+ 465 0071 8B45F4   		movl	-12(%rbp), %eax
+ 136:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 137:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 466              		.loc 1 137 1
+ 467 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 468 0078 6448330C 		xorq	%fs:40, %rcx
+ 468      25280000 
+ 468      00
+ 469 0081 7405     		je	.L30
+ 470 0083 E8000000 		call	__stack_chk_fail@PLT
+ 470      00
+ 471              	.L30:
+ 472 0088 C9       		leave
+ 473              	.LCFI20:
+ 474              		.cfi_def_cfa 7, 8
+ 475 0089 C3       		ret
+ 476              		.cfi_endproc
+ 477              	.LFE12:
+ 479              		.section	.text.osal_mutex_unlock,"ax",@progbits
+ 480              		.globl	osal_mutex_unlock
+ 482              	osal_mutex_unlock:
+ 483              	.LFB13:
+ 138:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 139:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 140:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_mutex_unlock(osal_mutex_t mutex)
+ 141:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 484              		.loc 1 141 1
+ 485              		.cfi_startproc
+ 486 0000 F30F1EFA 		endbr64
+ 487 0004 55       		pushq	%rbp
+ 488              	.LCFI21:
+ 489              		.cfi_def_cfa_offset 16
+ 490              		.cfi_offset 6, -16
+ 491 0005 4889E5   		movq	%rsp, %rbp
+ 492              	.LCFI22:
+GAS LISTING /tmp/ccaBVwM7.s 			page 13
+
+
+ 493              		.cfi_def_cfa_register 6
+ 494 0008 4883EC20 		subq	$32, %rsp
+ 495 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 496              		.loc 1 141 1
+ 497 0010 64488B04 		movq	%fs:40, %rax
+ 497      25280000 
+ 497      00
+ 498 0019 488945F8 		movq	%rax, -8(%rbp)
+ 499 001d 31C0     		xorl	%eax, %eax
+ 142:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 500              		.loc 1 142 12
+ 501 001f C745F400 		movl	$0, -12(%rbp)
+ 501      000000
+ 143:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 144:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_unlock))
+ 502              		.loc 1 144 14
+ 503 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 503      000000
+ 504              		.loc 1 144 7
+ 505 002d 4885C0   		testq	%rax, %rax
+ 506 0030 743F     		je	.L32
+ 507              		.loc 1 144 44 discriminator 1
+ 508 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 508      000000
+ 509 0039 488B4008 		movq	8(%rax), %rax
+ 510              		.loc 1 144 26 discriminator 1
+ 511 003d 4885C0   		testq	%rax, %rax
+ 512 0040 742F     		je	.L32
+ 513              		.loc 1 144 69 discriminator 2
+ 514 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 514      000000
+ 515 0049 488B4008 		movq	8(%rax), %rax
+ 516              		.loc 1 144 74 discriminator 2
+ 517 004d 488B4030 		movq	48(%rax), %rax
+ 518              		.loc 1 144 51 discriminator 2
+ 519 0051 4885C0   		testq	%rax, %rax
+ 520 0054 741B     		je	.L32
+ 145:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 146:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->mutex_unlock(mutex);
+ 521              		.loc 1 146 22
+ 522 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 522      000000
+ 523 005d 488B4008 		movq	8(%rax), %rax
+ 524              		.loc 1 146 27
+ 525 0061 488B5030 		movq	48(%rax), %rdx
+ 526              		.loc 1 146 15
+ 527 0065 488B45E8 		movq	-24(%rbp), %rax
+ 528 0069 4889C7   		movq	%rax, %rdi
+ 529 006c FFD2     		call	*%rdx
+ 530              	.LVL6:
+ 531 006e 8945F4   		movl	%eax, -12(%rbp)
+ 532              	.L32:
+ 147:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 148:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 149:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 533              		.loc 1 149 12
+ 534 0071 8B45F4   		movl	-12(%rbp), %eax
+GAS LISTING /tmp/ccaBVwM7.s 			page 14
+
+
+ 150:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 151:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 535              		.loc 1 151 1
+ 536 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 537 0078 6448330C 		xorq	%fs:40, %rcx
+ 537      25280000 
+ 537      00
+ 538 0081 7405     		je	.L34
+ 539 0083 E8000000 		call	__stack_chk_fail@PLT
+ 539      00
+ 540              	.L34:
+ 541 0088 C9       		leave
+ 542              	.LCFI23:
+ 543              		.cfi_def_cfa 7, 8
+ 544 0089 C3       		ret
+ 545              		.cfi_endproc
+ 546              	.LFE13:
+ 548              		.section	.text.osal_mutex_del,"ax",@progbits
+ 549              		.globl	osal_mutex_del
+ 551              	osal_mutex_del:
+ 552              	.LFB14:
+ 152:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 153:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_mutex_del(osal_mutex_t mutex)
+ 154:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 553              		.loc 1 154 1
+ 554              		.cfi_startproc
+ 555 0000 F30F1EFA 		endbr64
+ 556 0004 55       		pushq	%rbp
+ 557              	.LCFI24:
+ 558              		.cfi_def_cfa_offset 16
+ 559              		.cfi_offset 6, -16
+ 560 0005 4889E5   		movq	%rsp, %rbp
+ 561              	.LCFI25:
+ 562              		.cfi_def_cfa_register 6
+ 563 0008 4883EC20 		subq	$32, %rsp
+ 564 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 565              		.loc 1 154 1
+ 566 0010 64488B04 		movq	%fs:40, %rax
+ 566      25280000 
+ 566      00
+ 567 0019 488945F8 		movq	%rax, -8(%rbp)
+ 568 001d 31C0     		xorl	%eax, %eax
+ 155:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 569              		.loc 1 155 12
+ 570 001f C745F400 		movl	$0, -12(%rbp)
+ 570      000000
+ 156:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 157:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->mutex_del))
+ 571              		.loc 1 157 14
+ 572 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 572      000000
+ 573              		.loc 1 157 7
+ 574 002d 4885C0   		testq	%rax, %rax
+ 575 0030 743F     		je	.L36
+ 576              		.loc 1 157 44 discriminator 1
+ 577 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 577      000000
+GAS LISTING /tmp/ccaBVwM7.s 			page 15
+
+
+ 578 0039 488B4008 		movq	8(%rax), %rax
+ 579              		.loc 1 157 26 discriminator 1
+ 580 003d 4885C0   		testq	%rax, %rax
+ 581 0040 742F     		je	.L36
+ 582              		.loc 1 157 69 discriminator 2
+ 583 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 583      000000
+ 584 0049 488B4008 		movq	8(%rax), %rax
+ 585              		.loc 1 157 74 discriminator 2
+ 586 004d 488B4038 		movq	56(%rax), %rax
+ 587              		.loc 1 157 51 discriminator 2
+ 588 0051 4885C0   		testq	%rax, %rax
+ 589 0054 741B     		je	.L36
+ 158:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 159:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->mutex_del(mutex);
+ 590              		.loc 1 159 22
+ 591 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 591      000000
+ 592 005d 488B4008 		movq	8(%rax), %rax
+ 593              		.loc 1 159 27
+ 594 0061 488B5038 		movq	56(%rax), %rdx
+ 595              		.loc 1 159 15
+ 596 0065 488B45E8 		movq	-24(%rbp), %rax
+ 597 0069 4889C7   		movq	%rax, %rdi
+ 598 006c FFD2     		call	*%rdx
+ 599              	.LVL7:
+ 600 006e 8945F4   		movl	%eax, -12(%rbp)
+ 601              	.L36:
+ 160:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 161:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 162:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 602              		.loc 1 162 12
+ 603 0071 8B45F4   		movl	-12(%rbp), %eax
+ 163:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 164:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 604              		.loc 1 164 1
+ 605 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 606 0078 6448330C 		xorq	%fs:40, %rcx
+ 606      25280000 
+ 606      00
+ 607 0081 7405     		je	.L38
+ 608 0083 E8000000 		call	__stack_chk_fail@PLT
+ 608      00
+ 609              	.L38:
+ 610 0088 C9       		leave
+ 611              	.LCFI26:
+ 612              		.cfi_def_cfa 7, 8
+ 613 0089 C3       		ret
+ 614              		.cfi_endproc
+ 615              	.LFE14:
+ 617              		.section	.text.osal_semp_create,"ax",@progbits
+ 618              		.globl	osal_semp_create
+ 620              	osal_semp_create:
+ 621              	.LFB15:
+ 165:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 166:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_semp_create(osal_semp_t *semp,int limit,int initvalue)
+ 167:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+GAS LISTING /tmp/ccaBVwM7.s 			page 16
+
+
+ 622              		.loc 1 167 1
+ 623              		.cfi_startproc
+ 624 0000 F30F1EFA 		endbr64
+ 625 0004 55       		pushq	%rbp
+ 626              	.LCFI27:
+ 627              		.cfi_def_cfa_offset 16
+ 628              		.cfi_offset 6, -16
+ 629 0005 4889E5   		movq	%rsp, %rbp
+ 630              	.LCFI28:
+ 631              		.cfi_def_cfa_register 6
+ 632 0008 4883EC20 		subq	$32, %rsp
+ 633 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 634 0010 8975E4   		movl	%esi, -28(%rbp)
+ 635 0013 8955E0   		movl	%edx, -32(%rbp)
+ 636              		.loc 1 167 1
+ 637 0016 64488B04 		movq	%fs:40, %rax
+ 637      25280000 
+ 637      00
+ 638 001f 488945F8 		movq	%rax, -8(%rbp)
+ 639 0023 31C0     		xorl	%eax, %eax
+ 168:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 640              		.loc 1 168 12
+ 641 0025 C745F400 		movl	$0, -12(%rbp)
+ 641      000000
+ 169:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 170:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_create))
+ 642              		.loc 1 170 14
+ 643 002c 488B0500 		movq	s_os_cb(%rip), %rax
+ 643      000000
+ 644              		.loc 1 170 7
+ 645 0033 4885C0   		testq	%rax, %rax
+ 646 0036 7448     		je	.L40
+ 647              		.loc 1 170 44 discriminator 1
+ 648 0038 488B0500 		movq	s_os_cb(%rip), %rax
+ 648      000000
+ 649 003f 488B4008 		movq	8(%rax), %rax
+ 650              		.loc 1 170 26 discriminator 1
+ 651 0043 4885C0   		testq	%rax, %rax
+ 652 0046 7438     		je	.L40
+ 653              		.loc 1 170 69 discriminator 2
+ 654 0048 488B0500 		movq	s_os_cb(%rip), %rax
+ 654      000000
+ 655 004f 488B4008 		movq	8(%rax), %rax
+ 656              		.loc 1 170 74 discriminator 2
+ 657 0053 488B4040 		movq	64(%rax), %rax
+ 658              		.loc 1 170 51 discriminator 2
+ 659 0057 4885C0   		testq	%rax, %rax
+ 660 005a 7424     		je	.L40
+ 171:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 172:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->semp_create(semp,limit,initvalue);
+ 661              		.loc 1 172 22
+ 662 005c 488B0500 		movq	s_os_cb(%rip), %rax
+ 662      000000
+ 663 0063 488B4008 		movq	8(%rax), %rax
+ 664              		.loc 1 172 27
+ 665 0067 4C8B4040 		movq	64(%rax), %r8
+ 666              		.loc 1 172 15
+GAS LISTING /tmp/ccaBVwM7.s 			page 17
+
+
+ 667 006b 8B55E0   		movl	-32(%rbp), %edx
+ 668 006e 8B4DE4   		movl	-28(%rbp), %ecx
+ 669 0071 488B45E8 		movq	-24(%rbp), %rax
+ 670 0075 89CE     		movl	%ecx, %esi
+ 671 0077 4889C7   		movq	%rax, %rdi
+ 672 007a 41FFD0   		call	*%r8
+ 673              	.LVL8:
+ 674 007d 8945F4   		movl	%eax, -12(%rbp)
+ 675              	.L40:
+ 173:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 174:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 175:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 676              		.loc 1 175 12
+ 677 0080 8B45F4   		movl	-12(%rbp), %eax
+ 176:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 177:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 678              		.loc 1 177 1
+ 679 0083 488B4DF8 		movq	-8(%rbp), %rcx
+ 680 0087 6448330C 		xorq	%fs:40, %rcx
+ 680      25280000 
+ 680      00
+ 681 0090 7405     		je	.L42
+ 682 0092 E8000000 		call	__stack_chk_fail@PLT
+ 682      00
+ 683              	.L42:
+ 684 0097 C9       		leave
+ 685              	.LCFI29:
+ 686              		.cfi_def_cfa 7, 8
+ 687 0098 C3       		ret
+ 688              		.cfi_endproc
+ 689              	.LFE15:
+ 691              		.section	.text.osal_semp_pend,"ax",@progbits
+ 692              		.globl	osal_semp_pend
+ 694              	osal_semp_pend:
+ 695              	.LFB16:
+ 178:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 179:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_semp_pend(osal_semp_t semp,unsigned int timeout)
+ 180:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 696              		.loc 1 180 1
+ 697              		.cfi_startproc
+ 698 0000 F30F1EFA 		endbr64
+ 699 0004 55       		pushq	%rbp
+ 700              	.LCFI30:
+ 701              		.cfi_def_cfa_offset 16
+ 702              		.cfi_offset 6, -16
+ 703 0005 4889E5   		movq	%rsp, %rbp
+ 704              	.LCFI31:
+ 705              		.cfi_def_cfa_register 6
+ 706 0008 4883EC20 		subq	$32, %rsp
+ 707 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 708 0010 8975E4   		movl	%esi, -28(%rbp)
+ 709              		.loc 1 180 1
+ 710 0013 64488B04 		movq	%fs:40, %rax
+ 710      25280000 
+ 710      00
+ 711 001c 488945F8 		movq	%rax, -8(%rbp)
+ 712 0020 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/ccaBVwM7.s 			page 18
+
+
+ 181:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 713              		.loc 1 181 12
+ 714 0022 C745F400 		movl	$0, -12(%rbp)
+ 714      000000
+ 182:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 183:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_pend))
+ 715              		.loc 1 183 14
+ 716 0029 488B0500 		movq	s_os_cb(%rip), %rax
+ 716      000000
+ 717              		.loc 1 183 7
+ 718 0030 4885C0   		testq	%rax, %rax
+ 719 0033 7444     		je	.L44
+ 720              		.loc 1 183 44 discriminator 1
+ 721 0035 488B0500 		movq	s_os_cb(%rip), %rax
+ 721      000000
+ 722 003c 488B4008 		movq	8(%rax), %rax
+ 723              		.loc 1 183 26 discriminator 1
+ 724 0040 4885C0   		testq	%rax, %rax
+ 725 0043 7434     		je	.L44
+ 726              		.loc 1 183 69 discriminator 2
+ 727 0045 488B0500 		movq	s_os_cb(%rip), %rax
+ 727      000000
+ 728 004c 488B4008 		movq	8(%rax), %rax
+ 729              		.loc 1 183 74 discriminator 2
+ 730 0050 488B4048 		movq	72(%rax), %rax
+ 731              		.loc 1 183 51 discriminator 2
+ 732 0054 4885C0   		testq	%rax, %rax
+ 733 0057 7420     		je	.L44
+ 184:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 185:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->semp_pend(semp,timeout);
+ 734              		.loc 1 185 22
+ 735 0059 488B0500 		movq	s_os_cb(%rip), %rax
+ 735      000000
+ 736 0060 488B4008 		movq	8(%rax), %rax
+ 737              		.loc 1 185 27
+ 738 0064 488B4848 		movq	72(%rax), %rcx
+ 739              		.loc 1 185 15
+ 740 0068 8B55E4   		movl	-28(%rbp), %edx
+ 741 006b 488B45E8 		movq	-24(%rbp), %rax
+ 742 006f 89D6     		movl	%edx, %esi
+ 743 0071 4889C7   		movq	%rax, %rdi
+ 744 0074 FFD1     		call	*%rcx
+ 745              	.LVL9:
+ 746 0076 8945F4   		movl	%eax, -12(%rbp)
+ 747              	.L44:
+ 186:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 187:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 188:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 748              		.loc 1 188 12
+ 749 0079 8B45F4   		movl	-12(%rbp), %eax
+ 189:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 190:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 750              		.loc 1 190 1
+ 751 007c 488B55F8 		movq	-8(%rbp), %rdx
+ 752 0080 64483314 		xorq	%fs:40, %rdx
+ 752      25280000 
+ 752      00
+GAS LISTING /tmp/ccaBVwM7.s 			page 19
+
+
+ 753 0089 7405     		je	.L46
+ 754 008b E8000000 		call	__stack_chk_fail@PLT
+ 754      00
+ 755              	.L46:
+ 756 0090 C9       		leave
+ 757              	.LCFI32:
+ 758              		.cfi_def_cfa 7, 8
+ 759 0091 C3       		ret
+ 760              		.cfi_endproc
+ 761              	.LFE16:
+ 763              		.section	.text.osal_semp_post,"ax",@progbits
+ 764              		.globl	osal_semp_post
+ 766              	osal_semp_post:
+ 767              	.LFB17:
+ 191:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 192:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 193:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_semp_post(osal_semp_t semp)
+ 194:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 768              		.loc 1 194 1
+ 769              		.cfi_startproc
+ 770 0000 F30F1EFA 		endbr64
+ 771 0004 55       		pushq	%rbp
+ 772              	.LCFI33:
+ 773              		.cfi_def_cfa_offset 16
+ 774              		.cfi_offset 6, -16
+ 775 0005 4889E5   		movq	%rsp, %rbp
+ 776              	.LCFI34:
+ 777              		.cfi_def_cfa_register 6
+ 778 0008 4883EC20 		subq	$32, %rsp
+ 779 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 780              		.loc 1 194 1
+ 781 0010 64488B04 		movq	%fs:40, %rax
+ 781      25280000 
+ 781      00
+ 782 0019 488945F8 		movq	%rax, -8(%rbp)
+ 783 001d 31C0     		xorl	%eax, %eax
+ 195:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 784              		.loc 1 195 12
+ 785 001f C745F400 		movl	$0, -12(%rbp)
+ 785      000000
+ 196:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 197:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_post))
+ 786              		.loc 1 197 14
+ 787 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 787      000000
+ 788              		.loc 1 197 7
+ 789 002d 4885C0   		testq	%rax, %rax
+ 790 0030 743F     		je	.L48
+ 791              		.loc 1 197 44 discriminator 1
+ 792 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 792      000000
+ 793 0039 488B4008 		movq	8(%rax), %rax
+ 794              		.loc 1 197 26 discriminator 1
+ 795 003d 4885C0   		testq	%rax, %rax
+ 796 0040 742F     		je	.L48
+ 797              		.loc 1 197 69 discriminator 2
+ 798 0042 488B0500 		movq	s_os_cb(%rip), %rax
+GAS LISTING /tmp/ccaBVwM7.s 			page 20
+
+
+ 798      000000
+ 799 0049 488B4008 		movq	8(%rax), %rax
+ 800              		.loc 1 197 74 discriminator 2
+ 801 004d 488B4050 		movq	80(%rax), %rax
+ 802              		.loc 1 197 51 discriminator 2
+ 803 0051 4885C0   		testq	%rax, %rax
+ 804 0054 741B     		je	.L48
+ 198:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 199:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->semp_post(semp);
+ 805              		.loc 1 199 22
+ 806 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 806      000000
+ 807 005d 488B4008 		movq	8(%rax), %rax
+ 808              		.loc 1 199 27
+ 809 0061 488B5050 		movq	80(%rax), %rdx
+ 810              		.loc 1 199 15
+ 811 0065 488B45E8 		movq	-24(%rbp), %rax
+ 812 0069 4889C7   		movq	%rax, %rdi
+ 813 006c FFD2     		call	*%rdx
+ 814              	.LVL10:
+ 815 006e 8945F4   		movl	%eax, -12(%rbp)
+ 816              	.L48:
+ 200:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 201:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 202:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 817              		.loc 1 202 12
+ 818 0071 8B45F4   		movl	-12(%rbp), %eax
+ 203:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 204:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 819              		.loc 1 204 1
+ 820 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 821 0078 6448330C 		xorq	%fs:40, %rcx
+ 821      25280000 
+ 821      00
+ 822 0081 7405     		je	.L50
+ 823 0083 E8000000 		call	__stack_chk_fail@PLT
+ 823      00
+ 824              	.L50:
+ 825 0088 C9       		leave
+ 826              	.LCFI35:
+ 827              		.cfi_def_cfa 7, 8
+ 828 0089 C3       		ret
+ 829              		.cfi_endproc
+ 830              	.LFE17:
+ 832              		.section	.text.osal_semp_del,"ax",@progbits
+ 833              		.globl	osal_semp_del
+ 835              	osal_semp_del:
+ 836              	.LFB18:
+ 205:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 206:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_semp_del(osal_semp_t semp)
+ 207:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 837              		.loc 1 207 1
+ 838              		.cfi_startproc
+ 839 0000 F30F1EFA 		endbr64
+ 840 0004 55       		pushq	%rbp
+ 841              	.LCFI36:
+ 842              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/ccaBVwM7.s 			page 21
+
+
+ 843              		.cfi_offset 6, -16
+ 844 0005 4889E5   		movq	%rsp, %rbp
+ 845              	.LCFI37:
+ 846              		.cfi_def_cfa_register 6
+ 847 0008 4883EC20 		subq	$32, %rsp
+ 848 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 849              		.loc 1 207 1
+ 850 0010 64488B04 		movq	%fs:40, %rax
+ 850      25280000 
+ 850      00
+ 851 0019 488945F8 		movq	%rax, -8(%rbp)
+ 852 001d 31C0     		xorl	%eax, %eax
+ 208:/home/xingli/share/1205tiny/os/osal/osal.c ****     bool_t ret = false;
+ 853              		.loc 1 208 12
+ 854 001f C745F400 		movl	$0, -12(%rbp)
+ 854      000000
+ 209:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 210:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->semp_del))
+ 855              		.loc 1 210 14
+ 856 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 856      000000
+ 857              		.loc 1 210 7
+ 858 002d 4885C0   		testq	%rax, %rax
+ 859 0030 743F     		je	.L52
+ 860              		.loc 1 210 44 discriminator 1
+ 861 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 861      000000
+ 862 0039 488B4008 		movq	8(%rax), %rax
+ 863              		.loc 1 210 26 discriminator 1
+ 864 003d 4885C0   		testq	%rax, %rax
+ 865 0040 742F     		je	.L52
+ 866              		.loc 1 210 69 discriminator 2
+ 867 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 867      000000
+ 868 0049 488B4008 		movq	8(%rax), %rax
+ 869              		.loc 1 210 74 discriminator 2
+ 870 004d 488B4058 		movq	88(%rax), %rax
+ 871              		.loc 1 210 51 discriminator 2
+ 872 0051 4885C0   		testq	%rax, %rax
+ 873 0054 741B     		je	.L52
+ 211:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 212:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->semp_del(semp);
+ 874              		.loc 1 212 22
+ 875 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 875      000000
+ 876 005d 488B4008 		movq	8(%rax), %rax
+ 877              		.loc 1 212 27
+ 878 0061 488B5058 		movq	88(%rax), %rdx
+ 879              		.loc 1 212 15
+ 880 0065 488B45E8 		movq	-24(%rbp), %rax
+ 881 0069 4889C7   		movq	%rax, %rdi
+ 882 006c FFD2     		call	*%rdx
+ 883              	.LVL11:
+ 884 006e 8945F4   		movl	%eax, -12(%rbp)
+ 885              	.L52:
+ 213:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 214:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+GAS LISTING /tmp/ccaBVwM7.s 			page 22
+
+
+ 215:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 886              		.loc 1 215 12
+ 887 0071 8B45F4   		movl	-12(%rbp), %eax
+ 216:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 217:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 888              		.loc 1 217 1
+ 889 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 890 0078 6448330C 		xorq	%fs:40, %rcx
+ 890      25280000 
+ 890      00
+ 891 0081 7405     		je	.L54
+ 892 0083 E8000000 		call	__stack_chk_fail@PLT
+ 892      00
+ 893              	.L54:
+ 894 0088 C9       		leave
+ 895              	.LCFI38:
+ 896              		.cfi_def_cfa 7, 8
+ 897 0089 C3       		ret
+ 898              		.cfi_endproc
+ 899              	.LFE18:
+ 901              		.section	.text.osal_malloc,"ax",@progbits
+ 902              		.globl	osal_malloc
+ 904              	osal_malloc:
+ 905              	.LFB19:
+ 218:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 219:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 220:/home/xingli/share/1205tiny/os/osal/osal.c **** void *osal_malloc(size_t size)
+ 221:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 906              		.loc 1 221 1
+ 907              		.cfi_startproc
+ 908 0000 F30F1EFA 		endbr64
+ 909 0004 55       		pushq	%rbp
+ 910              	.LCFI39:
+ 911              		.cfi_def_cfa_offset 16
+ 912              		.cfi_offset 6, -16
+ 913 0005 4889E5   		movq	%rsp, %rbp
+ 914              	.LCFI40:
+ 915              		.cfi_def_cfa_register 6
+ 916 0008 4883EC20 		subq	$32, %rsp
+ 917 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 918              		.loc 1 221 1
+ 919 0010 64488B04 		movq	%fs:40, %rax
+ 919      25280000 
+ 919      00
+ 920 0019 488945F8 		movq	%rax, -8(%rbp)
+ 921 001d 31C0     		xorl	%eax, %eax
+ 222:/home/xingli/share/1205tiny/os/osal/osal.c ****     void *ret = NULL;
+ 922              		.loc 1 222 11
+ 923 001f 48C745F0 		movq	$0, -16(%rbp)
+ 923      00000000 
+ 223:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 224:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->malloc))
+ 924              		.loc 1 224 14
+ 925 0027 488B0500 		movq	s_os_cb(%rip), %rax
+ 925      000000
+ 926              		.loc 1 224 7
+ 927 002e 4885C0   		testq	%rax, %rax
+GAS LISTING /tmp/ccaBVwM7.s 			page 23
+
+
+ 928 0031 7446     		je	.L56
+ 929              		.loc 1 224 44 discriminator 1
+ 930 0033 488B0500 		movq	s_os_cb(%rip), %rax
+ 930      000000
+ 931 003a 488B4008 		movq	8(%rax), %rax
+ 932              		.loc 1 224 26 discriminator 1
+ 933 003e 4885C0   		testq	%rax, %rax
+ 934 0041 7436     		je	.L56
+ 935              		.loc 1 224 69 discriminator 2
+ 936 0043 488B0500 		movq	s_os_cb(%rip), %rax
+ 936      000000
+ 937 004a 488B4008 		movq	8(%rax), %rax
+ 938              		.loc 1 224 74 discriminator 2
+ 939 004e 488B8080 		movq	128(%rax), %rax
+ 939      000000
+ 940              		.loc 1 224 51 discriminator 2
+ 941 0055 4885C0   		testq	%rax, %rax
+ 942 0058 741F     		je	.L56
+ 225:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 226:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->malloc(size);
+ 943              		.loc 1 226 22
+ 944 005a 488B0500 		movq	s_os_cb(%rip), %rax
+ 944      000000
+ 945 0061 488B4008 		movq	8(%rax), %rax
+ 946              		.loc 1 226 27
+ 947 0065 488B9080 		movq	128(%rax), %rdx
+ 947      000000
+ 948              		.loc 1 226 15
+ 949 006c 488B45E8 		movq	-24(%rbp), %rax
+ 950 0070 4889C7   		movq	%rax, %rdi
+ 951 0073 FFD2     		call	*%rdx
+ 952              	.LVL12:
+ 953 0075 488945F0 		movq	%rax, -16(%rbp)
+ 954              	.L56:
+ 227:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 228:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 229:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 955              		.loc 1 229 12
+ 956 0079 488B45F0 		movq	-16(%rbp), %rax
+ 230:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 231:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 957              		.loc 1 231 1
+ 958 007d 488B4DF8 		movq	-8(%rbp), %rcx
+ 959 0081 6448330C 		xorq	%fs:40, %rcx
+ 959      25280000 
+ 959      00
+ 960 008a 7405     		je	.L58
+ 961 008c E8000000 		call	__stack_chk_fail@PLT
+ 961      00
+ 962              	.L58:
+ 963 0091 C9       		leave
+ 964              	.LCFI41:
+ 965              		.cfi_def_cfa 7, 8
+ 966 0092 C3       		ret
+ 967              		.cfi_endproc
+ 968              	.LFE19:
+ 970              		.section	.text.osal_free,"ax",@progbits
+GAS LISTING /tmp/ccaBVwM7.s 			page 24
+
+
+ 971              		.globl	osal_free
+ 973              	osal_free:
+ 974              	.LFB20:
+ 232:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 233:/home/xingli/share/1205tiny/os/osal/osal.c **** void  osal_free(void *addr)
+ 234:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 975              		.loc 1 234 1
+ 976              		.cfi_startproc
+ 977 0000 F30F1EFA 		endbr64
+ 978 0004 55       		pushq	%rbp
+ 979              	.LCFI42:
+ 980              		.cfi_def_cfa_offset 16
+ 981              		.cfi_offset 6, -16
+ 982 0005 4889E5   		movq	%rsp, %rbp
+ 983              	.LCFI43:
+ 984              		.cfi_def_cfa_register 6
+ 985 0008 4883EC20 		subq	$32, %rsp
+ 986 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 987              		.loc 1 234 1
+ 988 0010 64488B04 		movq	%fs:40, %rax
+ 988      25280000 
+ 988      00
+ 989 0019 488945F8 		movq	%rax, -8(%rbp)
+ 990 001d 31C0     		xorl	%eax, %eax
+ 235:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 236:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != addr) && (NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->free))
+ 991              		.loc 1 236 7
+ 992 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 992      00
+ 993 0024 744F     		je	.L63
+ 994              		.loc 1 236 32 discriminator 1
+ 995 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 995      000000
+ 996              		.loc 1 236 23 discriminator 1
+ 997 002d 4885C0   		testq	%rax, %rax
+ 998 0030 7443     		je	.L63
+ 999              		.loc 1 236 62 discriminator 2
+ 1000 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 1000      000000
+ 1001 0039 488B4008 		movq	8(%rax), %rax
+ 1002              		.loc 1 236 44 discriminator 2
+ 1003 003d 4885C0   		testq	%rax, %rax
+ 1004 0040 7433     		je	.L63
+ 1005              		.loc 1 236 87 discriminator 3
+ 1006 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 1006      000000
+ 1007 0049 488B4008 		movq	8(%rax), %rax
+ 1008              		.loc 1 236 92 discriminator 3
+ 1009 004d 488B8088 		movq	136(%rax), %rax
+ 1009      000000
+ 1010              		.loc 1 236 69 discriminator 3
+ 1011 0054 4885C0   		testq	%rax, %rax
+ 1012 0057 741C     		je	.L63
+ 237:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 238:/home/xingli/share/1205tiny/os/osal/osal.c ****         s_os_cb->ops->free(addr);
+ 1013              		.loc 1 238 16
+ 1014 0059 488B0500 		movq	s_os_cb(%rip), %rax
+GAS LISTING /tmp/ccaBVwM7.s 			page 25
+
+
+ 1014      000000
+ 1015 0060 488B4008 		movq	8(%rax), %rax
+ 1016              		.loc 1 238 21
+ 1017 0064 488B9088 		movq	136(%rax), %rdx
+ 1017      000000
+ 1018              		.loc 1 238 9
+ 1019 006b 488B45E8 		movq	-24(%rbp), %rax
+ 1020 006f 4889C7   		movq	%rax, %rdi
+ 1021 0072 FFD2     		call	*%rdx
+ 1022              	.LVL13:
+ 239:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 240:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 241:/home/xingli/share/1205tiny/os/osal/osal.c ****     return;
+ 1023              		.loc 1 241 5
+ 1024 0074 90       		nop
+ 1025              	.L63:
+ 1026 0075 90       		nop
+ 242:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1027              		.loc 1 242 1
+ 1028 0076 488B45F8 		movq	-8(%rbp), %rax
+ 1029 007a 64483304 		xorq	%fs:40, %rax
+ 1029      25280000 
+ 1029      00
+ 1030 0083 7405     		je	.L62
+ 1031 0085 E8000000 		call	__stack_chk_fail@PLT
+ 1031      00
+ 1032              	.L62:
+ 1033 008a C9       		leave
+ 1034              	.LCFI44:
+ 1035              		.cfi_def_cfa 7, 8
+ 1036 008b C3       		ret
+ 1037              		.cfi_endproc
+ 1038              	.LFE20:
+ 1040              		.section	.text.osal_zalloc,"ax",@progbits
+ 1041              		.globl	osal_zalloc
+ 1043              	osal_zalloc:
+ 1044              	.LFB21:
+ 243:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 244:/home/xingli/share/1205tiny/os/osal/osal.c **** void *osal_zalloc(size_t size)
+ 245:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1045              		.loc 1 245 1
+ 1046              		.cfi_startproc
+ 1047 0000 F30F1EFA 		endbr64
+ 1048 0004 55       		pushq	%rbp
+ 1049              	.LCFI45:
+ 1050              		.cfi_def_cfa_offset 16
+ 1051              		.cfi_offset 6, -16
+ 1052 0005 4889E5   		movq	%rsp, %rbp
+ 1053              	.LCFI46:
+ 1054              		.cfi_def_cfa_register 6
+ 1055 0008 4883EC20 		subq	$32, %rsp
+ 1056 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1057              		.loc 1 245 1
+ 1058 0010 64488B04 		movq	%fs:40, %rax
+ 1058      25280000 
+ 1058      00
+ 1059 0019 488945F8 		movq	%rax, -8(%rbp)
+GAS LISTING /tmp/ccaBVwM7.s 			page 26
+
+
+ 1060 001d 31C0     		xorl	%eax, %eax
+ 246:/home/xingli/share/1205tiny/os/osal/osal.c ****     void *ret = NULL;
+ 1061              		.loc 1 246 11
+ 1062 001f 48C745F0 		movq	$0, -16(%rbp)
+ 1062      00000000 
+ 247:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 248:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->malloc))
+ 1063              		.loc 1 248 14
+ 1064 0027 488B0500 		movq	s_os_cb(%rip), %rax
+ 1064      000000
+ 1065              		.loc 1 248 7
+ 1066 002e 4885C0   		testq	%rax, %rax
+ 1067 0031 7462     		je	.L65
+ 1068              		.loc 1 248 44 discriminator 1
+ 1069 0033 488B0500 		movq	s_os_cb(%rip), %rax
+ 1069      000000
+ 1070 003a 488B4008 		movq	8(%rax), %rax
+ 1071              		.loc 1 248 26 discriminator 1
+ 1072 003e 4885C0   		testq	%rax, %rax
+ 1073 0041 7452     		je	.L65
+ 1074              		.loc 1 248 69 discriminator 2
+ 1075 0043 488B0500 		movq	s_os_cb(%rip), %rax
+ 1075      000000
+ 1076 004a 488B4008 		movq	8(%rax), %rax
+ 1077              		.loc 1 248 74 discriminator 2
+ 1078 004e 488B8080 		movq	128(%rax), %rax
+ 1078      000000
+ 1079              		.loc 1 248 51 discriminator 2
+ 1080 0055 4885C0   		testq	%rax, %rax
+ 1081 0058 743B     		je	.L65
+ 249:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 250:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->malloc(size);
+ 1082              		.loc 1 250 22
+ 1083 005a 488B0500 		movq	s_os_cb(%rip), %rax
+ 1083      000000
+ 1084 0061 488B4008 		movq	8(%rax), %rax
+ 1085              		.loc 1 250 27
+ 1086 0065 488B9080 		movq	128(%rax), %rdx
+ 1086      000000
+ 1087              		.loc 1 250 15
+ 1088 006c 488B45E8 		movq	-24(%rbp), %rax
+ 1089 0070 4889C7   		movq	%rax, %rdi
+ 1090 0073 FFD2     		call	*%rdx
+ 1091              	.LVL14:
+ 1092 0075 488945F0 		movq	%rax, -16(%rbp)
+ 251:/home/xingli/share/1205tiny/os/osal/osal.c ****         if(NULL != ret)
+ 1093              		.loc 1 251 11
+ 1094 0079 48837DF0 		cmpq	$0, -16(%rbp)
+ 1094      00
+ 1095 007e 7415     		je	.L65
+ 252:/home/xingli/share/1205tiny/os/osal/osal.c ****         {
+ 253:/home/xingli/share/1205tiny/os/osal/osal.c ****             (void) memset(ret,0,size);
+ 1096              		.loc 1 253 20
+ 1097 0080 488B55E8 		movq	-24(%rbp), %rdx
+ 1098 0084 488B45F0 		movq	-16(%rbp), %rax
+ 1099 0088 BE000000 		movl	$0, %esi
+ 1099      00
+GAS LISTING /tmp/ccaBVwM7.s 			page 27
+
+
+ 1100 008d 4889C7   		movq	%rax, %rdi
+ 1101 0090 E8000000 		call	memset@PLT
+ 1101      00
+ 1102              	.L65:
+ 254:/home/xingli/share/1205tiny/os/osal/osal.c ****         }
+ 255:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 256:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 257:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1103              		.loc 1 257 12
+ 1104 0095 488B45F0 		movq	-16(%rbp), %rax
+ 258:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 259:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1105              		.loc 1 259 1
+ 1106 0099 488B4DF8 		movq	-8(%rbp), %rcx
+ 1107 009d 6448330C 		xorq	%fs:40, %rcx
+ 1107      25280000 
+ 1107      00
+ 1108 00a6 7405     		je	.L67
+ 1109 00a8 E8000000 		call	__stack_chk_fail@PLT
+ 1109      00
+ 1110              	.L67:
+ 1111 00ad C9       		leave
+ 1112              	.LCFI47:
+ 1113              		.cfi_def_cfa 7, 8
+ 1114 00ae C3       		ret
+ 1115              		.cfi_endproc
+ 1116              	.LFE21:
+ 1118              		.section	.text.osal_realloc,"ax",@progbits
+ 1119              		.globl	osal_realloc
+ 1121              	osal_realloc:
+ 1122              	.LFB22:
+ 260:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 261:/home/xingli/share/1205tiny/os/osal/osal.c **** void *osal_realloc(void *ptr,size_t newsize)
+ 262:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1123              		.loc 1 262 1
+ 1124              		.cfi_startproc
+ 1125 0000 F30F1EFA 		endbr64
+ 1126 0004 55       		pushq	%rbp
+ 1127              	.LCFI48:
+ 1128              		.cfi_def_cfa_offset 16
+ 1129              		.cfi_offset 6, -16
+ 1130 0005 4889E5   		movq	%rsp, %rbp
+ 1131              	.LCFI49:
+ 1132              		.cfi_def_cfa_register 6
+ 1133 0008 4883EC20 		subq	$32, %rsp
+ 1134 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1135 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1136              		.loc 1 262 1
+ 1137 0014 64488B04 		movq	%fs:40, %rax
+ 1137      25280000 
+ 1137      00
+ 1138 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1139 0021 31C0     		xorl	%eax, %eax
+ 263:/home/xingli/share/1205tiny/os/osal/osal.c ****     void *ret = NULL;
+ 1140              		.loc 1 263 11
+ 1141 0023 48C745F0 		movq	$0, -16(%rbp)
+ 1141      00000000 
+GAS LISTING /tmp/ccaBVwM7.s 			page 28
+
+
+ 264:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 265:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->realloc))
+ 1142              		.loc 1 265 14
+ 1143 002b 488B0500 		movq	s_os_cb(%rip), %rax
+ 1143      000000
+ 1144              		.loc 1 265 7
+ 1145 0032 4885C0   		testq	%rax, %rax
+ 1146 0035 744D     		je	.L69
+ 1147              		.loc 1 265 44 discriminator 1
+ 1148 0037 488B0500 		movq	s_os_cb(%rip), %rax
+ 1148      000000
+ 1149 003e 488B4008 		movq	8(%rax), %rax
+ 1150              		.loc 1 265 26 discriminator 1
+ 1151 0042 4885C0   		testq	%rax, %rax
+ 1152 0045 743D     		je	.L69
+ 1153              		.loc 1 265 69 discriminator 2
+ 1154 0047 488B0500 		movq	s_os_cb(%rip), %rax
+ 1154      000000
+ 1155 004e 488B4008 		movq	8(%rax), %rax
+ 1156              		.loc 1 265 74 discriminator 2
+ 1157 0052 488B8090 		movq	144(%rax), %rax
+ 1157      000000
+ 1158              		.loc 1 265 51 discriminator 2
+ 1159 0059 4885C0   		testq	%rax, %rax
+ 1160 005c 7426     		je	.L69
+ 266:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 267:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->realloc(ptr,newsize);
+ 1161              		.loc 1 267 22
+ 1162 005e 488B0500 		movq	s_os_cb(%rip), %rax
+ 1162      000000
+ 1163 0065 488B4008 		movq	8(%rax), %rax
+ 1164              		.loc 1 267 27
+ 1165 0069 488B8890 		movq	144(%rax), %rcx
+ 1165      000000
+ 1166              		.loc 1 267 15
+ 1167 0070 488B55E0 		movq	-32(%rbp), %rdx
+ 1168 0074 488B45E8 		movq	-24(%rbp), %rax
+ 1169 0078 4889D6   		movq	%rdx, %rsi
+ 1170 007b 4889C7   		movq	%rax, %rdi
+ 1171 007e FFD1     		call	*%rcx
+ 1172              	.LVL15:
+ 1173 0080 488945F0 		movq	%rax, -16(%rbp)
+ 1174              	.L69:
+ 268:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 269:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 270:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1175              		.loc 1 270 12
+ 1176 0084 488B45F0 		movq	-16(%rbp), %rax
+ 271:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1177              		.loc 1 271 1
+ 1178 0088 488B55F8 		movq	-8(%rbp), %rdx
+ 1179 008c 64483314 		xorq	%fs:40, %rdx
+ 1179      25280000 
+ 1179      00
+ 1180 0095 7405     		je	.L71
+ 1181 0097 E8000000 		call	__stack_chk_fail@PLT
+ 1181      00
+GAS LISTING /tmp/ccaBVwM7.s 			page 29
+
+
+ 1182              	.L71:
+ 1183 009c C9       		leave
+ 1184              	.LCFI50:
+ 1185              		.cfi_def_cfa 7, 8
+ 1186 009d C3       		ret
+ 1187              		.cfi_endproc
+ 1188              	.LFE22:
+ 1190              		.section	.text.osal_calloc,"ax",@progbits
+ 1191              		.globl	osal_calloc
+ 1193              	osal_calloc:
+ 1194              	.LFB23:
+ 272:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 273:/home/xingli/share/1205tiny/os/osal/osal.c **** void *osal_calloc(size_t n, size_t size)
+ 274:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1195              		.loc 1 274 1
+ 1196              		.cfi_startproc
+ 1197 0000 F30F1EFA 		endbr64
+ 1198 0004 55       		pushq	%rbp
+ 1199              	.LCFI51:
+ 1200              		.cfi_def_cfa_offset 16
+ 1201              		.cfi_offset 6, -16
+ 1202 0005 4889E5   		movq	%rsp, %rbp
+ 1203              	.LCFI52:
+ 1204              		.cfi_def_cfa_register 6
+ 1205 0008 4883EC30 		subq	$48, %rsp
+ 1206 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1207 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1208              		.loc 1 274 1
+ 1209 0014 64488B04 		movq	%fs:40, %rax
+ 1209      25280000 
+ 1209      00
+ 1210 001d 488945F8 		movq	%rax, -8(%rbp)
+ 1211 0021 31C0     		xorl	%eax, %eax
+ 275:/home/xingli/share/1205tiny/os/osal/osal.c ****     void *ret = NULL;
+ 1212              		.loc 1 275 11
+ 1213 0023 48C745E8 		movq	$0, -24(%rbp)
+ 1213      00000000 
+ 276:/home/xingli/share/1205tiny/os/osal/osal.c ****     size_t len;
+ 277:/home/xingli/share/1205tiny/os/osal/osal.c ****     len = n*size;
+ 1214              		.loc 1 277 9
+ 1215 002b 488B45D8 		movq	-40(%rbp), %rax
+ 1216 002f 480FAF45 		imulq	-48(%rbp), %rax
+ 1216      D0
+ 1217 0034 488945F0 		movq	%rax, -16(%rbp)
+ 278:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 279:/home/xingli/share/1205tiny/os/osal/osal.c ****     ret = malloc(len);
+ 1218              		.loc 1 279 11
+ 1219 0038 488B45F0 		movq	-16(%rbp), %rax
+ 1220 003c 4889C7   		movq	%rax, %rdi
+ 1221 003f E8000000 		call	malloc@PLT
+ 1221      00
+ 1222 0044 488945E8 		movq	%rax, -24(%rbp)
+ 280:/home/xingli/share/1205tiny/os/osal/osal.c ****     if(NULL != ret)
+ 1223              		.loc 1 280 7
+ 1224 0048 48837DE8 		cmpq	$0, -24(%rbp)
+ 1224      00
+ 1225 004d 7415     		je	.L73
+GAS LISTING /tmp/ccaBVwM7.s 			page 30
+
+
+ 281:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 282:/home/xingli/share/1205tiny/os/osal/osal.c ****         (void) memset(ret, 0,len);
+ 1226              		.loc 1 282 16
+ 1227 004f 488B55F0 		movq	-16(%rbp), %rdx
+ 1228 0053 488B45E8 		movq	-24(%rbp), %rax
+ 1229 0057 BE000000 		movl	$0, %esi
+ 1229      00
+ 1230 005c 4889C7   		movq	%rax, %rdi
+ 1231 005f E8000000 		call	memset@PLT
+ 1231      00
+ 1232              	.L73:
+ 283:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 284:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 285:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1233              		.loc 1 285 12
+ 1234 0064 488B45E8 		movq	-24(%rbp), %rax
+ 286:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1235              		.loc 1 286 1
+ 1236 0068 488B4DF8 		movq	-8(%rbp), %rcx
+ 1237 006c 6448330C 		xorq	%fs:40, %rcx
+ 1237      25280000 
+ 1237      00
+ 1238 0075 7405     		je	.L75
+ 1239 0077 E8000000 		call	__stack_chk_fail@PLT
+ 1239      00
+ 1240              	.L75:
+ 1241 007c C9       		leave
+ 1242              	.LCFI53:
+ 1243              		.cfi_def_cfa 7, 8
+ 1244 007d C3       		ret
+ 1245              		.cfi_endproc
+ 1246              	.LFE23:
+ 1248              		.section	.text.osal_sys_time,"ax",@progbits
+ 1249              		.globl	osal_sys_time
+ 1251              	osal_sys_time:
+ 1252              	.LFB24:
+ 287:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 288:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 289:/home/xingli/share/1205tiny/os/osal/osal.c **** unsigned long long osal_sys_time(void)
+ 290:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1253              		.loc 1 290 1
+ 1254              		.cfi_startproc
+ 1255 0000 F30F1EFA 		endbr64
+ 1256 0004 55       		pushq	%rbp
+ 1257              	.LCFI54:
+ 1258              		.cfi_def_cfa_offset 16
+ 1259              		.cfi_offset 6, -16
+ 1260 0005 4889E5   		movq	%rsp, %rbp
+ 1261              	.LCFI55:
+ 1262              		.cfi_def_cfa_register 6
+ 1263 0008 4883EC10 		subq	$16, %rsp
+ 1264              		.loc 1 290 1
+ 1265 000c 64488B04 		movq	%fs:40, %rax
+ 1265      25280000 
+ 1265      00
+ 1266 0015 488945F8 		movq	%rax, -8(%rbp)
+ 1267 0019 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/ccaBVwM7.s 			page 31
+
+
+ 291:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 292:/home/xingli/share/1205tiny/os/osal/osal.c ****     unsigned long long  ret = 0;
+ 1268              		.loc 1 292 25
+ 1269 001b 48C745F0 		movq	$0, -16(%rbp)
+ 1269      00000000 
+ 293:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 294:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->get_sys_time))
+ 1270              		.loc 1 294 14
+ 1271 0023 488B0500 		movq	s_os_cb(%rip), %rax
+ 1271      000000
+ 1272              		.loc 1 294 7
+ 1273 002a 4885C0   		testq	%rax, %rax
+ 1274 002d 743F     		je	.L77
+ 1275              		.loc 1 294 44 discriminator 1
+ 1276 002f 488B0500 		movq	s_os_cb(%rip), %rax
+ 1276      000000
+ 1277 0036 488B4008 		movq	8(%rax), %rax
+ 1278              		.loc 1 294 26 discriminator 1
+ 1279 003a 4885C0   		testq	%rax, %rax
+ 1280 003d 742F     		je	.L77
+ 1281              		.loc 1 294 69 discriminator 2
+ 1282 003f 488B0500 		movq	s_os_cb(%rip), %rax
+ 1282      000000
+ 1283 0046 488B4008 		movq	8(%rax), %rax
+ 1284              		.loc 1 294 74 discriminator 2
+ 1285 004a 488B8098 		movq	152(%rax), %rax
+ 1285      000000
+ 1286              		.loc 1 294 51 discriminator 2
+ 1287 0051 4885C0   		testq	%rax, %rax
+ 1288 0054 7418     		je	.L77
+ 295:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 296:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->get_sys_time();
+ 1289              		.loc 1 296 22
+ 1290 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 1290      000000
+ 1291 005d 488B4008 		movq	8(%rax), %rax
+ 1292              		.loc 1 296 27
+ 1293 0061 488B8098 		movq	152(%rax), %rax
+ 1293      000000
+ 1294              		.loc 1 296 15
+ 1295 0068 FFD0     		call	*%rax
+ 1296              	.LVL16:
+ 1297 006a 488945F0 		movq	%rax, -16(%rbp)
+ 1298              	.L77:
+ 297:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 298:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 299:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1299              		.loc 1 299 12
+ 1300 006e 488B45F0 		movq	-16(%rbp), %rax
+ 300:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1301              		.loc 1 300 1
+ 1302 0072 488B55F8 		movq	-8(%rbp), %rdx
+ 1303 0076 64483314 		xorq	%fs:40, %rdx
+ 1303      25280000 
+ 1303      00
+ 1304 007f 7405     		je	.L79
+ 1305 0081 E8000000 		call	__stack_chk_fail@PLT
+GAS LISTING /tmp/ccaBVwM7.s 			page 32
+
+
+ 1305      00
+ 1306              	.L79:
+ 1307 0086 C9       		leave
+ 1308              	.LCFI56:
+ 1309              		.cfi_def_cfa 7, 8
+ 1310 0087 C3       		ret
+ 1311              		.cfi_endproc
+ 1312              	.LFE24:
+ 1314              		.section	.text.osal_loop_timer_init,"ax",@progbits
+ 1315              		.globl	osal_loop_timer_init
+ 1317              	osal_loop_timer_init:
+ 1318              	.LFB25:
+ 301:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 302:/home/xingli/share/1205tiny/os/osal/osal.c **** void osal_loop_timer_init(osal_loop_timer_t *timer)
+ 303:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1319              		.loc 1 303 1
+ 1320              		.cfi_startproc
+ 1321 0000 F30F1EFA 		endbr64
+ 1322 0004 55       		pushq	%rbp
+ 1323              	.LCFI57:
+ 1324              		.cfi_def_cfa_offset 16
+ 1325              		.cfi_offset 6, -16
+ 1326 0005 4889E5   		movq	%rsp, %rbp
+ 1327              	.LCFI58:
+ 1328              		.cfi_def_cfa_register 6
+ 1329 0008 4883EC20 		subq	$32, %rsp
+ 1330 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1331              		.loc 1 303 1
+ 1332 0010 64488B04 		movq	%fs:40, %rax
+ 1332      25280000 
+ 1332      00
+ 1333 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1334 001d 31C0     		xorl	%eax, %eax
+ 304:/home/xingli/share/1205tiny/os/osal/osal.c ****     timer->dead_time = osal_sys_time();
+ 1335              		.loc 1 304 24
+ 1336 001f E8000000 		call	osal_sys_time
+ 1336      00
+ 1337              		.loc 1 304 22
+ 1338 0024 488B55E8 		movq	-24(%rbp), %rdx
+ 1339 0028 488902   		movq	%rax, (%rdx)
+ 305:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1340              		.loc 1 305 1
+ 1341 002b 90       		nop
+ 1342 002c 488B45F8 		movq	-8(%rbp), %rax
+ 1343 0030 64483304 		xorq	%fs:40, %rax
+ 1343      25280000 
+ 1343      00
+ 1344 0039 7405     		je	.L81
+ 1345 003b E8000000 		call	__stack_chk_fail@PLT
+ 1345      00
+ 1346              	.L81:
+ 1347 0040 C9       		leave
+ 1348              	.LCFI59:
+ 1349              		.cfi_def_cfa 7, 8
+ 1350 0041 C3       		ret
+ 1351              		.cfi_endproc
+ 1352              	.LFE25:
+GAS LISTING /tmp/ccaBVwM7.s 			page 33
+
+
+ 1354              		.section	.text.osal_loop_timer_expired,"ax",@progbits
+ 1355              		.globl	osal_loop_timer_expired
+ 1357              	osal_loop_timer_expired:
+ 1358              	.LFB26:
+ 306:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 307:/home/xingli/share/1205tiny/os/osal/osal.c **** char osal_loop_timer_expired(osal_loop_timer_t *timer)
+ 308:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1359              		.loc 1 308 1
+ 1360              		.cfi_startproc
+ 1361 0000 F30F1EFA 		endbr64
+ 1362 0004 55       		pushq	%rbp
+ 1363              	.LCFI60:
+ 1364              		.cfi_def_cfa_offset 16
+ 1365              		.cfi_offset 6, -16
+ 1366 0005 4889E5   		movq	%rsp, %rbp
+ 1367              	.LCFI61:
+ 1368              		.cfi_def_cfa_register 6
+ 1369 0008 4883EC20 		subq	$32, %rsp
+ 1370 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1371              		.loc 1 308 1
+ 1372 0010 64488B04 		movq	%fs:40, %rax
+ 1372      25280000 
+ 1372      00
+ 1373 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1374 001d 31C0     		xorl	%eax, %eax
+ 309:/home/xingli/share/1205tiny/os/osal/osal.c ****     unsigned long long now = osal_sys_time();
+ 1375              		.loc 1 309 30
+ 1376 001f E8000000 		call	osal_sys_time
+ 1376      00
+ 1377 0024 488945F0 		movq	%rax, -16(%rbp)
+ 310:/home/xingli/share/1205tiny/os/osal/osal.c ****     return now >= timer->dead_time;
+ 1378              		.loc 1 310 24
+ 1379 0028 488B45E8 		movq	-24(%rbp), %rax
+ 1380 002c 488B00   		movq	(%rax), %rax
+ 1381              		.loc 1 310 16
+ 1382 002f 483945F0 		cmpq	%rax, -16(%rbp)
+ 1383 0033 0F93C0   		setnb	%al
+ 311:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1384              		.loc 1 311 1
+ 1385 0036 488B55F8 		movq	-8(%rbp), %rdx
+ 1386 003a 64483314 		xorq	%fs:40, %rdx
+ 1386      25280000 
+ 1386      00
+ 1387 0043 7405     		je	.L84
+ 1388 0045 E8000000 		call	__stack_chk_fail@PLT
+ 1388      00
+ 1389              	.L84:
+ 1390 004a C9       		leave
+ 1391              	.LCFI62:
+ 1392              		.cfi_def_cfa 7, 8
+ 1393 004b C3       		ret
+ 1394              		.cfi_endproc
+ 1395              	.LFE26:
+ 1397              		.section	.text.osal_loop_timer_count_downms,"ax",@progbits
+ 1398              		.globl	osal_loop_timer_count_downms
+ 1400              	osal_loop_timer_count_downms:
+ 1401              	.LFB27:
+GAS LISTING /tmp/ccaBVwM7.s 			page 34
+
+
+ 312:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 313:/home/xingli/share/1205tiny/os/osal/osal.c **** void osal_loop_timer_count_downms(osal_loop_timer_t *timer, unsigned int timeout)
+ 314:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1402              		.loc 1 314 1
+ 1403              		.cfi_startproc
+ 1404 0000 F30F1EFA 		endbr64
+ 1405 0004 55       		pushq	%rbp
+ 1406              	.LCFI63:
+ 1407              		.cfi_def_cfa_offset 16
+ 1408              		.cfi_offset 6, -16
+ 1409 0005 4889E5   		movq	%rsp, %rbp
+ 1410              	.LCFI64:
+ 1411              		.cfi_def_cfa_register 6
+ 1412 0008 4883EC20 		subq	$32, %rsp
+ 1413 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1414 0010 8975E4   		movl	%esi, -28(%rbp)
+ 1415              		.loc 1 314 1
+ 1416 0013 64488B04 		movq	%fs:40, %rax
+ 1416      25280000 
+ 1416      00
+ 1417 001c 488945F8 		movq	%rax, -8(%rbp)
+ 1418 0020 31C0     		xorl	%eax, %eax
+ 315:/home/xingli/share/1205tiny/os/osal/osal.c ****     unsigned long long now = osal_sys_time();
+ 1419              		.loc 1 315 30
+ 1420 0022 E8000000 		call	osal_sys_time
+ 1420      00
+ 1421 0027 488945F0 		movq	%rax, -16(%rbp)
+ 316:/home/xingli/share/1205tiny/os/osal/osal.c ****     timer->dead_time = now + timeout;
+ 1422              		.loc 1 316 28
+ 1423 002b 8B55E4   		movl	-28(%rbp), %edx
+ 1424 002e 488B45F0 		movq	-16(%rbp), %rax
+ 1425 0032 4801C2   		addq	%rax, %rdx
+ 1426              		.loc 1 316 22
+ 1427 0035 488B45E8 		movq	-24(%rbp), %rax
+ 1428 0039 488910   		movq	%rdx, (%rax)
+ 317:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1429              		.loc 1 317 1
+ 1430 003c 90       		nop
+ 1431 003d 488B45F8 		movq	-8(%rbp), %rax
+ 1432 0041 64483304 		xorq	%fs:40, %rax
+ 1432      25280000 
+ 1432      00
+ 1433 004a 7405     		je	.L86
+ 1434 004c E8000000 		call	__stack_chk_fail@PLT
+ 1434      00
+ 1435              	.L86:
+ 1436 0051 C9       		leave
+ 1437              	.LCFI65:
+ 1438              		.cfi_def_cfa 7, 8
+ 1439 0052 C3       		ret
+ 1440              		.cfi_endproc
+ 1441              	.LFE27:
+ 1443              		.section	.text.osal_loop_timer_count_down,"ax",@progbits
+ 1444              		.globl	osal_loop_timer_count_down
+ 1446              	osal_loop_timer_count_down:
+ 1447              	.LFB28:
+ 318:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+GAS LISTING /tmp/ccaBVwM7.s 			page 35
+
+
+ 319:/home/xingli/share/1205tiny/os/osal/osal.c **** void osal_loop_timer_count_down(osal_loop_timer_t *timer, unsigned int timeout)
+ 320:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1448              		.loc 1 320 1
+ 1449              		.cfi_startproc
+ 1450 0000 F30F1EFA 		endbr64
+ 1451 0004 55       		pushq	%rbp
+ 1452              	.LCFI66:
+ 1453              		.cfi_def_cfa_offset 16
+ 1454              		.cfi_offset 6, -16
+ 1455 0005 4889E5   		movq	%rsp, %rbp
+ 1456              	.LCFI67:
+ 1457              		.cfi_def_cfa_register 6
+ 1458 0008 4883EC20 		subq	$32, %rsp
+ 1459 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1460 0010 8975E4   		movl	%esi, -28(%rbp)
+ 1461              		.loc 1 320 1
+ 1462 0013 64488B04 		movq	%fs:40, %rax
+ 1462      25280000 
+ 1462      00
+ 1463 001c 488945F8 		movq	%rax, -8(%rbp)
+ 1464 0020 31C0     		xorl	%eax, %eax
+ 321:/home/xingli/share/1205tiny/os/osal/osal.c ****     osal_loop_timer_count_downms(timer,timeout*1000);
+ 1465              		.loc 1 321 5
+ 1466 0022 8B45E4   		movl	-28(%rbp), %eax
+ 1467 0025 69D0E803 		imull	$1000, %eax, %edx
+ 1467      0000
+ 1468 002b 488B45E8 		movq	-24(%rbp), %rax
+ 1469 002f 89D6     		movl	%edx, %esi
+ 1470 0031 4889C7   		movq	%rax, %rdi
+ 1471 0034 E8000000 		call	osal_loop_timer_count_downms
+ 1471      00
+ 322:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1472              		.loc 1 322 1
+ 1473 0039 90       		nop
+ 1474 003a 488B45F8 		movq	-8(%rbp), %rax
+ 1475 003e 64483304 		xorq	%fs:40, %rax
+ 1475      25280000 
+ 1475      00
+ 1476 0047 7405     		je	.L88
+ 1477 0049 E8000000 		call	__stack_chk_fail@PLT
+ 1477      00
+ 1478              	.L88:
+ 1479 004e C9       		leave
+ 1480              	.LCFI68:
+ 1481              		.cfi_def_cfa 7, 8
+ 1482 004f C3       		ret
+ 1483              		.cfi_endproc
+ 1484              	.LFE28:
+ 1486              		.section	.text.osal_loop_timer_left,"ax",@progbits
+ 1487              		.globl	osal_loop_timer_left
+ 1489              	osal_loop_timer_left:
+ 1490              	.LFB29:
+ 323:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 324:/home/xingli/share/1205tiny/os/osal/osal.c **** int osal_loop_timer_left(osal_loop_timer_t *timer)
+ 325:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1491              		.loc 1 325 1
+ 1492              		.cfi_startproc
+GAS LISTING /tmp/ccaBVwM7.s 			page 36
+
+
+ 1493 0000 F30F1EFA 		endbr64
+ 1494 0004 55       		pushq	%rbp
+ 1495              	.LCFI69:
+ 1496              		.cfi_def_cfa_offset 16
+ 1497              		.cfi_offset 6, -16
+ 1498 0005 4889E5   		movq	%rsp, %rbp
+ 1499              	.LCFI70:
+ 1500              		.cfi_def_cfa_register 6
+ 1501 0008 4883EC20 		subq	$32, %rsp
+ 1502 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1503              		.loc 1 325 1
+ 1504 0010 64488B04 		movq	%fs:40, %rax
+ 1504      25280000 
+ 1504      00
+ 1505 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1506 001d 31C0     		xorl	%eax, %eax
+ 326:/home/xingli/share/1205tiny/os/osal/osal.c ****     unsigned long long now = osal_sys_time();
+ 1507              		.loc 1 326 30
+ 1508 001f E8000000 		call	osal_sys_time
+ 1508      00
+ 1509 0024 488945F0 		movq	%rax, -16(%rbp)
+ 327:/home/xingli/share/1205tiny/os/osal/osal.c ****     return timer->dead_time <= now ? 0 : timer->dead_time - now;
+ 1510              		.loc 1 327 17
+ 1511 0028 488B45E8 		movq	-24(%rbp), %rax
+ 1512 002c 488B00   		movq	(%rax), %rax
+ 1513              		.loc 1 327 40
+ 1514 002f 483945F0 		cmpq	%rax, -16(%rbp)
+ 1515 0033 7313     		jnb	.L90
+ 1516              		.loc 1 327 47 discriminator 1
+ 1517 0035 488B45E8 		movq	-24(%rbp), %rax
+ 1518 0039 488B00   		movq	(%rax), %rax
+ 1519              		.loc 1 327 59 discriminator 1
+ 1520 003c 89C2     		movl	%eax, %edx
+ 1521 003e 488B45F0 		movq	-16(%rbp), %rax
+ 1522 0042 29C2     		subl	%eax, %edx
+ 1523 0044 89D0     		movl	%edx, %eax
+ 1524              		.loc 1 327 40 discriminator 1
+ 1525 0046 EB05     		jmp	.L92
+ 1526              	.L90:
+ 1527              		.loc 1 327 40 is_stmt 0 discriminator 2
+ 1528 0048 B8000000 		movl	$0, %eax
+ 1528      00
+ 1529              	.L92:
+ 328:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1530              		.loc 1 328 1 is_stmt 1 discriminator 5
+ 1531 004d 488B4DF8 		movq	-8(%rbp), %rcx
+ 1532 0051 6448330C 		xorq	%fs:40, %rcx
+ 1532      25280000 
+ 1532      00
+ 1533 005a 7405     		je	.L93
+ 1534              		.loc 1 328 1 is_stmt 0
+ 1535 005c E8000000 		call	__stack_chk_fail@PLT
+ 1535      00
+ 1536              	.L93:
+ 1537 0061 C9       		leave
+ 1538              	.LCFI71:
+ 1539              		.cfi_def_cfa 7, 8
+GAS LISTING /tmp/ccaBVwM7.s 			page 37
+
+
+ 1540 0062 C3       		ret
+ 1541              		.cfi_endproc
+ 1542              	.LFE29:
+ 1544              		.section	.text.osal_reboot,"ax",@progbits
+ 1545              		.globl	osal_reboot
+ 1547              	osal_reboot:
+ 1548              	.LFB30:
+ 329:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 330:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 331:/home/xingli/share/1205tiny/os/osal/osal.c **** int osal_reboot(void)  ///< maybe we should never come back
+ 332:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1549              		.loc 1 332 1 is_stmt 1
+ 1550              		.cfi_startproc
+ 1551 0000 F30F1EFA 		endbr64
+ 1552 0004 55       		pushq	%rbp
+ 1553              	.LCFI72:
+ 1554              		.cfi_def_cfa_offset 16
+ 1555              		.cfi_offset 6, -16
+ 1556 0005 4889E5   		movq	%rsp, %rbp
+ 1557              	.LCFI73:
+ 1558              		.cfi_def_cfa_register 6
+ 1559 0008 4883EC10 		subq	$16, %rsp
+ 1560              		.loc 1 332 1
+ 1561 000c 64488B04 		movq	%fs:40, %rax
+ 1561      25280000 
+ 1561      00
+ 1562 0015 488945F8 		movq	%rax, -8(%rbp)
+ 1563 0019 31C0     		xorl	%eax, %eax
+ 333:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = -1;
+ 1564              		.loc 1 333 9
+ 1565 001b C745F4FF 		movl	$-1, -12(%rbp)
+ 1565      FFFFFF
+ 334:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 335:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->reboot))
+ 1566              		.loc 1 335 14
+ 1567 0022 488B0500 		movq	s_os_cb(%rip), %rax
+ 1567      000000
+ 1568              		.loc 1 335 7
+ 1569 0029 4885C0   		testq	%rax, %rax
+ 1570 002c 743E     		je	.L95
+ 1571              		.loc 1 335 44 discriminator 1
+ 1572 002e 488B0500 		movq	s_os_cb(%rip), %rax
+ 1572      000000
+ 1573 0035 488B4008 		movq	8(%rax), %rax
+ 1574              		.loc 1 335 26 discriminator 1
+ 1575 0039 4885C0   		testq	%rax, %rax
+ 1576 003c 742E     		je	.L95
+ 1577              		.loc 1 335 69 discriminator 2
+ 1578 003e 488B0500 		movq	s_os_cb(%rip), %rax
+ 1578      000000
+ 1579 0045 488B4008 		movq	8(%rax), %rax
+ 1580              		.loc 1 335 74 discriminator 2
+ 1581 0049 488B80A0 		movq	160(%rax), %rax
+ 1581      000000
+ 1582              		.loc 1 335 51 discriminator 2
+ 1583 0050 4885C0   		testq	%rax, %rax
+ 1584 0053 7417     		je	.L95
+GAS LISTING /tmp/ccaBVwM7.s 			page 38
+
+
+ 336:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 337:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->reboot();
+ 1585              		.loc 1 337 22
+ 1586 0055 488B0500 		movq	s_os_cb(%rip), %rax
+ 1586      000000
+ 1587 005c 488B4008 		movq	8(%rax), %rax
+ 1588              		.loc 1 337 27
+ 1589 0060 488B80A0 		movq	160(%rax), %rax
+ 1589      000000
+ 1590              		.loc 1 337 15
+ 1591 0067 FFD0     		call	*%rax
+ 1592              	.LVL17:
+ 1593 0069 8945F4   		movl	%eax, -12(%rbp)
+ 1594              	.L95:
+ 338:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 339:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 340:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1595              		.loc 1 340 12
+ 1596 006c 8B45F4   		movl	-12(%rbp), %eax
+ 341:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1597              		.loc 1 341 1
+ 1598 006f 488B55F8 		movq	-8(%rbp), %rdx
+ 1599 0073 64483314 		xorq	%fs:40, %rdx
+ 1599      25280000 
+ 1599      00
+ 1600 007c 7405     		je	.L97
+ 1601 007e E8000000 		call	__stack_chk_fail@PLT
+ 1601      00
+ 1602              	.L97:
+ 1603 0083 C9       		leave
+ 1604              	.LCFI74:
+ 1605              		.cfi_def_cfa 7, 8
+ 1606 0084 C3       		ret
+ 1607              		.cfi_endproc
+ 1608              	.LFE30:
+ 1610              		.section	.text.osal_int_connect,"ax",@progbits
+ 1611              		.globl	osal_int_connect
+ 1613              	osal_int_connect:
+ 1614              	.LFB31:
+ 342:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 343:/home/xingli/share/1205tiny/os/osal/osal.c **** int osal_int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void *arg)
+ 344:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1615              		.loc 1 344 1
+ 1616              		.cfi_startproc
+ 1617 0000 F30F1EFA 		endbr64
+ 1618 0004 55       		pushq	%rbp
+ 1619              	.LCFI75:
+ 1620              		.cfi_def_cfa_offset 16
+ 1621              		.cfi_offset 6, -16
+ 1622 0005 4889E5   		movq	%rsp, %rbp
+ 1623              	.LCFI76:
+ 1624              		.cfi_def_cfa_register 6
+ 1625 0008 4883EC30 		subq	$48, %rsp
+ 1626 000c 897DEC   		movl	%edi, -20(%rbp)
+ 1627 000f 8975E8   		movl	%esi, -24(%rbp)
+ 1628 0012 8955E4   		movl	%edx, -28(%rbp)
+ 1629 0015 48894DD8 		movq	%rcx, -40(%rbp)
+GAS LISTING /tmp/ccaBVwM7.s 			page 39
+
+
+ 1630 0019 4C8945D0 		movq	%r8, -48(%rbp)
+ 1631              		.loc 1 344 1
+ 1632 001d 64488B04 		movq	%fs:40, %rax
+ 1632      25280000 
+ 1632      00
+ 1633 0026 488945F8 		movq	%rax, -8(%rbp)
+ 1634 002a 31C0     		xorl	%eax, %eax
+ 345:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = -1;
+ 1635              		.loc 1 345 9
+ 1636 002c C745F4FF 		movl	$-1, -12(%rbp)
+ 1636      FFFFFF
+ 346:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->int_connect))
+ 1637              		.loc 1 346 14
+ 1638 0033 488B0500 		movq	s_os_cb(%rip), %rax
+ 1638      000000
+ 1639              		.loc 1 346 7
+ 1640 003a 4885C0   		testq	%rax, %rax
+ 1641 003d 7455     		je	.L99
+ 1642              		.loc 1 346 44 discriminator 1
+ 1643 003f 488B0500 		movq	s_os_cb(%rip), %rax
+ 1643      000000
+ 1644 0046 488B4008 		movq	8(%rax), %rax
+ 1645              		.loc 1 346 26 discriminator 1
+ 1646 004a 4885C0   		testq	%rax, %rax
+ 1647 004d 7445     		je	.L99
+ 1648              		.loc 1 346 69 discriminator 2
+ 1649 004f 488B0500 		movq	s_os_cb(%rip), %rax
+ 1649      000000
+ 1650 0056 488B4008 		movq	8(%rax), %rax
+ 1651              		.loc 1 346 74 discriminator 2
+ 1652 005a 488B80A8 		movq	168(%rax), %rax
+ 1652      000000
+ 1653              		.loc 1 346 51 discriminator 2
+ 1654 0061 4885C0   		testq	%rax, %rax
+ 1655 0064 742E     		je	.L99
+ 347:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 348:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->int_connect(intnum, prio, mode, callback, arg);
+ 1656              		.loc 1 348 22
+ 1657 0066 488B0500 		movq	s_os_cb(%rip), %rax
+ 1657      000000
+ 1658 006d 488B4008 		movq	8(%rax), %rax
+ 1659              		.loc 1 348 27
+ 1660 0071 4C8B88A8 		movq	168(%rax), %r9
+ 1660      000000
+ 1661              		.loc 1 348 15
+ 1662 0078 488B7DD0 		movq	-48(%rbp), %rdi
+ 1663 007c 488B4DD8 		movq	-40(%rbp), %rcx
+ 1664 0080 8B55E4   		movl	-28(%rbp), %edx
+ 1665 0083 8B75E8   		movl	-24(%rbp), %esi
+ 1666 0086 8B45EC   		movl	-20(%rbp), %eax
+ 1667 0089 4989F8   		movq	%rdi, %r8
+ 1668 008c 89C7     		movl	%eax, %edi
+ 1669 008e 41FFD1   		call	*%r9
+ 1670              	.LVL18:
+ 1671 0091 8945F4   		movl	%eax, -12(%rbp)
+ 1672              	.L99:
+ 349:/home/xingli/share/1205tiny/os/osal/osal.c **** 	}
+GAS LISTING /tmp/ccaBVwM7.s 			page 40
+
+
+ 350:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 351:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1673              		.loc 1 351 12
+ 1674 0094 8B45F4   		movl	-12(%rbp), %eax
+ 352:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1675              		.loc 1 352 1
+ 1676 0097 488B55F8 		movq	-8(%rbp), %rdx
+ 1677 009b 64483314 		xorq	%fs:40, %rdx
+ 1677      25280000 
+ 1677      00
+ 1678 00a4 7405     		je	.L101
+ 1679 00a6 E8000000 		call	__stack_chk_fail@PLT
+ 1679      00
+ 1680              	.L101:
+ 1681 00ab C9       		leave
+ 1682              	.LCFI77:
+ 1683              		.cfi_def_cfa 7, 8
+ 1684 00ac C3       		ret
+ 1685              		.cfi_endproc
+ 1686              	.LFE31:
+ 1688              		.section	.text.osal_queue_create,"ax",@progbits
+ 1689              		.globl	osal_queue_create
+ 1691              	osal_queue_create:
+ 1692              	.LFB32:
+ 353:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 354:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 355:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_queue_create(osal_queue_t *queue,int len,int msgsize)
+ 356:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1693              		.loc 1 356 1
+ 1694              		.cfi_startproc
+ 1695 0000 F30F1EFA 		endbr64
+ 1696 0004 55       		pushq	%rbp
+ 1697              	.LCFI78:
+ 1698              		.cfi_def_cfa_offset 16
+ 1699              		.cfi_offset 6, -16
+ 1700 0005 4889E5   		movq	%rsp, %rbp
+ 1701              	.LCFI79:
+ 1702              		.cfi_def_cfa_register 6
+ 1703 0008 4883EC20 		subq	$32, %rsp
+ 1704 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1705 0010 8975E4   		movl	%esi, -28(%rbp)
+ 1706 0013 8955E0   		movl	%edx, -32(%rbp)
+ 1707              		.loc 1 356 1
+ 1708 0016 64488B04 		movq	%fs:40, %rax
+ 1708      25280000 
+ 1708      00
+ 1709 001f 488945F8 		movq	%rax, -8(%rbp)
+ 1710 0023 31C0     		xorl	%eax, %eax
+ 357:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = false;
+ 1711              		.loc 1 357 9
+ 1712 0025 C745F400 		movl	$0, -12(%rbp)
+ 1712      000000
+ 358:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 359:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_create))
+ 1713              		.loc 1 359 14
+ 1714 002c 488B0500 		movq	s_os_cb(%rip), %rax
+ 1714      000000
+GAS LISTING /tmp/ccaBVwM7.s 			page 41
+
+
+ 1715              		.loc 1 359 7
+ 1716 0033 4885C0   		testq	%rax, %rax
+ 1717 0036 7448     		je	.L103
+ 1718              		.loc 1 359 44 discriminator 1
+ 1719 0038 488B0500 		movq	s_os_cb(%rip), %rax
+ 1719      000000
+ 1720 003f 488B4008 		movq	8(%rax), %rax
+ 1721              		.loc 1 359 26 discriminator 1
+ 1722 0043 4885C0   		testq	%rax, %rax
+ 1723 0046 7438     		je	.L103
+ 1724              		.loc 1 359 69 discriminator 2
+ 1725 0048 488B0500 		movq	s_os_cb(%rip), %rax
+ 1725      000000
+ 1726 004f 488B4008 		movq	8(%rax), %rax
+ 1727              		.loc 1 359 74 discriminator 2
+ 1728 0053 488B4060 		movq	96(%rax), %rax
+ 1729              		.loc 1 359 51 discriminator 2
+ 1730 0057 4885C0   		testq	%rax, %rax
+ 1731 005a 7424     		je	.L103
+ 360:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 361:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->queue_create( queue, len, msgsize);
+ 1732              		.loc 1 361 22
+ 1733 005c 488B0500 		movq	s_os_cb(%rip), %rax
+ 1733      000000
+ 1734 0063 488B4008 		movq	8(%rax), %rax
+ 1735              		.loc 1 361 27
+ 1736 0067 4C8B4060 		movq	96(%rax), %r8
+ 1737              		.loc 1 361 15
+ 1738 006b 8B55E0   		movl	-32(%rbp), %edx
+ 1739 006e 8B4DE4   		movl	-28(%rbp), %ecx
+ 1740 0071 488B45E8 		movq	-24(%rbp), %rax
+ 1741 0075 89CE     		movl	%ecx, %esi
+ 1742 0077 4889C7   		movq	%rax, %rdi
+ 1743 007a 41FFD0   		call	*%r8
+ 1744              	.LVL19:
+ 1745 007d 8945F4   		movl	%eax, -12(%rbp)
+ 1746              	.L103:
+ 362:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 363:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 364:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1747              		.loc 1 364 12
+ 1748 0080 8B45F4   		movl	-12(%rbp), %eax
+ 365:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1749              		.loc 1 365 1
+ 1750 0083 488B4DF8 		movq	-8(%rbp), %rcx
+ 1751 0087 6448330C 		xorq	%fs:40, %rcx
+ 1751      25280000 
+ 1751      00
+ 1752 0090 7405     		je	.L105
+ 1753 0092 E8000000 		call	__stack_chk_fail@PLT
+ 1753      00
+ 1754              	.L105:
+ 1755 0097 C9       		leave
+ 1756              	.LCFI80:
+ 1757              		.cfi_def_cfa 7, 8
+ 1758 0098 C3       		ret
+ 1759              		.cfi_endproc
+GAS LISTING /tmp/ccaBVwM7.s 			page 42
+
+
+ 1760              	.LFE32:
+ 1762              		.section	.text.osal_queue_send,"ax",@progbits
+ 1763              		.globl	osal_queue_send
+ 1765              	osal_queue_send:
+ 1766              	.LFB33:
+ 366:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 367:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
+ 368:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1767              		.loc 1 368 1
+ 1768              		.cfi_startproc
+ 1769 0000 F30F1EFA 		endbr64
+ 1770 0004 55       		pushq	%rbp
+ 1771              	.LCFI81:
+ 1772              		.cfi_def_cfa_offset 16
+ 1773              		.cfi_offset 6, -16
+ 1774 0005 4889E5   		movq	%rsp, %rbp
+ 1775              	.LCFI82:
+ 1776              		.cfi_def_cfa_register 6
+ 1777 0008 4883EC30 		subq	$48, %rsp
+ 1778 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1779 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1780 0014 8955DC   		movl	%edx, -36(%rbp)
+ 1781 0017 894DD8   		movl	%ecx, -40(%rbp)
+ 1782              		.loc 1 368 1
+ 1783 001a 64488B04 		movq	%fs:40, %rax
+ 1783      25280000 
+ 1783      00
+ 1784 0023 488945F8 		movq	%rax, -8(%rbp)
+ 1785 0027 31C0     		xorl	%eax, %eax
+ 369:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = false;
+ 1786              		.loc 1 369 9
+ 1787 0029 C745F400 		movl	$0, -12(%rbp)
+ 1787      000000
+ 370:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 371:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_send))
+ 1788              		.loc 1 371 14
+ 1789 0030 488B0500 		movq	s_os_cb(%rip), %rax
+ 1789      000000
+ 1790              		.loc 1 371 7
+ 1791 0037 4885C0   		testq	%rax, %rax
+ 1792 003a 744A     		je	.L107
+ 1793              		.loc 1 371 44 discriminator 1
+ 1794 003c 488B0500 		movq	s_os_cb(%rip), %rax
+ 1794      000000
+ 1795 0043 488B4008 		movq	8(%rax), %rax
+ 1796              		.loc 1 371 26 discriminator 1
+ 1797 0047 4885C0   		testq	%rax, %rax
+ 1798 004a 743A     		je	.L107
+ 1799              		.loc 1 371 69 discriminator 2
+ 1800 004c 488B0500 		movq	s_os_cb(%rip), %rax
+ 1800      000000
+ 1801 0053 488B4008 		movq	8(%rax), %rax
+ 1802              		.loc 1 371 74 discriminator 2
+ 1803 0057 488B4068 		movq	104(%rax), %rax
+ 1804              		.loc 1 371 51 discriminator 2
+ 1805 005b 4885C0   		testq	%rax, %rax
+ 1806 005e 7426     		je	.L107
+GAS LISTING /tmp/ccaBVwM7.s 			page 43
+
+
+ 372:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 373:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->queue_send( queue, pbuf, bufsize, timeout);
+ 1807              		.loc 1 373 22
+ 1808 0060 488B0500 		movq	s_os_cb(%rip), %rax
+ 1808      000000
+ 1809 0067 488B4008 		movq	8(%rax), %rax
+ 1810              		.loc 1 373 27
+ 1811 006b 4C8B4068 		movq	104(%rax), %r8
+ 1812              		.loc 1 373 15
+ 1813 006f 8B4DD8   		movl	-40(%rbp), %ecx
+ 1814 0072 8B55DC   		movl	-36(%rbp), %edx
+ 1815 0075 488B75E0 		movq	-32(%rbp), %rsi
+ 1816 0079 488B45E8 		movq	-24(%rbp), %rax
+ 1817 007d 4889C7   		movq	%rax, %rdi
+ 1818 0080 41FFD0   		call	*%r8
+ 1819              	.LVL20:
+ 1820 0083 8945F4   		movl	%eax, -12(%rbp)
+ 1821              	.L107:
+ 374:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 375:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 376:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1822              		.loc 1 376 12
+ 1823 0086 8B45F4   		movl	-12(%rbp), %eax
+ 377:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1824              		.loc 1 377 1
+ 1825 0089 488B7DF8 		movq	-8(%rbp), %rdi
+ 1826 008d 6448333C 		xorq	%fs:40, %rdi
+ 1826      25280000 
+ 1826      00
+ 1827 0096 7405     		je	.L109
+ 1828 0098 E8000000 		call	__stack_chk_fail@PLT
+ 1828      00
+ 1829              	.L109:
+ 1830 009d C9       		leave
+ 1831              	.LCFI83:
+ 1832              		.cfi_def_cfa 7, 8
+ 1833 009e C3       		ret
+ 1834              		.cfi_endproc
+ 1835              	.LFE33:
+ 1837              		.section	.text.osal_queue_recv,"ax",@progbits
+ 1838              		.globl	osal_queue_recv
+ 1840              	osal_queue_recv:
+ 1841              	.LFB34:
+ 378:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 379:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_queue_recv(osal_queue_t queue, void *pbuf, unsigned int *bufsize, unsigned int timeout
+ 380:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1842              		.loc 1 380 1
+ 1843              		.cfi_startproc
+ 1844 0000 F30F1EFA 		endbr64
+ 1845 0004 55       		pushq	%rbp
+ 1846              	.LCFI84:
+ 1847              		.cfi_def_cfa_offset 16
+ 1848              		.cfi_offset 6, -16
+ 1849 0005 4889E5   		movq	%rsp, %rbp
+ 1850              	.LCFI85:
+ 1851              		.cfi_def_cfa_register 6
+ 1852 0008 4883EC30 		subq	$48, %rsp
+GAS LISTING /tmp/ccaBVwM7.s 			page 44
+
+
+ 1853 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1854 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1855 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1856 0018 894DD4   		movl	%ecx, -44(%rbp)
+ 1857              		.loc 1 380 1
+ 1858 001b 64488B04 		movq	%fs:40, %rax
+ 1858      25280000 
+ 1858      00
+ 1859 0024 488945F8 		movq	%rax, -8(%rbp)
+ 1860 0028 31C0     		xorl	%eax, %eax
+ 381:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = false;
+ 1861              		.loc 1 381 9
+ 1862 002a C745F400 		movl	$0, -12(%rbp)
+ 1862      000000
+ 382:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 383:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_recv))
+ 1863              		.loc 1 383 14
+ 1864 0031 488B0500 		movq	s_os_cb(%rip), %rax
+ 1864      000000
+ 1865              		.loc 1 383 7
+ 1866 0038 4885C0   		testq	%rax, %rax
+ 1867 003b 744B     		je	.L111
+ 1868              		.loc 1 383 44 discriminator 1
+ 1869 003d 488B0500 		movq	s_os_cb(%rip), %rax
+ 1869      000000
+ 1870 0044 488B4008 		movq	8(%rax), %rax
+ 1871              		.loc 1 383 26 discriminator 1
+ 1872 0048 4885C0   		testq	%rax, %rax
+ 1873 004b 743B     		je	.L111
+ 1874              		.loc 1 383 69 discriminator 2
+ 1875 004d 488B0500 		movq	s_os_cb(%rip), %rax
+ 1875      000000
+ 1876 0054 488B4008 		movq	8(%rax), %rax
+ 1877              		.loc 1 383 74 discriminator 2
+ 1878 0058 488B4070 		movq	112(%rax), %rax
+ 1879              		.loc 1 383 51 discriminator 2
+ 1880 005c 4885C0   		testq	%rax, %rax
+ 1881 005f 7427     		je	.L111
+ 384:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 385:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->queue_recv( queue, pbuf, bufsize, timeout);
+ 1882              		.loc 1 385 22
+ 1883 0061 488B0500 		movq	s_os_cb(%rip), %rax
+ 1883      000000
+ 1884 0068 488B4008 		movq	8(%rax), %rax
+ 1885              		.loc 1 385 27
+ 1886 006c 4C8B4070 		movq	112(%rax), %r8
+ 1887              		.loc 1 385 15
+ 1888 0070 8B4DD4   		movl	-44(%rbp), %ecx
+ 1889 0073 488B55D8 		movq	-40(%rbp), %rdx
+ 1890 0077 488B75E0 		movq	-32(%rbp), %rsi
+ 1891 007b 488B45E8 		movq	-24(%rbp), %rax
+ 1892 007f 4889C7   		movq	%rax, %rdi
+ 1893 0082 41FFD0   		call	*%r8
+ 1894              	.LVL21:
+ 1895 0085 8945F4   		movl	%eax, -12(%rbp)
+ 1896              	.L111:
+ 386:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+GAS LISTING /tmp/ccaBVwM7.s 			page 45
+
+
+ 387:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 388:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1897              		.loc 1 388 12
+ 1898 0088 8B45F4   		movl	-12(%rbp), %eax
+ 389:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1899              		.loc 1 389 1
+ 1900 008b 488B7DF8 		movq	-8(%rbp), %rdi
+ 1901 008f 6448333C 		xorq	%fs:40, %rdi
+ 1901      25280000 
+ 1901      00
+ 1902 0098 7405     		je	.L113
+ 1903 009a E8000000 		call	__stack_chk_fail@PLT
+ 1903      00
+ 1904              	.L113:
+ 1905 009f C9       		leave
+ 1906              	.LCFI86:
+ 1907              		.cfi_def_cfa 7, 8
+ 1908 00a0 C3       		ret
+ 1909              		.cfi_endproc
+ 1910              	.LFE34:
+ 1912              		.section	.text.osal_queue_del,"ax",@progbits
+ 1913              		.globl	osal_queue_del
+ 1915              	osal_queue_del:
+ 1916              	.LFB35:
+ 390:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 391:/home/xingli/share/1205tiny/os/osal/osal.c **** bool_t  osal_queue_del(osal_queue_t queue)
+ 392:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1917              		.loc 1 392 1
+ 1918              		.cfi_startproc
+ 1919 0000 F30F1EFA 		endbr64
+ 1920 0004 55       		pushq	%rbp
+ 1921              	.LCFI87:
+ 1922              		.cfi_def_cfa_offset 16
+ 1923              		.cfi_offset 6, -16
+ 1924 0005 4889E5   		movq	%rsp, %rbp
+ 1925              	.LCFI88:
+ 1926              		.cfi_def_cfa_register 6
+ 1927 0008 4883EC20 		subq	$32, %rsp
+ 1928 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1929              		.loc 1 392 1
+ 1930 0010 64488B04 		movq	%fs:40, %rax
+ 1930      25280000 
+ 1930      00
+ 1931 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1932 001d 31C0     		xorl	%eax, %eax
+ 393:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = false;
+ 1933              		.loc 1 393 9
+ 1934 001f C745F400 		movl	$0, -12(%rbp)
+ 1934      000000
+ 394:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 395:/home/xingli/share/1205tiny/os/osal/osal.c ****     if((NULL != s_os_cb) &&(NULL != s_os_cb->ops) &&(NULL != s_os_cb->ops->queue_del))
+ 1935              		.loc 1 395 14
+ 1936 0026 488B0500 		movq	s_os_cb(%rip), %rax
+ 1936      000000
+ 1937              		.loc 1 395 7
+ 1938 002d 4885C0   		testq	%rax, %rax
+ 1939 0030 743F     		je	.L115
+GAS LISTING /tmp/ccaBVwM7.s 			page 46
+
+
+ 1940              		.loc 1 395 44 discriminator 1
+ 1941 0032 488B0500 		movq	s_os_cb(%rip), %rax
+ 1941      000000
+ 1942 0039 488B4008 		movq	8(%rax), %rax
+ 1943              		.loc 1 395 26 discriminator 1
+ 1944 003d 4885C0   		testq	%rax, %rax
+ 1945 0040 742F     		je	.L115
+ 1946              		.loc 1 395 69 discriminator 2
+ 1947 0042 488B0500 		movq	s_os_cb(%rip), %rax
+ 1947      000000
+ 1948 0049 488B4008 		movq	8(%rax), %rax
+ 1949              		.loc 1 395 74 discriminator 2
+ 1950 004d 488B4078 		movq	120(%rax), %rax
+ 1951              		.loc 1 395 51 discriminator 2
+ 1952 0051 4885C0   		testq	%rax, %rax
+ 1953 0054 741B     		je	.L115
+ 396:/home/xingli/share/1205tiny/os/osal/osal.c ****     {
+ 397:/home/xingli/share/1205tiny/os/osal/osal.c ****         ret = s_os_cb->ops->queue_del( queue);
+ 1954              		.loc 1 397 22
+ 1955 0056 488B0500 		movq	s_os_cb(%rip), %rax
+ 1955      000000
+ 1956 005d 488B4008 		movq	8(%rax), %rax
+ 1957              		.loc 1 397 27
+ 1958 0061 488B5078 		movq	120(%rax), %rdx
+ 1959              		.loc 1 397 15
+ 1960 0065 488B45E8 		movq	-24(%rbp), %rax
+ 1961 0069 4889C7   		movq	%rax, %rdi
+ 1962 006c FFD2     		call	*%rdx
+ 1963              	.LVL22:
+ 1964 006e 8945F4   		movl	%eax, -12(%rbp)
+ 1965              	.L115:
+ 398:/home/xingli/share/1205tiny/os/osal/osal.c ****     }
+ 399:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 400:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 1966              		.loc 1 400 12
+ 1967 0071 8B45F4   		movl	-12(%rbp), %eax
+ 401:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 1968              		.loc 1 401 1
+ 1969 0074 488B4DF8 		movq	-8(%rbp), %rcx
+ 1970 0078 6448330C 		xorq	%fs:40, %rcx
+ 1970      25280000 
+ 1970      00
+ 1971 0081 7405     		je	.L117
+ 1972 0083 E8000000 		call	__stack_chk_fail@PLT
+ 1972      00
+ 1973              	.L117:
+ 1974 0088 C9       		leave
+ 1975              	.LCFI89:
+ 1976              		.cfi_def_cfa 7, 8
+ 1977 0089 C3       		ret
+ 1978              		.cfi_endproc
+ 1979              	.LFE35:
+ 1981              		.section	.rodata
+ 1982              		.align 8
+ 1983              	.LC0:
+ 1984 0000 5B25735D 		.string	"[%s][%u][%s] %s:###please implement this function by yourself####\n\r\r\n"
+ 1984      5B25755D 
+GAS LISTING /tmp/ccaBVwM7.s 			page 47
+
+
+ 1984      5B25735D 
+ 1984      2025733A 
+ 1984      23232370 
+ 1985              		.section	.text.os_imp_init,"ax",@progbits
+ 1986              		.weak	os_imp_init
+ 1988              	os_imp_init:
+ 1989              	.LFB36:
+ 402:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 403:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 404:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 405:/home/xingli/share/1205tiny/os/osal/osal.c **** __attribute__((weak))  int os_imp_init(void)
+ 406:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 1990              		.loc 1 406 1
+ 1991              		.cfi_startproc
+ 1992 0000 F30F1EFA 		endbr64
+ 1993 0004 55       		pushq	%rbp
+ 1994              	.LCFI90:
+ 1995              		.cfi_def_cfa_offset 16
+ 1996              		.cfi_offset 6, -16
+ 1997 0005 4889E5   		movq	%rsp, %rbp
+ 1998              	.LCFI91:
+ 1999              		.cfi_def_cfa_register 6
+ 2000 0008 53       		pushq	%rbx
+ 2001 0009 4883EC18 		subq	$24, %rsp
+ 2002              		.cfi_offset 3, -24
+ 2003              		.loc 1 406 1
+ 2004 000d 64488B04 		movq	%fs:40, %rax
+ 2004      25280000 
+ 2004      00
+ 2005 0016 488945E8 		movq	%rax, -24(%rbp)
+ 2006 001a 31C0     		xorl	%eax, %eax
+ 407:/home/xingli/share/1205tiny/os/osal/osal.c ****     LINK_LOG_DEBUG("%s:###please implement this function by yourself####\n\r",__FUNCTION__);
+ 2007              		.loc 1 407 5
+ 2008 001c E8000000 		call	link_log_level_get@PLT
+ 2008      00
+ 2009 0021 83F801   		cmpl	$1, %eax
+ 2010 0024 7744     		ja	.L119
+ 2011              		.loc 1 407 5 is_stmt 0 discriminator 1
+ 2012 0026 E8000000 		call	osal_sys_time
+ 2012      00
+ 2013 002b 89C3     		movl	%eax, %ebx
+ 2014 002d BF010000 		movl	$1, %edi
+ 2014      00
+ 2015 0032 E8000000 		call	link_log_level_name@PLT
+ 2015      00
+ 2016 0037 4C8D0500 		leaq	__FUNCTION__.4031(%rip), %r8
+ 2016      000000
+ 2017 003e 488D0D00 		leaq	__FUNCTION__.4031(%rip), %rcx
+ 2017      000000
+ 2018 0045 89DA     		movl	%ebx, %edx
+ 2019 0047 4889C6   		movq	%rax, %rsi
+ 2020 004a 488D3D00 		leaq	.LC0(%rip), %rdi
+ 2020      000000
+ 2021 0051 B8000000 		movl	$0, %eax
+ 2021      00
+ 2022 0056 E8000000 		call	printf@PLT
+ 2022      00
+GAS LISTING /tmp/ccaBVwM7.s 			page 48
+
+
+ 2023 005b 488B0500 		movq	stdout(%rip), %rax
+ 2023      000000
+ 2024 0062 4889C7   		movq	%rax, %rdi
+ 2025 0065 E8000000 		call	fflush@PLT
+ 2025      00
+ 2026              	.L119:
+ 408:/home/xingli/share/1205tiny/os/osal/osal.c ****     return -1;
+ 2027              		.loc 1 408 12 is_stmt 1
+ 2028 006a B8FFFFFF 		movl	$-1, %eax
+ 2028      FF
+ 409:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 2029              		.loc 1 409 1
+ 2030 006f 488B55E8 		movq	-24(%rbp), %rdx
+ 2031 0073 64483314 		xorq	%fs:40, %rdx
+ 2031      25280000 
+ 2031      00
+ 2032 007c 7405     		je	.L121
+ 2033 007e E8000000 		call	__stack_chk_fail@PLT
+ 2033      00
+ 2034              	.L121:
+ 2035 0083 4883C418 		addq	$24, %rsp
+ 2036 0087 5B       		popq	%rbx
+ 2037 0088 5D       		popq	%rbp
+ 2038              	.LCFI92:
+ 2039              		.cfi_def_cfa 7, 8
+ 2040 0089 C3       		ret
+ 2041              		.cfi_endproc
+ 2042              	.LFE36:
+ 2044              		.section	.text.osal_init,"ax",@progbits
+ 2045              		.globl	osal_init
+ 2047              	osal_init:
+ 2048              	.LFB37:
+ 410:/home/xingli/share/1205tiny/os/osal/osal.c **** 
+ 411:/home/xingli/share/1205tiny/os/osal/osal.c **** int osal_init(void)
+ 412:/home/xingli/share/1205tiny/os/osal/osal.c **** {
+ 2049              		.loc 1 412 1
+ 2050              		.cfi_startproc
+ 2051 0000 F30F1EFA 		endbr64
+ 2052 0004 55       		pushq	%rbp
+ 2053              	.LCFI93:
+ 2054              		.cfi_def_cfa_offset 16
+ 2055              		.cfi_offset 6, -16
+ 2056 0005 4889E5   		movq	%rsp, %rbp
+ 2057              	.LCFI94:
+ 2058              		.cfi_def_cfa_register 6
+ 2059 0008 4883EC10 		subq	$16, %rsp
+ 2060              		.loc 1 412 1
+ 2061 000c 64488B04 		movq	%fs:40, %rax
+ 2061      25280000 
+ 2061      00
+ 2062 0015 488945F8 		movq	%rax, -8(%rbp)
+ 2063 0019 31C0     		xorl	%eax, %eax
+ 413:/home/xingli/share/1205tiny/os/osal/osal.c ****     int ret = -1;
+ 2064              		.loc 1 413 9
+ 2065 001b C745F4FF 		movl	$-1, -12(%rbp)
+ 2065      FFFFFF
+ 414:/home/xingli/share/1205tiny/os/osal/osal.c ****     ret = os_imp_init();
+GAS LISTING /tmp/ccaBVwM7.s 			page 49
+
+
+ 2066              		.loc 1 414 11
+ 2067 0022 E8000000 		call	os_imp_init
+ 2067      00
+ 2068 0027 8945F4   		movl	%eax, -12(%rbp)
+ 415:/home/xingli/share/1205tiny/os/osal/osal.c ****     return ret;
+ 2069              		.loc 1 415 12
+ 2070 002a 8B45F4   		movl	-12(%rbp), %eax
+ 416:/home/xingli/share/1205tiny/os/osal/osal.c **** }
+ 2071              		.loc 1 416 1
+ 2072 002d 488B55F8 		movq	-8(%rbp), %rdx
+ 2073 0031 64483314 		xorq	%fs:40, %rdx
+ 2073      25280000 
+ 2073      00
+ 2074 003a 7405     		je	.L124
+ 2075 003c E8000000 		call	__stack_chk_fail@PLT
+ 2075      00
+ 2076              	.L124:
+ 2077 0041 C9       		leave
+ 2078              	.LCFI95:
+ 2079              		.cfi_def_cfa 7, 8
+ 2080 0042 C3       		ret
+ 2081              		.cfi_endproc
+ 2082              	.LFE37:
+ 2084              		.section	.rodata.__FUNCTION__.4031,"a"
+ 2085              		.align 8
+ 2088              	__FUNCTION__.4031:
+ 2089 0000 6F735F69 		.string	"os_imp_init"
+ 2089      6D705F69 
+ 2089      6E697400 
+ 2090              		.text
+ 2091              	.Letext0:
+ 2092              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 2093              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 2094              		.file 4 "/usr/include/unistd.h"
+ 2095              		.file 5 "/usr/include/x86_64-linux-gnu/bits/getopt_core.h"
+ 2096              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 2097              		.file 7 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 2098              		.file 8 "/usr/include/stdio.h"
+ 2099              		.file 9 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 2100              		.file 10 "/home/xingli/share/1205tiny/os/osal/osal_types.h"
+ 2101              		.file 11 "/home/xingli/share/1205tiny/os/osal/osal_imp.h"
+ 2102              		.file 12 "/home/xingli/share/1205tiny/inc/link_log.h"
+ 6133              		.section	.note.gnu.property,"a"
+ 6134              		.align 8
+ 6135 0000 04000000 		.long	 1f - 0f
+ 6136 0004 10000000 		.long	 4f - 1f
+ 6137 0008 05000000 		.long	 5
+ 6138              	0:
+ 6139 000c 474E5500 		.string	 "GNU"
+ 6140              	1:
+ 6141              		.align 8
+ 6142 0010 020000C0 		.long	 0xc0000002
+ 6143 0014 04000000 		.long	 3f - 2f
+ 6144              	2:
+ 6145 0018 03000000 		.long	 0x3
+ 6146              	3:
+ 6147 001c 00000000 		.align 8
+GAS LISTING /tmp/ccaBVwM7.s 			page 50
+
+
+ 6148              	4:
+GAS LISTING /tmp/ccaBVwM7.s 			page 51
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 osal.c
+     /tmp/ccaBVwM7.s:8      .bss.s_os_cb:0000000000000000 s_os_cb
+     /tmp/ccaBVwM7.s:13     .text.osal_install:0000000000000000 osal_install
+     /tmp/ccaBVwM7.s:63     .text.osal_task_create:0000000000000000 osal_task_create
+     /tmp/ccaBVwM7.s:144    .text.osal_task_kill:0000000000000000 osal_task_kill
+     /tmp/ccaBVwM7.s:213    .text.osal_task_exit:0000000000000000 osal_task_exit
+     /tmp/ccaBVwM7.s:277    .text.osal_task_sleep:0000000000000000 osal_task_sleep
+     /tmp/ccaBVwM7.s:344    .text.osal_mutex_create:0000000000000000 osal_mutex_create
+     /tmp/ccaBVwM7.s:413    .text.osal_mutex_lock:0000000000000000 osal_mutex_lock
+     /tmp/ccaBVwM7.s:482    .text.osal_mutex_unlock:0000000000000000 osal_mutex_unlock
+     /tmp/ccaBVwM7.s:551    .text.osal_mutex_del:0000000000000000 osal_mutex_del
+     /tmp/ccaBVwM7.s:620    .text.osal_semp_create:0000000000000000 osal_semp_create
+     /tmp/ccaBVwM7.s:694    .text.osal_semp_pend:0000000000000000 osal_semp_pend
+     /tmp/ccaBVwM7.s:766    .text.osal_semp_post:0000000000000000 osal_semp_post
+     /tmp/ccaBVwM7.s:835    .text.osal_semp_del:0000000000000000 osal_semp_del
+     /tmp/ccaBVwM7.s:904    .text.osal_malloc:0000000000000000 osal_malloc
+     /tmp/ccaBVwM7.s:973    .text.osal_free:0000000000000000 osal_free
+     /tmp/ccaBVwM7.s:1043   .text.osal_zalloc:0000000000000000 osal_zalloc
+     /tmp/ccaBVwM7.s:1121   .text.osal_realloc:0000000000000000 osal_realloc
+     /tmp/ccaBVwM7.s:1193   .text.osal_calloc:0000000000000000 osal_calloc
+     /tmp/ccaBVwM7.s:1251   .text.osal_sys_time:0000000000000000 osal_sys_time
+     /tmp/ccaBVwM7.s:1317   .text.osal_loop_timer_init:0000000000000000 osal_loop_timer_init
+     /tmp/ccaBVwM7.s:1357   .text.osal_loop_timer_expired:0000000000000000 osal_loop_timer_expired
+     /tmp/ccaBVwM7.s:1400   .text.osal_loop_timer_count_downms:0000000000000000 osal_loop_timer_count_downms
+     /tmp/ccaBVwM7.s:1446   .text.osal_loop_timer_count_down:0000000000000000 osal_loop_timer_count_down
+     /tmp/ccaBVwM7.s:1489   .text.osal_loop_timer_left:0000000000000000 osal_loop_timer_left
+     /tmp/ccaBVwM7.s:1547   .text.osal_reboot:0000000000000000 osal_reboot
+     /tmp/ccaBVwM7.s:1613   .text.osal_int_connect:0000000000000000 osal_int_connect
+     /tmp/ccaBVwM7.s:1691   .text.osal_queue_create:0000000000000000 osal_queue_create
+     /tmp/ccaBVwM7.s:1765   .text.osal_queue_send:0000000000000000 osal_queue_send
+     /tmp/ccaBVwM7.s:1840   .text.osal_queue_recv:0000000000000000 osal_queue_recv
+     /tmp/ccaBVwM7.s:1915   .text.osal_queue_del:0000000000000000 osal_queue_del
+     /tmp/ccaBVwM7.s:1988   .text.os_imp_init:0000000000000000 os_imp_init
+     /tmp/ccaBVwM7.s:2088   .rodata.__FUNCTION__.4031:0000000000000000 __FUNCTION__.4031
+     /tmp/ccaBVwM7.s:2047   .text.osal_init:0000000000000000 osal_init
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+memset
+malloc
+link_log_level_get
+link_log_level_name
+printf
+stdout
+fflush

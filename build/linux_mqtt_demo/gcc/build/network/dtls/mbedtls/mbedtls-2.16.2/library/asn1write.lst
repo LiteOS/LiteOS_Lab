@@ -1,0 +1,2840 @@
+GAS LISTING /tmp/ccyUvz9a.s 			page 1
+
+
+   1              		.file	"asn1write.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_asn1_write_len,"ax",@progbits
+   5              		.globl	mbedtls_asn1_write_len
+   7              	mbedtls_asn1_write_len:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c"
+   1:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** /*
+   2:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  * ASN.1 buffer writing functionality
+   3:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *
+   4:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *
+   7:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *
+  11:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *
+  13:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  limitations under the License.
+  18:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *
+  19:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  */
+  21:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  22:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  23:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #include "mbedtls/config.h"
+  24:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #else
+  25:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #include MBEDTLS_CONFIG_FILE
+  26:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #endif
+  27:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  28:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #if defined(MBEDTLS_ASN1_WRITE_C)
+  29:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  30:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #include "mbedtls/asn1write.h"
+  31:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  32:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #include <string.h>
+  33:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  34:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #if defined(MBEDTLS_PLATFORM_C)
+  35:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #include "mbedtls/platform.h"
+  36:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #else
+  37:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #include <stdlib.h>
+  38:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #define mbedtls_calloc    calloc
+  39:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #define mbedtls_free       free
+  40:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #endif
+  41:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  42:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_len( unsigned char **p, unsigned char *start, size_t len )
+  43:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+  10              		.loc 1 43 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/ccyUvz9a.s 			page 2
+
+
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC30 		subq	$48, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22 0010 488975E0 		movq	%rsi, -32(%rbp)
+  23 0014 488955D8 		movq	%rdx, -40(%rbp)
+  24              		.loc 1 43 1
+  25 0018 64488B04 		movq	%fs:40, %rax
+  25      25280000 
+  25      00
+  26 0021 488945F8 		movq	%rax, -8(%rbp)
+  27 0025 31C0     		xorl	%eax, %eax
+  44:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( len < 0x80 )
+  28              		.loc 1 44 7
+  29 0027 48837DD8 		cmpq	$127, -40(%rbp)
+  29      7F
+  30 002c 7743     		ja	.L2
+  45:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+  46:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( *p - start < 1 )
+  31              		.loc 1 46 13
+  32 002e 488B45E8 		movq	-24(%rbp), %rax
+  33 0032 488B00   		movq	(%rax), %rax
+  34              		.loc 1 46 16
+  35 0035 482B45E0 		subq	-32(%rbp), %rax
+  36              		.loc 1 46 11
+  37 0039 4885C0   		testq	%rax, %rax
+  38 003c 7F0A     		jg	.L3
+  47:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+  39              		.loc 1 47 19
+  40 003e B894FFFF 		movl	$-108, %eax
+  40      FF
+  41 0043 E9D00200 		jmp	.L4
+  41      00
+  42              	.L3:
+  48:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  49:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = (unsigned char) len;
+  43              		.loc 1 49 13
+  44 0048 488B45E8 		movq	-24(%rbp), %rax
+  45 004c 488B00   		movq	(%rax), %rax
+  46              		.loc 1 49 10
+  47 004f 488D50FF 		leaq	-1(%rax), %rdx
+  48              		.loc 1 49 17
+  49 0053 488B45E8 		movq	-24(%rbp), %rax
+  50 0057 488910   		movq	%rdx, (%rax)
+  51              		.loc 1 49 13
+  52 005a 488B45E8 		movq	-24(%rbp), %rax
+  53 005e 488B00   		movq	(%rax), %rax
+  54              		.loc 1 49 19
+  55 0061 488B55D8 		movq	-40(%rbp), %rdx
+  56              		.loc 1 49 17
+  57 0065 8810     		movb	%dl, (%rax)
+  50:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( 1 );
+  58              		.loc 1 50 15
+  59 0067 B8010000 		movl	$1, %eax
+  59      00
+GAS LISTING /tmp/ccyUvz9a.s 			page 3
+
+
+  60 006c E9A70200 		jmp	.L4
+  60      00
+  61              	.L2:
+  51:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+  52:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  53:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( len <= 0xFF )
+  62              		.loc 1 53 7
+  63 0071 48817DD8 		cmpq	$255, -40(%rbp)
+  63      FF000000 
+  64 0079 7760     		ja	.L5
+  54:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+  55:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( *p - start < 2 )
+  65              		.loc 1 55 13
+  66 007b 488B45E8 		movq	-24(%rbp), %rax
+  67 007f 488B00   		movq	(%rax), %rax
+  68              		.loc 1 55 16
+  69 0082 482B45E0 		subq	-32(%rbp), %rax
+  70              		.loc 1 55 11
+  71 0086 4883F801 		cmpq	$1, %rax
+  72 008a 7F0A     		jg	.L6
+  56:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+  73              		.loc 1 56 19
+  74 008c B894FFFF 		movl	$-108, %eax
+  74      FF
+  75 0091 E9820200 		jmp	.L4
+  75      00
+  76              	.L6:
+  57:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  58:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = (unsigned char) len;
+  77              		.loc 1 58 13
+  78 0096 488B45E8 		movq	-24(%rbp), %rax
+  79 009a 488B00   		movq	(%rax), %rax
+  80              		.loc 1 58 10
+  81 009d 488D50FF 		leaq	-1(%rax), %rdx
+  82              		.loc 1 58 17
+  83 00a1 488B45E8 		movq	-24(%rbp), %rax
+  84 00a5 488910   		movq	%rdx, (%rax)
+  85              		.loc 1 58 13
+  86 00a8 488B45E8 		movq	-24(%rbp), %rax
+  87 00ac 488B00   		movq	(%rax), %rax
+  88              		.loc 1 58 19
+  89 00af 488B55D8 		movq	-40(%rbp), %rdx
+  90              		.loc 1 58 17
+  91 00b3 8810     		movb	%dl, (%rax)
+  59:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = 0x81;
+  92              		.loc 1 59 13
+  93 00b5 488B45E8 		movq	-24(%rbp), %rax
+  94 00b9 488B00   		movq	(%rax), %rax
+  95              		.loc 1 59 10
+  96 00bc 488D50FF 		leaq	-1(%rax), %rdx
+  97              		.loc 1 59 17
+  98 00c0 488B45E8 		movq	-24(%rbp), %rax
+  99 00c4 488910   		movq	%rdx, (%rax)
+ 100              		.loc 1 59 13
+ 101 00c7 488B45E8 		movq	-24(%rbp), %rax
+ 102 00cb 488B00   		movq	(%rax), %rax
+ 103              		.loc 1 59 17
+GAS LISTING /tmp/ccyUvz9a.s 			page 4
+
+
+ 104 00ce C60081   		movb	$-127, (%rax)
+  60:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( 2 );
+ 105              		.loc 1 60 15
+ 106 00d1 B8020000 		movl	$2, %eax
+ 106      00
+ 107 00d6 E93D0200 		jmp	.L4
+ 107      00
+ 108              	.L5:
+  61:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+  62:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  63:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( len <= 0xFFFF )
+ 109              		.loc 1 63 7
+ 110 00db 48817DD8 		cmpq	$65535, -40(%rbp)
+ 110      FFFF0000 
+ 111 00e3 0F878800 		ja	.L7
+ 111      0000
+  64:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+  65:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( *p - start < 3 )
+ 112              		.loc 1 65 13
+ 113 00e9 488B45E8 		movq	-24(%rbp), %rax
+ 114 00ed 488B00   		movq	(%rax), %rax
+ 115              		.loc 1 65 16
+ 116 00f0 482B45E0 		subq	-32(%rbp), %rax
+ 117              		.loc 1 65 11
+ 118 00f4 4883F802 		cmpq	$2, %rax
+ 119 00f8 7F0A     		jg	.L8
+  66:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 120              		.loc 1 66 19
+ 121 00fa B894FFFF 		movl	$-108, %eax
+ 121      FF
+ 122 00ff E9140200 		jmp	.L4
+ 122      00
+ 123              	.L8:
+  67:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  68:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len       ) & 0xFF;
+ 124              		.loc 1 68 13
+ 125 0104 488B45E8 		movq	-24(%rbp), %rax
+ 126 0108 488B00   		movq	(%rax), %rax
+ 127              		.loc 1 68 10
+ 128 010b 488D50FF 		leaq	-1(%rax), %rdx
+ 129              		.loc 1 68 17
+ 130 010f 488B45E8 		movq	-24(%rbp), %rax
+ 131 0113 488910   		movq	%rdx, (%rax)
+ 132              		.loc 1 68 13
+ 133 0116 488B45E8 		movq	-24(%rbp), %rax
+ 134 011a 488B00   		movq	(%rax), %rax
+ 135              		.loc 1 68 17
+ 136 011d 488B55D8 		movq	-40(%rbp), %rdx
+ 137 0121 8810     		movb	%dl, (%rax)
+  69:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len >>  8 ) & 0xFF;
+ 138              		.loc 1 69 25
+ 139 0123 488B45D8 		movq	-40(%rbp), %rax
+ 140 0127 48C1E808 		shrq	$8, %rax
+ 141 012b 4889C1   		movq	%rax, %rcx
+ 142              		.loc 1 69 13
+ 143 012e 488B45E8 		movq	-24(%rbp), %rax
+ 144 0132 488B00   		movq	(%rax), %rax
+GAS LISTING /tmp/ccyUvz9a.s 			page 5
+
+
+ 145              		.loc 1 69 10
+ 146 0135 488D50FF 		leaq	-1(%rax), %rdx
+ 147              		.loc 1 69 17
+ 148 0139 488B45E8 		movq	-24(%rbp), %rax
+ 149 013d 488910   		movq	%rdx, (%rax)
+ 150              		.loc 1 69 13
+ 151 0140 488B45E8 		movq	-24(%rbp), %rax
+ 152 0144 488B00   		movq	(%rax), %rax
+ 153              		.loc 1 69 17
+ 154 0147 89CA     		movl	%ecx, %edx
+ 155 0149 8810     		movb	%dl, (%rax)
+  70:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = 0x82;
+ 156              		.loc 1 70 13
+ 157 014b 488B45E8 		movq	-24(%rbp), %rax
+ 158 014f 488B00   		movq	(%rax), %rax
+ 159              		.loc 1 70 10
+ 160 0152 488D50FF 		leaq	-1(%rax), %rdx
+ 161              		.loc 1 70 17
+ 162 0156 488B45E8 		movq	-24(%rbp), %rax
+ 163 015a 488910   		movq	%rdx, (%rax)
+ 164              		.loc 1 70 13
+ 165 015d 488B45E8 		movq	-24(%rbp), %rax
+ 166 0161 488B00   		movq	(%rax), %rax
+ 167              		.loc 1 70 17
+ 168 0164 C60082   		movb	$-126, (%rax)
+  71:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( 3 );
+ 169              		.loc 1 71 15
+ 170 0167 B8030000 		movl	$3, %eax
+ 170      00
+ 171 016c E9A70100 		jmp	.L4
+ 171      00
+ 172              	.L7:
+  72:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+  73:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  74:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( len <= 0xFFFFFF )
+ 173              		.loc 1 74 7
+ 174 0171 48817DD8 		cmpq	$16777215, -40(%rbp)
+ 174      FFFFFF00 
+ 175 0179 0F87B000 		ja	.L9
+ 175      0000
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+  76:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( *p - start < 4 )
+ 176              		.loc 1 76 13
+ 177 017f 488B45E8 		movq	-24(%rbp), %rax
+ 178 0183 488B00   		movq	(%rax), %rax
+ 179              		.loc 1 76 16
+ 180 0186 482B45E0 		subq	-32(%rbp), %rax
+ 181              		.loc 1 76 11
+ 182 018a 4883F803 		cmpq	$3, %rax
+ 183 018e 7F0A     		jg	.L10
+  77:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 184              		.loc 1 77 19
+ 185 0190 B894FFFF 		movl	$-108, %eax
+ 185      FF
+ 186 0195 E97E0100 		jmp	.L4
+ 186      00
+ 187              	.L10:
+GAS LISTING /tmp/ccyUvz9a.s 			page 6
+
+
+  78:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  79:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len       ) & 0xFF;
+ 188              		.loc 1 79 13
+ 189 019a 488B45E8 		movq	-24(%rbp), %rax
+ 190 019e 488B00   		movq	(%rax), %rax
+ 191              		.loc 1 79 10
+ 192 01a1 488D50FF 		leaq	-1(%rax), %rdx
+ 193              		.loc 1 79 17
+ 194 01a5 488B45E8 		movq	-24(%rbp), %rax
+ 195 01a9 488910   		movq	%rdx, (%rax)
+ 196              		.loc 1 79 13
+ 197 01ac 488B45E8 		movq	-24(%rbp), %rax
+ 198 01b0 488B00   		movq	(%rax), %rax
+ 199              		.loc 1 79 17
+ 200 01b3 488B55D8 		movq	-40(%rbp), %rdx
+ 201 01b7 8810     		movb	%dl, (%rax)
+  80:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len >>  8 ) & 0xFF;
+ 202              		.loc 1 80 25
+ 203 01b9 488B45D8 		movq	-40(%rbp), %rax
+ 204 01bd 48C1E808 		shrq	$8, %rax
+ 205 01c1 4889C1   		movq	%rax, %rcx
+ 206              		.loc 1 80 13
+ 207 01c4 488B45E8 		movq	-24(%rbp), %rax
+ 208 01c8 488B00   		movq	(%rax), %rax
+ 209              		.loc 1 80 10
+ 210 01cb 488D50FF 		leaq	-1(%rax), %rdx
+ 211              		.loc 1 80 17
+ 212 01cf 488B45E8 		movq	-24(%rbp), %rax
+ 213 01d3 488910   		movq	%rdx, (%rax)
+ 214              		.loc 1 80 13
+ 215 01d6 488B45E8 		movq	-24(%rbp), %rax
+ 216 01da 488B00   		movq	(%rax), %rax
+ 217              		.loc 1 80 17
+ 218 01dd 89CA     		movl	%ecx, %edx
+ 219 01df 8810     		movb	%dl, (%rax)
+  81:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len >> 16 ) & 0xFF;
+ 220              		.loc 1 81 25
+ 221 01e1 488B45D8 		movq	-40(%rbp), %rax
+ 222 01e5 48C1E810 		shrq	$16, %rax
+ 223 01e9 4889C1   		movq	%rax, %rcx
+ 224              		.loc 1 81 13
+ 225 01ec 488B45E8 		movq	-24(%rbp), %rax
+ 226 01f0 488B00   		movq	(%rax), %rax
+ 227              		.loc 1 81 10
+ 228 01f3 488D50FF 		leaq	-1(%rax), %rdx
+ 229              		.loc 1 81 17
+ 230 01f7 488B45E8 		movq	-24(%rbp), %rax
+ 231 01fb 488910   		movq	%rdx, (%rax)
+ 232              		.loc 1 81 13
+ 233 01fe 488B45E8 		movq	-24(%rbp), %rax
+ 234 0202 488B00   		movq	(%rax), %rax
+ 235              		.loc 1 81 17
+ 236 0205 89CA     		movl	%ecx, %edx
+ 237 0207 8810     		movb	%dl, (%rax)
+  82:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = 0x83;
+ 238              		.loc 1 82 13
+ 239 0209 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/ccyUvz9a.s 			page 7
+
+
+ 240 020d 488B00   		movq	(%rax), %rax
+ 241              		.loc 1 82 10
+ 242 0210 488D50FF 		leaq	-1(%rax), %rdx
+ 243              		.loc 1 82 17
+ 244 0214 488B45E8 		movq	-24(%rbp), %rax
+ 245 0218 488910   		movq	%rdx, (%rax)
+ 246              		.loc 1 82 13
+ 247 021b 488B45E8 		movq	-24(%rbp), %rax
+ 248 021f 488B00   		movq	(%rax), %rax
+ 249              		.loc 1 82 17
+ 250 0222 C60083   		movb	$-125, (%rax)
+  83:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( 4 );
+ 251              		.loc 1 83 15
+ 252 0225 B8040000 		movl	$4, %eax
+ 252      00
+ 253 022a E9E90000 		jmp	.L4
+ 253      00
+ 254              	.L9:
+  84:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+  85:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #if SIZE_MAX > 0xFFFFFFFF
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( len <= 0xFFFFFFFF )
+ 255              		.loc 1 87 7
+ 256 022f B8FFFFFF 		movl	$4294967295, %eax
+ 256      FF
+ 257 0234 483945D8 		cmpq	%rax, -40(%rbp)
+ 258 0238 0F87D500 		ja	.L11
+ 258      0000
+  88:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #endif
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+  90:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( *p - start < 5 )
+ 259              		.loc 1 90 13
+ 260 023e 488B45E8 		movq	-24(%rbp), %rax
+ 261 0242 488B00   		movq	(%rax), %rax
+ 262              		.loc 1 90 16
+ 263 0245 482B45E0 		subq	-32(%rbp), %rax
+ 264              		.loc 1 90 11
+ 265 0249 4883F804 		cmpq	$4, %rax
+ 266 024d 7F0A     		jg	.L12
+  91:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 267              		.loc 1 91 19
+ 268 024f B894FFFF 		movl	$-108, %eax
+ 268      FF
+ 269 0254 E9BF0000 		jmp	.L4
+ 269      00
+ 270              	.L12:
+  92:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+  93:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len       ) & 0xFF;
+ 271              		.loc 1 93 13
+ 272 0259 488B45E8 		movq	-24(%rbp), %rax
+ 273 025d 488B00   		movq	(%rax), %rax
+ 274              		.loc 1 93 10
+ 275 0260 488D50FF 		leaq	-1(%rax), %rdx
+ 276              		.loc 1 93 17
+ 277 0264 488B45E8 		movq	-24(%rbp), %rax
+ 278 0268 488910   		movq	%rdx, (%rax)
+ 279              		.loc 1 93 13
+GAS LISTING /tmp/ccyUvz9a.s 			page 8
+
+
+ 280 026b 488B45E8 		movq	-24(%rbp), %rax
+ 281 026f 488B00   		movq	(%rax), %rax
+ 282              		.loc 1 93 17
+ 283 0272 488B55D8 		movq	-40(%rbp), %rdx
+ 284 0276 8810     		movb	%dl, (%rax)
+  94:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len >>  8 ) & 0xFF;
+ 285              		.loc 1 94 25
+ 286 0278 488B45D8 		movq	-40(%rbp), %rax
+ 287 027c 48C1E808 		shrq	$8, %rax
+ 288 0280 4889C1   		movq	%rax, %rcx
+ 289              		.loc 1 94 13
+ 290 0283 488B45E8 		movq	-24(%rbp), %rax
+ 291 0287 488B00   		movq	(%rax), %rax
+ 292              		.loc 1 94 10
+ 293 028a 488D50FF 		leaq	-1(%rax), %rdx
+ 294              		.loc 1 94 17
+ 295 028e 488B45E8 		movq	-24(%rbp), %rax
+ 296 0292 488910   		movq	%rdx, (%rax)
+ 297              		.loc 1 94 13
+ 298 0295 488B45E8 		movq	-24(%rbp), %rax
+ 299 0299 488B00   		movq	(%rax), %rax
+ 300              		.loc 1 94 17
+ 301 029c 89CA     		movl	%ecx, %edx
+ 302 029e 8810     		movb	%dl, (%rax)
+  95:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len >> 16 ) & 0xFF;
+ 303              		.loc 1 95 25
+ 304 02a0 488B45D8 		movq	-40(%rbp), %rax
+ 305 02a4 48C1E810 		shrq	$16, %rax
+ 306 02a8 4889C1   		movq	%rax, %rcx
+ 307              		.loc 1 95 13
+ 308 02ab 488B45E8 		movq	-24(%rbp), %rax
+ 309 02af 488B00   		movq	(%rax), %rax
+ 310              		.loc 1 95 10
+ 311 02b2 488D50FF 		leaq	-1(%rax), %rdx
+ 312              		.loc 1 95 17
+ 313 02b6 488B45E8 		movq	-24(%rbp), %rax
+ 314 02ba 488910   		movq	%rdx, (%rax)
+ 315              		.loc 1 95 13
+ 316 02bd 488B45E8 		movq	-24(%rbp), %rax
+ 317 02c1 488B00   		movq	(%rax), %rax
+ 318              		.loc 1 95 17
+ 319 02c4 89CA     		movl	%ecx, %edx
+ 320 02c6 8810     		movb	%dl, (%rax)
+  96:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = ( len >> 24 ) & 0xFF;
+ 321              		.loc 1 96 25
+ 322 02c8 488B45D8 		movq	-40(%rbp), %rax
+ 323 02cc 48C1E818 		shrq	$24, %rax
+ 324 02d0 4889C1   		movq	%rax, %rcx
+ 325              		.loc 1 96 13
+ 326 02d3 488B45E8 		movq	-24(%rbp), %rax
+ 327 02d7 488B00   		movq	(%rax), %rax
+ 328              		.loc 1 96 10
+ 329 02da 488D50FF 		leaq	-1(%rax), %rdx
+ 330              		.loc 1 96 17
+ 331 02de 488B45E8 		movq	-24(%rbp), %rax
+ 332 02e2 488910   		movq	%rdx, (%rax)
+ 333              		.loc 1 96 13
+GAS LISTING /tmp/ccyUvz9a.s 			page 9
+
+
+ 334 02e5 488B45E8 		movq	-24(%rbp), %rax
+ 335 02e9 488B00   		movq	(%rax), %rax
+ 336              		.loc 1 96 17
+ 337 02ec 89CA     		movl	%ecx, %edx
+ 338 02ee 8810     		movb	%dl, (%rax)
+  97:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = 0x84;
+ 339              		.loc 1 97 13
+ 340 02f0 488B45E8 		movq	-24(%rbp), %rax
+ 341 02f4 488B00   		movq	(%rax), %rax
+ 342              		.loc 1 97 10
+ 343 02f7 488D50FF 		leaq	-1(%rax), %rdx
+ 344              		.loc 1 97 17
+ 345 02fb 488B45E8 		movq	-24(%rbp), %rax
+ 346 02ff 488910   		movq	%rdx, (%rax)
+ 347              		.loc 1 97 13
+ 348 0302 488B45E8 		movq	-24(%rbp), %rax
+ 349 0306 488B00   		movq	(%rax), %rax
+ 350              		.loc 1 97 17
+ 351 0309 C60084   		movb	$-124, (%rax)
+  98:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( 5 );
+ 352              		.loc 1 98 15
+ 353 030c B8050000 		movl	$5, %eax
+ 353      00
+ 354 0311 EB05     		jmp	.L4
+ 355              	.L11:
+  99:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+ 100:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 101:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #if SIZE_MAX > 0xFFFFFFFF
+ 102:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
+ 356              		.loc 1 102 11
+ 357 0313 B89CFFFF 		movl	$-100, %eax
+ 357      FF
+ 358              	.L4:
+ 103:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #endif
+ 104:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 359              		.loc 1 104 1
+ 360 0318 488B75F8 		movq	-8(%rbp), %rsi
+ 361 031c 64483334 		xorq	%fs:40, %rsi
+ 361      25280000 
+ 361      00
+ 362 0325 7405     		je	.L13
+ 363 0327 E8000000 		call	__stack_chk_fail@PLT
+ 363      00
+ 364              	.L13:
+ 365 032c C9       		leave
+ 366              	.LCFI2:
+ 367              		.cfi_def_cfa 7, 8
+ 368 032d C3       		ret
+ 369              		.cfi_endproc
+ 370              	.LFE6:
+ 372              		.section	.text.mbedtls_asn1_write_tag,"ax",@progbits
+ 373              		.globl	mbedtls_asn1_write_tag
+ 375              	mbedtls_asn1_write_tag:
+ 376              	.LFB7:
+ 105:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 106:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_tag( unsigned char **p, unsigned char *start, unsigned char tag )
+ 107:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+GAS LISTING /tmp/ccyUvz9a.s 			page 10
+
+
+ 377              		.loc 1 107 1
+ 378              		.cfi_startproc
+ 379 0000 F30F1EFA 		endbr64
+ 380 0004 55       		pushq	%rbp
+ 381              	.LCFI3:
+ 382              		.cfi_def_cfa_offset 16
+ 383              		.cfi_offset 6, -16
+ 384 0005 4889E5   		movq	%rsp, %rbp
+ 385              	.LCFI4:
+ 386              		.cfi_def_cfa_register 6
+ 387 0008 4883EC30 		subq	$48, %rsp
+ 388 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 389 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 390 0014 89D0     		movl	%edx, %eax
+ 391 0016 8845DC   		movb	%al, -36(%rbp)
+ 392              		.loc 1 107 1
+ 393 0019 64488B04 		movq	%fs:40, %rax
+ 393      25280000 
+ 393      00
+ 394 0022 488945F8 		movq	%rax, -8(%rbp)
+ 395 0026 31C0     		xorl	%eax, %eax
+ 108:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( *p - start < 1 )
+ 396              		.loc 1 108 9
+ 397 0028 488B45E8 		movq	-24(%rbp), %rax
+ 398 002c 488B00   		movq	(%rax), %rax
+ 399              		.loc 1 108 12
+ 400 002f 482B45E0 		subq	-32(%rbp), %rax
+ 401              		.loc 1 108 7
+ 402 0033 4885C0   		testq	%rax, %rax
+ 403 0036 7F07     		jg	.L15
+ 109:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 404              		.loc 1 109 15
+ 405 0038 B894FFFF 		movl	$-108, %eax
+ 405      FF
+ 406 003d EB24     		jmp	.L16
+ 407              	.L15:
+ 110:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 111:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     *--(*p) = tag;
+ 408              		.loc 1 111 9
+ 409 003f 488B45E8 		movq	-24(%rbp), %rax
+ 410 0043 488B00   		movq	(%rax), %rax
+ 411              		.loc 1 111 6
+ 412 0046 488D50FF 		leaq	-1(%rax), %rdx
+ 413              		.loc 1 111 13
+ 414 004a 488B45E8 		movq	-24(%rbp), %rax
+ 415 004e 488910   		movq	%rdx, (%rax)
+ 416              		.loc 1 111 9
+ 417 0051 488B45E8 		movq	-24(%rbp), %rax
+ 418 0055 488B00   		movq	(%rax), %rax
+ 419              		.loc 1 111 13
+ 420 0058 0FB655DC 		movzbl	-36(%rbp), %edx
+ 421 005c 8810     		movb	%dl, (%rax)
+ 112:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 113:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( 1 );
+ 422              		.loc 1 113 11
+ 423 005e B8010000 		movl	$1, %eax
+ 423      00
+GAS LISTING /tmp/ccyUvz9a.s 			page 11
+
+
+ 424              	.L16:
+ 114:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 425              		.loc 1 114 1
+ 426 0063 488B4DF8 		movq	-8(%rbp), %rcx
+ 427 0067 6448330C 		xorq	%fs:40, %rcx
+ 427      25280000 
+ 427      00
+ 428 0070 7405     		je	.L17
+ 429 0072 E8000000 		call	__stack_chk_fail@PLT
+ 429      00
+ 430              	.L17:
+ 431 0077 C9       		leave
+ 432              	.LCFI5:
+ 433              		.cfi_def_cfa 7, 8
+ 434 0078 C3       		ret
+ 435              		.cfi_endproc
+ 436              	.LFE7:
+ 438              		.section	.text.mbedtls_asn1_write_raw_buffer,"ax",@progbits
+ 439              		.globl	mbedtls_asn1_write_raw_buffer
+ 441              	mbedtls_asn1_write_raw_buffer:
+ 442              	.LFB8:
+ 115:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 116:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_raw_buffer( unsigned char **p, unsigned char *start,
+ 117:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                            const unsigned char *buf, size_t size )
+ 118:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 443              		.loc 1 118 1
+ 444              		.cfi_startproc
+ 445 0000 F30F1EFA 		endbr64
+ 446 0004 55       		pushq	%rbp
+ 447              	.LCFI6:
+ 448              		.cfi_def_cfa_offset 16
+ 449              		.cfi_offset 6, -16
+ 450 0005 4889E5   		movq	%rsp, %rbp
+ 451              	.LCFI7:
+ 452              		.cfi_def_cfa_register 6
+ 453 0008 4883EC30 		subq	$48, %rsp
+ 454 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 455 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 456 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 457 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 458              		.loc 1 118 1
+ 459 001c 64488B04 		movq	%fs:40, %rax
+ 459      25280000 
+ 459      00
+ 460 0025 488945F8 		movq	%rax, -8(%rbp)
+ 461 0029 31C0     		xorl	%eax, %eax
+ 119:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 462              		.loc 1 119 12
+ 463 002b 48C745F0 		movq	$0, -16(%rbp)
+ 463      00000000 
+ 120:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 121:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( *p < start || (size_t)( *p - start ) < size )
+ 464              		.loc 1 121 9
+ 465 0033 488B45E8 		movq	-24(%rbp), %rax
+ 466 0037 488B00   		movq	(%rax), %rax
+ 467              		.loc 1 121 7
+ 468 003a 483945E0 		cmpq	%rax, -32(%rbp)
+GAS LISTING /tmp/ccyUvz9a.s 			page 12
+
+
+ 469 003e 7711     		ja	.L19
+ 470              		.loc 1 121 33 discriminator 1
+ 471 0040 488B45E8 		movq	-24(%rbp), %rax
+ 472 0044 488B00   		movq	(%rax), %rax
+ 473              		.loc 1 121 36 discriminator 1
+ 474 0047 482B45E0 		subq	-32(%rbp), %rax
+ 475              		.loc 1 121 20 discriminator 1
+ 476 004b 483945D0 		cmpq	%rax, -48(%rbp)
+ 477 004f 7607     		jbe	.L20
+ 478              	.L19:
+ 122:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 479              		.loc 1 122 15
+ 480 0051 B894FFFF 		movl	$-108, %eax
+ 480      FF
+ 481 0056 EB3E     		jmp	.L21
+ 482              	.L20:
+ 123:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 124:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     len = size;
+ 483              		.loc 1 124 9
+ 484 0058 488B45D0 		movq	-48(%rbp), %rax
+ 485 005c 488945F0 		movq	%rax, -16(%rbp)
+ 125:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     (*p) -= len;
+ 486              		.loc 1 125 10
+ 487 0060 488B45E8 		movq	-24(%rbp), %rax
+ 488 0064 488B00   		movq	(%rax), %rax
+ 489 0067 488B55F0 		movq	-16(%rbp), %rdx
+ 490 006b 48F7DA   		negq	%rdx
+ 491 006e 4801C2   		addq	%rax, %rdx
+ 492 0071 488B45E8 		movq	-24(%rbp), %rax
+ 493 0075 488910   		movq	%rdx, (%rax)
+ 126:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     memcpy( *p, buf, len );
+ 494              		.loc 1 126 5
+ 495 0078 488B45E8 		movq	-24(%rbp), %rax
+ 496 007c 488B00   		movq	(%rax), %rax
+ 497 007f 488B55F0 		movq	-16(%rbp), %rdx
+ 498 0083 488B4DD8 		movq	-40(%rbp), %rcx
+ 499 0087 4889CE   		movq	%rcx, %rsi
+ 500 008a 4889C7   		movq	%rax, %rdi
+ 501 008d E8000000 		call	memcpy@PLT
+ 501      00
+ 127:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 128:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 502              		.loc 1 128 13
+ 503 0092 488B45F0 		movq	-16(%rbp), %rax
+ 504              	.L21:
+ 129:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 505              		.loc 1 129 1
+ 506 0096 488B75F8 		movq	-8(%rbp), %rsi
+ 507 009a 64483334 		xorq	%fs:40, %rsi
+ 507      25280000 
+ 507      00
+ 508 00a3 7405     		je	.L22
+ 509 00a5 E8000000 		call	__stack_chk_fail@PLT
+ 509      00
+ 510              	.L22:
+ 511 00aa C9       		leave
+ 512              	.LCFI8:
+GAS LISTING /tmp/ccyUvz9a.s 			page 13
+
+
+ 513              		.cfi_def_cfa 7, 8
+ 514 00ab C3       		ret
+ 515              		.cfi_endproc
+ 516              	.LFE8:
+ 518              		.section	.text.mbedtls_asn1_write_mpi,"ax",@progbits
+ 519              		.globl	mbedtls_asn1_write_mpi
+ 521              	mbedtls_asn1_write_mpi:
+ 522              	.LFB9:
+ 130:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 131:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #if defined(MBEDTLS_BIGNUM_C)
+ 132:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_mpi( unsigned char **p, unsigned char *start, const mbedtls_mpi *X )
+ 133:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 523              		.loc 1 133 1
+ 524              		.cfi_startproc
+ 525 0000 F30F1EFA 		endbr64
+ 526 0004 55       		pushq	%rbp
+ 527              	.LCFI9:
+ 528              		.cfi_def_cfa_offset 16
+ 529              		.cfi_offset 6, -16
+ 530 0005 4889E5   		movq	%rsp, %rbp
+ 531              	.LCFI10:
+ 532              		.cfi_def_cfa_register 6
+ 533 0008 4883EC40 		subq	$64, %rsp
+ 534 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 535 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 536 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 537              		.loc 1 133 1
+ 538 0018 64488B04 		movq	%fs:40, %rax
+ 538      25280000 
+ 538      00
+ 539 0021 488945F8 		movq	%rax, -8(%rbp)
+ 540 0025 31C0     		xorl	%eax, %eax
+ 134:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 135:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 541              		.loc 1 135 12
+ 542 0027 48C745F0 		movq	$0, -16(%rbp)
+ 542      00000000 
+ 136:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 137:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     // Write the MPI
+ 138:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     //
+ 139:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     len = mbedtls_mpi_size( X );
+ 543              		.loc 1 139 11
+ 544 002f 488B45C8 		movq	-56(%rbp), %rax
+ 545 0033 4889C7   		movq	%rax, %rdi
+ 546 0036 E8000000 		call	mbedtls_mpi_size@PLT
+ 546      00
+ 547 003b 488945F0 		movq	%rax, -16(%rbp)
+ 140:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( *p < start || (size_t)( *p - start ) < len )
+ 548              		.loc 1 141 9
+ 549 003f 488B45D8 		movq	-40(%rbp), %rax
+ 550 0043 488B00   		movq	(%rax), %rax
+ 551              		.loc 1 141 7
+ 552 0046 483945D0 		cmpq	%rax, -48(%rbp)
+ 553 004a 7711     		ja	.L24
+ 554              		.loc 1 141 33 discriminator 1
+ 555 004c 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/ccyUvz9a.s 			page 14
+
+
+ 556 0050 488B00   		movq	(%rax), %rax
+ 557              		.loc 1 141 36 discriminator 1
+ 558 0053 482B45D0 		subq	-48(%rbp), %rax
+ 559              		.loc 1 141 20 discriminator 1
+ 560 0057 483945F0 		cmpq	%rax, -16(%rbp)
+ 561 005b 760A     		jbe	.L25
+ 562              	.L24:
+ 142:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 563              		.loc 1 142 15
+ 564 005d B894FFFF 		movl	$-108, %eax
+ 564      FF
+ 565 0062 E9FD0000 		jmp	.L26
+ 565      00
+ 566              	.L25:
+ 143:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 144:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     (*p) -= len;
+ 567              		.loc 1 144 10
+ 568 0067 488B45D8 		movq	-40(%rbp), %rax
+ 569 006b 488B00   		movq	(%rax), %rax
+ 570 006e 488B55F0 		movq	-16(%rbp), %rdx
+ 571 0072 48F7DA   		negq	%rdx
+ 572 0075 4801C2   		addq	%rax, %rdx
+ 573 0078 488B45D8 		movq	-40(%rbp), %rax
+ 574 007c 488910   		movq	%rdx, (%rax)
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( X, *p, len ) );
+ 575              		.loc 1 145 5
+ 576 007f 488B45D8 		movq	-40(%rbp), %rax
+ 577 0083 488B08   		movq	(%rax), %rcx
+ 578 0086 488B55F0 		movq	-16(%rbp), %rdx
+ 579 008a 488B45C8 		movq	-56(%rbp), %rax
+ 580 008e 4889CE   		movq	%rcx, %rsi
+ 581 0091 4889C7   		movq	%rax, %rdi
+ 582 0094 E8000000 		call	mbedtls_mpi_write_binary@PLT
+ 582      00
+ 583 0099 8945EC   		movl	%eax, -20(%rbp)
+ 584 009c 837DEC00 		cmpl	$0, -20(%rbp)
+ 585 00a0 0F85BA00 		jne	.L34
+ 585      0000
+ 146:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 147:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     // DER format assumes 2s complement for numbers, so the leftmost bit
+ 148:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     // should be 0 for positive numbers and 1 for negative numbers.
+ 149:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     //
+ 150:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( X->s ==1 && **p & 0x80 )
+ 586              		.loc 1 150 10
+ 587 00a6 488B45C8 		movq	-56(%rbp), %rax
+ 588 00aa 8B00     		movl	(%rax), %eax
+ 589              		.loc 1 150 7
+ 590 00ac 83F801   		cmpl	$1, %eax
+ 591 00af 7549     		jne	.L29
+ 592              		.loc 1 150 22 discriminator 1
+ 593 00b1 488B45D8 		movq	-40(%rbp), %rax
+ 594 00b5 488B00   		movq	(%rax), %rax
+ 595              		.loc 1 150 21 discriminator 1
+ 596 00b8 0FB600   		movzbl	(%rax), %eax
+ 597              		.loc 1 150 18 discriminator 1
+ 598 00bb 84C0     		testb	%al, %al
+ 599 00bd 793B     		jns	.L29
+GAS LISTING /tmp/ccyUvz9a.s 			page 15
+
+
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+ 152:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( *p - start < 1 )
+ 600              		.loc 1 152 13
+ 601 00bf 488B45D8 		movq	-40(%rbp), %rax
+ 602 00c3 488B00   		movq	(%rax), %rax
+ 603              		.loc 1 152 16
+ 604 00c6 482B45D0 		subq	-48(%rbp), %rax
+ 605              		.loc 1 152 11
+ 606 00ca 4885C0   		testq	%rax, %rax
+ 607 00cd 7F0A     		jg	.L30
+ 153:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 608              		.loc 1 153 19
+ 609 00cf B894FFFF 		movl	$-108, %eax
+ 609      FF
+ 610 00d4 E98B0000 		jmp	.L26
+ 610      00
+ 611              	.L30:
+ 154:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 155:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = 0x00;
+ 612              		.loc 1 155 13
+ 613 00d9 488B45D8 		movq	-40(%rbp), %rax
+ 614 00dd 488B00   		movq	(%rax), %rax
+ 615              		.loc 1 155 10
+ 616 00e0 488D50FF 		leaq	-1(%rax), %rdx
+ 617              		.loc 1 155 17
+ 618 00e4 488B45D8 		movq	-40(%rbp), %rax
+ 619 00e8 488910   		movq	%rdx, (%rax)
+ 620              		.loc 1 155 13
+ 621 00eb 488B45D8 		movq	-40(%rbp), %rax
+ 622 00ef 488B00   		movq	(%rax), %rax
+ 623              		.loc 1 155 17
+ 624 00f2 C60000   		movb	$0, (%rax)
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         len += 1;
+ 625              		.loc 1 156 13
+ 626 00f5 488345F0 		addq	$1, -16(%rbp)
+ 626      01
+ 627              	.L29:
+ 157:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+ 158:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 159:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 628              		.loc 1 159 5
+ 629 00fa 488B55F0 		movq	-16(%rbp), %rdx
+ 630 00fe 488B4DD0 		movq	-48(%rbp), %rcx
+ 631 0102 488B45D8 		movq	-40(%rbp), %rax
+ 632 0106 4889CE   		movq	%rcx, %rsi
+ 633 0109 4889C7   		movq	%rax, %rdi
+ 634 010c E8000000 		call	mbedtls_asn1_write_len
+ 634      00
+ 635 0111 8945EC   		movl	%eax, -20(%rbp)
+ 636 0114 837DEC00 		cmpl	$0, -20(%rbp)
+ 637 0118 7905     		jns	.L31
+ 638              		.loc 1 159 5 is_stmt 0 discriminator 1
+ 639 011a 8B45EC   		movl	-20(%rbp), %eax
+ 640 011d EB45     		jmp	.L26
+ 641              	.L31:
+ 642              		.loc 1 159 5 discriminator 2
+ 643 011f 8B45EC   		movl	-20(%rbp), %eax
+GAS LISTING /tmp/ccyUvz9a.s 			page 16
+
+
+ 644 0122 4898     		cltq
+ 645 0124 480145F0 		addq	%rax, -16(%rbp)
+ 160:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_INTEGER ) );
+ 646              		.loc 1 160 5 is_stmt 1 discriminator 2
+ 647 0128 488B4DD0 		movq	-48(%rbp), %rcx
+ 648 012c 488B45D8 		movq	-40(%rbp), %rax
+ 649 0130 BA020000 		movl	$2, %edx
+ 649      00
+ 650 0135 4889CE   		movq	%rcx, %rsi
+ 651 0138 4889C7   		movq	%rax, %rdi
+ 652 013b E8000000 		call	mbedtls_asn1_write_tag
+ 652      00
+ 653 0140 8945EC   		movl	%eax, -20(%rbp)
+ 654 0143 837DEC00 		cmpl	$0, -20(%rbp)
+ 655 0147 7905     		jns	.L32
+ 656              		.loc 1 160 5 is_stmt 0 discriminator 1
+ 657 0149 8B45EC   		movl	-20(%rbp), %eax
+ 658 014c EB16     		jmp	.L26
+ 659              	.L32:
+ 660              		.loc 1 160 5 discriminator 2
+ 661 014e 8B45EC   		movl	-20(%rbp), %eax
+ 662 0151 4898     		cltq
+ 663 0153 480145F0 		addq	%rax, -16(%rbp)
+ 161:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 162:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     ret = (int) len;
+ 664              		.loc 1 162 9 is_stmt 1 discriminator 2
+ 665 0157 488B45F0 		movq	-16(%rbp), %rax
+ 666 015b 8945EC   		movl	%eax, -20(%rbp)
+ 667 015e EB01     		jmp	.L28
+ 668              	.L34:
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 669              		.loc 1 145 5
+ 670 0160 90       		nop
+ 671              	.L28:
+ 163:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 164:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** cleanup:
+ 165:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( ret );
+ 672              		.loc 1 165 11
+ 673 0161 8B45EC   		movl	-20(%rbp), %eax
+ 674              	.L26:
+ 166:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 675              		.loc 1 166 1
+ 676 0164 488B75F8 		movq	-8(%rbp), %rsi
+ 677 0168 64483334 		xorq	%fs:40, %rsi
+ 677      25280000 
+ 677      00
+ 678 0171 7405     		je	.L33
+ 679 0173 E8000000 		call	__stack_chk_fail@PLT
+ 679      00
+ 680              	.L33:
+ 681 0178 C9       		leave
+ 682              	.LCFI11:
+ 683              		.cfi_def_cfa 7, 8
+ 684 0179 C3       		ret
+ 685              		.cfi_endproc
+ 686              	.LFE9:
+ 688              		.section	.text.mbedtls_asn1_write_null,"ax",@progbits
+GAS LISTING /tmp/ccyUvz9a.s 			page 17
+
+
+ 689              		.globl	mbedtls_asn1_write_null
+ 691              	mbedtls_asn1_write_null:
+ 692              	.LFB10:
+ 167:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** #endif /* MBEDTLS_BIGNUM_C */
+ 168:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 169:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_null( unsigned char **p, unsigned char *start )
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 693              		.loc 1 170 1
+ 694              		.cfi_startproc
+ 695 0000 F30F1EFA 		endbr64
+ 696 0004 55       		pushq	%rbp
+ 697              	.LCFI12:
+ 698              		.cfi_def_cfa_offset 16
+ 699              		.cfi_offset 6, -16
+ 700 0005 4889E5   		movq	%rsp, %rbp
+ 701              	.LCFI13:
+ 702              		.cfi_def_cfa_register 6
+ 703 0008 4883EC30 		subq	$48, %rsp
+ 704 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 705 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 706              		.loc 1 170 1
+ 707 0014 64488B04 		movq	%fs:40, %rax
+ 707      25280000 
+ 707      00
+ 708 001d 488945F8 		movq	%rax, -8(%rbp)
+ 709 0021 31C0     		xorl	%eax, %eax
+ 171:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 172:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 710              		.loc 1 172 12
+ 711 0023 48C745F0 		movq	$0, -16(%rbp)
+ 711      00000000 
+ 173:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 174:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     // Write NULL
+ 175:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     //
+ 176:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, 0) );
+ 712              		.loc 1 176 5
+ 713 002b 488B4DD0 		movq	-48(%rbp), %rcx
+ 714 002f 488B45D8 		movq	-40(%rbp), %rax
+ 715 0033 BA000000 		movl	$0, %edx
+ 715      00
+ 716 0038 4889CE   		movq	%rcx, %rsi
+ 717 003b 4889C7   		movq	%rax, %rdi
+ 718 003e E8000000 		call	mbedtls_asn1_write_len
+ 718      00
+ 719 0043 8945EC   		movl	%eax, -20(%rbp)
+ 720 0046 837DEC00 		cmpl	$0, -20(%rbp)
+ 721 004a 7905     		jns	.L36
+ 722              		.loc 1 176 5 is_stmt 0 discriminator 1
+ 723 004c 8B45EC   		movl	-20(%rbp), %eax
+ 724 004f EB3C     		jmp	.L37
+ 725              	.L36:
+ 726              		.loc 1 176 5 discriminator 2
+ 727 0051 8B45EC   		movl	-20(%rbp), %eax
+ 728 0054 4898     		cltq
+ 729 0056 480145F0 		addq	%rax, -16(%rbp)
+ 177:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_NULL ) );
+ 730              		.loc 1 177 5 is_stmt 1 discriminator 2
+GAS LISTING /tmp/ccyUvz9a.s 			page 18
+
+
+ 731 005a 488B4DD0 		movq	-48(%rbp), %rcx
+ 732 005e 488B45D8 		movq	-40(%rbp), %rax
+ 733 0062 BA050000 		movl	$5, %edx
+ 733      00
+ 734 0067 4889CE   		movq	%rcx, %rsi
+ 735 006a 4889C7   		movq	%rax, %rdi
+ 736 006d E8000000 		call	mbedtls_asn1_write_tag
+ 736      00
+ 737 0072 8945EC   		movl	%eax, -20(%rbp)
+ 738 0075 837DEC00 		cmpl	$0, -20(%rbp)
+ 739 0079 7905     		jns	.L38
+ 740              		.loc 1 177 5 is_stmt 0 discriminator 1
+ 741 007b 8B45EC   		movl	-20(%rbp), %eax
+ 742 007e EB0D     		jmp	.L37
+ 743              	.L38:
+ 744              		.loc 1 177 5 discriminator 2
+ 745 0080 8B45EC   		movl	-20(%rbp), %eax
+ 746 0083 4898     		cltq
+ 747 0085 480145F0 		addq	%rax, -16(%rbp)
+ 178:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 179:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 748              		.loc 1 179 13 is_stmt 1 discriminator 2
+ 749 0089 488B45F0 		movq	-16(%rbp), %rax
+ 750              	.L37:
+ 180:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 751              		.loc 1 180 1
+ 752 008d 488B55F8 		movq	-8(%rbp), %rdx
+ 753 0091 64483314 		xorq	%fs:40, %rdx
+ 753      25280000 
+ 753      00
+ 754 009a 7405     		je	.L39
+ 755 009c E8000000 		call	__stack_chk_fail@PLT
+ 755      00
+ 756              	.L39:
+ 757 00a1 C9       		leave
+ 758              	.LCFI14:
+ 759              		.cfi_def_cfa 7, 8
+ 760 00a2 C3       		ret
+ 761              		.cfi_endproc
+ 762              	.LFE10:
+ 764              		.section	.text.mbedtls_asn1_write_oid,"ax",@progbits
+ 765              		.globl	mbedtls_asn1_write_oid
+ 767              	mbedtls_asn1_write_oid:
+ 768              	.LFB11:
+ 181:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 182:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_oid( unsigned char **p, unsigned char *start,
+ 183:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                     const char *oid, size_t oid_len )
+ 184:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 769              		.loc 1 184 1
+ 770              		.cfi_startproc
+ 771 0000 F30F1EFA 		endbr64
+ 772 0004 55       		pushq	%rbp
+ 773              	.LCFI15:
+ 774              		.cfi_def_cfa_offset 16
+ 775              		.cfi_offset 6, -16
+ 776 0005 4889E5   		movq	%rsp, %rbp
+ 777              	.LCFI16:
+GAS LISTING /tmp/ccyUvz9a.s 			page 19
+
+
+ 778              		.cfi_def_cfa_register 6
+ 779 0008 4883EC40 		subq	$64, %rsp
+ 780 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 781 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 782 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 783 0018 48894DC0 		movq	%rcx, -64(%rbp)
+ 784              		.loc 1 184 1
+ 785 001c 64488B04 		movq	%fs:40, %rax
+ 785      25280000 
+ 785      00
+ 786 0025 488945F8 		movq	%rax, -8(%rbp)
+ 787 0029 31C0     		xorl	%eax, %eax
+ 185:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 186:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 788              		.loc 1 186 12
+ 789 002b 48C745F0 		movq	$0, -16(%rbp)
+ 789      00000000 
+ 187:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 188:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_raw_buffer( p, start,
+ 790              		.loc 1 188 5
+ 791 0033 488B4DC0 		movq	-64(%rbp), %rcx
+ 792 0037 488B55C8 		movq	-56(%rbp), %rdx
+ 793 003b 488B75D0 		movq	-48(%rbp), %rsi
+ 794 003f 488B45D8 		movq	-40(%rbp), %rax
+ 795 0043 4889C7   		movq	%rax, %rdi
+ 796 0046 E8000000 		call	mbedtls_asn1_write_raw_buffer
+ 796      00
+ 797 004b 8945EC   		movl	%eax, -20(%rbp)
+ 798 004e 837DEC00 		cmpl	$0, -20(%rbp)
+ 799 0052 7905     		jns	.L41
+ 800              		.loc 1 188 5 is_stmt 0 discriminator 1
+ 801 0054 8B45EC   		movl	-20(%rbp), %eax
+ 802 0057 EB6A     		jmp	.L42
+ 803              	.L41:
+ 804              		.loc 1 188 5 discriminator 2
+ 805 0059 8B45EC   		movl	-20(%rbp), %eax
+ 806 005c 4898     		cltq
+ 807 005e 480145F0 		addq	%rax, -16(%rbp)
+ 189:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                   (const unsigned char *) oid, oid_len ) );
+ 190:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len , mbedtls_asn1_write_len( p, start, len ) );
+ 808              		.loc 1 190 5 is_stmt 1 discriminator 2
+ 809 0062 488B55F0 		movq	-16(%rbp), %rdx
+ 810 0066 488B4DD0 		movq	-48(%rbp), %rcx
+ 811 006a 488B45D8 		movq	-40(%rbp), %rax
+ 812 006e 4889CE   		movq	%rcx, %rsi
+ 813 0071 4889C7   		movq	%rax, %rdi
+ 814 0074 E8000000 		call	mbedtls_asn1_write_len
+ 814      00
+ 815 0079 8945EC   		movl	%eax, -20(%rbp)
+ 816 007c 837DEC00 		cmpl	$0, -20(%rbp)
+ 817 0080 7905     		jns	.L43
+ 818              		.loc 1 190 5 is_stmt 0 discriminator 1
+ 819 0082 8B45EC   		movl	-20(%rbp), %eax
+ 820 0085 EB3C     		jmp	.L42
+ 821              	.L43:
+ 822              		.loc 1 190 5 discriminator 2
+ 823 0087 8B45EC   		movl	-20(%rbp), %eax
+GAS LISTING /tmp/ccyUvz9a.s 			page 20
+
+
+ 824 008a 4898     		cltq
+ 825 008c 480145F0 		addq	%rax, -16(%rbp)
+ 191:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len , mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_OID ) );
+ 826              		.loc 1 191 5 is_stmt 1 discriminator 2
+ 827 0090 488B4DD0 		movq	-48(%rbp), %rcx
+ 828 0094 488B45D8 		movq	-40(%rbp), %rax
+ 829 0098 BA060000 		movl	$6, %edx
+ 829      00
+ 830 009d 4889CE   		movq	%rcx, %rsi
+ 831 00a0 4889C7   		movq	%rax, %rdi
+ 832 00a3 E8000000 		call	mbedtls_asn1_write_tag
+ 832      00
+ 833 00a8 8945EC   		movl	%eax, -20(%rbp)
+ 834 00ab 837DEC00 		cmpl	$0, -20(%rbp)
+ 835 00af 7905     		jns	.L44
+ 836              		.loc 1 191 5 is_stmt 0 discriminator 1
+ 837 00b1 8B45EC   		movl	-20(%rbp), %eax
+ 838 00b4 EB0D     		jmp	.L42
+ 839              	.L44:
+ 840              		.loc 1 191 5 discriminator 2
+ 841 00b6 8B45EC   		movl	-20(%rbp), %eax
+ 842 00b9 4898     		cltq
+ 843 00bb 480145F0 		addq	%rax, -16(%rbp)
+ 192:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 193:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 844              		.loc 1 193 13 is_stmt 1 discriminator 2
+ 845 00bf 488B45F0 		movq	-16(%rbp), %rax
+ 846              	.L42:
+ 194:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 847              		.loc 1 194 1
+ 848 00c3 488B7DF8 		movq	-8(%rbp), %rdi
+ 849 00c7 6448333C 		xorq	%fs:40, %rdi
+ 849      25280000 
+ 849      00
+ 850 00d0 7405     		je	.L45
+ 851 00d2 E8000000 		call	__stack_chk_fail@PLT
+ 851      00
+ 852              	.L45:
+ 853 00d7 C9       		leave
+ 854              	.LCFI17:
+ 855              		.cfi_def_cfa 7, 8
+ 856 00d8 C3       		ret
+ 857              		.cfi_endproc
+ 858              	.LFE11:
+ 860              		.section	.text.mbedtls_asn1_write_algorithm_identifier,"ax",@progbits
+ 861              		.globl	mbedtls_asn1_write_algorithm_identifier
+ 863              	mbedtls_asn1_write_algorithm_identifier:
+ 864              	.LFB12:
+ 195:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_algorithm_identifier( unsigned char **p, unsigned char *start,
+ 197:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                      const char *oid, size_t oid_len,
+ 198:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                      size_t par_len )
+ 199:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 865              		.loc 1 199 1
+ 866              		.cfi_startproc
+ 867 0000 F30F1EFA 		endbr64
+ 868 0004 55       		pushq	%rbp
+GAS LISTING /tmp/ccyUvz9a.s 			page 21
+
+
+ 869              	.LCFI18:
+ 870              		.cfi_def_cfa_offset 16
+ 871              		.cfi_offset 6, -16
+ 872 0005 4889E5   		movq	%rsp, %rbp
+ 873              	.LCFI19:
+ 874              		.cfi_def_cfa_register 6
+ 875 0008 4883EC50 		subq	$80, %rsp
+ 876 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 877 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 878 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 879 0018 48894DC0 		movq	%rcx, -64(%rbp)
+ 880 001c 4C8945B8 		movq	%r8, -72(%rbp)
+ 881              		.loc 1 199 1
+ 882 0020 64488B04 		movq	%fs:40, %rax
+ 882      25280000 
+ 882      00
+ 883 0029 488945F8 		movq	%rax, -8(%rbp)
+ 884 002d 31C0     		xorl	%eax, %eax
+ 200:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 201:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 885              		.loc 1 201 12
+ 886 002f 48C745F0 		movq	$0, -16(%rbp)
+ 886      00000000 
+ 202:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 203:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( par_len == 0 )
+ 887              		.loc 1 203 7
+ 888 0037 48837DB8 		cmpq	$0, -72(%rbp)
+ 888      00
+ 889 003c 752F     		jne	.L47
+ 204:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_null( p, start ) );
+ 890              		.loc 1 204 9
+ 891 003e 488B55D0 		movq	-48(%rbp), %rdx
+ 892 0042 488B45D8 		movq	-40(%rbp), %rax
+ 893 0046 4889D6   		movq	%rdx, %rsi
+ 894 0049 4889C7   		movq	%rax, %rdi
+ 895 004c E8000000 		call	mbedtls_asn1_write_null
+ 895      00
+ 896 0051 8945EC   		movl	%eax, -20(%rbp)
+ 897 0054 837DEC00 		cmpl	$0, -20(%rbp)
+ 898 0058 7908     		jns	.L48
+ 899              		.loc 1 204 9 is_stmt 0 discriminator 1
+ 900 005a 8B45EC   		movl	-20(%rbp), %eax
+ 901 005d E9A30000 		jmp	.L49
+ 901      00
+ 902              	.L48:
+ 903              		.loc 1 204 9 discriminator 2
+ 904 0062 8B45EC   		movl	-20(%rbp), %eax
+ 905 0065 4898     		cltq
+ 906 0067 480145F0 		addq	%rax, -16(%rbp)
+ 907 006b EB08     		jmp	.L50
+ 908              	.L47:
+ 205:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     else
+ 206:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         len += par_len;
+ 909              		.loc 1 206 13 is_stmt 1
+ 910 006d 488B45B8 		movq	-72(%rbp), %rax
+ 911 0071 480145F0 		addq	%rax, -16(%rbp)
+ 912              	.L50:
+GAS LISTING /tmp/ccyUvz9a.s 			page 22
+
+
+ 207:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 208:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_oid( p, start, oid, oid_len ) );
+ 913              		.loc 1 208 5
+ 914 0075 488B4DC0 		movq	-64(%rbp), %rcx
+ 915 0079 488B55C8 		movq	-56(%rbp), %rdx
+ 916 007d 488B75D0 		movq	-48(%rbp), %rsi
+ 917 0081 488B45D8 		movq	-40(%rbp), %rax
+ 918 0085 4889C7   		movq	%rax, %rdi
+ 919 0088 E8000000 		call	mbedtls_asn1_write_oid
+ 919      00
+ 920 008d 8945EC   		movl	%eax, -20(%rbp)
+ 921 0090 837DEC00 		cmpl	$0, -20(%rbp)
+ 922 0094 7905     		jns	.L51
+ 923              		.loc 1 208 5 is_stmt 0 discriminator 1
+ 924 0096 8B45EC   		movl	-20(%rbp), %eax
+ 925 0099 EB6A     		jmp	.L49
+ 926              	.L51:
+ 927              		.loc 1 208 5 discriminator 2
+ 928 009b 8B45EC   		movl	-20(%rbp), %eax
+ 929 009e 4898     		cltq
+ 930 00a0 480145F0 		addq	%rax, -16(%rbp)
+ 209:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 210:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 931              		.loc 1 210 5 is_stmt 1 discriminator 2
+ 932 00a4 488B55F0 		movq	-16(%rbp), %rdx
+ 933 00a8 488B4DD0 		movq	-48(%rbp), %rcx
+ 934 00ac 488B45D8 		movq	-40(%rbp), %rax
+ 935 00b0 4889CE   		movq	%rcx, %rsi
+ 936 00b3 4889C7   		movq	%rax, %rdi
+ 937 00b6 E8000000 		call	mbedtls_asn1_write_len
+ 937      00
+ 938 00bb 8945EC   		movl	%eax, -20(%rbp)
+ 939 00be 837DEC00 		cmpl	$0, -20(%rbp)
+ 940 00c2 7905     		jns	.L52
+ 941              		.loc 1 210 5 is_stmt 0 discriminator 1
+ 942 00c4 8B45EC   		movl	-20(%rbp), %eax
+ 943 00c7 EB3C     		jmp	.L49
+ 944              	.L52:
+ 945              		.loc 1 210 5 discriminator 2
+ 946 00c9 8B45EC   		movl	-20(%rbp), %eax
+ 947 00cc 4898     		cltq
+ 948 00ce 480145F0 		addq	%rax, -16(%rbp)
+ 211:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start,
+ 949              		.loc 1 211 5 is_stmt 1 discriminator 2
+ 950 00d2 488B4DD0 		movq	-48(%rbp), %rcx
+ 951 00d6 488B45D8 		movq	-40(%rbp), %rax
+ 952 00da BA300000 		movl	$48, %edx
+ 952      00
+ 953 00df 4889CE   		movq	%rcx, %rsi
+ 954 00e2 4889C7   		movq	%rax, %rdi
+ 955 00e5 E8000000 		call	mbedtls_asn1_write_tag
+ 955      00
+ 956 00ea 8945EC   		movl	%eax, -20(%rbp)
+ 957 00ed 837DEC00 		cmpl	$0, -20(%rbp)
+ 958 00f1 7905     		jns	.L53
+ 959              		.loc 1 211 5 is_stmt 0 discriminator 1
+ 960 00f3 8B45EC   		movl	-20(%rbp), %eax
+GAS LISTING /tmp/ccyUvz9a.s 			page 23
+
+
+ 961 00f6 EB0D     		jmp	.L49
+ 962              	.L53:
+ 963              		.loc 1 211 5 discriminator 2
+ 964 00f8 8B45EC   		movl	-20(%rbp), %eax
+ 965 00fb 4898     		cltq
+ 966 00fd 480145F0 		addq	%rax, -16(%rbp)
+ 212:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                        MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) );
+ 213:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 214:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 967              		.loc 1 214 13 is_stmt 1 discriminator 2
+ 968 0101 488B45F0 		movq	-16(%rbp), %rax
+ 969              	.L49:
+ 215:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 970              		.loc 1 215 1
+ 971 0105 488B7DF8 		movq	-8(%rbp), %rdi
+ 972 0109 6448333C 		xorq	%fs:40, %rdi
+ 972      25280000 
+ 972      00
+ 973 0112 7405     		je	.L54
+ 974 0114 E8000000 		call	__stack_chk_fail@PLT
+ 974      00
+ 975              	.L54:
+ 976 0119 C9       		leave
+ 977              	.LCFI20:
+ 978              		.cfi_def_cfa 7, 8
+ 979 011a C3       		ret
+ 980              		.cfi_endproc
+ 981              	.LFE12:
+ 983              		.section	.text.mbedtls_asn1_write_bool,"ax",@progbits
+ 984              		.globl	mbedtls_asn1_write_bool
+ 986              	mbedtls_asn1_write_bool:
+ 987              	.LFB13:
+ 216:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 217:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_bool( unsigned char **p, unsigned char *start, int boolean )
+ 218:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 988              		.loc 1 218 1
+ 989              		.cfi_startproc
+ 990 0000 F30F1EFA 		endbr64
+ 991 0004 55       		pushq	%rbp
+ 992              	.LCFI21:
+ 993              		.cfi_def_cfa_offset 16
+ 994              		.cfi_offset 6, -16
+ 995 0005 4889E5   		movq	%rsp, %rbp
+ 996              	.LCFI22:
+ 997              		.cfi_def_cfa_register 6
+ 998 0008 4883EC40 		subq	$64, %rsp
+ 999 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1000 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1001 0014 8955CC   		movl	%edx, -52(%rbp)
+ 1002              		.loc 1 218 1
+ 1003 0017 64488B04 		movq	%fs:40, %rax
+ 1003      25280000 
+ 1003      00
+ 1004 0020 488945F8 		movq	%rax, -8(%rbp)
+ 1005 0024 31C0     		xorl	%eax, %eax
+ 219:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+GAS LISTING /tmp/ccyUvz9a.s 			page 24
+
+
+ 1006              		.loc 1 220 12
+ 1007 0026 48C745F0 		movq	$0, -16(%rbp)
+ 1007      00000000 
+ 221:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( *p - start < 1 )
+ 1008              		.loc 1 222 9
+ 1009 002e 488B45D8 		movq	-40(%rbp), %rax
+ 1010 0032 488B00   		movq	(%rax), %rax
+ 1011              		.loc 1 222 12
+ 1012 0035 482B45D0 		subq	-48(%rbp), %rax
+ 1013              		.loc 1 222 7
+ 1014 0039 4885C0   		testq	%rax, %rax
+ 1015 003c 7F0A     		jg	.L56
+ 223:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 1016              		.loc 1 223 15
+ 1017 003e B894FFFF 		movl	$-108, %eax
+ 1017      FF
+ 1018 0043 E9930000 		jmp	.L57
+ 1018      00
+ 1019              	.L56:
+ 224:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 225:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     *--(*p) = (boolean) ? 255 : 0;
+ 1020              		.loc 1 225 13
+ 1021 0048 837DCC00 		cmpl	$0, -52(%rbp)
+ 1022 004c 7407     		je	.L58
+ 1023              		.loc 1 225 13 is_stmt 0 discriminator 1
+ 1024 004e B9FFFFFF 		movl	$-1, %ecx
+ 1024      FF
+ 1025 0053 EB05     		jmp	.L59
+ 1026              	.L58:
+ 1027              		.loc 1 225 13 discriminator 2
+ 1028 0055 B9000000 		movl	$0, %ecx
+ 1028      00
+ 1029              	.L59:
+ 1030              		.loc 1 225 9 is_stmt 1 discriminator 4
+ 1031 005a 488B45D8 		movq	-40(%rbp), %rax
+ 1032 005e 488B00   		movq	(%rax), %rax
+ 1033              		.loc 1 225 6 discriminator 4
+ 1034 0061 488D50FF 		leaq	-1(%rax), %rdx
+ 1035              		.loc 1 225 13 discriminator 4
+ 1036 0065 488B45D8 		movq	-40(%rbp), %rax
+ 1037 0069 488910   		movq	%rdx, (%rax)
+ 1038              		.loc 1 225 9 discriminator 4
+ 1039 006c 488B45D8 		movq	-40(%rbp), %rax
+ 1040 0070 488B00   		movq	(%rax), %rax
+ 1041              		.loc 1 225 13 discriminator 4
+ 1042 0073 8808     		movb	%cl, (%rax)
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     len++;
+ 1043              		.loc 1 226 8 discriminator 4
+ 1044 0075 488345F0 		addq	$1, -16(%rbp)
+ 1044      01
+ 227:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 228:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 1045              		.loc 1 228 5 discriminator 4
+ 1046 007a 488B55F0 		movq	-16(%rbp), %rdx
+ 1047 007e 488B4DD0 		movq	-48(%rbp), %rcx
+ 1048 0082 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/ccyUvz9a.s 			page 25
+
+
+ 1049 0086 4889CE   		movq	%rcx, %rsi
+ 1050 0089 4889C7   		movq	%rax, %rdi
+ 1051 008c E8000000 		call	mbedtls_asn1_write_len
+ 1051      00
+ 1052 0091 8945EC   		movl	%eax, -20(%rbp)
+ 1053 0094 837DEC00 		cmpl	$0, -20(%rbp)
+ 1054 0098 7905     		jns	.L60
+ 1055              		.loc 1 228 5 is_stmt 0 discriminator 1
+ 1056 009a 8B45EC   		movl	-20(%rbp), %eax
+ 1057 009d EB3C     		jmp	.L57
+ 1058              	.L60:
+ 1059              		.loc 1 228 5 discriminator 2
+ 1060 009f 8B45EC   		movl	-20(%rbp), %eax
+ 1061 00a2 4898     		cltq
+ 1062 00a4 480145F0 		addq	%rax, -16(%rbp)
+ 229:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_BOOLEAN ) );
+ 1063              		.loc 1 229 5 is_stmt 1 discriminator 2
+ 1064 00a8 488B4DD0 		movq	-48(%rbp), %rcx
+ 1065 00ac 488B45D8 		movq	-40(%rbp), %rax
+ 1066 00b0 BA010000 		movl	$1, %edx
+ 1066      00
+ 1067 00b5 4889CE   		movq	%rcx, %rsi
+ 1068 00b8 4889C7   		movq	%rax, %rdi
+ 1069 00bb E8000000 		call	mbedtls_asn1_write_tag
+ 1069      00
+ 1070 00c0 8945EC   		movl	%eax, -20(%rbp)
+ 1071 00c3 837DEC00 		cmpl	$0, -20(%rbp)
+ 1072 00c7 7905     		jns	.L61
+ 1073              		.loc 1 229 5 is_stmt 0 discriminator 1
+ 1074 00c9 8B45EC   		movl	-20(%rbp), %eax
+ 1075 00cc EB0D     		jmp	.L57
+ 1076              	.L61:
+ 1077              		.loc 1 229 5 discriminator 2
+ 1078 00ce 8B45EC   		movl	-20(%rbp), %eax
+ 1079 00d1 4898     		cltq
+ 1080 00d3 480145F0 		addq	%rax, -16(%rbp)
+ 230:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 231:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 1081              		.loc 1 231 13 is_stmt 1 discriminator 2
+ 1082 00d7 488B45F0 		movq	-16(%rbp), %rax
+ 1083              	.L57:
+ 232:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1084              		.loc 1 232 1
+ 1085 00db 488B75F8 		movq	-8(%rbp), %rsi
+ 1086 00df 64483334 		xorq	%fs:40, %rsi
+ 1086      25280000 
+ 1086      00
+ 1087 00e8 7405     		je	.L62
+ 1088 00ea E8000000 		call	__stack_chk_fail@PLT
+ 1088      00
+ 1089              	.L62:
+ 1090 00ef C9       		leave
+ 1091              	.LCFI23:
+ 1092              		.cfi_def_cfa 7, 8
+ 1093 00f0 C3       		ret
+ 1094              		.cfi_endproc
+ 1095              	.LFE13:
+GAS LISTING /tmp/ccyUvz9a.s 			page 26
+
+
+ 1097              		.section	.text.mbedtls_asn1_write_int,"ax",@progbits
+ 1098              		.globl	mbedtls_asn1_write_int
+ 1100              	mbedtls_asn1_write_int:
+ 1101              	.LFB14:
+ 233:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 234:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_int( unsigned char **p, unsigned char *start, int val )
+ 235:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1102              		.loc 1 235 1
+ 1103              		.cfi_startproc
+ 1104 0000 F30F1EFA 		endbr64
+ 1105 0004 55       		pushq	%rbp
+ 1106              	.LCFI24:
+ 1107              		.cfi_def_cfa_offset 16
+ 1108              		.cfi_offset 6, -16
+ 1109 0005 4889E5   		movq	%rsp, %rbp
+ 1110              	.LCFI25:
+ 1111              		.cfi_def_cfa_register 6
+ 1112 0008 4883EC40 		subq	$64, %rsp
+ 1113 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1114 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1115 0014 8955CC   		movl	%edx, -52(%rbp)
+ 1116              		.loc 1 235 1
+ 1117 0017 64488B04 		movq	%fs:40, %rax
+ 1117      25280000 
+ 1117      00
+ 1118 0020 488945F8 		movq	%rax, -8(%rbp)
+ 1119 0024 31C0     		xorl	%eax, %eax
+ 236:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 237:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 1120              		.loc 1 237 12
+ 1121 0026 48C745F0 		movq	$0, -16(%rbp)
+ 1121      00000000 
+ 238:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 239:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( *p - start < 1 )
+ 1122              		.loc 1 239 9
+ 1123 002e 488B45D8 		movq	-40(%rbp), %rax
+ 1124 0032 488B00   		movq	(%rax), %rax
+ 1125              		.loc 1 239 12
+ 1126 0035 482B45D0 		subq	-48(%rbp), %rax
+ 1127              		.loc 1 239 7
+ 1128 0039 4885C0   		testq	%rax, %rax
+ 1129 003c 7F0A     		jg	.L64
+ 240:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 1130              		.loc 1 240 15
+ 1131 003e B894FFFF 		movl	$-108, %eax
+ 1131      FF
+ 1132 0043 E9D30000 		jmp	.L65
+ 1132      00
+ 1133              	.L64:
+ 241:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 242:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     len += 1;
+ 1134              		.loc 1 242 9
+ 1135 0048 488345F0 		addq	$1, -16(%rbp)
+ 1135      01
+ 243:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     *--(*p) = val;
+ 1136              		.loc 1 243 9
+ 1137 004d 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/ccyUvz9a.s 			page 27
+
+
+ 1138 0051 488B00   		movq	(%rax), %rax
+ 1139              		.loc 1 243 6
+ 1140 0054 488D50FF 		leaq	-1(%rax), %rdx
+ 1141              		.loc 1 243 13
+ 1142 0058 488B45D8 		movq	-40(%rbp), %rax
+ 1143 005c 488910   		movq	%rdx, (%rax)
+ 1144              		.loc 1 243 9
+ 1145 005f 488B45D8 		movq	-40(%rbp), %rax
+ 1146 0063 488B00   		movq	(%rax), %rax
+ 1147              		.loc 1 243 13
+ 1148 0066 8B55CC   		movl	-52(%rbp), %edx
+ 1149 0069 8810     		movb	%dl, (%rax)
+ 244:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( val > 0 && **p & 0x80 )
+ 1150              		.loc 1 245 7
+ 1151 006b 837DCC00 		cmpl	$0, -52(%rbp)
+ 1152 006f 7E49     		jle	.L66
+ 1153              		.loc 1 245 21 discriminator 1
+ 1154 0071 488B45D8 		movq	-40(%rbp), %rax
+ 1155 0075 488B00   		movq	(%rax), %rax
+ 1156              		.loc 1 245 20 discriminator 1
+ 1157 0078 0FB600   		movzbl	(%rax), %eax
+ 1158              		.loc 1 245 17 discriminator 1
+ 1159 007b 84C0     		testb	%al, %al
+ 1160 007d 793B     		jns	.L66
+ 246:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+ 247:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( *p - start < 1 )
+ 1161              		.loc 1 247 13
+ 1162 007f 488B45D8 		movq	-40(%rbp), %rax
+ 1163 0083 488B00   		movq	(%rax), %rax
+ 1164              		.loc 1 247 16
+ 1165 0086 482B45D0 		subq	-48(%rbp), %rax
+ 1166              		.loc 1 247 11
+ 1167 008a 4885C0   		testq	%rax, %rax
+ 1168 008d 7F0A     		jg	.L67
+ 248:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 1169              		.loc 1 248 19
+ 1170 008f B894FFFF 		movl	$-108, %eax
+ 1170      FF
+ 1171 0094 E9820000 		jmp	.L65
+ 1171      00
+ 1172              	.L67:
+ 249:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 250:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--(*p) = 0x00;
+ 1173              		.loc 1 250 13
+ 1174 0099 488B45D8 		movq	-40(%rbp), %rax
+ 1175 009d 488B00   		movq	(%rax), %rax
+ 1176              		.loc 1 250 10
+ 1177 00a0 488D50FF 		leaq	-1(%rax), %rdx
+ 1178              		.loc 1 250 17
+ 1179 00a4 488B45D8 		movq	-40(%rbp), %rax
+ 1180 00a8 488910   		movq	%rdx, (%rax)
+ 1181              		.loc 1 250 13
+ 1182 00ab 488B45D8 		movq	-40(%rbp), %rax
+ 1183 00af 488B00   		movq	(%rax), %rax
+ 1184              		.loc 1 250 17
+ 1185 00b2 C60000   		movb	$0, (%rax)
+GAS LISTING /tmp/ccyUvz9a.s 			page 28
+
+
+ 251:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         len += 1;
+ 1186              		.loc 1 251 13
+ 1187 00b5 488345F0 		addq	$1, -16(%rbp)
+ 1187      01
+ 1188              	.L66:
+ 252:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+ 253:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 254:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 1189              		.loc 1 254 5
+ 1190 00ba 488B55F0 		movq	-16(%rbp), %rdx
+ 1191 00be 488B4DD0 		movq	-48(%rbp), %rcx
+ 1192 00c2 488B45D8 		movq	-40(%rbp), %rax
+ 1193 00c6 4889CE   		movq	%rcx, %rsi
+ 1194 00c9 4889C7   		movq	%rax, %rdi
+ 1195 00cc E8000000 		call	mbedtls_asn1_write_len
+ 1195      00
+ 1196 00d1 8945EC   		movl	%eax, -20(%rbp)
+ 1197 00d4 837DEC00 		cmpl	$0, -20(%rbp)
+ 1198 00d8 7905     		jns	.L68
+ 1199              		.loc 1 254 5 is_stmt 0 discriminator 1
+ 1200 00da 8B45EC   		movl	-20(%rbp), %eax
+ 1201 00dd EB3C     		jmp	.L65
+ 1202              	.L68:
+ 1203              		.loc 1 254 5 discriminator 2
+ 1204 00df 8B45EC   		movl	-20(%rbp), %eax
+ 1205 00e2 4898     		cltq
+ 1206 00e4 480145F0 		addq	%rax, -16(%rbp)
+ 255:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_INTEGER ) );
+ 1207              		.loc 1 255 5 is_stmt 1 discriminator 2
+ 1208 00e8 488B4DD0 		movq	-48(%rbp), %rcx
+ 1209 00ec 488B45D8 		movq	-40(%rbp), %rax
+ 1210 00f0 BA020000 		movl	$2, %edx
+ 1210      00
+ 1211 00f5 4889CE   		movq	%rcx, %rsi
+ 1212 00f8 4889C7   		movq	%rax, %rdi
+ 1213 00fb E8000000 		call	mbedtls_asn1_write_tag
+ 1213      00
+ 1214 0100 8945EC   		movl	%eax, -20(%rbp)
+ 1215 0103 837DEC00 		cmpl	$0, -20(%rbp)
+ 1216 0107 7905     		jns	.L69
+ 1217              		.loc 1 255 5 is_stmt 0 discriminator 1
+ 1218 0109 8B45EC   		movl	-20(%rbp), %eax
+ 1219 010c EB0D     		jmp	.L65
+ 1220              	.L69:
+ 1221              		.loc 1 255 5 discriminator 2
+ 1222 010e 8B45EC   		movl	-20(%rbp), %eax
+ 1223 0111 4898     		cltq
+ 1224 0113 480145F0 		addq	%rax, -16(%rbp)
+ 256:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 257:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 1225              		.loc 1 257 13 is_stmt 1 discriminator 2
+ 1226 0117 488B45F0 		movq	-16(%rbp), %rax
+ 1227              	.L65:
+ 258:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1228              		.loc 1 258 1
+ 1229 011b 488B75F8 		movq	-8(%rbp), %rsi
+ 1230 011f 64483334 		xorq	%fs:40, %rsi
+GAS LISTING /tmp/ccyUvz9a.s 			page 29
+
+
+ 1230      25280000 
+ 1230      00
+ 1231 0128 7405     		je	.L70
+ 1232 012a E8000000 		call	__stack_chk_fail@PLT
+ 1232      00
+ 1233              	.L70:
+ 1234 012f C9       		leave
+ 1235              	.LCFI26:
+ 1236              		.cfi_def_cfa 7, 8
+ 1237 0130 C3       		ret
+ 1238              		.cfi_endproc
+ 1239              	.LFE14:
+ 1241              		.section	.text.mbedtls_asn1_write_tagged_string,"ax",@progbits
+ 1242              		.globl	mbedtls_asn1_write_tagged_string
+ 1244              	mbedtls_asn1_write_tagged_string:
+ 1245              	.LFB15:
+ 259:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 260:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_tagged_string( unsigned char **p, unsigned char *start, int tag,
+ 261:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     const char *text, size_t text_len )
+ 262:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1246              		.loc 1 262 1
+ 1247              		.cfi_startproc
+ 1248 0000 F30F1EFA 		endbr64
+ 1249 0004 55       		pushq	%rbp
+ 1250              	.LCFI27:
+ 1251              		.cfi_def_cfa_offset 16
+ 1252              		.cfi_offset 6, -16
+ 1253 0005 4889E5   		movq	%rsp, %rbp
+ 1254              	.LCFI28:
+ 1255              		.cfi_def_cfa_register 6
+ 1256 0008 4883EC50 		subq	$80, %rsp
+ 1257 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1258 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1259 0014 8955CC   		movl	%edx, -52(%rbp)
+ 1260 0017 48894DC0 		movq	%rcx, -64(%rbp)
+ 1261 001b 4C8945B8 		movq	%r8, -72(%rbp)
+ 1262              		.loc 1 262 1
+ 1263 001f 64488B04 		movq	%fs:40, %rax
+ 1263      25280000 
+ 1263      00
+ 1264 0028 488945F8 		movq	%rax, -8(%rbp)
+ 1265 002c 31C0     		xorl	%eax, %eax
+ 263:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 264:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 1266              		.loc 1 264 12
+ 1267 002e 48C745F0 		movq	$0, -16(%rbp)
+ 1267      00000000 
+ 265:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_raw_buffer( p, start,
+ 1268              		.loc 1 266 5
+ 1269 0036 488B4DB8 		movq	-72(%rbp), %rcx
+ 1270 003a 488B55C0 		movq	-64(%rbp), %rdx
+ 1271 003e 488B75D0 		movq	-48(%rbp), %rsi
+ 1272 0042 488B45D8 		movq	-40(%rbp), %rax
+ 1273 0046 4889C7   		movq	%rax, %rdi
+ 1274 0049 E8000000 		call	mbedtls_asn1_write_raw_buffer
+ 1274      00
+GAS LISTING /tmp/ccyUvz9a.s 			page 30
+
+
+ 1275 004e 8945EC   		movl	%eax, -20(%rbp)
+ 1276 0051 837DEC00 		cmpl	$0, -20(%rbp)
+ 1277 0055 7905     		jns	.L72
+ 1278              		.loc 1 266 5 is_stmt 0 discriminator 1
+ 1279 0057 8B45EC   		movl	-20(%rbp), %eax
+ 1280 005a EB6B     		jmp	.L73
+ 1281              	.L72:
+ 1282              		.loc 1 266 5 discriminator 2
+ 1283 005c 8B45EC   		movl	-20(%rbp), %eax
+ 1284 005f 4898     		cltq
+ 1285 0061 480145F0 		addq	%rax, -16(%rbp)
+ 267:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         (const unsigned char *) text, text_len ) );
+ 268:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 269:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 1286              		.loc 1 269 5 is_stmt 1 discriminator 2
+ 1287 0065 488B55F0 		movq	-16(%rbp), %rdx
+ 1288 0069 488B4DD0 		movq	-48(%rbp), %rcx
+ 1289 006d 488B45D8 		movq	-40(%rbp), %rax
+ 1290 0071 4889CE   		movq	%rcx, %rsi
+ 1291 0074 4889C7   		movq	%rax, %rdi
+ 1292 0077 E8000000 		call	mbedtls_asn1_write_len
+ 1292      00
+ 1293 007c 8945EC   		movl	%eax, -20(%rbp)
+ 1294 007f 837DEC00 		cmpl	$0, -20(%rbp)
+ 1295 0083 7905     		jns	.L74
+ 1296              		.loc 1 269 5 is_stmt 0 discriminator 1
+ 1297 0085 8B45EC   		movl	-20(%rbp), %eax
+ 1298 0088 EB3D     		jmp	.L73
+ 1299              	.L74:
+ 1300              		.loc 1 269 5 discriminator 2
+ 1301 008a 8B45EC   		movl	-20(%rbp), %eax
+ 1302 008d 4898     		cltq
+ 1303 008f 480145F0 		addq	%rax, -16(%rbp)
+ 270:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, tag ) );
+ 1304              		.loc 1 270 5 is_stmt 1 discriminator 2
+ 1305 0093 8B45CC   		movl	-52(%rbp), %eax
+ 1306 0096 0FB6D0   		movzbl	%al, %edx
+ 1307 0099 488B4DD0 		movq	-48(%rbp), %rcx
+ 1308 009d 488B45D8 		movq	-40(%rbp), %rax
+ 1309 00a1 4889CE   		movq	%rcx, %rsi
+ 1310 00a4 4889C7   		movq	%rax, %rdi
+ 1311 00a7 E8000000 		call	mbedtls_asn1_write_tag
+ 1311      00
+ 1312 00ac 8945EC   		movl	%eax, -20(%rbp)
+ 1313 00af 837DEC00 		cmpl	$0, -20(%rbp)
+ 1314 00b3 7905     		jns	.L75
+ 1315              		.loc 1 270 5 is_stmt 0 discriminator 1
+ 1316 00b5 8B45EC   		movl	-20(%rbp), %eax
+ 1317 00b8 EB0D     		jmp	.L73
+ 1318              	.L75:
+ 1319              		.loc 1 270 5 discriminator 2
+ 1320 00ba 8B45EC   		movl	-20(%rbp), %eax
+ 1321 00bd 4898     		cltq
+ 1322 00bf 480145F0 		addq	%rax, -16(%rbp)
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 272:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 1323              		.loc 1 272 13 is_stmt 1 discriminator 2
+GAS LISTING /tmp/ccyUvz9a.s 			page 31
+
+
+ 1324 00c3 488B45F0 		movq	-16(%rbp), %rax
+ 1325              	.L73:
+ 273:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1326              		.loc 1 273 1
+ 1327 00c7 488B7DF8 		movq	-8(%rbp), %rdi
+ 1328 00cb 6448333C 		xorq	%fs:40, %rdi
+ 1328      25280000 
+ 1328      00
+ 1329 00d4 7405     		je	.L76
+ 1330 00d6 E8000000 		call	__stack_chk_fail@PLT
+ 1330      00
+ 1331              	.L76:
+ 1332 00db C9       		leave
+ 1333              	.LCFI29:
+ 1334              		.cfi_def_cfa 7, 8
+ 1335 00dc C3       		ret
+ 1336              		.cfi_endproc
+ 1337              	.LFE15:
+ 1339              		.section	.text.mbedtls_asn1_write_utf8_string,"ax",@progbits
+ 1340              		.globl	mbedtls_asn1_write_utf8_string
+ 1342              	mbedtls_asn1_write_utf8_string:
+ 1343              	.LFB16:
+ 274:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 275:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_utf8_string( unsigned char **p, unsigned char *start,
+ 276:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     const char *text, size_t text_len )
+ 277:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1344              		.loc 1 277 1
+ 1345              		.cfi_startproc
+ 1346 0000 F30F1EFA 		endbr64
+ 1347 0004 55       		pushq	%rbp
+ 1348              	.LCFI30:
+ 1349              		.cfi_def_cfa_offset 16
+ 1350              		.cfi_offset 6, -16
+ 1351 0005 4889E5   		movq	%rsp, %rbp
+ 1352              	.LCFI31:
+ 1353              		.cfi_def_cfa_register 6
+ 1354 0008 4883EC30 		subq	$48, %rsp
+ 1355 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1356 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1357 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1358 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 1359              		.loc 1 277 1
+ 1360 001c 64488B04 		movq	%fs:40, %rax
+ 1360      25280000 
+ 1360      00
+ 1361 0025 488945F8 		movq	%rax, -8(%rbp)
+ 1362 0029 31C0     		xorl	%eax, %eax
+ 278:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( mbedtls_asn1_write_tagged_string(p, start, MBEDTLS_ASN1_UTF8_STRING, text, text_len) );
+ 1363              		.loc 1 278 13
+ 1364 002b 488B4DD0 		movq	-48(%rbp), %rcx
+ 1365 002f 488B55D8 		movq	-40(%rbp), %rdx
+ 1366 0033 488B75E0 		movq	-32(%rbp), %rsi
+ 1367 0037 488B45E8 		movq	-24(%rbp), %rax
+ 1368 003b 4989C8   		movq	%rcx, %r8
+ 1369 003e 4889D1   		movq	%rdx, %rcx
+ 1370 0041 BA0C0000 		movl	$12, %edx
+ 1370      00
+GAS LISTING /tmp/ccyUvz9a.s 			page 32
+
+
+ 1371 0046 4889C7   		movq	%rax, %rdi
+ 1372 0049 E8000000 		call	mbedtls_asn1_write_tagged_string
+ 1372      00
+ 279:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1373              		.loc 1 279 1
+ 1374 004e 488B7DF8 		movq	-8(%rbp), %rdi
+ 1375 0052 6448333C 		xorq	%fs:40, %rdi
+ 1375      25280000 
+ 1375      00
+ 1376 005b 7405     		je	.L79
+ 1377 005d E8000000 		call	__stack_chk_fail@PLT
+ 1377      00
+ 1378              	.L79:
+ 1379 0062 C9       		leave
+ 1380              	.LCFI32:
+ 1381              		.cfi_def_cfa 7, 8
+ 1382 0063 C3       		ret
+ 1383              		.cfi_endproc
+ 1384              	.LFE16:
+ 1386              		.section	.text.mbedtls_asn1_write_printable_string,"ax",@progbits
+ 1387              		.globl	mbedtls_asn1_write_printable_string
+ 1389              	mbedtls_asn1_write_printable_string:
+ 1390              	.LFB17:
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 281:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_printable_string( unsigned char **p, unsigned char *start,
+ 282:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                  const char *text, size_t text_len )
+ 283:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1391              		.loc 1 283 1
+ 1392              		.cfi_startproc
+ 1393 0000 F30F1EFA 		endbr64
+ 1394 0004 55       		pushq	%rbp
+ 1395              	.LCFI33:
+ 1396              		.cfi_def_cfa_offset 16
+ 1397              		.cfi_offset 6, -16
+ 1398 0005 4889E5   		movq	%rsp, %rbp
+ 1399              	.LCFI34:
+ 1400              		.cfi_def_cfa_register 6
+ 1401 0008 4883EC30 		subq	$48, %rsp
+ 1402 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1403 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1404 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1405 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 1406              		.loc 1 283 1
+ 1407 001c 64488B04 		movq	%fs:40, %rax
+ 1407      25280000 
+ 1407      00
+ 1408 0025 488945F8 		movq	%rax, -8(%rbp)
+ 1409 0029 31C0     		xorl	%eax, %eax
+ 284:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( mbedtls_asn1_write_tagged_string(p, start, MBEDTLS_ASN1_PRINTABLE_STRING, text, text_le
+ 1410              		.loc 1 284 13
+ 1411 002b 488B4DD0 		movq	-48(%rbp), %rcx
+ 1412 002f 488B55D8 		movq	-40(%rbp), %rdx
+ 1413 0033 488B75E0 		movq	-32(%rbp), %rsi
+ 1414 0037 488B45E8 		movq	-24(%rbp), %rax
+ 1415 003b 4989C8   		movq	%rcx, %r8
+ 1416 003e 4889D1   		movq	%rdx, %rcx
+ 1417 0041 BA130000 		movl	$19, %edx
+GAS LISTING /tmp/ccyUvz9a.s 			page 33
+
+
+ 1417      00
+ 1418 0046 4889C7   		movq	%rax, %rdi
+ 1419 0049 E8000000 		call	mbedtls_asn1_write_tagged_string
+ 1419      00
+ 285:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1420              		.loc 1 285 1
+ 1421 004e 488B7DF8 		movq	-8(%rbp), %rdi
+ 1422 0052 6448333C 		xorq	%fs:40, %rdi
+ 1422      25280000 
+ 1422      00
+ 1423 005b 7405     		je	.L82
+ 1424 005d E8000000 		call	__stack_chk_fail@PLT
+ 1424      00
+ 1425              	.L82:
+ 1426 0062 C9       		leave
+ 1427              	.LCFI35:
+ 1428              		.cfi_def_cfa 7, 8
+ 1429 0063 C3       		ret
+ 1430              		.cfi_endproc
+ 1431              	.LFE17:
+ 1433              		.section	.text.mbedtls_asn1_write_ia5_string,"ax",@progbits
+ 1434              		.globl	mbedtls_asn1_write_ia5_string
+ 1436              	mbedtls_asn1_write_ia5_string:
+ 1437              	.LFB18:
+ 286:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 287:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_ia5_string( unsigned char **p, unsigned char *start,
+ 288:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                            const char *text, size_t text_len )
+ 289:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1438              		.loc 1 289 1
+ 1439              		.cfi_startproc
+ 1440 0000 F30F1EFA 		endbr64
+ 1441 0004 55       		pushq	%rbp
+ 1442              	.LCFI36:
+ 1443              		.cfi_def_cfa_offset 16
+ 1444              		.cfi_offset 6, -16
+ 1445 0005 4889E5   		movq	%rsp, %rbp
+ 1446              	.LCFI37:
+ 1447              		.cfi_def_cfa_register 6
+ 1448 0008 4883EC30 		subq	$48, %rsp
+ 1449 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1450 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1451 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1452 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 1453              		.loc 1 289 1
+ 1454 001c 64488B04 		movq	%fs:40, %rax
+ 1454      25280000 
+ 1454      00
+ 1455 0025 488945F8 		movq	%rax, -8(%rbp)
+ 1456 0029 31C0     		xorl	%eax, %eax
+ 290:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( mbedtls_asn1_write_tagged_string(p, start, MBEDTLS_ASN1_IA5_STRING, text, text_len) );
+ 1457              		.loc 1 290 13
+ 1458 002b 488B4DD0 		movq	-48(%rbp), %rcx
+ 1459 002f 488B55D8 		movq	-40(%rbp), %rdx
+ 1460 0033 488B75E0 		movq	-32(%rbp), %rsi
+ 1461 0037 488B45E8 		movq	-24(%rbp), %rax
+ 1462 003b 4989C8   		movq	%rcx, %r8
+ 1463 003e 4889D1   		movq	%rdx, %rcx
+GAS LISTING /tmp/ccyUvz9a.s 			page 34
+
+
+ 1464 0041 BA160000 		movl	$22, %edx
+ 1464      00
+ 1465 0046 4889C7   		movq	%rax, %rdi
+ 1466 0049 E8000000 		call	mbedtls_asn1_write_tagged_string
+ 1466      00
+ 291:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1467              		.loc 1 291 1
+ 1468 004e 488B7DF8 		movq	-8(%rbp), %rdi
+ 1469 0052 6448333C 		xorq	%fs:40, %rdi
+ 1469      25280000 
+ 1469      00
+ 1470 005b 7405     		je	.L85
+ 1471 005d E8000000 		call	__stack_chk_fail@PLT
+ 1471      00
+ 1472              	.L85:
+ 1473 0062 C9       		leave
+ 1474              	.LCFI38:
+ 1475              		.cfi_def_cfa 7, 8
+ 1476 0063 C3       		ret
+ 1477              		.cfi_endproc
+ 1478              	.LFE18:
+ 1480              		.section	.text.mbedtls_asn1_write_bitstring,"ax",@progbits
+ 1481              		.globl	mbedtls_asn1_write_bitstring
+ 1483              	mbedtls_asn1_write_bitstring:
+ 1484              	.LFB19:
+ 292:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 293:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_bitstring( unsigned char **p, unsigned char *start,
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                           const unsigned char *buf, size_t bits )
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1485              		.loc 1 295 1
+ 1486              		.cfi_startproc
+ 1487 0000 F30F1EFA 		endbr64
+ 1488 0004 55       		pushq	%rbp
+ 1489              	.LCFI39:
+ 1490              		.cfi_def_cfa_offset 16
+ 1491              		.cfi_offset 6, -16
+ 1492 0005 4889E5   		movq	%rsp, %rbp
+ 1493              	.LCFI40:
+ 1494              		.cfi_def_cfa_register 6
+ 1495 0008 4883EC50 		subq	$80, %rsp
+ 1496 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 1497 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 1498 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 1499 0018 48894DB0 		movq	%rcx, -80(%rbp)
+ 1500              		.loc 1 295 1
+ 1501 001c 64488B04 		movq	%fs:40, %rax
+ 1501      25280000 
+ 1501      00
+ 1502 0025 488945F8 		movq	%rax, -8(%rbp)
+ 1503 0029 31C0     		xorl	%eax, %eax
+ 296:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 297:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 1504              		.loc 1 297 12
+ 1505 002b 48C745E0 		movq	$0, -32(%rbp)
+ 1505      00000000 
+ 298:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t unused_bits, byte_len;
+ 299:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+GAS LISTING /tmp/ccyUvz9a.s 			page 35
+
+
+ 300:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     byte_len = ( bits + 7 ) / 8;
+ 1506              		.loc 1 300 23
+ 1507 0033 488B45B0 		movq	-80(%rbp), %rax
+ 1508 0037 4883C007 		addq	$7, %rax
+ 1509              		.loc 1 300 14
+ 1510 003b 48C1E803 		shrq	$3, %rax
+ 1511 003f 488945E8 		movq	%rax, -24(%rbp)
+ 301:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     unused_bits = ( byte_len * 8 ) - bits;
+ 1512              		.loc 1 301 30
+ 1513 0043 488B45E8 		movq	-24(%rbp), %rax
+ 1514 0047 48C1E003 		salq	$3, %rax
+ 1515              		.loc 1 301 17
+ 1516 004b 482B45B0 		subq	-80(%rbp), %rax
+ 1517 004f 488945F0 		movq	%rax, -16(%rbp)
+ 302:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 303:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( *p < start || (size_t)( *p - start ) < byte_len + 1 )
+ 1518              		.loc 1 303 9
+ 1519 0053 488B45C8 		movq	-56(%rbp), %rax
+ 1520 0057 488B00   		movq	(%rax), %rax
+ 1521              		.loc 1 303 7
+ 1522 005a 483945C0 		cmpq	%rax, -64(%rbp)
+ 1523 005e 771B     		ja	.L87
+ 1524              		.loc 1 303 33 discriminator 1
+ 1525 0060 488B45C8 		movq	-56(%rbp), %rax
+ 1526 0064 488B00   		movq	(%rax), %rax
+ 1527              		.loc 1 303 36 discriminator 1
+ 1528 0067 482B45C0 		subq	-64(%rbp), %rax
+ 1529              		.loc 1 303 23 discriminator 1
+ 1530 006b 4889C2   		movq	%rax, %rdx
+ 1531              		.loc 1 303 57 discriminator 1
+ 1532 006e 488B45E8 		movq	-24(%rbp), %rax
+ 1533 0072 4883C001 		addq	$1, %rax
+ 1534              		.loc 1 303 20 discriminator 1
+ 1535 0076 4839C2   		cmpq	%rax, %rdx
+ 1536 0079 730A     		jnb	.L88
+ 1537              	.L87:
+ 304:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
+ 1538              		.loc 1 304 15
+ 1539 007b B894FFFF 		movl	$-108, %eax
+ 1539      FF
+ 1540 0080 E90C0100 		jmp	.L89
+ 1540      00
+ 1541              	.L88:
+ 305:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 306:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     len = byte_len + 1;
+ 1542              		.loc 1 306 9
+ 1543 0085 488B45E8 		movq	-24(%rbp), %rax
+ 1544 0089 4883C001 		addq	$1, %rax
+ 1545 008d 488945E0 		movq	%rax, -32(%rbp)
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 308:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     /* Write the bitstring. Ensure the unused bits are zeroed */
+ 309:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( byte_len > 0 )
+ 1546              		.loc 1 309 7
+ 1547 0091 48837DE8 		cmpq	$0, -24(%rbp)
+ 1547      00
+ 1548 0096 7479     		je	.L90
+ 310:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+GAS LISTING /tmp/ccyUvz9a.s 			page 36
+
+
+ 311:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         byte_len--;
+ 1549              		.loc 1 311 17
+ 1550 0098 48836DE8 		subq	$1, -24(%rbp)
+ 1550      01
+ 312:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *--( *p ) = buf[byte_len] & ~( ( 0x1 << unused_bits ) - 1 );
+ 1551              		.loc 1 312 24
+ 1552 009d 488B55B8 		movq	-72(%rbp), %rdx
+ 1553 00a1 488B45E8 		movq	-24(%rbp), %rax
+ 1554 00a5 4801D0   		addq	%rdx, %rax
+ 1555 00a8 0FB600   		movzbl	(%rax), %eax
+ 1556 00ab 89C2     		movl	%eax, %edx
+ 1557              		.loc 1 312 46
+ 1558 00ad 488B45F0 		movq	-16(%rbp), %rax
+ 1559 00b1 BE010000 		movl	$1, %esi
+ 1559      00
+ 1560 00b6 89C1     		movl	%eax, %ecx
+ 1561 00b8 D3E6     		sall	%cl, %esi
+ 1562 00ba 89F0     		movl	%esi, %eax
+ 1563              		.loc 1 312 35
+ 1564 00bc F7D8     		negl	%eax
+ 1565 00be 89D1     		movl	%edx, %ecx
+ 1566 00c0 21C1     		andl	%eax, %ecx
+ 1567              		.loc 1 312 14
+ 1568 00c2 488B45C8 		movq	-56(%rbp), %rax
+ 1569 00c6 488B00   		movq	(%rax), %rax
+ 1570              		.loc 1 312 10
+ 1571 00c9 488D50FF 		leaq	-1(%rax), %rdx
+ 1572              		.loc 1 312 19
+ 1573 00cd 488B45C8 		movq	-56(%rbp), %rax
+ 1574 00d1 488910   		movq	%rdx, (%rax)
+ 1575              		.loc 1 312 14
+ 1576 00d4 488B45C8 		movq	-56(%rbp), %rax
+ 1577 00d8 488B00   		movq	(%rax), %rax
+ 1578              		.loc 1 312 35
+ 1579 00db 89CA     		movl	%ecx, %edx
+ 1580              		.loc 1 312 19
+ 1581 00dd 8810     		movb	%dl, (%rax)
+ 313:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         ( *p ) -= byte_len;
+ 1582              		.loc 1 313 16
+ 1583 00df 488B45C8 		movq	-56(%rbp), %rax
+ 1584 00e3 488B00   		movq	(%rax), %rax
+ 1585 00e6 488B55E8 		movq	-24(%rbp), %rdx
+ 1586 00ea 48F7DA   		negq	%rdx
+ 1587 00ed 4801C2   		addq	%rax, %rdx
+ 1588 00f0 488B45C8 		movq	-56(%rbp), %rax
+ 1589 00f4 488910   		movq	%rdx, (%rax)
+ 314:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         memcpy( *p, buf, byte_len );
+ 1590              		.loc 1 314 9
+ 1591 00f7 488B45C8 		movq	-56(%rbp), %rax
+ 1592 00fb 488B00   		movq	(%rax), %rax
+ 1593 00fe 488B55E8 		movq	-24(%rbp), %rdx
+ 1594 0102 488B4DB8 		movq	-72(%rbp), %rcx
+ 1595 0106 4889CE   		movq	%rcx, %rsi
+ 1596 0109 4889C7   		movq	%rax, %rdi
+ 1597 010c E8000000 		call	memcpy@PLT
+ 1597      00
+ 1598              	.L90:
+GAS LISTING /tmp/ccyUvz9a.s 			page 37
+
+
+ 315:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+ 316:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 317:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     /* Write unused bits */
+ 318:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     *--( *p ) = (unsigned char)unused_bits;
+ 1599              		.loc 1 318 10
+ 1600 0111 488B45C8 		movq	-56(%rbp), %rax
+ 1601 0115 488B00   		movq	(%rax), %rax
+ 1602              		.loc 1 318 6
+ 1603 0118 488D50FF 		leaq	-1(%rax), %rdx
+ 1604              		.loc 1 318 15
+ 1605 011c 488B45C8 		movq	-56(%rbp), %rax
+ 1606 0120 488910   		movq	%rdx, (%rax)
+ 1607              		.loc 1 318 10
+ 1608 0123 488B45C8 		movq	-56(%rbp), %rax
+ 1609 0127 488B00   		movq	(%rax), %rax
+ 1610              		.loc 1 318 17
+ 1611 012a 488B55F0 		movq	-16(%rbp), %rdx
+ 1612              		.loc 1 318 15
+ 1613 012e 8810     		movb	%dl, (%rax)
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 320:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 1614              		.loc 1 320 5
+ 1615 0130 488B55E0 		movq	-32(%rbp), %rdx
+ 1616 0134 488B4DC0 		movq	-64(%rbp), %rcx
+ 1617 0138 488B45C8 		movq	-56(%rbp), %rax
+ 1618 013c 4889CE   		movq	%rcx, %rsi
+ 1619 013f 4889C7   		movq	%rax, %rdi
+ 1620 0142 E8000000 		call	mbedtls_asn1_write_len
+ 1620      00
+ 1621 0147 8945DC   		movl	%eax, -36(%rbp)
+ 1622 014a 837DDC00 		cmpl	$0, -36(%rbp)
+ 1623 014e 7905     		jns	.L91
+ 1624              		.loc 1 320 5 is_stmt 0 discriminator 1
+ 1625 0150 8B45DC   		movl	-36(%rbp), %eax
+ 1626 0153 EB3C     		jmp	.L89
+ 1627              	.L91:
+ 1628              		.loc 1 320 5 discriminator 2
+ 1629 0155 8B45DC   		movl	-36(%rbp), %eax
+ 1630 0158 4898     		cltq
+ 1631 015a 480145E0 		addq	%rax, -32(%rbp)
+ 321:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_BIT_STRING ) );
+ 1632              		.loc 1 321 5 is_stmt 1 discriminator 2
+ 1633 015e 488B4DC0 		movq	-64(%rbp), %rcx
+ 1634 0162 488B45C8 		movq	-56(%rbp), %rax
+ 1635 0166 BA030000 		movl	$3, %edx
+ 1635      00
+ 1636 016b 4889CE   		movq	%rcx, %rsi
+ 1637 016e 4889C7   		movq	%rax, %rdi
+ 1638 0171 E8000000 		call	mbedtls_asn1_write_tag
+ 1638      00
+ 1639 0176 8945DC   		movl	%eax, -36(%rbp)
+ 1640 0179 837DDC00 		cmpl	$0, -36(%rbp)
+ 1641 017d 7905     		jns	.L92
+ 1642              		.loc 1 321 5 is_stmt 0 discriminator 1
+ 1643 017f 8B45DC   		movl	-36(%rbp), %eax
+ 1644 0182 EB0D     		jmp	.L89
+ 1645              	.L92:
+GAS LISTING /tmp/ccyUvz9a.s 			page 38
+
+
+ 1646              		.loc 1 321 5 discriminator 2
+ 1647 0184 8B45DC   		movl	-36(%rbp), %eax
+ 1648 0187 4898     		cltq
+ 1649 0189 480145E0 		addq	%rax, -32(%rbp)
+ 322:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 1650              		.loc 1 323 13 is_stmt 1 discriminator 2
+ 1651 018d 488B45E0 		movq	-32(%rbp), %rax
+ 1652              	.L89:
+ 324:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1653              		.loc 1 324 1
+ 1654 0191 488B7DF8 		movq	-8(%rbp), %rdi
+ 1655 0195 6448333C 		xorq	%fs:40, %rdi
+ 1655      25280000 
+ 1655      00
+ 1656 019e 7405     		je	.L93
+ 1657 01a0 E8000000 		call	__stack_chk_fail@PLT
+ 1657      00
+ 1658              	.L93:
+ 1659 01a5 C9       		leave
+ 1660              	.LCFI41:
+ 1661              		.cfi_def_cfa 7, 8
+ 1662 01a6 C3       		ret
+ 1663              		.cfi_endproc
+ 1664              	.LFE19:
+ 1666              		.section	.text.mbedtls_asn1_write_octet_string,"ax",@progbits
+ 1667              		.globl	mbedtls_asn1_write_octet_string
+ 1669              	mbedtls_asn1_write_octet_string:
+ 1670              	.LFB20:
+ 325:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 326:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** int mbedtls_asn1_write_octet_string( unsigned char **p, unsigned char *start,
+ 327:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                              const unsigned char *buf, size_t size )
+ 328:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1671              		.loc 1 328 1
+ 1672              		.cfi_startproc
+ 1673 0000 F30F1EFA 		endbr64
+ 1674 0004 55       		pushq	%rbp
+ 1675              	.LCFI42:
+ 1676              		.cfi_def_cfa_offset 16
+ 1677              		.cfi_offset 6, -16
+ 1678 0005 4889E5   		movq	%rsp, %rbp
+ 1679              	.LCFI43:
+ 1680              		.cfi_def_cfa_register 6
+ 1681 0008 4883EC40 		subq	$64, %rsp
+ 1682 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1683 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1684 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 1685 0018 48894DC0 		movq	%rcx, -64(%rbp)
+ 1686              		.loc 1 328 1
+ 1687 001c 64488B04 		movq	%fs:40, %rax
+ 1687      25280000 
+ 1687      00
+ 1688 0025 488945F8 		movq	%rax, -8(%rbp)
+ 1689 0029 31C0     		xorl	%eax, %eax
+ 329:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     int ret;
+ 330:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     size_t len = 0;
+ 1690              		.loc 1 330 12
+GAS LISTING /tmp/ccyUvz9a.s 			page 39
+
+
+ 1691 002b 48C745F0 		movq	$0, -16(%rbp)
+ 1691      00000000 
+ 331:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_raw_buffer( p, start, buf, size ) );
+ 1692              		.loc 1 332 5
+ 1693 0033 488B4DC0 		movq	-64(%rbp), %rcx
+ 1694 0037 488B55C8 		movq	-56(%rbp), %rdx
+ 1695 003b 488B75D0 		movq	-48(%rbp), %rsi
+ 1696 003f 488B45D8 		movq	-40(%rbp), %rax
+ 1697 0043 4889C7   		movq	%rax, %rdi
+ 1698 0046 E8000000 		call	mbedtls_asn1_write_raw_buffer
+ 1698      00
+ 1699 004b 8945EC   		movl	%eax, -20(%rbp)
+ 1700 004e 837DEC00 		cmpl	$0, -20(%rbp)
+ 1701 0052 7905     		jns	.L95
+ 1702              		.loc 1 332 5 is_stmt 0 discriminator 1
+ 1703 0054 8B45EC   		movl	-20(%rbp), %eax
+ 1704 0057 EB6A     		jmp	.L96
+ 1705              	.L95:
+ 1706              		.loc 1 332 5 discriminator 2
+ 1707 0059 8B45EC   		movl	-20(%rbp), %eax
+ 1708 005c 4898     		cltq
+ 1709 005e 480145F0 		addq	%rax, -16(%rbp)
+ 333:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 334:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
+ 1710              		.loc 1 334 5 is_stmt 1 discriminator 2
+ 1711 0062 488B55F0 		movq	-16(%rbp), %rdx
+ 1712 0066 488B4DD0 		movq	-48(%rbp), %rcx
+ 1713 006a 488B45D8 		movq	-40(%rbp), %rax
+ 1714 006e 4889CE   		movq	%rcx, %rsi
+ 1715 0071 4889C7   		movq	%rax, %rdi
+ 1716 0074 E8000000 		call	mbedtls_asn1_write_len
+ 1716      00
+ 1717 0079 8945EC   		movl	%eax, -20(%rbp)
+ 1718 007c 837DEC00 		cmpl	$0, -20(%rbp)
+ 1719 0080 7905     		jns	.L97
+ 1720              		.loc 1 334 5 is_stmt 0 discriminator 1
+ 1721 0082 8B45EC   		movl	-20(%rbp), %eax
+ 1722 0085 EB3C     		jmp	.L96
+ 1723              	.L97:
+ 1724              		.loc 1 334 5 discriminator 2
+ 1725 0087 8B45EC   		movl	-20(%rbp), %eax
+ 1726 008a 4898     		cltq
+ 1727 008c 480145F0 		addq	%rax, -16(%rbp)
+ 335:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_OCTET_STRING ) );
+ 1728              		.loc 1 335 5 is_stmt 1 discriminator 2
+ 1729 0090 488B4DD0 		movq	-48(%rbp), %rcx
+ 1730 0094 488B45D8 		movq	-40(%rbp), %rax
+ 1731 0098 BA040000 		movl	$4, %edx
+ 1731      00
+ 1732 009d 4889CE   		movq	%rcx, %rsi
+ 1733 00a0 4889C7   		movq	%rax, %rdi
+ 1734 00a3 E8000000 		call	mbedtls_asn1_write_tag
+ 1734      00
+ 1735 00a8 8945EC   		movl	%eax, -20(%rbp)
+ 1736 00ab 837DEC00 		cmpl	$0, -20(%rbp)
+ 1737 00af 7905     		jns	.L98
+GAS LISTING /tmp/ccyUvz9a.s 			page 40
+
+
+ 1738              		.loc 1 335 5 is_stmt 0 discriminator 1
+ 1739 00b1 8B45EC   		movl	-20(%rbp), %eax
+ 1740 00b4 EB0D     		jmp	.L96
+ 1741              	.L98:
+ 1742              		.loc 1 335 5 discriminator 2
+ 1743 00b6 8B45EC   		movl	-20(%rbp), %eax
+ 1744 00b9 4898     		cltq
+ 1745 00bb 480145F0 		addq	%rax, -16(%rbp)
+ 336:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 337:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( (int) len );
+ 1746              		.loc 1 337 13 is_stmt 1 discriminator 2
+ 1747 00bf 488B45F0 		movq	-16(%rbp), %rax
+ 1748              	.L96:
+ 338:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1749              		.loc 1 338 1
+ 1750 00c3 488B7DF8 		movq	-8(%rbp), %rdi
+ 1751 00c7 6448333C 		xorq	%fs:40, %rdi
+ 1751      25280000 
+ 1751      00
+ 1752 00d0 7405     		je	.L99
+ 1753 00d2 E8000000 		call	__stack_chk_fail@PLT
+ 1753      00
+ 1754              	.L99:
+ 1755 00d7 C9       		leave
+ 1756              	.LCFI44:
+ 1757              		.cfi_def_cfa 7, 8
+ 1758 00d8 C3       		ret
+ 1759              		.cfi_endproc
+ 1760              	.LFE20:
+ 1762              		.section	.text.asn1_find_named_data,"ax",@progbits
+ 1764              	asn1_find_named_data:
+ 1765              	.LFB21:
+ 339:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 340:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 341:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** /* This is a copy of the ASN.1 parsing function mbedtls_asn1_find_named_data(),
+ 342:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****  * which is replicated to avoid a dependency ASN1_WRITE_C on ASN1_PARSE_C. */
+ 343:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** static mbedtls_asn1_named_data *asn1_find_named_data(
+ 344:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                                mbedtls_asn1_named_data *list,
+ 345:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                                const char *oid, size_t len )
+ 346:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1766              		.loc 1 346 1
+ 1767              		.cfi_startproc
+ 1768 0000 F30F1EFA 		endbr64
+ 1769 0004 55       		pushq	%rbp
+ 1770              	.LCFI45:
+ 1771              		.cfi_def_cfa_offset 16
+ 1772              		.cfi_offset 6, -16
+ 1773 0005 4889E5   		movq	%rsp, %rbp
+ 1774              	.LCFI46:
+ 1775              		.cfi_def_cfa_register 6
+ 1776 0008 4883EC30 		subq	$48, %rsp
+ 1777 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1778 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 1779 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 1780              		.loc 1 346 1
+ 1781 0018 64488B04 		movq	%fs:40, %rax
+ 1781      25280000 
+GAS LISTING /tmp/ccyUvz9a.s 			page 41
+
+
+ 1781      00
+ 1782 0021 488945F8 		movq	%rax, -8(%rbp)
+ 1783 0025 31C0     		xorl	%eax, %eax
+ 347:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     while( list != NULL )
+ 1784              		.loc 1 347 10
+ 1785 0027 EB39     		jmp	.L101
+ 1786              	.L104:
+ 348:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+ 349:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( list->oid.len == len &&
+ 1787              		.loc 1 349 22
+ 1788 0029 488B45E8 		movq	-24(%rbp), %rax
+ 1789 002d 488B4008 		movq	8(%rax), %rax
+ 1790              		.loc 1 349 11
+ 1791 0031 483945D8 		cmpq	%rax, -40(%rbp)
+ 1792 0035 751F     		jne	.L102
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             memcmp( list->oid.p, oid, len ) == 0 )
+ 1793              		.loc 1 350 30 discriminator 1
+ 1794 0037 488B45E8 		movq	-24(%rbp), %rax
+ 1795 003b 488B4010 		movq	16(%rax), %rax
+ 1796              		.loc 1 350 13 discriminator 1
+ 1797 003f 488B55D8 		movq	-40(%rbp), %rdx
+ 1798 0043 488B4DE0 		movq	-32(%rbp), %rcx
+ 1799 0047 4889CE   		movq	%rcx, %rsi
+ 1800 004a 4889C7   		movq	%rax, %rdi
+ 1801 004d E8000000 		call	memcmp@PLT
+ 1801      00
+ 349:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             memcmp( list->oid.p, oid, len ) == 0 )
+ 1802              		.loc 1 349 34 discriminator 1
+ 1803 0052 85C0     		testl	%eax, %eax
+ 1804 0054 7415     		je	.L107
+ 1805              	.L102:
+ 351:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         {
+ 352:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             break;
+ 353:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         }
+ 354:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 355:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         list = list->next;
+ 1806              		.loc 1 355 14
+ 1807 0056 488B45E8 		movq	-24(%rbp), %rax
+ 1808 005a 488B4030 		movq	48(%rax), %rax
+ 1809 005e 488945E8 		movq	%rax, -24(%rbp)
+ 1810              	.L101:
+ 347:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+ 1811              		.loc 1 347 10
+ 1812 0062 48837DE8 		cmpq	$0, -24(%rbp)
+ 1812      00
+ 1813 0067 75C0     		jne	.L104
+ 1814 0069 EB01     		jmp	.L103
+ 1815              	.L107:
+ 352:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         }
+ 1816              		.loc 1 352 13
+ 1817 006b 90       		nop
+ 1818              	.L103:
+ 356:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+ 357:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 358:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( list );
+ 1819              		.loc 1 358 11
+ 1820 006c 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/ccyUvz9a.s 			page 42
+
+
+ 359:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 1821              		.loc 1 359 1
+ 1822 0070 488B4DF8 		movq	-8(%rbp), %rcx
+ 1823 0074 6448330C 		xorq	%fs:40, %rcx
+ 1823      25280000 
+ 1823      00
+ 1824 007d 7405     		je	.L106
+ 1825 007f E8000000 		call	__stack_chk_fail@PLT
+ 1825      00
+ 1826              	.L106:
+ 1827 0084 C9       		leave
+ 1828              	.LCFI47:
+ 1829              		.cfi_def_cfa 7, 8
+ 1830 0085 C3       		ret
+ 1831              		.cfi_endproc
+ 1832              	.LFE21:
+ 1834              		.section	.text.mbedtls_asn1_store_named_data,"ax",@progbits
+ 1835              		.globl	mbedtls_asn1_store_named_data
+ 1837              	mbedtls_asn1_store_named_data:
+ 1838              	.LFB22:
+ 360:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 361:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** mbedtls_asn1_named_data *mbedtls_asn1_store_named_data(
+ 362:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                         mbedtls_asn1_named_data **head,
+ 363:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                         const char *oid, size_t oid_len,
+ 364:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                         const unsigned char *val,
+ 365:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                         size_t val_len )
+ 366:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** {
+ 1839              		.loc 1 366 1
+ 1840              		.cfi_startproc
+ 1841 0000 F30F1EFA 		endbr64
+ 1842 0004 55       		pushq	%rbp
+ 1843              	.LCFI48:
+ 1844              		.cfi_def_cfa_offset 16
+ 1845              		.cfi_offset 6, -16
+ 1846 0005 4889E5   		movq	%rsp, %rbp
+ 1847              	.LCFI49:
+ 1848              		.cfi_def_cfa_register 6
+ 1849 0008 4883EC50 		subq	$80, %rsp
+ 1850 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 1851 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 1852 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 1853 0018 48894DC0 		movq	%rcx, -64(%rbp)
+ 1854 001c 4C8945B8 		movq	%r8, -72(%rbp)
+ 1855              		.loc 1 366 1
+ 1856 0020 64488B04 		movq	%fs:40, %rax
+ 1856      25280000 
+ 1856      00
+ 1857 0029 488945F8 		movq	%rax, -8(%rbp)
+ 1858 002d 31C0     		xorl	%eax, %eax
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     mbedtls_asn1_named_data *cur;
+ 368:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 369:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( ( cur = asn1_find_named_data( *head, oid, oid_len ) ) == NULL )
+ 1859              		.loc 1 369 17
+ 1860 002f 488B45D8 		movq	-40(%rbp), %rax
+ 1861 0033 488B00   		movq	(%rax), %rax
+ 1862 0036 488B55C8 		movq	-56(%rbp), %rdx
+ 1863 003a 488B4DD0 		movq	-48(%rbp), %rcx
+GAS LISTING /tmp/ccyUvz9a.s 			page 43
+
+
+ 1864 003e 4889CE   		movq	%rcx, %rsi
+ 1865 0041 4889C7   		movq	%rax, %rdi
+ 1866 0044 E8000000 		call	asn1_find_named_data
+ 1866      00
+ 1867 0049 488945E8 		movq	%rax, -24(%rbp)
+ 1868              		.loc 1 369 7
+ 1869 004d 48837DE8 		cmpq	$0, -24(%rbp)
+ 1869      00
+ 1870 0052 0F85FB00 		jne	.L109
+ 1870      0000
+ 370:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+ 371:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         // Add new entry if not present yet based on OID
+ 372:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         //
+ 373:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur = (mbedtls_asn1_named_data*)mbedtls_calloc( 1,
+ 1871              		.loc 1 373 41
+ 1872 0058 BE400000 		movl	$64, %esi
+ 1872      00
+ 1873 005d BF010000 		movl	$1, %edi
+ 1873      00
+ 1874 0062 E8000000 		call	mbedtls_calloc@PLT
+ 1874      00
+ 1875 0067 488945E8 		movq	%rax, -24(%rbp)
+ 374:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****                                             sizeof(mbedtls_asn1_named_data) );
+ 375:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( cur == NULL )
+ 1876              		.loc 1 375 11
+ 1877 006b 48837DE8 		cmpq	$0, -24(%rbp)
+ 1877      00
+ 1878 0070 750A     		jne	.L110
+ 376:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( NULL );
+ 1879              		.loc 1 376 19
+ 1880 0072 B8000000 		movl	$0, %eax
+ 1880      00
+ 1881 0077 E9560100 		jmp	.L111
+ 1881      00
+ 1882              	.L110:
+ 377:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 378:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur->oid.len = oid_len;
+ 1883              		.loc 1 378 22
+ 1884 007c 488B45E8 		movq	-24(%rbp), %rax
+ 1885 0080 488B55C8 		movq	-56(%rbp), %rdx
+ 1886 0084 48895008 		movq	%rdx, 8(%rax)
+ 379:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur->oid.p = mbedtls_calloc( 1, oid_len );
+ 1887              		.loc 1 379 22
+ 1888 0088 488B45C8 		movq	-56(%rbp), %rax
+ 1889 008c 4889C6   		movq	%rax, %rsi
+ 1890 008f BF010000 		movl	$1, %edi
+ 1890      00
+ 1891 0094 E8000000 		call	mbedtls_calloc@PLT
+ 1891      00
+ 1892              		.loc 1 379 20
+ 1893 0099 488B55E8 		movq	-24(%rbp), %rdx
+ 1894 009d 48894210 		movq	%rax, 16(%rdx)
+ 380:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( cur->oid.p == NULL )
+ 1895              		.loc 1 380 21
+ 1896 00a1 488B45E8 		movq	-24(%rbp), %rax
+ 1897 00a5 488B4010 		movq	16(%rax), %rax
+ 1898              		.loc 1 380 11
+GAS LISTING /tmp/ccyUvz9a.s 			page 44
+
+
+ 1899 00a9 4885C0   		testq	%rax, %rax
+ 1900 00ac 7516     		jne	.L112
+ 381:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         {
+ 382:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             mbedtls_free( cur );
+ 1901              		.loc 1 382 13
+ 1902 00ae 488B45E8 		movq	-24(%rbp), %rax
+ 1903 00b2 4889C7   		movq	%rax, %rdi
+ 1904 00b5 E8000000 		call	mbedtls_free@PLT
+ 1904      00
+ 383:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( NULL );
+ 1905              		.loc 1 383 19
+ 1906 00ba B8000000 		movl	$0, %eax
+ 1906      00
+ 1907 00bf E90E0100 		jmp	.L111
+ 1907      00
+ 1908              	.L112:
+ 384:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         }
+ 385:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 386:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         memcpy( cur->oid.p, oid, oid_len );
+ 1909              		.loc 1 386 25
+ 1910 00c4 488B45E8 		movq	-24(%rbp), %rax
+ 1911 00c8 488B4010 		movq	16(%rax), %rax
+ 1912              		.loc 1 386 9
+ 1913 00cc 488B55C8 		movq	-56(%rbp), %rdx
+ 1914 00d0 488B4DD0 		movq	-48(%rbp), %rcx
+ 1915 00d4 4889CE   		movq	%rcx, %rsi
+ 1916 00d7 4889C7   		movq	%rax, %rdi
+ 1917 00da E8000000 		call	memcpy@PLT
+ 1917      00
+ 387:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 388:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur->val.len = val_len;
+ 1918              		.loc 1 388 22
+ 1919 00df 488B45E8 		movq	-24(%rbp), %rax
+ 1920 00e3 488B55B8 		movq	-72(%rbp), %rdx
+ 1921 00e7 48895020 		movq	%rdx, 32(%rax)
+ 389:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur->val.p = mbedtls_calloc( 1, val_len );
+ 1922              		.loc 1 389 22
+ 1923 00eb 488B45B8 		movq	-72(%rbp), %rax
+ 1924 00ef 4889C6   		movq	%rax, %rsi
+ 1925 00f2 BF010000 		movl	$1, %edi
+ 1925      00
+ 1926 00f7 E8000000 		call	mbedtls_calloc@PLT
+ 1926      00
+ 1927              		.loc 1 389 20
+ 1928 00fc 488B55E8 		movq	-24(%rbp), %rdx
+ 1929 0100 48894228 		movq	%rax, 40(%rdx)
+ 390:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( cur->val.p == NULL )
+ 1930              		.loc 1 390 21
+ 1931 0104 488B45E8 		movq	-24(%rbp), %rax
+ 1932 0108 488B4028 		movq	40(%rax), %rax
+ 1933              		.loc 1 390 11
+ 1934 010c 4885C0   		testq	%rax, %rax
+ 1935 010f 7526     		jne	.L113
+ 391:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         {
+ 392:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             mbedtls_free( cur->oid.p );
+ 1936              		.loc 1 392 35
+ 1937 0111 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/ccyUvz9a.s 			page 45
+
+
+ 1938 0115 488B4010 		movq	16(%rax), %rax
+ 1939              		.loc 1 392 13
+ 1940 0119 4889C7   		movq	%rax, %rdi
+ 1941 011c E8000000 		call	mbedtls_free@PLT
+ 1941      00
+ 393:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             mbedtls_free( cur );
+ 1942              		.loc 1 393 13
+ 1943 0121 488B45E8 		movq	-24(%rbp), %rax
+ 1944 0125 4889C7   		movq	%rax, %rdi
+ 1945 0128 E8000000 		call	mbedtls_free@PLT
+ 1945      00
+ 394:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( NULL );
+ 1946              		.loc 1 394 19
+ 1947 012d B8000000 		movl	$0, %eax
+ 1947      00
+ 1948 0132 E99B0000 		jmp	.L111
+ 1948      00
+ 1949              	.L113:
+ 395:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         }
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 397:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur->next = *head;
+ 1950              		.loc 1 397 21
+ 1951 0137 488B45D8 		movq	-40(%rbp), %rax
+ 1952 013b 488B10   		movq	(%rax), %rdx
+ 1953              		.loc 1 397 19
+ 1954 013e 488B45E8 		movq	-24(%rbp), %rax
+ 1955 0142 48895030 		movq	%rdx, 48(%rax)
+ 398:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         *head = cur;
+ 1956              		.loc 1 398 15
+ 1957 0146 488B45D8 		movq	-40(%rbp), %rax
+ 1958 014a 488B55E8 		movq	-24(%rbp), %rdx
+ 1959 014e 488910   		movq	%rdx, (%rax)
+ 1960 0151 EB59     		jmp	.L114
+ 1961              	.L109:
+ 399:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+ 400:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     else if( cur->val.len < val_len )
+ 1962              		.loc 1 400 22
+ 1963 0153 488B45E8 		movq	-24(%rbp), %rax
+ 1964 0157 488B4020 		movq	32(%rax), %rax
+ 1965              		.loc 1 400 12
+ 1966 015b 483945B8 		cmpq	%rax, -72(%rbp)
+ 1967 015f 764B     		jbe	.L114
+ 1968              	.LBB2:
+ 401:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     {
+ 402:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         /*
+ 403:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****          * Enlarge existing value buffer if needed
+ 404:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****          * Preserve old data until the allocation succeeded, to leave list in
+ 405:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****          * a consistent state in case allocation fails.
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****          */
+ 407:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         void *p = mbedtls_calloc( 1, val_len );
+ 1969              		.loc 1 407 19
+ 1970 0161 488B45B8 		movq	-72(%rbp), %rax
+ 1971 0165 4889C6   		movq	%rax, %rsi
+ 1972 0168 BF010000 		movl	$1, %edi
+ 1972      00
+ 1973 016d E8000000 		call	mbedtls_calloc@PLT
+ 1973      00
+GAS LISTING /tmp/ccyUvz9a.s 			page 46
+
+
+ 1974 0172 488945F0 		movq	%rax, -16(%rbp)
+ 408:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         if( p == NULL )
+ 1975              		.loc 1 408 11
+ 1976 0176 48837DF0 		cmpq	$0, -16(%rbp)
+ 1976      00
+ 1977 017b 7507     		jne	.L115
+ 409:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****             return( NULL );
+ 1978              		.loc 1 409 19
+ 1979 017d B8000000 		movl	$0, %eax
+ 1979      00
+ 1980 0182 EB4E     		jmp	.L111
+ 1981              	.L115:
+ 410:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 411:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         mbedtls_free( cur->val.p );
+ 1982              		.loc 1 411 31
+ 1983 0184 488B45E8 		movq	-24(%rbp), %rax
+ 1984 0188 488B4028 		movq	40(%rax), %rax
+ 1985              		.loc 1 411 9
+ 1986 018c 4889C7   		movq	%rax, %rdi
+ 1987 018f E8000000 		call	mbedtls_free@PLT
+ 1987      00
+ 412:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur->val.p = p;
+ 1988              		.loc 1 412 20
+ 1989 0194 488B45E8 		movq	-24(%rbp), %rax
+ 1990 0198 488B55F0 		movq	-16(%rbp), %rdx
+ 1991 019c 48895028 		movq	%rdx, 40(%rax)
+ 413:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         cur->val.len = val_len;
+ 1992              		.loc 1 413 22
+ 1993 01a0 488B45E8 		movq	-24(%rbp), %rax
+ 1994 01a4 488B55B8 		movq	-72(%rbp), %rdx
+ 1995 01a8 48895020 		movq	%rdx, 32(%rax)
+ 1996              	.L114:
+ 1997              	.LBE2:
+ 414:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     }
+ 415:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 416:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     if( val != NULL )
+ 1998              		.loc 1 416 7
+ 1999 01ac 48837DC0 		cmpq	$0, -64(%rbp)
+ 1999      00
+ 2000 01b1 741B     		je	.L116
+ 417:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****         memcpy( cur->val.p, val, val_len );
+ 2001              		.loc 1 417 25
+ 2002 01b3 488B45E8 		movq	-24(%rbp), %rax
+ 2003 01b7 488B4028 		movq	40(%rax), %rax
+ 2004              		.loc 1 417 9
+ 2005 01bb 488B55B8 		movq	-72(%rbp), %rdx
+ 2006 01bf 488B4DC0 		movq	-64(%rbp), %rcx
+ 2007 01c3 4889CE   		movq	%rcx, %rsi
+ 2008 01c6 4889C7   		movq	%rax, %rdi
+ 2009 01c9 E8000000 		call	memcpy@PLT
+ 2009      00
+ 2010              	.L116:
+ 418:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** 
+ 419:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c ****     return( cur );
+ 2011              		.loc 1 419 11
+ 2012 01ce 488B45E8 		movq	-24(%rbp), %rax
+ 2013              	.L111:
+GAS LISTING /tmp/ccyUvz9a.s 			page 47
+
+
+ 420:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/asn1write.c **** }
+ 2014              		.loc 1 420 1
+ 2015 01d2 488B4DF8 		movq	-8(%rbp), %rcx
+ 2016 01d6 6448330C 		xorq	%fs:40, %rcx
+ 2016      25280000 
+ 2016      00
+ 2017 01df 7405     		je	.L117
+ 2018 01e1 E8000000 		call	__stack_chk_fail@PLT
+ 2018      00
+ 2019              	.L117:
+ 2020 01e6 C9       		leave
+ 2021              	.LCFI50:
+ 2022              		.cfi_def_cfa 7, 8
+ 2023 01e7 C3       		ret
+ 2024              		.cfi_endproc
+ 2025              	.LFE22:
+ 2027              		.text
+ 2028              	.Letext0:
+ 2029              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 2030              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 2031              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 2032              		.file 5 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/bignum.h"
+ 2033              		.file 6 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/asn1.h"
+ 2034              		.file 7 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 2035              		.file 8 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 2036              		.file 9 "/usr/include/stdio.h"
+ 2037              		.file 10 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 2038              		.file 11 "/usr/include/time.h"
+ 2039              		.file 12 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platform
+ 4968              		.section	.note.gnu.property,"a"
+ 4969              		.align 8
+ 4970 0000 04000000 		.long	 1f - 0f
+ 4971 0004 10000000 		.long	 4f - 1f
+ 4972 0008 05000000 		.long	 5
+ 4973              	0:
+ 4974 000c 474E5500 		.string	 "GNU"
+ 4975              	1:
+ 4976              		.align 8
+ 4977 0010 020000C0 		.long	 0xc0000002
+ 4978 0014 04000000 		.long	 3f - 2f
+ 4979              	2:
+ 4980 0018 03000000 		.long	 0x3
+ 4981              	3:
+ 4982 001c 00000000 		.align 8
+ 4983              	4:
+GAS LISTING /tmp/ccyUvz9a.s 			page 48
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 asn1write.c
+     /tmp/ccyUvz9a.s:7      .text.mbedtls_asn1_write_len:0000000000000000 mbedtls_asn1_write_len
+     /tmp/ccyUvz9a.s:375    .text.mbedtls_asn1_write_tag:0000000000000000 mbedtls_asn1_write_tag
+     /tmp/ccyUvz9a.s:441    .text.mbedtls_asn1_write_raw_buffer:0000000000000000 mbedtls_asn1_write_raw_buffer
+     /tmp/ccyUvz9a.s:521    .text.mbedtls_asn1_write_mpi:0000000000000000 mbedtls_asn1_write_mpi
+     /tmp/ccyUvz9a.s:691    .text.mbedtls_asn1_write_null:0000000000000000 mbedtls_asn1_write_null
+     /tmp/ccyUvz9a.s:767    .text.mbedtls_asn1_write_oid:0000000000000000 mbedtls_asn1_write_oid
+     /tmp/ccyUvz9a.s:863    .text.mbedtls_asn1_write_algorithm_identifier:0000000000000000 mbedtls_asn1_write_algorithm_identifier
+     /tmp/ccyUvz9a.s:986    .text.mbedtls_asn1_write_bool:0000000000000000 mbedtls_asn1_write_bool
+     /tmp/ccyUvz9a.s:1100   .text.mbedtls_asn1_write_int:0000000000000000 mbedtls_asn1_write_int
+     /tmp/ccyUvz9a.s:1244   .text.mbedtls_asn1_write_tagged_string:0000000000000000 mbedtls_asn1_write_tagged_string
+     /tmp/ccyUvz9a.s:1342   .text.mbedtls_asn1_write_utf8_string:0000000000000000 mbedtls_asn1_write_utf8_string
+     /tmp/ccyUvz9a.s:1389   .text.mbedtls_asn1_write_printable_string:0000000000000000 mbedtls_asn1_write_printable_string
+     /tmp/ccyUvz9a.s:1436   .text.mbedtls_asn1_write_ia5_string:0000000000000000 mbedtls_asn1_write_ia5_string
+     /tmp/ccyUvz9a.s:1483   .text.mbedtls_asn1_write_bitstring:0000000000000000 mbedtls_asn1_write_bitstring
+     /tmp/ccyUvz9a.s:1669   .text.mbedtls_asn1_write_octet_string:0000000000000000 mbedtls_asn1_write_octet_string
+     /tmp/ccyUvz9a.s:1764   .text.asn1_find_named_data:0000000000000000 asn1_find_named_data
+     /tmp/ccyUvz9a.s:1837   .text.mbedtls_asn1_store_named_data:0000000000000000 mbedtls_asn1_store_named_data
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+memcpy
+mbedtls_mpi_size
+mbedtls_mpi_write_binary
+memcmp
+mbedtls_calloc
+mbedtls_free

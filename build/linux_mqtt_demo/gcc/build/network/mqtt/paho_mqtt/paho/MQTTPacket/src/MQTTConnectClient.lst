@@ -1,0 +1,1188 @@
+GAS LISTING /tmp/ccu4kMP5.s 			page 1
+
+
+   1              		.file	"MQTTConnectClient.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.MQTTSerialize_connectLength,"ax",@progbits
+   5              		.globl	MQTTSerialize_connectLength
+   7              	MQTTSerialize_connectLength:
+   8              	.LFB0:
+   9              		.file 1 "/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.
+   1:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** /*******************************************************************************
+   2:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  * Copyright (c) 2014 IBM Corp.
+   3:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  *
+   4:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  * All rights reserved. This program and the accompanying materials
+   5:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  * are made available under the terms of the Eclipse Public License v1.0
+   6:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  * and Eclipse Distribution License v1.0 which accompany this distribution.
+   7:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  *
+   8:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  * The Eclipse Public License is available at
+   9:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  *    http://www.eclipse.org/legal/epl-v10.html
+  10:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  * and the Eclipse Distribution License is available at
+  11:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  *   http://www.eclipse.org/org/documents/edl-v10.php.
+  12:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  *
+  13:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  * Contributors:
+  14:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  *    Ian Craggs - initial API and implementation and/or initial documentation
+  15:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****  *******************************************************************************/
+  16:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  17:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** #include "MQTTPacket.h"
+  18:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** #include "StackTrace.h"
+  19:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  20:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** #include <string.h>
+  21:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  22:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** /**
+  23:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * Determines the length of the MQTT connect packet that would be produced using the supplied conn
+  24:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param options the options to be used to build the connect packet
+  25:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @return the length of buffer needed to contain the serialized version of the packet
+  26:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   */
+  27:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** int MQTTSerialize_connectLength(MQTTPacket_connectData* options)
+  28:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** {
+  10              		.loc 1 28 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 53       		pushq	%rbx
+  21 0009 4883EC28 		subq	$40, %rsp
+  22              		.cfi_offset 3, -24
+  23 000d 48897DD8 		movq	%rdi, -40(%rbp)
+  24              		.loc 1 28 1
+  25 0011 64488B04 		movq	%fs:40, %rax
+  25      25280000 
+  25      00
+  26 001a 488945E8 		movq	%rax, -24(%rbp)
+  27 001e 31C0     		xorl	%eax, %eax
+  29:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	int len = 0;
+GAS LISTING /tmp/ccu4kMP5.s 			page 2
+
+
+  28              		.loc 1 29 6
+  29 0020 C745E400 		movl	$0, -28(%rbp)
+  29      000000
+  30:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  31:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	FUNC_ENTRY;
+  32:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  33:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->MQTTVersion == 3)
+  30              		.loc 1 33 13
+  31 0027 488B45D8 		movq	-40(%rbp), %rax
+  32 002b 0FB64008 		movzbl	8(%rax), %eax
+  33              		.loc 1 33 5
+  34 002f 3C03     		cmpb	$3, %al
+  35 0031 7509     		jne	.L2
+  34:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		len = 12; /* variable depending on MQTT or MQIsdp */
+  36              		.loc 1 34 7
+  37 0033 C745E40C 		movl	$12, -28(%rbp)
+  37      000000
+  38 003a EB13     		jmp	.L3
+  39              	.L2:
+  35:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	else if (options->MQTTVersion == 4)
+  40              		.loc 1 35 18
+  41 003c 488B45D8 		movq	-40(%rbp), %rax
+  42 0040 0FB64008 		movzbl	8(%rax), %eax
+  43              		.loc 1 35 10
+  44 0044 3C04     		cmpb	$4, %al
+  45 0046 7507     		jne	.L3
+  36:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		len = 10;
+  46              		.loc 1 36 7
+  47 0048 C745E40A 		movl	$10, -28(%rbp)
+  47      000000
+  48              	.L3:
+  37:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  38:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	len += MQTTstrlen(options->clientID)+2;
+  49              		.loc 1 38 9
+  50 004f 4883EC08 		subq	$8, %rsp
+  51 0053 488B45D8 		movq	-40(%rbp), %rax
+  52 0057 FF7020   		pushq	32(%rax)
+  53 005a FF7018   		pushq	24(%rax)
+  54 005d FF7010   		pushq	16(%rax)
+  55 0060 E8000000 		call	MQTTstrlen@PLT
+  55      00
+  56 0065 4883C420 		addq	$32, %rsp
+  57              		.loc 1 38 38
+  58 0069 83C002   		addl	$2, %eax
+  59              		.loc 1 38 6
+  60 006c 0145E4   		addl	%eax, -28(%rbp)
+  39:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->willFlag)
+  61              		.loc 1 39 13
+  62 006f 488B45D8 		movq	-40(%rbp), %rax
+  63 0073 0FB6402B 		movzbl	43(%rax), %eax
+  64              		.loc 1 39 5
+  65 0077 84C0     		testb	%al, %al
+  66 0079 743F     		je	.L4
+  40:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		len += MQTTstrlen(options->will.topicName)+2 + MQTTstrlen(options->will.message)+2;
+  67              		.loc 1 40 10
+  68 007b 4883EC08 		subq	$8, %rsp
+  69 007f 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/ccu4kMP5.s 			page 3
+
+
+  70 0083 FF7048   		pushq	72(%rax)
+  71 0086 FF7040   		pushq	64(%rax)
+  72 0089 FF7038   		pushq	56(%rax)
+  73 008c E8000000 		call	MQTTstrlen@PLT
+  73      00
+  74 0091 4883C420 		addq	$32, %rsp
+  75              		.loc 1 40 45
+  76 0095 8D5802   		leal	2(%rax), %ebx
+  77              		.loc 1 40 50
+  78 0098 4883EC08 		subq	$8, %rsp
+  79 009c 488B45D8 		movq	-40(%rbp), %rax
+  80 00a0 FF7060   		pushq	96(%rax)
+  81 00a3 FF7058   		pushq	88(%rax)
+  82 00a6 FF7050   		pushq	80(%rax)
+  83 00a9 E8000000 		call	MQTTstrlen@PLT
+  83      00
+  84 00ae 4883C420 		addq	$32, %rsp
+  85              		.loc 1 40 48
+  86 00b2 01D8     		addl	%ebx, %eax
+  87              		.loc 1 40 83
+  88 00b4 83C002   		addl	$2, %eax
+  89              		.loc 1 40 7
+  90 00b7 0145E4   		addl	%eax, -28(%rbp)
+  91              	.L4:
+  41:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->username.cstring || options->username.lenstring.data)
+  92              		.loc 1 41 23
+  93 00ba 488B45D8 		movq	-40(%rbp), %rax
+  94 00be 488B4070 		movq	112(%rax), %rax
+  95              		.loc 1 41 5
+  96 00c2 4885C0   		testq	%rax, %rax
+  97 00c5 7510     		jne	.L5
+  98              		.loc 1 41 62 discriminator 1
+  99 00c7 488B45D8 		movq	-40(%rbp), %rax
+ 100 00cb 488B8080 		movq	128(%rax), %rax
+ 100      000000
+ 101              		.loc 1 41 32 discriminator 1
+ 102 00d2 4885C0   		testq	%rax, %rax
+ 103 00d5 7423     		je	.L6
+ 104              	.L5:
+  42:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		len += MQTTstrlen(options->username)+2;
+ 105              		.loc 1 42 10
+ 106 00d7 4883EC08 		subq	$8, %rsp
+ 107 00db 488B45D8 		movq	-40(%rbp), %rax
+ 108 00df FFB08000 		pushq	128(%rax)
+ 108      0000
+ 109 00e5 FF7078   		pushq	120(%rax)
+ 110 00e8 FF7070   		pushq	112(%rax)
+ 111 00eb E8000000 		call	MQTTstrlen@PLT
+ 111      00
+ 112 00f0 4883C420 		addq	$32, %rsp
+ 113              		.loc 1 42 39
+ 114 00f4 83C002   		addl	$2, %eax
+ 115              		.loc 1 42 7
+ 116 00f7 0145E4   		addl	%eax, -28(%rbp)
+ 117              	.L6:
+  43:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->password.cstring || options->password.lenstring.data)
+ 118              		.loc 1 43 23
+GAS LISTING /tmp/ccu4kMP5.s 			page 4
+
+
+ 119 00fa 488B45D8 		movq	-40(%rbp), %rax
+ 120 00fe 488B8088 		movq	136(%rax), %rax
+ 120      000000
+ 121              		.loc 1 43 5
+ 122 0105 4885C0   		testq	%rax, %rax
+ 123 0108 7510     		jne	.L7
+ 124              		.loc 1 43 62 discriminator 1
+ 125 010a 488B45D8 		movq	-40(%rbp), %rax
+ 126 010e 488B8098 		movq	152(%rax), %rax
+ 126      000000
+ 127              		.loc 1 43 32 discriminator 1
+ 128 0115 4885C0   		testq	%rax, %rax
+ 129 0118 7429     		je	.L8
+ 130              	.L7:
+  44:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		len += MQTTstrlen(options->password)+2;
+ 131              		.loc 1 44 10
+ 132 011a 4883EC08 		subq	$8, %rsp
+ 133 011e 488B45D8 		movq	-40(%rbp), %rax
+ 134 0122 FFB09800 		pushq	152(%rax)
+ 134      0000
+ 135 0128 FFB09000 		pushq	144(%rax)
+ 135      0000
+ 136 012e FFB08800 		pushq	136(%rax)
+ 136      0000
+ 137 0134 E8000000 		call	MQTTstrlen@PLT
+ 137      00
+ 138 0139 4883C420 		addq	$32, %rsp
+ 139              		.loc 1 44 39
+ 140 013d 83C002   		addl	$2, %eax
+ 141              		.loc 1 44 7
+ 142 0140 0145E4   		addl	%eax, -28(%rbp)
+ 143              	.L8:
+  45:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  46:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	FUNC_EXIT_RC(len);
+  47:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	return len;
+ 144              		.loc 1 47 9
+ 145 0143 8B45E4   		movl	-28(%rbp), %eax
+  48:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** }
+ 146              		.loc 1 48 1
+ 147 0146 488B55E8 		movq	-24(%rbp), %rdx
+ 148 014a 64483314 		xorq	%fs:40, %rdx
+ 148      25280000 
+ 148      00
+ 149 0153 7405     		je	.L10
+ 150 0155 E8000000 		call	__stack_chk_fail@PLT
+ 150      00
+ 151              	.L10:
+ 152 015a 488B5DF8 		movq	-8(%rbp), %rbx
+ 153 015e C9       		leave
+ 154              	.LCFI2:
+ 155              		.cfi_def_cfa 7, 8
+ 156 015f C3       		ret
+ 157              		.cfi_endproc
+ 158              	.LFE0:
+ 160              		.section	.rodata
+ 161              	.LC0:
+ 162 0000 4D515454 		.string	"MQTT"
+GAS LISTING /tmp/ccu4kMP5.s 			page 5
+
+
+ 162      00
+ 163              	.LC1:
+ 164 0005 4D514973 		.string	"MQIsdp"
+ 164      647000
+ 165              		.section	.text.MQTTSerialize_connect,"ax",@progbits
+ 166              		.globl	MQTTSerialize_connect
+ 168              	MQTTSerialize_connect:
+ 169              	.LFB1:
+  49:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  50:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  51:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** /**
+  52:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * Serializes the connect options into the buffer.
+  53:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buf the buffer into which the packet will be serialized
+  54:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param len the length in bytes of the supplied buffer
+  55:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param options the options to be used to build the connect packet
+  56:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @return serialized length, or error if 0
+  57:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   */
+  58:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** int MQTTSerialize_connect(unsigned char* buf, int buflen, MQTTPacket_connectData* options)
+  59:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** {
+ 170              		.loc 1 59 1
+ 171              		.cfi_startproc
+ 172 0000 F30F1EFA 		endbr64
+ 173 0004 55       		pushq	%rbp
+ 174              	.LCFI3:
+ 175              		.cfi_def_cfa_offset 16
+ 176              		.cfi_offset 6, -16
+ 177 0005 4889E5   		movq	%rsp, %rbp
+ 178              	.LCFI4:
+ 179              		.cfi_def_cfa_register 6
+ 180 0008 4883EC40 		subq	$64, %rsp
+ 181 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 182 0010 8975D4   		movl	%esi, -44(%rbp)
+ 183 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 184              		.loc 1 59 1
+ 185 0017 64488B04 		movq	%fs:40, %rax
+ 185      25280000 
+ 185      00
+ 186 0020 488945F8 		movq	%rax, -8(%rbp)
+ 187 0024 31C0     		xorl	%eax, %eax
+  60:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	unsigned char *ptr = buf;
+ 188              		.loc 1 60 17
+ 189 0026 488B45D8 		movq	-40(%rbp), %rax
+ 190 002a 488945F0 		movq	%rax, -16(%rbp)
+  61:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	MQTTHeader header = {0};
+ 191              		.loc 1 61 13
+ 192 002e C745E000 		movl	$0, -32(%rbp)
+ 192      000000
+  62:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	MQTTConnectFlags flags = {0};
+ 193              		.loc 1 62 19
+ 194 0035 C745E400 		movl	$0, -28(%rbp)
+ 194      000000
+  63:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	int len = 0;
+ 195              		.loc 1 63 6
+ 196 003c C745EC00 		movl	$0, -20(%rbp)
+ 196      000000
+  64:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	int rc = -1;
+ 197              		.loc 1 64 6
+GAS LISTING /tmp/ccu4kMP5.s 			page 6
+
+
+ 198 0043 C745E8FF 		movl	$-1, -24(%rbp)
+ 198      FFFFFF
+  65:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  66:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	FUNC_ENTRY;
+  67:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (MQTTPacket_len(len = MQTTSerialize_connectLength(options)) > buflen)
+ 199              		.loc 1 67 27
+ 200 004a 488B45C8 		movq	-56(%rbp), %rax
+ 201 004e 4889C7   		movq	%rax, %rdi
+ 202 0051 E8000000 		call	MQTTSerialize_connectLength
+ 202      00
+ 203 0056 8945EC   		movl	%eax, -20(%rbp)
+ 204              		.loc 1 67 6
+ 205 0059 8B45EC   		movl	-20(%rbp), %eax
+ 206 005c 89C7     		movl	%eax, %edi
+ 207 005e E8000000 		call	MQTTPacket_len@PLT
+ 207      00
+ 208              		.loc 1 67 5
+ 209 0063 3945D4   		cmpl	%eax, -44(%rbp)
+ 210 0066 7D0C     		jge	.L12
+  68:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	{
+  69:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		rc = MQTTPACKET_BUFFER_TOO_SHORT;
+ 211              		.loc 1 69 6
+ 212 0068 C745E8FE 		movl	$-2, -24(%rbp)
+ 212      FFFFFF
+  70:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		goto exit;
+ 213              		.loc 1 70 3
+ 214 006f E9860200 		jmp	.L13
+ 214      00
+ 215              	.L12:
+  71:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	}
+  72:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  73:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	header.byte = 0;
+ 216              		.loc 1 73 14
+ 217 0074 C645E000 		movb	$0, -32(%rbp)
+  74:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	header.bits.type = CONNECT;
+ 218              		.loc 1 74 19
+ 219 0078 0FB645E0 		movzbl	-32(%rbp), %eax
+ 220 007c 83E00F   		andl	$15, %eax
+ 221 007f 83C810   		orl	$16, %eax
+ 222 0082 8845E0   		movb	%al, -32(%rbp)
+  75:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	writeChar(&ptr, header.byte); /* write header */
+ 223              		.loc 1 75 24
+ 224 0085 0FB645E0 		movzbl	-32(%rbp), %eax
+ 225              		.loc 1 75 2
+ 226 0089 0FBED0   		movsbl	%al, %edx
+ 227 008c 488D45F0 		leaq	-16(%rbp), %rax
+ 228 0090 89D6     		movl	%edx, %esi
+ 229 0092 4889C7   		movq	%rax, %rdi
+ 230 0095 E8000000 		call	writeChar@PLT
+ 230      00
+  76:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  77:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	ptr += MQTTPacket_encode(ptr, len); /* write remaining length */
+ 231              		.loc 1 77 9
+ 232 009a 488B45F0 		movq	-16(%rbp), %rax
+ 233 009e 8B55EC   		movl	-20(%rbp), %edx
+ 234 00a1 89D6     		movl	%edx, %esi
+ 235 00a3 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccu4kMP5.s 			page 7
+
+
+ 236 00a6 E8000000 		call	MQTTPacket_encode@PLT
+ 236      00
+ 237              		.loc 1 77 6
+ 238 00ab 488B55F0 		movq	-16(%rbp), %rdx
+ 239              		.loc 1 77 9
+ 240 00af 4898     		cltq
+ 241              		.loc 1 77 6
+ 242 00b1 4801D0   		addq	%rdx, %rax
+ 243 00b4 488945F0 		movq	%rax, -16(%rbp)
+  78:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  79:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->MQTTVersion == 4)
+ 244              		.loc 1 79 13
+ 245 00b8 488B45C8 		movq	-56(%rbp), %rax
+ 246 00bc 0FB64008 		movzbl	8(%rax), %eax
+ 247              		.loc 1 79 5
+ 248 00c0 3C04     		cmpb	$4, %al
+ 249 00c2 7526     		jne	.L14
+  80:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	{
+  81:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeCString(&ptr, "MQTT");
+ 250              		.loc 1 81 3
+ 251 00c4 488D45F0 		leaq	-16(%rbp), %rax
+ 252 00c8 488D3500 		leaq	.LC0(%rip), %rsi
+ 252      000000
+ 253 00cf 4889C7   		movq	%rax, %rdi
+ 254 00d2 E8000000 		call	writeCString@PLT
+ 254      00
+  82:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeChar(&ptr, (char) 4);
+ 255              		.loc 1 82 3
+ 256 00d7 488D45F0 		leaq	-16(%rbp), %rax
+ 257 00db BE040000 		movl	$4, %esi
+ 257      00
+ 258 00e0 4889C7   		movq	%rax, %rdi
+ 259 00e3 E8000000 		call	writeChar@PLT
+ 259      00
+ 260 00e8 EB24     		jmp	.L15
+ 261              	.L14:
+  83:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	}
+  84:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	else
+  85:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	{
+  86:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeCString(&ptr, "MQIsdp");
+ 262              		.loc 1 86 3
+ 263 00ea 488D45F0 		leaq	-16(%rbp), %rax
+ 264 00ee 488D3500 		leaq	.LC1(%rip), %rsi
+ 264      000000
+ 265 00f5 4889C7   		movq	%rax, %rdi
+ 266 00f8 E8000000 		call	writeCString@PLT
+ 266      00
+  87:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeChar(&ptr, (char) 3);
+ 267              		.loc 1 87 3
+ 268 00fd 488D45F0 		leaq	-16(%rbp), %rax
+ 269 0101 BE030000 		movl	$3, %esi
+ 269      00
+ 270 0106 4889C7   		movq	%rax, %rdi
+ 271 0109 E8000000 		call	writeChar@PLT
+ 271      00
+ 272              	.L15:
+  88:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	}
+GAS LISTING /tmp/ccu4kMP5.s 			page 8
+
+
+  89:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  90:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	flags.all = 0;
+ 273              		.loc 1 90 12
+ 274 010e C645E400 		movb	$0, -28(%rbp)
+  91:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	flags.bits.cleansession = options->cleansession;
+ 275              		.loc 1 91 35
+ 276 0112 488B45C8 		movq	-56(%rbp), %rax
+ 277 0116 0FB6402A 		movzbl	42(%rax), %eax
+ 278 011a 83E001   		andl	$1, %eax
+ 279              		.loc 1 91 26
+ 280 011d 83E001   		andl	$1, %eax
+ 281 0120 8D1400   		leal	(%rax,%rax), %edx
+ 282 0123 0FB645E4 		movzbl	-28(%rbp), %eax
+ 283 0127 83E0FD   		andl	$-3, %eax
+ 284 012a 09D0     		orl	%edx, %eax
+ 285 012c 8845E4   		movb	%al, -28(%rbp)
+  92:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	flags.bits.will = (options->willFlag) ? 1 : 0;
+ 286              		.loc 1 92 28
+ 287 012f 488B45C8 		movq	-56(%rbp), %rax
+ 288 0133 0FB6402B 		movzbl	43(%rax), %eax
+ 289              		.loc 1 92 44
+ 290 0137 84C0     		testb	%al, %al
+ 291 0139 0F95C0   		setne	%al
+ 292              		.loc 1 92 18
+ 293 013c 83E001   		andl	$1, %eax
+ 294 013f 8D148500 		leal	0(,%rax,4), %edx
+ 294      000000
+ 295 0146 0FB645E4 		movzbl	-28(%rbp), %eax
+ 296 014a 83E0FB   		andl	$-5, %eax
+ 297 014d 09D0     		orl	%edx, %eax
+ 298 014f 8845E4   		movb	%al, -28(%rbp)
+  93:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (flags.bits.will)
+ 299              		.loc 1 93 6
+ 300 0152 0FB645E4 		movzbl	-28(%rbp), %eax
+ 301 0156 83E004   		andl	$4, %eax
+ 302              		.loc 1 93 5
+ 303 0159 84C0     		testb	%al, %al
+ 304 015b 7440     		je	.L16
+  94:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	{
+  95:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		flags.bits.willQoS = options->will.qos;
+ 305              		.loc 1 95 37
+ 306 015d 488B45C8 		movq	-56(%rbp), %rax
+ 307 0161 0FB64069 		movzbl	105(%rax), %eax
+ 308 0165 83E003   		andl	$3, %eax
+ 309              		.loc 1 95 22
+ 310 0168 83E003   		andl	$3, %eax
+ 311 016b 8D14C500 		leal	0(,%rax,8), %edx
+ 311      000000
+ 312 0172 0FB645E4 		movzbl	-28(%rbp), %eax
+ 313 0176 83E0E7   		andl	$-25, %eax
+ 314 0179 09D0     		orl	%edx, %eax
+ 315 017b 8845E4   		movb	%al, -28(%rbp)
+  96:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		flags.bits.willRetain = options->will.retained;
+ 316              		.loc 1 96 40
+ 317 017e 488B45C8 		movq	-56(%rbp), %rax
+ 318 0182 0FB64068 		movzbl	104(%rax), %eax
+ 319 0186 83E001   		andl	$1, %eax
+GAS LISTING /tmp/ccu4kMP5.s 			page 9
+
+
+ 320              		.loc 1 96 25
+ 321 0189 83E001   		andl	$1, %eax
+ 322 018c C1E005   		sall	$5, %eax
+ 323 018f 89C2     		movl	%eax, %edx
+ 324 0191 0FB645E4 		movzbl	-28(%rbp), %eax
+ 325 0195 83E0DF   		andl	$-33, %eax
+ 326 0198 09D0     		orl	%edx, %eax
+ 327 019a 8845E4   		movb	%al, -28(%rbp)
+ 328              	.L16:
+  97:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	}
+  98:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+  99:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->username.cstring || options->username.lenstring.data)
+ 329              		.loc 1 99 23
+ 330 019d 488B45C8 		movq	-56(%rbp), %rax
+ 331 01a1 488B4070 		movq	112(%rax), %rax
+ 332              		.loc 1 99 5
+ 333 01a5 4885C0   		testq	%rax, %rax
+ 334 01a8 7510     		jne	.L17
+ 335              		.loc 1 99 62 discriminator 1
+ 336 01aa 488B45C8 		movq	-56(%rbp), %rax
+ 337 01ae 488B8080 		movq	128(%rax), %rax
+ 337      000000
+ 338              		.loc 1 99 32 discriminator 1
+ 339 01b5 4885C0   		testq	%rax, %rax
+ 340 01b8 740A     		je	.L18
+ 341              	.L17:
+ 100:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		flags.bits.username = 1;
+ 342              		.loc 1 100 23
+ 343 01ba 0FB645E4 		movzbl	-28(%rbp), %eax
+ 344 01be 83C880   		orl	$-128, %eax
+ 345 01c1 8845E4   		movb	%al, -28(%rbp)
+ 346              	.L18:
+ 101:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->password.cstring || options->password.lenstring.data)
+ 347              		.loc 1 101 23
+ 348 01c4 488B45C8 		movq	-56(%rbp), %rax
+ 349 01c8 488B8088 		movq	136(%rax), %rax
+ 349      000000
+ 350              		.loc 1 101 5
+ 351 01cf 4885C0   		testq	%rax, %rax
+ 352 01d2 7510     		jne	.L19
+ 353              		.loc 1 101 62 discriminator 1
+ 354 01d4 488B45C8 		movq	-56(%rbp), %rax
+ 355 01d8 488B8098 		movq	152(%rax), %rax
+ 355      000000
+ 356              		.loc 1 101 32 discriminator 1
+ 357 01df 4885C0   		testq	%rax, %rax
+ 358 01e2 740A     		je	.L20
+ 359              	.L19:
+ 102:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		flags.bits.password = 1;
+ 360              		.loc 1 102 23
+ 361 01e4 0FB645E4 		movzbl	-28(%rbp), %eax
+ 362 01e8 83C840   		orl	$64, %eax
+ 363 01eb 8845E4   		movb	%al, -28(%rbp)
+ 364              	.L20:
+ 103:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 104:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	writeChar(&ptr, flags.all);
+ 365              		.loc 1 104 23
+GAS LISTING /tmp/ccu4kMP5.s 			page 10
+
+
+ 366 01ee 0FB645E4 		movzbl	-28(%rbp), %eax
+ 367              		.loc 1 104 2
+ 368 01f2 0FBED0   		movsbl	%al, %edx
+ 369 01f5 488D45F0 		leaq	-16(%rbp), %rax
+ 370 01f9 89D6     		movl	%edx, %esi
+ 371 01fb 4889C7   		movq	%rax, %rdi
+ 372 01fe E8000000 		call	writeChar@PLT
+ 372      00
+ 105:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	writeInt(&ptr, options->keepAliveInterval);
+ 373              		.loc 1 105 24
+ 374 0203 488B45C8 		movq	-56(%rbp), %rax
+ 375 0207 0FB74028 		movzwl	40(%rax), %eax
+ 376              		.loc 1 105 2
+ 377 020b 0FB7D0   		movzwl	%ax, %edx
+ 378 020e 488D45F0 		leaq	-16(%rbp), %rax
+ 379 0212 89D6     		movl	%edx, %esi
+ 380 0214 4889C7   		movq	%rax, %rdi
+ 381 0217 E8000000 		call	writeInt@PLT
+ 381      00
+ 106:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	writeMQTTString(&ptr, options->clientID);
+ 382              		.loc 1 106 2
+ 383 021c 488D55F0 		leaq	-16(%rbp), %rdx
+ 384 0220 4883EC08 		subq	$8, %rsp
+ 385 0224 488B45C8 		movq	-56(%rbp), %rax
+ 386 0228 FF7020   		pushq	32(%rax)
+ 387 022b FF7018   		pushq	24(%rax)
+ 388 022e FF7010   		pushq	16(%rax)
+ 389 0231 4889D7   		movq	%rdx, %rdi
+ 390 0234 E8000000 		call	writeMQTTString@PLT
+ 390      00
+ 391 0239 4883C420 		addq	$32, %rsp
+ 107:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (options->willFlag)
+ 392              		.loc 1 107 13
+ 393 023d 488B45C8 		movq	-56(%rbp), %rax
+ 394 0241 0FB6402B 		movzbl	43(%rax), %eax
+ 395              		.loc 1 107 5
+ 396 0245 84C0     		testb	%al, %al
+ 397 0247 7442     		je	.L21
+ 108:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	{
+ 109:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeMQTTString(&ptr, options->will.topicName);
+ 398              		.loc 1 109 3
+ 399 0249 488D55F0 		leaq	-16(%rbp), %rdx
+ 400 024d 4883EC08 		subq	$8, %rsp
+ 401 0251 488B45C8 		movq	-56(%rbp), %rax
+ 402 0255 FF7048   		pushq	72(%rax)
+ 403 0258 FF7040   		pushq	64(%rax)
+ 404 025b FF7038   		pushq	56(%rax)
+ 405 025e 4889D7   		movq	%rdx, %rdi
+ 406 0261 E8000000 		call	writeMQTTString@PLT
+ 406      00
+ 407 0266 4883C420 		addq	$32, %rsp
+ 110:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeMQTTString(&ptr, options->will.message);
+ 408              		.loc 1 110 3
+ 409 026a 488D55F0 		leaq	-16(%rbp), %rdx
+ 410 026e 4883EC08 		subq	$8, %rsp
+ 411 0272 488B45C8 		movq	-56(%rbp), %rax
+ 412 0276 FF7060   		pushq	96(%rax)
+GAS LISTING /tmp/ccu4kMP5.s 			page 11
+
+
+ 413 0279 FF7058   		pushq	88(%rax)
+ 414 027c FF7050   		pushq	80(%rax)
+ 415 027f 4889D7   		movq	%rdx, %rdi
+ 416 0282 E8000000 		call	writeMQTTString@PLT
+ 416      00
+ 417 0287 4883C420 		addq	$32, %rsp
+ 418              	.L21:
+ 111:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	}
+ 112:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (flags.bits.username)
+ 419              		.loc 1 112 6
+ 420 028b 0FB645E4 		movzbl	-28(%rbp), %eax
+ 421 028f 83E080   		andl	$-128, %eax
+ 422              		.loc 1 112 5
+ 423 0292 84C0     		testb	%al, %al
+ 424 0294 7424     		je	.L22
+ 113:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeMQTTString(&ptr, options->username);
+ 425              		.loc 1 113 3
+ 426 0296 488D55F0 		leaq	-16(%rbp), %rdx
+ 427 029a 4883EC08 		subq	$8, %rsp
+ 428 029e 488B45C8 		movq	-56(%rbp), %rax
+ 429 02a2 FFB08000 		pushq	128(%rax)
+ 429      0000
+ 430 02a8 FF7078   		pushq	120(%rax)
+ 431 02ab FF7070   		pushq	112(%rax)
+ 432 02ae 4889D7   		movq	%rdx, %rdi
+ 433 02b1 E8000000 		call	writeMQTTString@PLT
+ 433      00
+ 434 02b6 4883C420 		addq	$32, %rsp
+ 435              	.L22:
+ 114:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (flags.bits.password)
+ 436              		.loc 1 114 6
+ 437 02ba 0FB645E4 		movzbl	-28(%rbp), %eax
+ 438 02be 83E040   		andl	$64, %eax
+ 439              		.loc 1 114 5
+ 440 02c1 84C0     		testb	%al, %al
+ 441 02c3 742A     		je	.L23
+ 115:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		writeMQTTString(&ptr, options->password);
+ 442              		.loc 1 115 3
+ 443 02c5 488D55F0 		leaq	-16(%rbp), %rdx
+ 444 02c9 4883EC08 		subq	$8, %rsp
+ 445 02cd 488B45C8 		movq	-56(%rbp), %rax
+ 446 02d1 FFB09800 		pushq	152(%rax)
+ 446      0000
+ 447 02d7 FFB09000 		pushq	144(%rax)
+ 447      0000
+ 448 02dd FFB08800 		pushq	136(%rax)
+ 448      0000
+ 449 02e3 4889D7   		movq	%rdx, %rdi
+ 450 02e6 E8000000 		call	writeMQTTString@PLT
+ 450      00
+ 451 02eb 4883C420 		addq	$32, %rsp
+ 452              	.L23:
+ 116:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 117:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	rc = ptr - buf;
+ 453              		.loc 1 117 11
+ 454 02ef 488B45F0 		movq	-16(%rbp), %rax
+ 455 02f3 482B45D8 		subq	-40(%rbp), %rax
+GAS LISTING /tmp/ccu4kMP5.s 			page 12
+
+
+ 456              		.loc 1 117 5
+ 457 02f7 8945E8   		movl	%eax, -24(%rbp)
+ 458              	.L13:
+ 118:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 119:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	exit: FUNC_EXIT_RC(rc);
+ 120:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	return rc;
+ 459              		.loc 1 120 9
+ 460 02fa 8B45E8   		movl	-24(%rbp), %eax
+ 121:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** }
+ 461              		.loc 1 121 1
+ 462 02fd 488B4DF8 		movq	-8(%rbp), %rcx
+ 463 0301 6448330C 		xorq	%fs:40, %rcx
+ 463      25280000 
+ 463      00
+ 464 030a 7405     		je	.L25
+ 465 030c E8000000 		call	__stack_chk_fail@PLT
+ 465      00
+ 466              	.L25:
+ 467 0311 C9       		leave
+ 468              	.LCFI5:
+ 469              		.cfi_def_cfa 7, 8
+ 470 0312 C3       		ret
+ 471              		.cfi_endproc
+ 472              	.LFE1:
+ 474              		.section	.text.MQTTDeserialize_connack,"ax",@progbits
+ 475              		.globl	MQTTDeserialize_connack
+ 477              	MQTTDeserialize_connack:
+ 478              	.LFB2:
+ 122:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 123:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 124:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** /**
+ 125:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * Deserializes the supplied (wire) buffer into connack data - return code
+ 126:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param sessionPresent the session present flag returned (only for MQTT 3.1.1)
+ 127:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param connack_rc returned integer value of the connack return code
+ 128:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buf the raw buffer data, of the correct length determined by the remaining length field
+ 129:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param len the length in bytes of the data in the supplied buffer
+ 130:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @return error code.  1 is success, 0 is failure
+ 131:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   */
+ 132:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** int MQTTDeserialize_connack(unsigned char* sessionPresent, unsigned char* connack_rc, unsigned char
+ 133:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** {
+ 479              		.loc 1 133 1
+ 480              		.cfi_startproc
+ 481 0000 F30F1EFA 		endbr64
+ 482 0004 55       		pushq	%rbp
+ 483              	.LCFI6:
+ 484              		.cfi_def_cfa_offset 16
+ 485              		.cfi_offset 6, -16
+ 486 0005 4889E5   		movq	%rsp, %rbp
+ 487              	.LCFI7:
+ 488              		.cfi_def_cfa_register 6
+ 489 0008 4883EC50 		subq	$80, %rsp
+ 490 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 491 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 492 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 493 0018 894DB4   		movl	%ecx, -76(%rbp)
+ 494              		.loc 1 133 1
+ 495 001b 64488B04 		movq	%fs:40, %rax
+GAS LISTING /tmp/ccu4kMP5.s 			page 13
+
+
+ 495      25280000 
+ 495      00
+ 496 0024 488945F8 		movq	%rax, -8(%rbp)
+ 497 0028 31C0     		xorl	%eax, %eax
+ 134:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	MQTTHeader header = {0};
+ 498              		.loc 1 134 13
+ 499 002a C745D800 		movl	$0, -40(%rbp)
+ 499      000000
+ 135:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	unsigned char* curdata = buf;
+ 500              		.loc 1 135 17
+ 501 0031 488B45B8 		movq	-72(%rbp), %rax
+ 502 0035 488945E8 		movq	%rax, -24(%rbp)
+ 136:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	unsigned char* enddata = NULL;
+ 503              		.loc 1 136 17
+ 504 0039 48C745F0 		movq	$0, -16(%rbp)
+ 504      00000000 
+ 137:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	int rc = 0;
+ 505              		.loc 1 137 6
+ 506 0041 C745E400 		movl	$0, -28(%rbp)
+ 506      000000
+ 138:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	int mylen;
+ 139:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	MQTTConnackFlags flags = {0};
+ 507              		.loc 1 139 19
+ 508 0048 C745E000 		movl	$0, -32(%rbp)
+ 508      000000
+ 140:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 141:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	FUNC_ENTRY;
+ 142:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	header.byte = readChar(&curdata);
+ 509              		.loc 1 142 16
+ 510 004f 488D45E8 		leaq	-24(%rbp), %rax
+ 511 0053 4889C7   		movq	%rax, %rdi
+ 512 0056 E8000000 		call	readChar@PLT
+ 512      00
+ 513              		.loc 1 142 14
+ 514 005b 8845D8   		movb	%al, -40(%rbp)
+ 143:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (header.bits.type != CONNACK)
+ 515              		.loc 1 143 23
+ 516 005e 0FB645D8 		movzbl	-40(%rbp), %eax
+ 517 0062 83E0F0   		andl	$-16, %eax
+ 518              		.loc 1 143 5
+ 519 0065 3C20     		cmpb	$32, %al
+ 520 0067 0F858500 		jne	.L32
+ 520      0000
+ 144:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		goto exit;
+ 145:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 146:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	curdata += (rc = MQTTPacket_decodeBuf(curdata, &mylen)); /* read remaining length */
+ 521              		.loc 1 146 19
+ 522 006d 488B45E8 		movq	-24(%rbp), %rax
+ 523 0071 488D55DC 		leaq	-36(%rbp), %rdx
+ 524 0075 4889D6   		movq	%rdx, %rsi
+ 525 0078 4889C7   		movq	%rax, %rdi
+ 526 007b E8000000 		call	MQTTPacket_decodeBuf@PLT
+ 526      00
+ 527 0080 8945E4   		movl	%eax, -28(%rbp)
+ 528              		.loc 1 146 17
+ 529 0083 8B45E4   		movl	-28(%rbp), %eax
+ 530              		.loc 1 146 10
+GAS LISTING /tmp/ccu4kMP5.s 			page 14
+
+
+ 531 0086 488B55E8 		movq	-24(%rbp), %rdx
+ 532              		.loc 1 146 17
+ 533 008a 4898     		cltq
+ 534              		.loc 1 146 10
+ 535 008c 4801D0   		addq	%rdx, %rax
+ 536 008f 488945E8 		movq	%rax, -24(%rbp)
+ 147:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	enddata = curdata + mylen;
+ 537              		.loc 1 147 20
+ 538 0093 488B55E8 		movq	-24(%rbp), %rdx
+ 539 0097 8B45DC   		movl	-36(%rbp), %eax
+ 540 009a 4898     		cltq
+ 541              		.loc 1 147 10
+ 542 009c 4801D0   		addq	%rdx, %rax
+ 543 009f 488945F0 		movq	%rax, -16(%rbp)
+ 148:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (enddata - curdata < 2)
+ 544              		.loc 1 148 14
+ 545 00a3 488B45E8 		movq	-24(%rbp), %rax
+ 546 00a7 488B55F0 		movq	-16(%rbp), %rdx
+ 547 00ab 4829C2   		subq	%rax, %rdx
+ 548 00ae 4889D0   		movq	%rdx, %rax
+ 549              		.loc 1 148 5
+ 550 00b1 4883F801 		cmpq	$1, %rax
+ 551 00b5 7E3E     		jle	.L33
+ 149:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		goto exit;
+ 150:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 151:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	flags.all = readChar(&curdata);
+ 552              		.loc 1 151 14
+ 553 00b7 488D45E8 		leaq	-24(%rbp), %rax
+ 554 00bb 4889C7   		movq	%rax, %rdi
+ 555 00be E8000000 		call	readChar@PLT
+ 555      00
+ 556              		.loc 1 151 12
+ 557 00c3 8845E0   		movb	%al, -32(%rbp)
+ 152:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	*sessionPresent = flags.bits.sessionpresent;
+ 558              		.loc 1 152 30
+ 559 00c6 0FB645E0 		movzbl	-32(%rbp), %eax
+ 560 00ca 83E001   		andl	$1, %eax
+ 561 00cd 89C2     		movl	%eax, %edx
+ 562              		.loc 1 152 18
+ 563 00cf 488B45C8 		movq	-56(%rbp), %rax
+ 564 00d3 8810     		movb	%dl, (%rax)
+ 153:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	*connack_rc = readChar(&curdata);
+ 565              		.loc 1 153 16
+ 566 00d5 488D45E8 		leaq	-24(%rbp), %rax
+ 567 00d9 4889C7   		movq	%rax, %rdi
+ 568 00dc E8000000 		call	readChar@PLT
+ 568      00
+ 569 00e1 89C2     		movl	%eax, %edx
+ 570              		.loc 1 153 14
+ 571 00e3 488B45C0 		movq	-64(%rbp), %rax
+ 572 00e7 8810     		movb	%dl, (%rax)
+ 154:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 155:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	rc = 1;
+ 573              		.loc 1 155 5
+ 574 00e9 C745E401 		movl	$1, -28(%rbp)
+ 574      000000
+ 575 00f0 EB04     		jmp	.L28
+GAS LISTING /tmp/ccu4kMP5.s 			page 15
+
+
+ 576              	.L32:
+ 144:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 577              		.loc 1 144 3
+ 578 00f2 90       		nop
+ 579 00f3 EB01     		jmp	.L28
+ 580              	.L33:
+ 149:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 581              		.loc 1 149 3
+ 582 00f5 90       		nop
+ 583              	.L28:
+ 156:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** exit:
+ 157:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	FUNC_EXIT_RC(rc);
+ 158:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	return rc;
+ 584              		.loc 1 158 9
+ 585 00f6 8B45E4   		movl	-28(%rbp), %eax
+ 159:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** }
+ 586              		.loc 1 159 1
+ 587 00f9 488B4DF8 		movq	-8(%rbp), %rcx
+ 588 00fd 6448330C 		xorq	%fs:40, %rcx
+ 588      25280000 
+ 588      00
+ 589 0106 7405     		je	.L31
+ 590 0108 E8000000 		call	__stack_chk_fail@PLT
+ 590      00
+ 591              	.L31:
+ 592 010d C9       		leave
+ 593              	.LCFI8:
+ 594              		.cfi_def_cfa 7, 8
+ 595 010e C3       		ret
+ 596              		.cfi_endproc
+ 597              	.LFE2:
+ 599              		.section	.text.MQTTSerialize_zero,"ax",@progbits
+ 600              		.globl	MQTTSerialize_zero
+ 602              	MQTTSerialize_zero:
+ 603              	.LFB3:
+ 160:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 161:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 162:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** /**
+ 163:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * Serializes a 0-length packet into the supplied buffer, ready for writing to a socket
+ 164:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buf the buffer into which the packet will be serialized
+ 165:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buflen the length in bytes of the supplied buffer, to avoid overruns
+ 166:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param packettype the message type
+ 167:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @return serialized length, or error if 0
+ 168:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   */
+ 169:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** int MQTTSerialize_zero(unsigned char* buf, int buflen, unsigned char packettype)
+ 170:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** {
+ 604              		.loc 1 170 1
+ 605              		.cfi_startproc
+ 606 0000 F30F1EFA 		endbr64
+ 607 0004 55       		pushq	%rbp
+ 608              	.LCFI9:
+ 609              		.cfi_def_cfa_offset 16
+ 610              		.cfi_offset 6, -16
+ 611 0005 4889E5   		movq	%rsp, %rbp
+ 612              	.LCFI10:
+ 613              		.cfi_def_cfa_register 6
+ 614 0008 4883EC30 		subq	$48, %rsp
+GAS LISTING /tmp/ccu4kMP5.s 			page 16
+
+
+ 615 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 616 0010 8975D4   		movl	%esi, -44(%rbp)
+ 617 0013 89D0     		movl	%edx, %eax
+ 618 0015 8845D0   		movb	%al, -48(%rbp)
+ 619              		.loc 1 170 1
+ 620 0018 64488B04 		movq	%fs:40, %rax
+ 620      25280000 
+ 620      00
+ 621 0021 488945F8 		movq	%rax, -8(%rbp)
+ 622 0025 31C0     		xorl	%eax, %eax
+ 171:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	MQTTHeader header = {0};
+ 623              		.loc 1 171 13
+ 624 0027 C745E800 		movl	$0, -24(%rbp)
+ 624      000000
+ 172:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	int rc = -1;
+ 625              		.loc 1 172 6
+ 626 002e C745ECFF 		movl	$-1, -20(%rbp)
+ 626      FFFFFF
+ 173:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	unsigned char *ptr = buf;
+ 627              		.loc 1 173 17
+ 628 0035 488B45D8 		movq	-40(%rbp), %rax
+ 629 0039 488945F0 		movq	%rax, -16(%rbp)
+ 174:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 175:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	FUNC_ENTRY;
+ 176:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	if (buflen < 2)
+ 630              		.loc 1 176 5
+ 631 003d 837DD401 		cmpl	$1, -44(%rbp)
+ 632 0041 7F09     		jg	.L35
+ 177:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	{
+ 178:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		rc = MQTTPACKET_BUFFER_TOO_SHORT;
+ 633              		.loc 1 178 6
+ 634 0043 C745ECFE 		movl	$-2, -20(%rbp)
+ 634      FFFFFF
+ 179:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 		goto exit;
+ 635              		.loc 1 179 3
+ 636 004a EB5A     		jmp	.L36
+ 637              	.L35:
+ 180:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	}
+ 181:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	header.byte = 0;
+ 638              		.loc 1 181 14
+ 639 004c C645E800 		movb	$0, -24(%rbp)
+ 182:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	header.bits.type = packettype;
+ 640              		.loc 1 182 19
+ 641 0050 0FB645D0 		movzbl	-48(%rbp), %eax
+ 642 0054 83E00F   		andl	$15, %eax
+ 643 0057 C1E004   		sall	$4, %eax
+ 644 005a 89C2     		movl	%eax, %edx
+ 645 005c 0FB645E8 		movzbl	-24(%rbp), %eax
+ 646 0060 83E00F   		andl	$15, %eax
+ 647 0063 09D0     		orl	%edx, %eax
+ 648 0065 8845E8   		movb	%al, -24(%rbp)
+ 183:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	writeChar(&ptr, header.byte); /* write header */
+ 649              		.loc 1 183 24
+ 650 0068 0FB645E8 		movzbl	-24(%rbp), %eax
+ 651              		.loc 1 183 2
+ 652 006c 0FBED0   		movsbl	%al, %edx
+ 653 006f 488D45F0 		leaq	-16(%rbp), %rax
+GAS LISTING /tmp/ccu4kMP5.s 			page 17
+
+
+ 654 0073 89D6     		movl	%edx, %esi
+ 655 0075 4889C7   		movq	%rax, %rdi
+ 656 0078 E8000000 		call	writeChar@PLT
+ 656      00
+ 184:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 185:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	ptr += MQTTPacket_encode(ptr, 0); /* write remaining length */
+ 657              		.loc 1 185 9
+ 658 007d 488B45F0 		movq	-16(%rbp), %rax
+ 659 0081 BE000000 		movl	$0, %esi
+ 659      00
+ 660 0086 4889C7   		movq	%rax, %rdi
+ 661 0089 E8000000 		call	MQTTPacket_encode@PLT
+ 661      00
+ 662              		.loc 1 185 6
+ 663 008e 488B55F0 		movq	-16(%rbp), %rdx
+ 664              		.loc 1 185 9
+ 665 0092 4898     		cltq
+ 666              		.loc 1 185 6
+ 667 0094 4801D0   		addq	%rdx, %rax
+ 668 0097 488945F0 		movq	%rax, -16(%rbp)
+ 186:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	rc = ptr - buf;
+ 669              		.loc 1 186 11
+ 670 009b 488B45F0 		movq	-16(%rbp), %rax
+ 671 009f 482B45D8 		subq	-40(%rbp), %rax
+ 672              		.loc 1 186 5
+ 673 00a3 8945EC   		movl	%eax, -20(%rbp)
+ 674              	.L36:
+ 187:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** exit:
+ 188:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	FUNC_EXIT_RC(rc);
+ 189:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	return rc;
+ 675              		.loc 1 189 9
+ 676 00a6 8B45EC   		movl	-20(%rbp), %eax
+ 190:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** }
+ 677              		.loc 1 190 1
+ 678 00a9 488B4DF8 		movq	-8(%rbp), %rcx
+ 679 00ad 6448330C 		xorq	%fs:40, %rcx
+ 679      25280000 
+ 679      00
+ 680 00b6 7405     		je	.L38
+ 681 00b8 E8000000 		call	__stack_chk_fail@PLT
+ 681      00
+ 682              	.L38:
+ 683 00bd C9       		leave
+ 684              	.LCFI11:
+ 685              		.cfi_def_cfa 7, 8
+ 686 00be C3       		ret
+ 687              		.cfi_endproc
+ 688              	.LFE3:
+ 690              		.section	.text.MQTTSerialize_disconnect,"ax",@progbits
+ 691              		.globl	MQTTSerialize_disconnect
+ 693              	MQTTSerialize_disconnect:
+ 694              	.LFB4:
+ 191:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 192:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 193:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** /**
+ 194:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * Serializes a disconnect packet into the supplied buffer, ready for writing to a socket
+ 195:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buf the buffer into which the packet will be serialized
+GAS LISTING /tmp/ccu4kMP5.s 			page 18
+
+
+ 196:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buflen the length in bytes of the supplied buffer, to avoid overruns
+ 197:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @return serialized length, or error if 0
+ 198:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   */
+ 199:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** int MQTTSerialize_disconnect(unsigned char* buf, int buflen)
+ 200:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** {
+ 695              		.loc 1 200 1
+ 696              		.cfi_startproc
+ 697 0000 F30F1EFA 		endbr64
+ 698 0004 55       		pushq	%rbp
+ 699              	.LCFI12:
+ 700              		.cfi_def_cfa_offset 16
+ 701              		.cfi_offset 6, -16
+ 702 0005 4889E5   		movq	%rsp, %rbp
+ 703              	.LCFI13:
+ 704              		.cfi_def_cfa_register 6
+ 705 0008 4883EC20 		subq	$32, %rsp
+ 706 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 707 0010 8975E4   		movl	%esi, -28(%rbp)
+ 708              		.loc 1 200 1
+ 709 0013 64488B04 		movq	%fs:40, %rax
+ 709      25280000 
+ 709      00
+ 710 001c 488945F8 		movq	%rax, -8(%rbp)
+ 711 0020 31C0     		xorl	%eax, %eax
+ 201:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	return MQTTSerialize_zero(buf, buflen, DISCONNECT);
+ 712              		.loc 1 201 9
+ 713 0022 8B4DE4   		movl	-28(%rbp), %ecx
+ 714 0025 488B45E8 		movq	-24(%rbp), %rax
+ 715 0029 BA0E0000 		movl	$14, %edx
+ 715      00
+ 716 002e 89CE     		movl	%ecx, %esi
+ 717 0030 4889C7   		movq	%rax, %rdi
+ 718 0033 E8000000 		call	MQTTSerialize_zero
+ 718      00
+ 202:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** }
+ 719              		.loc 1 202 1
+ 720 0038 488B55F8 		movq	-8(%rbp), %rdx
+ 721 003c 64483314 		xorq	%fs:40, %rdx
+ 721      25280000 
+ 721      00
+ 722 0045 7405     		je	.L41
+ 723 0047 E8000000 		call	__stack_chk_fail@PLT
+ 723      00
+ 724              	.L41:
+ 725 004c C9       		leave
+ 726              	.LCFI14:
+ 727              		.cfi_def_cfa 7, 8
+ 728 004d C3       		ret
+ 729              		.cfi_endproc
+ 730              	.LFE4:
+ 732              		.section	.text.MQTTSerialize_pingreq,"ax",@progbits
+ 733              		.globl	MQTTSerialize_pingreq
+ 735              	MQTTSerialize_pingreq:
+ 736              	.LFB5:
+ 203:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 204:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 
+ 205:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** /**
+GAS LISTING /tmp/ccu4kMP5.s 			page 19
+
+
+ 206:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * Serializes a disconnect packet into the supplied buffer, ready for writing to a socket
+ 207:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buf the buffer into which the packet will be serialized
+ 208:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @param buflen the length in bytes of the supplied buffer, to avoid overruns
+ 209:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   * @return serialized length, or error if 0
+ 210:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c ****   */
+ 211:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** int MQTTSerialize_pingreq(unsigned char* buf, int buflen)
+ 212:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** {
+ 737              		.loc 1 212 1
+ 738              		.cfi_startproc
+ 739 0000 F30F1EFA 		endbr64
+ 740 0004 55       		pushq	%rbp
+ 741              	.LCFI15:
+ 742              		.cfi_def_cfa_offset 16
+ 743              		.cfi_offset 6, -16
+ 744 0005 4889E5   		movq	%rsp, %rbp
+ 745              	.LCFI16:
+ 746              		.cfi_def_cfa_register 6
+ 747 0008 4883EC20 		subq	$32, %rsp
+ 748 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 749 0010 8975E4   		movl	%esi, -28(%rbp)
+ 750              		.loc 1 212 1
+ 751 0013 64488B04 		movq	%fs:40, %rax
+ 751      25280000 
+ 751      00
+ 752 001c 488945F8 		movq	%rax, -8(%rbp)
+ 753 0020 31C0     		xorl	%eax, %eax
+ 213:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** 	return MQTTSerialize_zero(buf, buflen, PINGREQ);
+ 754              		.loc 1 213 9
+ 755 0022 8B4DE4   		movl	-28(%rbp), %ecx
+ 756 0025 488B45E8 		movq	-24(%rbp), %rax
+ 757 0029 BA0C0000 		movl	$12, %edx
+ 757      00
+ 758 002e 89CE     		movl	%ecx, %esi
+ 759 0030 4889C7   		movq	%rax, %rdi
+ 760 0033 E8000000 		call	MQTTSerialize_zero
+ 760      00
+ 214:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c **** }
+ 761              		.loc 1 214 1
+ 762 0038 488B55F8 		movq	-8(%rbp), %rdx
+ 763 003c 64483314 		xorq	%fs:40, %rdx
+ 763      25280000 
+ 763      00
+ 764 0045 7405     		je	.L44
+ 765 0047 E8000000 		call	__stack_chk_fail@PLT
+ 765      00
+ 766              	.L44:
+ 767 004c C9       		leave
+ 768              	.LCFI17:
+ 769              		.cfi_def_cfa 7, 8
+ 770 004d C3       		ret
+ 771              		.cfi_endproc
+ 772              	.LFE5:
+ 774              		.text
+ 775              	.Letext0:
+ 776              		.file 2 "/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.h"
+ 777              		.file 3 "/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnect.h"
+ 778              		.file 4 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+GAS LISTING /tmp/ccu4kMP5.s 			page 20
+
+
+ 779              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 780              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 781              		.file 7 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 782              		.file 8 "/usr/include/stdio.h"
+ 783              		.file 9 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 3069              		.section	.note.gnu.property,"a"
+ 3070              		.align 8
+ 3071 0000 04000000 		.long	 1f - 0f
+ 3072 0004 10000000 		.long	 4f - 1f
+ 3073 0008 05000000 		.long	 5
+ 3074              	0:
+ 3075 000c 474E5500 		.string	 "GNU"
+ 3076              	1:
+ 3077              		.align 8
+ 3078 0010 020000C0 		.long	 0xc0000002
+ 3079 0014 04000000 		.long	 3f - 2f
+ 3080              	2:
+ 3081 0018 03000000 		.long	 0x3
+ 3082              	3:
+ 3083 001c 00000000 		.align 8
+ 3084              	4:
+GAS LISTING /tmp/ccu4kMP5.s 			page 21
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 MQTTConnectClient.c
+     /tmp/ccu4kMP5.s:7      .text.MQTTSerialize_connectLength:0000000000000000 MQTTSerialize_connectLength
+     /tmp/ccu4kMP5.s:168    .text.MQTTSerialize_connect:0000000000000000 MQTTSerialize_connect
+     /tmp/ccu4kMP5.s:477    .text.MQTTDeserialize_connack:0000000000000000 MQTTDeserialize_connack
+     /tmp/ccu4kMP5.s:602    .text.MQTTSerialize_zero:0000000000000000 MQTTSerialize_zero
+     /tmp/ccu4kMP5.s:693    .text.MQTTSerialize_disconnect:0000000000000000 MQTTSerialize_disconnect
+     /tmp/ccu4kMP5.s:735    .text.MQTTSerialize_pingreq:0000000000000000 MQTTSerialize_pingreq
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+MQTTstrlen
+__stack_chk_fail
+MQTTPacket_len
+writeChar
+MQTTPacket_encode
+writeCString
+writeInt
+writeMQTTString
+readChar
+MQTTPacket_decodeBuf

@@ -1,0 +1,1615 @@
+GAS LISTING /tmp/ccWtw0EV.s 			page 1
+
+
+   1              		.file	"entropy.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_entropy_init,"ax",@progbits
+   5              		.globl	mbedtls_entropy_init
+   7              	mbedtls_entropy_init:
+   8              	.LFB0:
+   9              		.file 1 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c"
+   1:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** /*
+   2:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  Entropy accumulator implementation
+   3:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *
+   4:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  Copyright (C) 2006-2016, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *
+   7:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *
+  11:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *
+  13:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  limitations under the License.
+  18:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *
+  19:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  */
+  21:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  22:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  23:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include "mbedtls/config.h"
+  24:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #else
+  25:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include MBEDTLS_CONFIG_FILE
+  26:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  27:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  28:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_C)
+  29:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  30:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_TEST_NULL_ENTROPY)
+  31:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #warning "**** WARNING!  MBEDTLS_TEST_NULL_ENTROPY defined! "
+  32:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #warning "**** THIS BUILD HAS NO DEFINED ENTROPY SOURCES "
+  33:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #warning "**** THIS BUILD IS *NOT* SUITABLE FOR PRODUCTION USE "
+  34:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  35:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  36:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include "mbedtls/entropy.h"
+  37:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include "mbedtls/entropy_poll.h"
+  38:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include "mbedtls/platform_util.h"
+  39:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  40:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include <string.h>
+  41:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  42:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_FS_IO)
+  43:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include <stdio.h>
+  44:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  45:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  46:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_NV_SEED)
+  47:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include "mbedtls/platform.h"
+  48:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  49:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+GAS LISTING /tmp/ccWtw0EV.s 			page 2
+
+
+  50:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_SELF_TEST)
+  51:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_PLATFORM_C)
+  52:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include "mbedtls/platform.h"
+  53:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #else
+  54:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include <stdio.h>
+  55:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #define mbedtls_printf     printf
+  56:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif /* MBEDTLS_PLATFORM_C */
+  57:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif /* MBEDTLS_SELF_TEST */
+  58:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  59:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_HAVEGE_C)
+  60:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #include "mbedtls/havege.h"
+  61:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  62:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  63:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #define ENTROPY_MAX_LOOP    256     /**< Maximum amount to loop before error */
+  64:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  65:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** void mbedtls_entropy_init( mbedtls_entropy_context *ctx )
+  66:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+  10              		.loc 1 66 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22              		.loc 1 66 1
+  23 0010 64488B04 		movq	%fs:40, %rax
+  23      25280000 
+  23      00
+  24 0019 488945F8 		movq	%rax, -8(%rbp)
+  25 001d 31C0     		xorl	%eax, %eax
+  67:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->source_count = 0;
+  26              		.loc 1 67 23
+  27 001f 488B45E8 		movq	-24(%rbp), %rax
+  28 0023 C7407000 		movl	$0, 112(%rax)
+  28      000000
+  68:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     memset( ctx->source, 0, sizeof( ctx->source ) );
+  29              		.loc 1 68 16
+  30 002a 488B45E8 		movq	-24(%rbp), %rax
+  31 002e 4883C078 		addq	$120, %rax
+  32              		.loc 1 68 5
+  33 0032 BA280000 		movl	$40, %edx
+  33      00
+  34 0037 BE000000 		movl	$0, %esi
+  34      00
+  35 003c 4889C7   		movq	%rax, %rdi
+  36 003f E8000000 		call	memset@PLT
+  36      00
+  69:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  70:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+  71:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_mutex_init( &ctx->mutex );
+  72:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  73:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+GAS LISTING /tmp/ccWtw0EV.s 			page 3
+
+
+  74:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->accumulator_started = 0;
+  37              		.loc 1 74 30
+  38 0044 488B45E8 		movq	-24(%rbp), %rax
+  39 0048 C7000000 		movl	$0, (%rax)
+  39      0000
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
+  76:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha512_init( &ctx->accumulator );
+  77:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #else
+  78:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha256_init( &ctx->accumulator );
+  40              		.loc 1 78 5
+  41 004e 488B45E8 		movq	-24(%rbp), %rax
+  42 0052 4883C004 		addq	$4, %rax
+  43 0056 4889C7   		movq	%rax, %rdi
+  44 0059 E8000000 		call	mbedtls_sha256_init@PLT
+  44      00
+  79:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  80:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_HAVEGE_C)
+  81:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_havege_init( &ctx->havege_data );
+  82:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  83:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  84:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /* Reminder: Update ENTROPY_HAVE_STRONG in the test files
+  85:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      *           when adding more strong entropy sources here. */
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_TEST_NULL_ENTROPY)
+  88:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_entropy_add_source( ctx, mbedtls_null_entropy_poll, NULL,
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 1, MBEDTLS_ENTROPY_SOURCE_STRONG );
+  90:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  91:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+  92:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if !defined(MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES)
+  93:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if !defined(MBEDTLS_NO_PLATFORM_ENTROPY)
+  94:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_entropy_add_source( ctx, mbedtls_platform_entropy_poll, NULL,
+  95:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_MIN_PLATFORM,
+  96:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_SOURCE_STRONG );
+  97:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+  98:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_TIMING_C)
+  99:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_entropy_add_source( ctx, mbedtls_hardclock_poll, NULL,
+ 100:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_MIN_HARDCLOCK,
+ 101:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_SOURCE_WEAK );
+ 102:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 103:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_HAVEGE_C)
+ 104:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_entropy_add_source( ctx, mbedtls_havege_poll, &ctx->havege_data,
+ 105:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_MIN_HAVEGE,
+ 106:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_SOURCE_STRONG );
+ 107:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 108:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_HARDWARE_ALT)
+ 109:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_entropy_add_source( ctx, mbedtls_hardware_poll, NULL,
+  45              		.loc 1 109 5
+  46 005e 488B45E8 		movq	-24(%rbp), %rax
+  47 0062 41B80100 		movl	$1, %r8d
+  47      0000
+  48 0068 B9200000 		movl	$32, %ecx
+  48      00
+  49 006d BA000000 		movl	$0, %edx
+  49      00
+  50 0072 488B3500 		movq	mbedtls_hardware_poll@GOTPCREL(%rip), %rsi
+  50      000000
+  51 0079 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccWtw0EV.s 			page 4
+
+
+  52 007c E8000000 		call	mbedtls_entropy_add_source
+  52      00
+ 110:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_MIN_HARDWARE,
+ 111:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_SOURCE_STRONG );
+ 112:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 113:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_NV_SEED)
+ 114:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_entropy_add_source( ctx, mbedtls_nv_seed_poll, NULL,
+ 115:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_BLOCK_SIZE,
+ 116:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                 MBEDTLS_ENTROPY_SOURCE_STRONG );
+ 117:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->initial_entropy_run = 0;
+ 118:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 119:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif /* MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES */
+ 120:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+  53              		.loc 1 120 1
+  54 0081 90       		nop
+  55 0082 488B45F8 		movq	-8(%rbp), %rax
+  56 0086 64483304 		xorq	%fs:40, %rax
+  56      25280000 
+  56      00
+  57 008f 7405     		je	.L2
+  58 0091 E8000000 		call	__stack_chk_fail@PLT
+  58      00
+  59              	.L2:
+  60 0096 C9       		leave
+  61              	.LCFI2:
+  62              		.cfi_def_cfa 7, 8
+  63 0097 C3       		ret
+  64              		.cfi_endproc
+  65              	.LFE0:
+  67              		.section	.text.mbedtls_entropy_free,"ax",@progbits
+  68              		.globl	mbedtls_entropy_free
+  70              	mbedtls_entropy_free:
+  71              	.LFB1:
+ 121:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 122:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** void mbedtls_entropy_free( mbedtls_entropy_context *ctx )
+ 123:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+  72              		.loc 1 123 1
+  73              		.cfi_startproc
+  74 0000 F30F1EFA 		endbr64
+  75 0004 55       		pushq	%rbp
+  76              	.LCFI3:
+  77              		.cfi_def_cfa_offset 16
+  78              		.cfi_offset 6, -16
+  79 0005 4889E5   		movq	%rsp, %rbp
+  80              	.LCFI4:
+  81              		.cfi_def_cfa_register 6
+  82 0008 4883EC20 		subq	$32, %rsp
+  83 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  84              		.loc 1 123 1
+  85 0010 64488B04 		movq	%fs:40, %rax
+  85      25280000 
+  85      00
+  86 0019 488945F8 		movq	%rax, -8(%rbp)
+  87 001d 31C0     		xorl	%eax, %eax
+ 124:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_HAVEGE_C)
+ 125:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_havege_free( &ctx->havege_data );
+ 126:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+GAS LISTING /tmp/ccWtw0EV.s 			page 5
+
+
+ 127:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 128:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_mutex_free( &ctx->mutex );
+ 129:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 130:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
+ 131:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha512_free( &ctx->accumulator );
+ 132:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #else
+ 133:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha256_free( &ctx->accumulator );
+  88              		.loc 1 133 5
+  89 001f 488B45E8 		movq	-24(%rbp), %rax
+  90 0023 4883C004 		addq	$4, %rax
+  91 0027 4889C7   		movq	%rax, %rdi
+  92 002a E8000000 		call	mbedtls_sha256_free@PLT
+  92      00
+ 134:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 135:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_NV_SEED)
+ 136:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->initial_entropy_run = 0;
+ 137:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 138:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->source_count = 0;
+  93              		.loc 1 138 23
+  94 002f 488B45E8 		movq	-24(%rbp), %rax
+  95 0033 C7407000 		movl	$0, 112(%rax)
+  95      000000
+ 139:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_platform_zeroize( ctx->source, sizeof( ctx->source ) );
+  96              		.loc 1 139 34
+  97 003a 488B45E8 		movq	-24(%rbp), %rax
+  98 003e 4883C078 		addq	$120, %rax
+  99              		.loc 1 139 5
+ 100 0042 BE280000 		movl	$40, %esi
+ 100      00
+ 101 0047 4889C7   		movq	%rax, %rdi
+ 102 004a E8000000 		call	mbedtls_platform_zeroize@PLT
+ 102      00
+ 140:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->accumulator_started = 0;
+ 103              		.loc 1 140 30
+ 104 004f 488B45E8 		movq	-24(%rbp), %rax
+ 105 0053 C7000000 		movl	$0, (%rax)
+ 105      0000
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+ 106              		.loc 1 141 1
+ 107 0059 90       		nop
+ 108 005a 488B45F8 		movq	-8(%rbp), %rax
+ 109 005e 64483304 		xorq	%fs:40, %rax
+ 109      25280000 
+ 109      00
+ 110 0067 7405     		je	.L4
+ 111 0069 E8000000 		call	__stack_chk_fail@PLT
+ 111      00
+ 112              	.L4:
+ 113 006e C9       		leave
+ 114              	.LCFI5:
+ 115              		.cfi_def_cfa 7, 8
+ 116 006f C3       		ret
+ 117              		.cfi_endproc
+ 118              	.LFE1:
+ 120              		.section	.text.mbedtls_entropy_add_source,"ax",@progbits
+ 121              		.globl	mbedtls_entropy_add_source
+ 123              	mbedtls_entropy_add_source:
+GAS LISTING /tmp/ccWtw0EV.s 			page 6
+
+
+ 124              	.LFB2:
+ 142:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 143:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** int mbedtls_entropy_add_source( mbedtls_entropy_context *ctx,
+ 144:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                         mbedtls_entropy_f_source_ptr f_source, void *p_source,
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                         size_t threshold, int strong )
+ 146:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+ 125              		.loc 1 146 1
+ 126              		.cfi_startproc
+ 127 0000 F30F1EFA 		endbr64
+ 128 0004 55       		pushq	%rbp
+ 129              	.LCFI6:
+ 130              		.cfi_def_cfa_offset 16
+ 131              		.cfi_offset 6, -16
+ 132 0005 4889E5   		movq	%rsp, %rbp
+ 133              	.LCFI7:
+ 134              		.cfi_def_cfa_register 6
+ 135 0008 4883EC40 		subq	$64, %rsp
+ 136 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 137 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 138 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 139 0018 48894DD0 		movq	%rcx, -48(%rbp)
+ 140 001c 448945CC 		movl	%r8d, -52(%rbp)
+ 141              		.loc 1 146 1
+ 142 0020 64488B04 		movq	%fs:40, %rax
+ 142      25280000 
+ 142      00
+ 143 0029 488945F8 		movq	%rax, -8(%rbp)
+ 144 002d 31C0     		xorl	%eax, %eax
+ 147:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     int idx, ret = 0;
+ 145              		.loc 1 147 14
+ 146 002f C745F000 		movl	$0, -16(%rbp)
+ 146      000000
+ 148:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 149:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 150:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_mutex_lock( &ctx->mutex ) ) != 0 )
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( ret );
+ 152:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 153:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 154:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     idx = ctx->source_count;
+ 147              		.loc 1 154 9
+ 148 0036 488B45E8 		movq	-24(%rbp), %rax
+ 149 003a 8B4070   		movl	112(%rax), %eax
+ 150 003d 8945F4   		movl	%eax, -12(%rbp)
+ 155:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( idx >= MBEDTLS_ENTROPY_MAX_SOURCES )
+ 151              		.loc 1 155 7
+ 152 0040 837DF400 		cmpl	$0, -12(%rbp)
+ 153 0044 7E0C     		jle	.L6
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 157:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ret = MBEDTLS_ERR_ENTROPY_MAX_SOURCES;
+ 154              		.loc 1 157 13
+ 155 0046 C745F0C2 		movl	$-62, -16(%rbp)
+ 155      FFFFFF
+ 158:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 156              		.loc 1 158 9
+ 157 004d E9B00000 		jmp	.L7
+ 157      00
+ 158              	.L6:
+GAS LISTING /tmp/ccWtw0EV.s 			page 7
+
+
+ 159:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     }
+ 160:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 161:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->source[idx].f_source  = f_source;
+ 159              		.loc 1 161 32
+ 160 0052 488B4DE8 		movq	-24(%rbp), %rcx
+ 161 0056 8B45F4   		movl	-12(%rbp), %eax
+ 162 0059 4863D0   		movslq	%eax, %rdx
+ 163 005c 4889D0   		movq	%rdx, %rax
+ 164 005f 48C1E002 		salq	$2, %rax
+ 165 0063 4801D0   		addq	%rdx, %rax
+ 166 0066 48C1E003 		salq	$3, %rax
+ 167 006a 4801C8   		addq	%rcx, %rax
+ 168 006d 488D5078 		leaq	120(%rax), %rdx
+ 169 0071 488B45E0 		movq	-32(%rbp), %rax
+ 170 0075 488902   		movq	%rax, (%rdx)
+ 162:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->source[idx].p_source  = p_source;
+ 171              		.loc 1 162 32
+ 172 0078 488B4DE8 		movq	-24(%rbp), %rcx
+ 173 007c 8B45F4   		movl	-12(%rbp), %eax
+ 174 007f 4863D0   		movslq	%eax, %rdx
+ 175 0082 4889D0   		movq	%rdx, %rax
+ 176 0085 48C1E002 		salq	$2, %rax
+ 177 0089 4801D0   		addq	%rdx, %rax
+ 178 008c 48C1E003 		salq	$3, %rax
+ 179 0090 4801C8   		addq	%rcx, %rax
+ 180 0093 488D9080 		leaq	128(%rax), %rdx
+ 180      000000
+ 181 009a 488B45D8 		movq	-40(%rbp), %rax
+ 182 009e 488902   		movq	%rax, (%rdx)
+ 163:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->source[idx].threshold = threshold;
+ 183              		.loc 1 163 32
+ 184 00a1 488B4DE8 		movq	-24(%rbp), %rcx
+ 185 00a5 8B45F4   		movl	-12(%rbp), %eax
+ 186 00a8 4863D0   		movslq	%eax, %rdx
+ 187 00ab 4889D0   		movq	%rdx, %rax
+ 188 00ae 48C1E002 		salq	$2, %rax
+ 189 00b2 4801D0   		addq	%rdx, %rax
+ 190 00b5 48C1E003 		salq	$3, %rax
+ 191 00b9 4801C8   		addq	%rcx, %rax
+ 192 00bc 488D9090 		leaq	144(%rax), %rdx
+ 192      000000
+ 193 00c3 488B45D0 		movq	-48(%rbp), %rax
+ 194 00c7 488902   		movq	%rax, (%rdx)
+ 164:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->source[idx].strong    = strong;
+ 195              		.loc 1 164 32
+ 196 00ca 488B4DE8 		movq	-24(%rbp), %rcx
+ 197 00ce 8B45F4   		movl	-12(%rbp), %eax
+ 198 00d1 4863D0   		movslq	%eax, %rdx
+ 199 00d4 4889D0   		movq	%rdx, %rax
+ 200 00d7 48C1E002 		salq	$2, %rax
+ 201 00db 4801D0   		addq	%rdx, %rax
+ 202 00de 48C1E003 		salq	$3, %rax
+ 203 00e2 4801C8   		addq	%rcx, %rax
+ 204 00e5 488D9098 		leaq	152(%rax), %rdx
+ 204      000000
+ 205 00ec 8B45CC   		movl	-52(%rbp), %eax
+ 206 00ef 8902     		movl	%eax, (%rdx)
+GAS LISTING /tmp/ccWtw0EV.s 			page 8
+
+
+ 165:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 166:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ctx->source_count++;
+ 207              		.loc 1 166 8
+ 208 00f1 488B45E8 		movq	-24(%rbp), %rax
+ 209 00f5 8B4070   		movl	112(%rax), %eax
+ 210              		.loc 1 166 22
+ 211 00f8 8D5001   		leal	1(%rax), %edx
+ 212 00fb 488B45E8 		movq	-24(%rbp), %rax
+ 213 00ff 895070   		movl	%edx, 112(%rax)
+ 214              	.L7:
+ 167:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 168:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** exit:
+ 169:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( mbedtls_mutex_unlock( &ctx->mutex ) != 0 )
+ 171:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( MBEDTLS_ERR_THREADING_MUTEX_ERROR );
+ 172:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 173:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 174:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     return( ret );
+ 215              		.loc 1 174 11
+ 216 0102 8B45F0   		movl	-16(%rbp), %eax
+ 175:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+ 217              		.loc 1 175 1
+ 218 0105 488B75F8 		movq	-8(%rbp), %rsi
+ 219 0109 64483334 		xorq	%fs:40, %rsi
+ 219      25280000 
+ 219      00
+ 220 0112 7405     		je	.L9
+ 221 0114 E8000000 		call	__stack_chk_fail@PLT
+ 221      00
+ 222              	.L9:
+ 223 0119 C9       		leave
+ 224              	.LCFI8:
+ 225              		.cfi_def_cfa 7, 8
+ 226 011a C3       		ret
+ 227              		.cfi_endproc
+ 228              	.LFE2:
+ 230              		.section	.text.entropy_update,"ax",@progbits
+ 232              	entropy_update:
+ 233              	.LFB3:
+ 176:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 177:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** /*
+ 178:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  * Entropy accumulator update
+ 179:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  */
+ 180:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** static int entropy_update( mbedtls_entropy_context *ctx, unsigned char source_id,
+ 181:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                            const unsigned char *data, size_t len )
+ 182:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+ 234              		.loc 1 182 1
+ 235              		.cfi_startproc
+ 236 0000 F30F1EFA 		endbr64
+ 237 0004 55       		pushq	%rbp
+ 238              	.LCFI9:
+ 239              		.cfi_def_cfa_offset 16
+ 240              		.cfi_offset 6, -16
+ 241 0005 4889E5   		movq	%rsp, %rbp
+ 242              	.LCFI10:
+ 243              		.cfi_def_cfa_register 6
+ 244 0008 4883EC70 		subq	$112, %rsp
+GAS LISTING /tmp/ccWtw0EV.s 			page 9
+
+
+ 245 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 246 0010 89F0     		movl	%esi, %eax
+ 247 0012 48895598 		movq	%rdx, -104(%rbp)
+ 248 0016 48894D90 		movq	%rcx, -112(%rbp)
+ 249 001a 8845A4   		movb	%al, -92(%rbp)
+ 250              		.loc 1 182 1
+ 251 001d 64488B04 		movq	%fs:40, %rax
+ 251      25280000 
+ 251      00
+ 252 0026 488945F8 		movq	%rax, -8(%rbp)
+ 253 002a 31C0     		xorl	%eax, %eax
+ 183:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     unsigned char header[2];
+ 184:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     unsigned char tmp[MBEDTLS_ENTROPY_BLOCK_SIZE];
+ 185:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     size_t use_len = len;
+ 254              		.loc 1 185 12
+ 255 002c 488B4590 		movq	-112(%rbp), %rax
+ 256 0030 488945B8 		movq	%rax, -72(%rbp)
+ 186:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     const unsigned char *p = data;
+ 257              		.loc 1 186 26
+ 258 0034 488B4598 		movq	-104(%rbp), %rax
+ 259 0038 488945C0 		movq	%rax, -64(%rbp)
+ 187:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     int ret = 0;
+ 260              		.loc 1 187 9
+ 261 003c C745B400 		movl	$0, -76(%rbp)
+ 261      000000
+ 188:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 189:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( use_len > MBEDTLS_ENTROPY_BLOCK_SIZE )
+ 262              		.loc 1 189 7
+ 263 0043 48837DB8 		cmpq	$32, -72(%rbp)
+ 263      20
+ 264 0048 7636     		jbe	.L11
+ 190:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 191:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
+ 192:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( ( ret = mbedtls_sha512_ret( data, len, tmp, 0 ) ) != 0 )
+ 193:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             goto cleanup;
+ 194:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #else
+ 195:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( ( ret = mbedtls_sha256_ret( data, len, tmp, 0 ) ) != 0 )
+ 265              		.loc 1 195 21
+ 266 004a 488D55D0 		leaq	-48(%rbp), %rdx
+ 267 004e 488B7590 		movq	-112(%rbp), %rsi
+ 268 0052 488B4598 		movq	-104(%rbp), %rax
+ 269 0056 B9000000 		movl	$0, %ecx
+ 269      00
+ 270 005b 4889C7   		movq	%rax, %rdi
+ 271 005e E8000000 		call	mbedtls_sha256_ret@PLT
+ 271      00
+ 272 0063 8945B4   		movl	%eax, -76(%rbp)
+ 273              		.loc 1 195 11
+ 274 0066 837DB400 		cmpl	$0, -76(%rbp)
+ 275 006a 0F859500 		jne	.L18
+ 275      0000
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             goto cleanup;
+ 197:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 198:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         p = tmp;
+ 276              		.loc 1 198 11
+ 277 0070 488D45D0 		leaq	-48(%rbp), %rax
+ 278 0074 488945C0 		movq	%rax, -64(%rbp)
+GAS LISTING /tmp/ccWtw0EV.s 			page 10
+
+
+ 199:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         use_len = MBEDTLS_ENTROPY_BLOCK_SIZE;
+ 279              		.loc 1 199 17
+ 280 0078 48C745B8 		movq	$32, -72(%rbp)
+ 280      20000000 
+ 281              	.L11:
+ 200:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     }
+ 201:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 202:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     header[0] = source_id;
+ 282              		.loc 1 202 15
+ 283 0080 0FB645A4 		movzbl	-92(%rbp), %eax
+ 284 0084 8845CE   		movb	%al, -50(%rbp)
+ 203:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     header[1] = use_len & 0xFF;
+ 285              		.loc 1 203 15
+ 286 0087 488B45B8 		movq	-72(%rbp), %rax
+ 287 008b 8845CF   		movb	%al, -49(%rbp)
+ 204:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 205:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 206:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Start the accumulator if this has not already happened. Note that
+ 207:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * it is sufficient to start the accumulator here only because all calls to
+ 208:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * gather entropy eventually execute this code.
+ 209:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 210:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
+ 211:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ctx->accumulator_started == 0 &&
+ 212:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ( ret = mbedtls_sha512_starts_ret( &ctx->accumulator, 0 ) ) != 0 )
+ 213:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto cleanup;
+ 214:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     else
+ 215:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ctx->accumulator_started = 1;
+ 216:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha512_update_ret( &ctx->accumulator, header, 2 ) ) != 0 )
+ 217:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto cleanup;
+ 218:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ret = mbedtls_sha512_update_ret( &ctx->accumulator, p, use_len );
+ 219:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #else
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ctx->accumulator_started == 0 &&
+ 288              		.loc 1 220 12
+ 289 008e 488B45A8 		movq	-88(%rbp), %rax
+ 290 0092 8B00     		movl	(%rax), %eax
+ 291              		.loc 1 220 7
+ 292 0094 85C0     		testl	%eax, %eax
+ 293 0096 751E     		jne	.L14
+ 221:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ( ret = mbedtls_sha256_starts_ret( &ctx->accumulator, 0 ) ) != 0 )
+ 294              		.loc 1 221 17 discriminator 1
+ 295 0098 488B45A8 		movq	-88(%rbp), %rax
+ 296 009c 4883C004 		addq	$4, %rax
+ 297 00a0 BE000000 		movl	$0, %esi
+ 297      00
+ 298 00a5 4889C7   		movq	%rax, %rdi
+ 299 00a8 E8000000 		call	mbedtls_sha256_starts_ret@PLT
+ 299      00
+ 300 00ad 8945B4   		movl	%eax, -76(%rbp)
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ( ret = mbedtls_sha256_starts_ret( &ctx->accumulator, 0 ) ) != 0 )
+ 301              		.loc 1 220 39 discriminator 1
+ 302 00b0 837DB400 		cmpl	$0, -76(%rbp)
+ 303 00b4 7552     		jne	.L19
+ 304              	.L14:
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto cleanup;
+ 223:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     else
+ 224:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ctx->accumulator_started = 1;
+ 305              		.loc 1 224 34
+GAS LISTING /tmp/ccWtw0EV.s 			page 11
+
+
+ 306 00b6 488B45A8 		movq	-88(%rbp), %rax
+ 307 00ba C7000100 		movl	$1, (%rax)
+ 307      0000
+ 225:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha256_update_ret( &ctx->accumulator, header, 2 ) ) != 0 )
+ 308              		.loc 1 225 17
+ 309 00c0 488B45A8 		movq	-88(%rbp), %rax
+ 310 00c4 488D4804 		leaq	4(%rax), %rcx
+ 311 00c8 488D45CE 		leaq	-50(%rbp), %rax
+ 312 00cc BA020000 		movl	$2, %edx
+ 312      00
+ 313 00d1 4889C6   		movq	%rax, %rsi
+ 314 00d4 4889CF   		movq	%rcx, %rdi
+ 315 00d7 E8000000 		call	mbedtls_sha256_update_ret@PLT
+ 315      00
+ 316 00dc 8945B4   		movl	%eax, -76(%rbp)
+ 317              		.loc 1 225 7
+ 318 00df 837DB400 		cmpl	$0, -76(%rbp)
+ 319 00e3 7526     		jne	.L20
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto cleanup;
+ 227:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ret = mbedtls_sha256_update_ret( &ctx->accumulator, p, use_len );
+ 320              		.loc 1 227 11
+ 321 00e5 488B45A8 		movq	-88(%rbp), %rax
+ 322 00e9 488D4804 		leaq	4(%rax), %rcx
+ 323 00ed 488B55B8 		movq	-72(%rbp), %rdx
+ 324 00f1 488B45C0 		movq	-64(%rbp), %rax
+ 325 00f5 4889C6   		movq	%rax, %rsi
+ 326 00f8 4889CF   		movq	%rcx, %rdi
+ 327 00fb E8000000 		call	mbedtls_sha256_update_ret@PLT
+ 327      00
+ 328 0100 8945B4   		movl	%eax, -76(%rbp)
+ 329 0103 EB07     		jmp	.L13
+ 330              	.L18:
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 331              		.loc 1 196 13
+ 332 0105 90       		nop
+ 333 0106 EB04     		jmp	.L13
+ 334              	.L19:
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     else
+ 335              		.loc 1 222 9
+ 336 0108 90       		nop
+ 337 0109 EB01     		jmp	.L13
+ 338              	.L20:
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto cleanup;
+ 339              		.loc 1 226 9
+ 340 010b 90       		nop
+ 341              	.L13:
+ 228:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 229:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 230:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** cleanup:
+ 231:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_platform_zeroize( tmp, sizeof( tmp ) );
+ 342              		.loc 1 231 5
+ 343 010c 488D45D0 		leaq	-48(%rbp), %rax
+ 344 0110 BE200000 		movl	$32, %esi
+ 344      00
+ 345 0115 4889C7   		movq	%rax, %rdi
+ 346 0118 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 346      00
+GAS LISTING /tmp/ccWtw0EV.s 			page 12
+
+
+ 232:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 233:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     return( ret );
+ 347              		.loc 1 233 11
+ 348 011d 8B45B4   		movl	-76(%rbp), %eax
+ 234:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+ 349              		.loc 1 234 1
+ 350 0120 488B4DF8 		movq	-8(%rbp), %rcx
+ 351 0124 6448330C 		xorq	%fs:40, %rcx
+ 351      25280000 
+ 351      00
+ 352 012d 7405     		je	.L17
+ 353 012f E8000000 		call	__stack_chk_fail@PLT
+ 353      00
+ 354              	.L17:
+ 355 0134 C9       		leave
+ 356              	.LCFI11:
+ 357              		.cfi_def_cfa 7, 8
+ 358 0135 C3       		ret
+ 359              		.cfi_endproc
+ 360              	.LFE3:
+ 362              		.section	.text.mbedtls_entropy_update_manual,"ax",@progbits
+ 363              		.globl	mbedtls_entropy_update_manual
+ 365              	mbedtls_entropy_update_manual:
+ 366              	.LFB4:
+ 235:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 236:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** int mbedtls_entropy_update_manual( mbedtls_entropy_context *ctx,
+ 237:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                            const unsigned char *data, size_t len )
+ 238:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+ 367              		.loc 1 238 1
+ 368              		.cfi_startproc
+ 369 0000 F30F1EFA 		endbr64
+ 370 0004 55       		pushq	%rbp
+ 371              	.LCFI12:
+ 372              		.cfi_def_cfa_offset 16
+ 373              		.cfi_offset 6, -16
+ 374 0005 4889E5   		movq	%rsp, %rbp
+ 375              	.LCFI13:
+ 376              		.cfi_def_cfa_register 6
+ 377 0008 4883EC30 		subq	$48, %rsp
+ 378 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 379 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 380 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 381              		.loc 1 238 1
+ 382 0018 64488B04 		movq	%fs:40, %rax
+ 382      25280000 
+ 382      00
+ 383 0021 488945F8 		movq	%rax, -8(%rbp)
+ 384 0025 31C0     		xorl	%eax, %eax
+ 239:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     int ret;
+ 240:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 241:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 242:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_mutex_lock( &ctx->mutex ) ) != 0 )
+ 243:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( ret );
+ 244:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 246:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ret = entropy_update( ctx, MBEDTLS_ENTROPY_SOURCE_MANUAL, data, len );
+ 385              		.loc 1 246 11
+GAS LISTING /tmp/ccWtw0EV.s 			page 13
+
+
+ 386 0027 488B4DD8 		movq	-40(%rbp), %rcx
+ 387 002b 488B55E0 		movq	-32(%rbp), %rdx
+ 388 002f 488B45E8 		movq	-24(%rbp), %rax
+ 389 0033 BE010000 		movl	$1, %esi
+ 389      00
+ 390 0038 4889C7   		movq	%rax, %rdi
+ 391 003b E8000000 		call	entropy_update
+ 391      00
+ 392 0040 8945F4   		movl	%eax, -12(%rbp)
+ 247:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 248:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 249:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( mbedtls_mutex_unlock( &ctx->mutex ) != 0 )
+ 250:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( MBEDTLS_ERR_THREADING_MUTEX_ERROR );
+ 251:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 252:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 253:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     return( ret );
+ 393              		.loc 1 253 11
+ 394 0043 8B45F4   		movl	-12(%rbp), %eax
+ 254:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+ 395              		.loc 1 254 1
+ 396 0046 488B75F8 		movq	-8(%rbp), %rsi
+ 397 004a 64483334 		xorq	%fs:40, %rsi
+ 397      25280000 
+ 397      00
+ 398 0053 7405     		je	.L23
+ 399 0055 E8000000 		call	__stack_chk_fail@PLT
+ 399      00
+ 400              	.L23:
+ 401 005a C9       		leave
+ 402              	.LCFI14:
+ 403              		.cfi_def_cfa 7, 8
+ 404 005b C3       		ret
+ 405              		.cfi_endproc
+ 406              	.LFE4:
+ 408              		.section	.text.entropy_gather_internal,"ax",@progbits
+ 410              	entropy_gather_internal:
+ 411              	.LFB5:
+ 255:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 256:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** /*
+ 257:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  * Run through the different sources to add entropy to our accumulator
+ 258:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  */
+ 259:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** static int entropy_gather_internal( mbedtls_entropy_context *ctx )
+ 260:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+ 412              		.loc 1 260 1
+ 413              		.cfi_startproc
+ 414 0000 F30F1EFA 		endbr64
+ 415 0004 55       		pushq	%rbp
+ 416              	.LCFI15:
+ 417              		.cfi_def_cfa_offset 16
+ 418              		.cfi_offset 6, -16
+ 419 0005 4889E5   		movq	%rsp, %rbp
+ 420              	.LCFI16:
+ 421              		.cfi_def_cfa_register 6
+ 422 0008 4881ECC0 		subq	$192, %rsp
+ 422      000000
+ 423 000f 4889BD48 		movq	%rdi, -184(%rbp)
+ 423      FFFFFF
+GAS LISTING /tmp/ccWtw0EV.s 			page 14
+
+
+ 424              		.loc 1 260 1
+ 425 0016 64488B04 		movq	%fs:40, %rax
+ 425      25280000 
+ 425      00
+ 426 001f 488945F8 		movq	%rax, -8(%rbp)
+ 427 0023 31C0     		xorl	%eax, %eax
+ 261:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     int ret, i, have_one_strong = 0;
+ 428              		.loc 1 261 17
+ 429 0025 C78564FF 		movl	$0, -156(%rbp)
+ 429      FFFF0000 
+ 429      0000
+ 262:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     unsigned char buf[MBEDTLS_ENTROPY_MAX_GATHER];
+ 263:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     size_t olen;
+ 264:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 265:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ctx->source_count == 0 )
+ 430              		.loc 1 265 12
+ 431 002f 488B8548 		movq	-184(%rbp), %rax
+ 431      FFFFFF
+ 432 0036 8B4070   		movl	112(%rax), %eax
+ 433              		.loc 1 265 7
+ 434 0039 85C0     		testl	%eax, %eax
+ 435 003b 750A     		jne	.L25
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( MBEDTLS_ERR_ENTROPY_NO_SOURCES_DEFINED );
+ 436              		.loc 1 266 15
+ 437 003d B8C0FFFF 		movl	$-64, %eax
+ 437      FF
+ 438 0042 E9D00100 		jmp	.L34
+ 438      00
+ 439              	.L25:
+ 267:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 268:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 269:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Run through our entropy sources
+ 270:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     for( i = 0; i < ctx->source_count; i++ )
+ 440              		.loc 1 271 12
+ 441 0047 C78560FF 		movl	$0, -160(%rbp)
+ 441      FFFF0000 
+ 441      0000
+ 442              		.loc 1 271 5
+ 443 0051 E9780100 		jmp	.L27
+ 443      00
+ 444              	.L33:
+ 272:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 273:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( ctx->source[i].strong == MBEDTLS_ENTROPY_SOURCE_STRONG )
+ 445              		.loc 1 273 27
+ 446 0056 488B8D48 		movq	-184(%rbp), %rcx
+ 446      FFFFFF
+ 447 005d 8B8560FF 		movl	-160(%rbp), %eax
+ 447      FFFF
+ 448 0063 4863D0   		movslq	%eax, %rdx
+ 449 0066 4889D0   		movq	%rdx, %rax
+ 450 0069 48C1E002 		salq	$2, %rax
+ 451 006d 4801D0   		addq	%rdx, %rax
+ 452 0070 48C1E003 		salq	$3, %rax
+ 453 0074 4801C8   		addq	%rcx, %rax
+ 454 0077 48059800 		addq	$152, %rax
+ 454      0000
+GAS LISTING /tmp/ccWtw0EV.s 			page 15
+
+
+ 455 007d 8B00     		movl	(%rax), %eax
+ 456              		.loc 1 273 11
+ 457 007f 83F801   		cmpl	$1, %eax
+ 458 0082 750A     		jne	.L28
+ 274:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             have_one_strong = 1;
+ 459              		.loc 1 274 29
+ 460 0084 C78564FF 		movl	$1, -156(%rbp)
+ 460      FFFF0100 
+ 460      0000
+ 461              	.L28:
+ 275:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 276:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         olen = 0;
+ 462              		.loc 1 276 14
+ 463 008e 48C78568 		movq	$0, -152(%rbp)
+ 463      FFFFFF00 
+ 463      000000
+ 277:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( ( ret = ctx->source[i].f_source( ctx->source[i].p_source,
+ 464              		.loc 1 277 35
+ 465 0099 488B8D48 		movq	-184(%rbp), %rcx
+ 465      FFFFFF
+ 466 00a0 8B8560FF 		movl	-160(%rbp), %eax
+ 466      FFFF
+ 467 00a6 4863D0   		movslq	%eax, %rdx
+ 468 00a9 4889D0   		movq	%rdx, %rax
+ 469 00ac 48C1E002 		salq	$2, %rax
+ 470 00b0 4801D0   		addq	%rdx, %rax
+ 471 00b3 48C1E003 		salq	$3, %rax
+ 472 00b7 4801C8   		addq	%rcx, %rax
+ 473 00ba 4883C078 		addq	$120, %rax
+ 474 00be 4C8B00   		movq	(%rax), %r8
+ 475              		.loc 1 277 21
+ 476 00c1 488B8D48 		movq	-184(%rbp), %rcx
+ 476      FFFFFF
+ 477 00c8 8B8560FF 		movl	-160(%rbp), %eax
+ 477      FFFF
+ 478 00ce 4863D0   		movslq	%eax, %rdx
+ 479 00d1 4889D0   		movq	%rdx, %rax
+ 480 00d4 48C1E002 		salq	$2, %rax
+ 481 00d8 4801D0   		addq	%rdx, %rax
+ 482 00db 48C1E003 		salq	$3, %rax
+ 483 00df 4801C8   		addq	%rcx, %rax
+ 484 00e2 4883E880 		subq	$-128, %rax
+ 485 00e6 488B00   		movq	(%rax), %rax
+ 486 00e9 488D9568 		leaq	-152(%rbp), %rdx
+ 486      FFFFFF
+ 487 00f0 488DB570 		leaq	-144(%rbp), %rsi
+ 487      FFFFFF
+ 488 00f7 4889D1   		movq	%rdx, %rcx
+ 489 00fa BA800000 		movl	$128, %edx
+ 489      00
+ 490 00ff 4889C7   		movq	%rax, %rdi
+ 491 0102 41FFD0   		call	*%r8
+ 492              	.LVL0:
+ 493 0105 89855CFF 		movl	%eax, -164(%rbp)
+ 493      FFFF
+ 494              		.loc 1 277 11
+ 495 010b 83BD5CFF 		cmpl	$0, -164(%rbp)
+GAS LISTING /tmp/ccWtw0EV.s 			page 16
+
+
+ 495      FFFF00
+ 496 0112 0F85E100 		jne	.L36
+ 496      0000
+ 278:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                         buf, MBEDTLS_ENTROPY_MAX_GATHER, &olen ) ) != 0 )
+ 279:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         {
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             goto cleanup;
+ 281:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         }
+ 282:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 283:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         /*
+ 284:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****          * Add if we actually gathered something
+ 285:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****          */
+ 286:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( olen > 0 )
+ 497              		.loc 1 286 18
+ 498 0118 488B8568 		movq	-152(%rbp), %rax
+ 498      FFFFFF
+ 499              		.loc 1 286 11
+ 500 011f 4885C0   		testq	%rax, %rax
+ 501 0122 0F849F00 		je	.L31
+ 501      0000
+ 287:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         {
+ 288:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             if( ( ret = entropy_update( ctx, (unsigned char) i,
+ 502              		.loc 1 288 25
+ 503 0128 488B8D68 		movq	-152(%rbp), %rcx
+ 503      FFFFFF
+ 504              		.loc 1 288 46
+ 505 012f 8B8560FF 		movl	-160(%rbp), %eax
+ 505      FFFF
+ 506              		.loc 1 288 25
+ 507 0135 0FB6F0   		movzbl	%al, %esi
+ 508 0138 488D9570 		leaq	-144(%rbp), %rdx
+ 508      FFFFFF
+ 509 013f 488B8548 		movq	-184(%rbp), %rax
+ 509      FFFFFF
+ 510 0146 4889C7   		movq	%rax, %rdi
+ 511 0149 E8000000 		call	entropy_update
+ 511      00
+ 512 014e 89855CFF 		movl	%eax, -164(%rbp)
+ 512      FFFF
+ 513              		.loc 1 288 15
+ 514 0154 83BD5CFF 		cmpl	$0, -164(%rbp)
+ 514      FFFF00
+ 515 015b 740B     		je	.L32
+ 289:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                         buf, olen ) ) != 0 )
+ 290:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                 return( ret );
+ 516              		.loc 1 290 23
+ 517 015d 8B855CFF 		movl	-164(%rbp), %eax
+ 517      FFFF
+ 518 0163 E9AF0000 		jmp	.L34
+ 518      00
+ 519              	.L32:
+ 291:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             ctx->source[i].size += olen;
+ 520              		.loc 1 291 33
+ 521 0168 488B8D48 		movq	-184(%rbp), %rcx
+ 521      FFFFFF
+ 522 016f 8B8560FF 		movl	-160(%rbp), %eax
+ 522      FFFF
+ 523 0175 4863D0   		movslq	%eax, %rdx
+GAS LISTING /tmp/ccWtw0EV.s 			page 17
+
+
+ 524 0178 4889D0   		movq	%rdx, %rax
+ 525 017b 48C1E002 		salq	$2, %rax
+ 526 017f 4801D0   		addq	%rdx, %rax
+ 527 0182 48C1E003 		salq	$3, %rax
+ 528 0186 4801C8   		addq	%rcx, %rax
+ 529 0189 48058800 		addq	$136, %rax
+ 529      0000
+ 530 018f 488B10   		movq	(%rax), %rdx
+ 531 0192 488B8568 		movq	-152(%rbp), %rax
+ 531      FFFFFF
+ 532 0199 488D0C02 		leaq	(%rdx,%rax), %rcx
+ 533 019d 488BB548 		movq	-184(%rbp), %rsi
+ 533      FFFFFF
+ 534 01a4 8B8560FF 		movl	-160(%rbp), %eax
+ 534      FFFF
+ 535 01aa 4863D0   		movslq	%eax, %rdx
+ 536 01ad 4889D0   		movq	%rdx, %rax
+ 537 01b0 48C1E002 		salq	$2, %rax
+ 538 01b4 4801D0   		addq	%rdx, %rax
+ 539 01b7 48C1E003 		salq	$3, %rax
+ 540 01bb 4801F0   		addq	%rsi, %rax
+ 541 01be 48058800 		addq	$136, %rax
+ 541      0000
+ 542 01c4 488908   		movq	%rcx, (%rax)
+ 543              	.L31:
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 544              		.loc 1 271 41 discriminator 2
+ 545 01c7 838560FF 		addl	$1, -160(%rbp)
+ 545      FFFF01
+ 546              	.L27:
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 547              		.loc 1 271 24 discriminator 1
+ 548 01ce 488B8548 		movq	-184(%rbp), %rax
+ 548      FFFFFF
+ 549 01d5 8B4070   		movl	112(%rax), %eax
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 550              		.loc 1 271 5 discriminator 1
+ 551 01d8 398560FF 		cmpl	%eax, -160(%rbp)
+ 551      FFFF
+ 552 01de 0F8C72FE 		jl	.L33
+ 552      FFFF
+ 292:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         }
+ 293:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     }
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( have_one_strong == 0 )
+ 553              		.loc 1 295 7
+ 554 01e4 83BD64FF 		cmpl	$0, -156(%rbp)
+ 554      FFFF00
+ 555 01eb 750F     		jne	.L37
+ 296:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ret = MBEDTLS_ERR_ENTROPY_NO_STRONG_SOURCE;
+ 556              		.loc 1 296 13
+ 557 01ed C7855CFF 		movl	$-61, -164(%rbp)
+ 557      FFFFC3FF 
+ 557      FFFF
+ 558 01f7 EB04     		jmp	.L30
+ 559              	.L36:
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         }
+GAS LISTING /tmp/ccWtw0EV.s 			page 18
+
+
+ 560              		.loc 1 280 13
+ 561 01f9 90       		nop
+ 562 01fa EB01     		jmp	.L30
+ 563              	.L37:
+ 297:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 298:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** cleanup:
+ 564              		.loc 1 298 1
+ 565 01fc 90       		nop
+ 566              	.L30:
+ 299:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_platform_zeroize( buf, sizeof( buf ) );
+ 567              		.loc 1 299 5
+ 568 01fd 488D8570 		leaq	-144(%rbp), %rax
+ 568      FFFFFF
+ 569 0204 BE800000 		movl	$128, %esi
+ 569      00
+ 570 0209 4889C7   		movq	%rax, %rdi
+ 571 020c E8000000 		call	mbedtls_platform_zeroize@PLT
+ 571      00
+ 300:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 301:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     return( ret );
+ 572              		.loc 1 301 11
+ 573 0211 8B855CFF 		movl	-164(%rbp), %eax
+ 573      FFFF
+ 574              	.L34:
+ 302:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+ 575              		.loc 1 302 1 discriminator 1
+ 576 0217 488B7DF8 		movq	-8(%rbp), %rdi
+ 577 021b 6448333C 		xorq	%fs:40, %rdi
+ 577      25280000 
+ 577      00
+ 578 0224 7405     		je	.L35
+ 579              		.loc 1 302 1 is_stmt 0
+ 580 0226 E8000000 		call	__stack_chk_fail@PLT
+ 580      00
+ 581              	.L35:
+ 582 022b C9       		leave
+ 583              	.LCFI17:
+ 584              		.cfi_def_cfa 7, 8
+ 585 022c C3       		ret
+ 586              		.cfi_endproc
+ 587              	.LFE5:
+ 589              		.section	.text.mbedtls_entropy_gather,"ax",@progbits
+ 590              		.globl	mbedtls_entropy_gather
+ 592              	mbedtls_entropy_gather:
+ 593              	.LFB6:
+ 303:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 304:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** /*
+ 305:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  * Thread-safe wrapper for entropy_gather_internal()
+ 306:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****  */
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** int mbedtls_entropy_gather( mbedtls_entropy_context *ctx )
+ 308:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+ 594              		.loc 1 308 1 is_stmt 1
+ 595              		.cfi_startproc
+ 596 0000 F30F1EFA 		endbr64
+ 597 0004 55       		pushq	%rbp
+ 598              	.LCFI18:
+ 599              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/ccWtw0EV.s 			page 19
+
+
+ 600              		.cfi_offset 6, -16
+ 601 0005 4889E5   		movq	%rsp, %rbp
+ 602              	.LCFI19:
+ 603              		.cfi_def_cfa_register 6
+ 604 0008 4883EC20 		subq	$32, %rsp
+ 605 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 606              		.loc 1 308 1
+ 607 0010 64488B04 		movq	%fs:40, %rax
+ 607      25280000 
+ 607      00
+ 608 0019 488945F8 		movq	%rax, -8(%rbp)
+ 609 001d 31C0     		xorl	%eax, %eax
+ 309:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     int ret;
+ 310:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 311:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 312:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_mutex_lock( &ctx->mutex ) ) != 0 )
+ 313:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( ret );
+ 314:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 315:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 316:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ret = entropy_gather_internal( ctx );
+ 610              		.loc 1 316 11
+ 611 001f 488B45E8 		movq	-24(%rbp), %rax
+ 612 0023 4889C7   		movq	%rax, %rdi
+ 613 0026 E8000000 		call	entropy_gather_internal
+ 613      00
+ 614 002b 8945F4   		movl	%eax, -12(%rbp)
+ 317:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 318:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( mbedtls_mutex_unlock( &ctx->mutex ) != 0 )
+ 320:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( MBEDTLS_ERR_THREADING_MUTEX_ERROR );
+ 321:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 322:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     return( ret );
+ 615              		.loc 1 323 11
+ 616 002e 8B45F4   		movl	-12(%rbp), %eax
+ 324:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+ 617              		.loc 1 324 1
+ 618 0031 488B55F8 		movq	-8(%rbp), %rdx
+ 619 0035 64483314 		xorq	%fs:40, %rdx
+ 619      25280000 
+ 619      00
+ 620 003e 7405     		je	.L40
+ 621 0040 E8000000 		call	__stack_chk_fail@PLT
+ 621      00
+ 622              	.L40:
+ 623 0045 C9       		leave
+ 624              	.LCFI20:
+ 625              		.cfi_def_cfa 7, 8
+ 626 0046 C3       		ret
+ 627              		.cfi_endproc
+ 628              	.LFE6:
+ 630              		.section	.text.mbedtls_entropy_func,"ax",@progbits
+ 631              		.globl	mbedtls_entropy_func
+ 633              	mbedtls_entropy_func:
+ 634              	.LFB7:
+ 325:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 326:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
+GAS LISTING /tmp/ccWtw0EV.s 			page 20
+
+
+ 327:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** {
+ 635              		.loc 1 327 1
+ 636              		.cfi_startproc
+ 637 0000 F30F1EFA 		endbr64
+ 638 0004 55       		pushq	%rbp
+ 639              	.LCFI21:
+ 640              		.cfi_def_cfa_offset 16
+ 641              		.cfi_offset 6, -16
+ 642 0005 4889E5   		movq	%rsp, %rbp
+ 643              	.LCFI22:
+ 644              		.cfi_def_cfa_register 6
+ 645 0008 4883EC70 		subq	$112, %rsp
+ 646 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 647 0010 488975A0 		movq	%rsi, -96(%rbp)
+ 648 0014 48895598 		movq	%rdx, -104(%rbp)
+ 649              		.loc 1 327 1
+ 650 0018 64488B04 		movq	%fs:40, %rax
+ 650      25280000 
+ 650      00
+ 651 0021 488945F8 		movq	%rax, -8(%rbp)
+ 652 0025 31C0     		xorl	%eax, %eax
+ 328:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     int ret, count = 0, i, done;
+ 653              		.loc 1 328 14
+ 654 0027 C745BC00 		movl	$0, -68(%rbp)
+ 654      000000
+ 329:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_entropy_context *ctx = (mbedtls_entropy_context *) data;
+ 655              		.loc 1 329 30
+ 656 002e 488B45A8 		movq	-88(%rbp), %rax
+ 657 0032 488945C8 		movq	%rax, -56(%rbp)
+ 330:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE];
+ 331:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( len > MBEDTLS_ENTROPY_BLOCK_SIZE )
+ 658              		.loc 1 332 7
+ 659 0036 48837D98 		cmpq	$32, -104(%rbp)
+ 659      20
+ 660 003b 760A     		jbe	.L42
+ 333:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
+ 661              		.loc 1 333 15
+ 662 003d B8C4FFFF 		movl	$-60, %eax
+ 662      FF
+ 663 0042 E9FD0100 		jmp	.L56
+ 663      00
+ 664              	.L42:
+ 334:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 335:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_NV_SEED)
+ 336:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /* Update the NV entropy seed before generating any entropy for outside
+ 337:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * use.
+ 338:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 339:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ctx->initial_entropy_run == 0 )
+ 340:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 341:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ctx->initial_entropy_run = 1;
+ 342:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( ( ret = mbedtls_entropy_update_nv_seed( ctx ) ) != 0 )
+ 343:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             return( ret );
+ 344:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     }
+ 345:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 346:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 347:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+GAS LISTING /tmp/ccWtw0EV.s 			page 21
+
+
+ 348:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_mutex_lock( &ctx->mutex ) ) != 0 )
+ 349:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( ret );
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 351:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 352:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 353:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Always gather extra entropy before a call
+ 354:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 355:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     do
+ 356:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     {
+ 357:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( count++ > ENTROPY_MAX_LOOP )
+ 665              		.loc 1 357 18
+ 666 0047 8B45BC   		movl	-68(%rbp), %eax
+ 667 004a 8D5001   		leal	1(%rax), %edx
+ 668 004d 8955BC   		movl	%edx, -68(%rbp)
+ 669              		.loc 1 357 11
+ 670 0050 3D000100 		cmpl	$256, %eax
+ 670      00
+ 671 0055 7E0C     		jle	.L44
+ 358:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         {
+ 359:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             ret = MBEDTLS_ERR_ENTROPY_SOURCE_FAILED;
+ 672              		.loc 1 359 17
+ 673 0057 C745B8C4 		movl	$-60, -72(%rbp)
+ 673      FFFFFF
+ 360:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             goto exit;
+ 674              		.loc 1 360 13
+ 675 005e E9CD0100 		jmp	.L45
+ 675      00
+ 676              	.L44:
+ 361:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         }
+ 362:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 363:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         if( ( ret = entropy_gather_internal( ctx ) ) != 0 )
+ 677              		.loc 1 363 21
+ 678 0063 488B45C8 		movq	-56(%rbp), %rax
+ 679 0067 4889C7   		movq	%rax, %rdi
+ 680 006a E8000000 		call	entropy_gather_internal
+ 680      00
+ 681 006f 8945B8   		movl	%eax, -72(%rbp)
+ 682              		.loc 1 363 11
+ 683 0072 837DB800 		cmpl	$0, -72(%rbp)
+ 684 0076 0F85A701 		jne	.L58
+ 684      0000
+ 364:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             goto exit;
+ 365:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 366:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         done = 1;
+ 685              		.loc 1 366 14
+ 686 007c C745C401 		movl	$1, -60(%rbp)
+ 686      000000
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         for( i = 0; i < ctx->source_count; i++ )
+ 687              		.loc 1 367 16
+ 688 0083 C745C000 		movl	$0, -64(%rbp)
+ 688      000000
+ 689              		.loc 1 367 9
+ 690 008a EB58     		jmp	.L47
+ 691              	.L49:
+ 368:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****             if( ctx->source[i].size < ctx->source[i].threshold )
+ 692              		.loc 1 368 31
+ 693 008c 488B4DC8 		movq	-56(%rbp), %rcx
+GAS LISTING /tmp/ccWtw0EV.s 			page 22
+
+
+ 694 0090 8B45C0   		movl	-64(%rbp), %eax
+ 695 0093 4863D0   		movslq	%eax, %rdx
+ 696 0096 4889D0   		movq	%rdx, %rax
+ 697 0099 48C1E002 		salq	$2, %rax
+ 698 009d 4801D0   		addq	%rdx, %rax
+ 699 00a0 48C1E003 		salq	$3, %rax
+ 700 00a4 4801C8   		addq	%rcx, %rax
+ 701 00a7 48058800 		addq	$136, %rax
+ 701      0000
+ 702 00ad 488B08   		movq	(%rax), %rcx
+ 703              		.loc 1 368 53
+ 704 00b0 488B75C8 		movq	-56(%rbp), %rsi
+ 705 00b4 8B45C0   		movl	-64(%rbp), %eax
+ 706 00b7 4863D0   		movslq	%eax, %rdx
+ 707 00ba 4889D0   		movq	%rdx, %rax
+ 708 00bd 48C1E002 		salq	$2, %rax
+ 709 00c1 4801D0   		addq	%rdx, %rax
+ 710 00c4 48C1E003 		salq	$3, %rax
+ 711 00c8 4801F0   		addq	%rsi, %rax
+ 712 00cb 48059000 		addq	$144, %rax
+ 712      0000
+ 713 00d1 488B00   		movq	(%rax), %rax
+ 714              		.loc 1 368 15
+ 715 00d4 4839C1   		cmpq	%rax, %rcx
+ 716 00d7 7307     		jnb	.L48
+ 369:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                 done = 0;
+ 717              		.loc 1 369 22
+ 718 00d9 C745C400 		movl	$0, -60(%rbp)
+ 718      000000
+ 719              	.L48:
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         for( i = 0; i < ctx->source_count; i++ )
+ 720              		.loc 1 367 45 discriminator 2
+ 721 00e0 8345C001 		addl	$1, -64(%rbp)
+ 722              	.L47:
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         for( i = 0; i < ctx->source_count; i++ )
+ 723              		.loc 1 367 28 discriminator 1
+ 724 00e4 488B45C8 		movq	-56(%rbp), %rax
+ 725 00e8 8B4070   		movl	112(%rax), %eax
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         for( i = 0; i < ctx->source_count; i++ )
+ 726              		.loc 1 367 9 discriminator 1
+ 727 00eb 3945C0   		cmpl	%eax, -64(%rbp)
+ 728 00ee 7C9C     		jl	.L49
+ 370:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     }
+ 371:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     while( ! done );
+ 729              		.loc 1 371 5
+ 730 00f0 837DC400 		cmpl	$0, -60(%rbp)
+ 731 00f4 0F844DFF 		je	.L42
+ 731      FFFF
+ 372:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 373:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     memset( buf, 0, MBEDTLS_ENTROPY_BLOCK_SIZE );
+ 732              		.loc 1 373 5
+ 733 00fa 488D45D0 		leaq	-48(%rbp), %rax
+ 734 00fe BA200000 		movl	$32, %edx
+ 734      00
+ 735 0103 BE000000 		movl	$0, %esi
+ 735      00
+ 736 0108 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccWtw0EV.s 			page 23
+
+
+ 737 010b E8000000 		call	memset@PLT
+ 737      00
+ 374:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 375:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
+ 376:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 377:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Note that at this stage it is assumed that the accumulator was started
+ 378:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * in a previous call to entropy_update(). If this is not guaranteed, the
+ 379:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * code below will fail.
+ 380:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 381:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha512_finish_ret( &ctx->accumulator, buf ) ) != 0 )
+ 382:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 383:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 384:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 385:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Reset accumulator and counters and recycle existing entropy
+ 386:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 387:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha512_free( &ctx->accumulator );
+ 388:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha512_init( &ctx->accumulator );
+ 389:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha512_starts_ret( &ctx->accumulator, 0 ) ) != 0 )
+ 390:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 391:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha512_update_ret( &ctx->accumulator, buf,
+ 392:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                            MBEDTLS_ENTROPY_BLOCK_SIZE ) ) != 0 )
+ 393:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 394:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 395:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Perform second SHA-512 on entropy
+ 397:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 398:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha512_ret( buf, MBEDTLS_ENTROPY_BLOCK_SIZE,
+ 399:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                     buf, 0 ) ) != 0 )
+ 400:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 401:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #else /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
+ 402:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha256_finish_ret( &ctx->accumulator, buf ) ) != 0 )
+ 738              		.loc 1 402 17
+ 739 0110 488B45C8 		movq	-56(%rbp), %rax
+ 740 0114 488D5004 		leaq	4(%rax), %rdx
+ 741 0118 488D45D0 		leaq	-48(%rbp), %rax
+ 742 011c 4889C6   		movq	%rax, %rsi
+ 743 011f 4889D7   		movq	%rdx, %rdi
+ 744 0122 E8000000 		call	mbedtls_sha256_finish_ret@PLT
+ 744      00
+ 745 0127 8945B8   		movl	%eax, -72(%rbp)
+ 746              		.loc 1 402 7
+ 747 012a 837DB800 		cmpl	$0, -72(%rbp)
+ 748 012e 0F85F200 		jne	.L59
+ 748      0000
+ 403:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 404:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 405:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Reset accumulator and counters and recycle existing entropy
+ 407:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 408:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha256_free( &ctx->accumulator );
+ 749              		.loc 1 408 5
+ 750 0134 488B45C8 		movq	-56(%rbp), %rax
+ 751 0138 4883C004 		addq	$4, %rax
+ 752 013c 4889C7   		movq	%rax, %rdi
+ 753 013f E8000000 		call	mbedtls_sha256_free@PLT
+ 753      00
+ 409:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_sha256_init( &ctx->accumulator );
+GAS LISTING /tmp/ccWtw0EV.s 			page 24
+
+
+ 754              		.loc 1 409 5
+ 755 0144 488B45C8 		movq	-56(%rbp), %rax
+ 756 0148 4883C004 		addq	$4, %rax
+ 757 014c 4889C7   		movq	%rax, %rdi
+ 758 014f E8000000 		call	mbedtls_sha256_init@PLT
+ 758      00
+ 410:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha256_starts_ret( &ctx->accumulator, 0 ) ) != 0 )
+ 759              		.loc 1 410 17
+ 760 0154 488B45C8 		movq	-56(%rbp), %rax
+ 761 0158 4883C004 		addq	$4, %rax
+ 762 015c BE000000 		movl	$0, %esi
+ 762      00
+ 763 0161 4889C7   		movq	%rax, %rdi
+ 764 0164 E8000000 		call	mbedtls_sha256_starts_ret@PLT
+ 764      00
+ 765 0169 8945B8   		movl	%eax, -72(%rbp)
+ 766              		.loc 1 410 7
+ 767 016c 837DB800 		cmpl	$0, -72(%rbp)
+ 768 0170 0F85B300 		jne	.L60
+ 768      0000
+ 411:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 412:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha256_update_ret( &ctx->accumulator, buf,
+ 769              		.loc 1 412 17
+ 770 0176 488B45C8 		movq	-56(%rbp), %rax
+ 771 017a 488D4804 		leaq	4(%rax), %rcx
+ 772 017e 488D45D0 		leaq	-48(%rbp), %rax
+ 773 0182 BA200000 		movl	$32, %edx
+ 773      00
+ 774 0187 4889C6   		movq	%rax, %rsi
+ 775 018a 4889CF   		movq	%rcx, %rdi
+ 776 018d E8000000 		call	mbedtls_sha256_update_ret@PLT
+ 776      00
+ 777 0192 8945B8   		movl	%eax, -72(%rbp)
+ 778              		.loc 1 412 7
+ 779 0195 837DB800 		cmpl	$0, -72(%rbp)
+ 780 0199 0F858D00 		jne	.L61
+ 780      0000
+ 413:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                            MBEDTLS_ENTROPY_BLOCK_SIZE ) ) != 0 )
+ 414:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 415:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 416:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     /*
+ 417:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      * Perform second SHA-256 on entropy
+ 418:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****      */
+ 419:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha256_ret( buf, MBEDTLS_ENTROPY_BLOCK_SIZE,
+ 781              		.loc 1 419 17
+ 782 019f 488D55D0 		leaq	-48(%rbp), %rdx
+ 783 01a3 488D45D0 		leaq	-48(%rbp), %rax
+ 784 01a7 B9000000 		movl	$0, %ecx
+ 784      00
+ 785 01ac BE200000 		movl	$32, %esi
+ 785      00
+ 786 01b1 4889C7   		movq	%rax, %rdi
+ 787 01b4 E8000000 		call	mbedtls_sha256_ret@PLT
+ 787      00
+ 788 01b9 8945B8   		movl	%eax, -72(%rbp)
+ 789              		.loc 1 419 7
+ 790 01bc 837DB800 		cmpl	$0, -72(%rbp)
+GAS LISTING /tmp/ccWtw0EV.s 			page 25
+
+
+ 791 01c0 756D     		jne	.L62
+ 420:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****                                     buf, 0 ) ) != 0 )
+ 421:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         goto exit;
+ 422:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
+ 423:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     for( i = 0; i < ctx->source_count; i++ )
+ 792              		.loc 1 424 12
+ 793 01c2 C745C000 		movl	$0, -64(%rbp)
+ 793      000000
+ 794              		.loc 1 424 5
+ 795 01c9 EB2C     		jmp	.L54
+ 796              	.L55:
+ 425:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ctx->source[i].size = 0;
+ 797              		.loc 1 425 29 discriminator 3
+ 798 01cb 488B4DC8 		movq	-56(%rbp), %rcx
+ 799 01cf 8B45C0   		movl	-64(%rbp), %eax
+ 800 01d2 4863D0   		movslq	%eax, %rdx
+ 801 01d5 4889D0   		movq	%rdx, %rax
+ 802 01d8 48C1E002 		salq	$2, %rax
+ 803 01dc 4801D0   		addq	%rdx, %rax
+ 804 01df 48C1E003 		salq	$3, %rax
+ 805 01e3 4801C8   		addq	%rcx, %rax
+ 806 01e6 48058800 		addq	$136, %rax
+ 806      0000
+ 807 01ec 48C70000 		movq	$0, (%rax)
+ 807      000000
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ctx->source[i].size = 0;
+ 808              		.loc 1 424 41 discriminator 3
+ 809 01f3 8345C001 		addl	$1, -64(%rbp)
+ 810              	.L54:
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ctx->source[i].size = 0;
+ 811              		.loc 1 424 24 discriminator 1
+ 812 01f7 488B45C8 		movq	-56(%rbp), %rax
+ 813 01fb 8B4070   		movl	112(%rax), %eax
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         ctx->source[i].size = 0;
+ 814              		.loc 1 424 5 discriminator 1
+ 815 01fe 3945C0   		cmpl	%eax, -64(%rbp)
+ 816 0201 7CC8     		jl	.L55
+ 426:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 427:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     memcpy( output, buf, len );
+ 817              		.loc 1 427 5
+ 818 0203 488B5598 		movq	-104(%rbp), %rdx
+ 819 0207 488D4DD0 		leaq	-48(%rbp), %rcx
+ 820 020b 488B45A0 		movq	-96(%rbp), %rax
+ 821 020f 4889CE   		movq	%rcx, %rsi
+ 822 0212 4889C7   		movq	%rax, %rdi
+ 823 0215 E8000000 		call	memcpy@PLT
+ 823      00
+ 428:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 429:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     ret = 0;
+ 824              		.loc 1 429 9
+ 825 021a C745B800 		movl	$0, -72(%rbp)
+ 825      000000
+ 826 0221 EB0D     		jmp	.L45
+ 827              	.L58:
+ 364:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 828              		.loc 1 364 13
+GAS LISTING /tmp/ccWtw0EV.s 			page 26
+
+
+ 829 0223 90       		nop
+ 830 0224 EB0A     		jmp	.L45
+ 831              	.L59:
+ 403:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 832              		.loc 1 403 9
+ 833 0226 90       		nop
+ 834 0227 EB07     		jmp	.L45
+ 835              	.L60:
+ 411:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( ( ret = mbedtls_sha256_update_ret( &ctx->accumulator, buf,
+ 836              		.loc 1 411 9
+ 837 0229 90       		nop
+ 838 022a EB04     		jmp	.L45
+ 839              	.L61:
+ 414:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 840              		.loc 1 414 9
+ 841 022c 90       		nop
+ 842 022d EB01     		jmp	.L45
+ 843              	.L62:
+ 421:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
+ 844              		.loc 1 421 9
+ 845 022f 90       		nop
+ 846              	.L45:
+ 430:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 431:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** exit:
+ 432:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     mbedtls_platform_zeroize( buf, sizeof( buf ) );
+ 847              		.loc 1 432 5
+ 848 0230 488D45D0 		leaq	-48(%rbp), %rax
+ 849 0234 BE200000 		movl	$32, %esi
+ 849      00
+ 850 0239 4889C7   		movq	%rax, %rdi
+ 851 023c E8000000 		call	mbedtls_platform_zeroize@PLT
+ 851      00
+ 433:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 434:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #if defined(MBEDTLS_THREADING_C)
+ 435:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     if( mbedtls_mutex_unlock( &ctx->mutex ) != 0 )
+ 436:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****         return( MBEDTLS_ERR_THREADING_MUTEX_ERROR );
+ 437:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** #endif
+ 438:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** 
+ 439:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c ****     return( ret );
+ 852              		.loc 1 439 11
+ 853 0241 8B45B8   		movl	-72(%rbp), %eax
+ 854              	.L56:
+ 440:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/entropy.c **** }
+ 855              		.loc 1 440 1 discriminator 1
+ 856 0244 488B75F8 		movq	-8(%rbp), %rsi
+ 857 0248 64483334 		xorq	%fs:40, %rsi
+ 857      25280000 
+ 857      00
+ 858 0251 7405     		je	.L57
+ 859              		.loc 1 440 1 is_stmt 0
+ 860 0253 E8000000 		call	__stack_chk_fail@PLT
+ 860      00
+ 861              	.L57:
+ 862 0258 C9       		leave
+ 863              	.LCFI23:
+ 864              		.cfi_def_cfa 7, 8
+ 865 0259 C3       		ret
+GAS LISTING /tmp/ccWtw0EV.s 			page 27
+
+
+ 866              		.cfi_endproc
+ 867              	.LFE7:
+ 869              		.text
+ 870              	.Letext0:
+ 871              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 872              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 873              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 874              		.file 5 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/sha256.h"
+ 875              		.file 6 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/entropy.h
+ 2507              		.section	.note.gnu.property,"a"
+ 2508              		.align 8
+ 2509 0000 04000000 		.long	 1f - 0f
+ 2510 0004 10000000 		.long	 4f - 1f
+ 2511 0008 05000000 		.long	 5
+ 2512              	0:
+ 2513 000c 474E5500 		.string	 "GNU"
+ 2514              	1:
+ 2515              		.align 8
+ 2516 0010 020000C0 		.long	 0xc0000002
+ 2517 0014 04000000 		.long	 3f - 2f
+ 2518              	2:
+ 2519 0018 03000000 		.long	 0x3
+ 2520              	3:
+ 2521 001c 00000000 		.align 8
+ 2522              	4:
+GAS LISTING /tmp/ccWtw0EV.s 			page 28
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 entropy.c
+     /tmp/ccWtw0EV.s:7      .text.mbedtls_entropy_init:0000000000000000 mbedtls_entropy_init
+     /tmp/ccWtw0EV.s:123    .text.mbedtls_entropy_add_source:0000000000000000 mbedtls_entropy_add_source
+     /tmp/ccWtw0EV.s:70     .text.mbedtls_entropy_free:0000000000000000 mbedtls_entropy_free
+     /tmp/ccWtw0EV.s:232    .text.entropy_update:0000000000000000 entropy_update
+     /tmp/ccWtw0EV.s:365    .text.mbedtls_entropy_update_manual:0000000000000000 mbedtls_entropy_update_manual
+     /tmp/ccWtw0EV.s:410    .text.entropy_gather_internal:0000000000000000 entropy_gather_internal
+     /tmp/ccWtw0EV.s:592    .text.mbedtls_entropy_gather:0000000000000000 mbedtls_entropy_gather
+     /tmp/ccWtw0EV.s:633    .text.mbedtls_entropy_func:0000000000000000 mbedtls_entropy_func
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+memset
+mbedtls_sha256_init
+mbedtls_hardware_poll
+__stack_chk_fail
+mbedtls_sha256_free
+mbedtls_platform_zeroize
+mbedtls_sha256_ret
+mbedtls_sha256_starts_ret
+mbedtls_sha256_update_ret
+mbedtls_sha256_finish_ret
+memcpy

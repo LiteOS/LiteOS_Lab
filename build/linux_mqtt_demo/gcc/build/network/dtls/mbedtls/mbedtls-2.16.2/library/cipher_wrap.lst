@@ -1,0 +1,1374 @@
+GAS LISTING /tmp/ccnPBEjk.s 			page 1
+
+
+   1              		.file	"cipher_wrap.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.gcm_ctx_alloc,"ax",@progbits
+   6              	gcm_ctx_alloc:
+   7              	.LFB13:
+   8              		.file 1 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c"
+   1:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** /**
+   2:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  * \file cipher_wrap.c
+   3:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *
+   4:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  * \brief Generic cipher wrapper for mbed TLS
+   5:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *
+   6:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  * \author Adriaan de Jong <dejong@fox-it.com>
+   7:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *
+   8:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   9:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  SPDX-License-Identifier: Apache-2.0
+  10:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *
+  11:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+  12:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  not use this file except in compliance with the License.
+  13:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  You may obtain a copy of the License at
+  14:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *
+  15:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  16:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *
+  17:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  Unless required by applicable law or agreed to in writing, software
+  18:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  19:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  20:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  See the License for the specific language governing permissions and
+  21:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  limitations under the License.
+  22:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *
+  23:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  24:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****  */
+  25:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  26:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  27:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/config.h"
+  28:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #else
+  29:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include MBEDTLS_CONFIG_FILE
+  30:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  31:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  32:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_C)
+  33:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  34:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/cipher_internal.h"
+  35:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  36:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CHACHAPOLY_C)
+  37:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/chachapoly.h"
+  38:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  39:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  40:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_AES_C)
+  41:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/aes.h"
+  42:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  43:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  44:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_ARC4_C)
+  45:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/arc4.h"
+  46:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  47:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  48:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CAMELLIA_C)
+  49:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/camellia.h"
+  50:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+GAS LISTING /tmp/ccnPBEjk.s 			page 2
+
+
+  51:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  52:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_ARIA_C)
+  53:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/aria.h"
+  54:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  55:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  56:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_DES_C)
+  57:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/des.h"
+  58:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  59:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  60:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_BLOWFISH_C)
+  61:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/blowfish.h"
+  62:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  63:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  64:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CHACHA20_C)
+  65:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/chacha20.h"
+  66:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  67:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  68:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_GCM_C)
+  69:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/gcm.h"
+  70:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  71:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  72:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CCM_C)
+  73:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/ccm.h"
+  74:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  76:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_NULL_CIPHER)
+  77:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include <string.h>
+  78:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  79:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  80:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_PLATFORM_C)
+  81:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include "mbedtls/platform.h"
+  82:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #else
+  83:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #include <stdlib.h>
+  84:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #define mbedtls_calloc    calloc
+  85:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #define mbedtls_free       free
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  88:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_GCM_C)
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** /* shared by all GCM ciphers */
+  90:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void *gcm_ctx_alloc( void )
+  91:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+   9              		.loc 1 91 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC10 		subq	$16, %rsp
+  20              		.loc 1 91 1
+  21 000c 64488B04 		movq	%fs:40, %rax
+  21      25280000 
+  21      00
+  22 0015 488945F8 		movq	%rax, -8(%rbp)
+GAS LISTING /tmp/ccnPBEjk.s 			page 3
+
+
+  23 0019 31C0     		xorl	%eax, %eax
+  92:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_gcm_context ) );
+  24              		.loc 1 92 17
+  25 001b BEA00100 		movl	$416, %esi
+  25      00
+  26 0020 BF010000 		movl	$1, %edi
+  26      00
+  27 0025 E8000000 		call	mbedtls_calloc@PLT
+  27      00
+  28 002a 488945F0 		movq	%rax, -16(%rbp)
+  93:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  94:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     if( ctx != NULL )
+  29              		.loc 1 94 7
+  30 002e 48837DF0 		cmpq	$0, -16(%rbp)
+  30      00
+  31 0033 740C     		je	.L2
+  95:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         mbedtls_gcm_init( (mbedtls_gcm_context *) ctx );
+  32              		.loc 1 95 9
+  33 0035 488B45F0 		movq	-16(%rbp), %rax
+  34 0039 4889C7   		movq	%rax, %rdi
+  35 003c E8000000 		call	mbedtls_gcm_init@PLT
+  35      00
+  36              	.L2:
+  96:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+  97:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return( ctx );
+  37              		.loc 1 97 11
+  38 0041 488B45F0 		movq	-16(%rbp), %rax
+  98:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+  39              		.loc 1 98 1
+  40 0045 488B55F8 		movq	-8(%rbp), %rdx
+  41 0049 64483314 		xorq	%fs:40, %rdx
+  41      25280000 
+  41      00
+  42 0052 7405     		je	.L4
+  43 0054 E8000000 		call	__stack_chk_fail@PLT
+  43      00
+  44              	.L4:
+  45 0059 C9       		leave
+  46              	.LCFI2:
+  47              		.cfi_def_cfa 7, 8
+  48 005a C3       		ret
+  49              		.cfi_endproc
+  50              	.LFE13:
+  52              		.section	.text.gcm_ctx_free,"ax",@progbits
+  54              	gcm_ctx_free:
+  55              	.LFB14:
+  99:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 100:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void gcm_ctx_free( void *ctx )
+ 101:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+  56              		.loc 1 101 1
+  57              		.cfi_startproc
+  58 0000 F30F1EFA 		endbr64
+  59 0004 55       		pushq	%rbp
+  60              	.LCFI3:
+  61              		.cfi_def_cfa_offset 16
+  62              		.cfi_offset 6, -16
+  63 0005 4889E5   		movq	%rsp, %rbp
+GAS LISTING /tmp/ccnPBEjk.s 			page 4
+
+
+  64              	.LCFI4:
+  65              		.cfi_def_cfa_register 6
+  66 0008 4883EC20 		subq	$32, %rsp
+  67 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  68              		.loc 1 101 1
+  69 0010 64488B04 		movq	%fs:40, %rax
+  69      25280000 
+  69      00
+  70 0019 488945F8 		movq	%rax, -8(%rbp)
+  71 001d 31C0     		xorl	%eax, %eax
+ 102:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_gcm_free( ctx );
+  72              		.loc 1 102 5
+  73 001f 488B45E8 		movq	-24(%rbp), %rax
+  74 0023 4889C7   		movq	%rax, %rdi
+  75 0026 E8000000 		call	mbedtls_gcm_free@PLT
+  75      00
+ 103:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_free( ctx );
+  76              		.loc 1 103 5
+  77 002b 488B45E8 		movq	-24(%rbp), %rax
+  78 002f 4889C7   		movq	%rax, %rdi
+  79 0032 E8000000 		call	mbedtls_free@PLT
+  79      00
+ 104:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+  80              		.loc 1 104 1
+  81 0037 90       		nop
+  82 0038 488B45F8 		movq	-8(%rbp), %rax
+  83 003c 64483304 		xorq	%fs:40, %rax
+  83      25280000 
+  83      00
+  84 0045 7405     		je	.L6
+  85 0047 E8000000 		call	__stack_chk_fail@PLT
+  85      00
+  86              	.L6:
+  87 004c C9       		leave
+  88              	.LCFI5:
+  89              		.cfi_def_cfa 7, 8
+  90 004d C3       		ret
+  91              		.cfi_endproc
+  92              	.LFE14:
+  94              		.section	.text.aes_crypt_ecb_wrap,"ax",@progbits
+  96              	aes_crypt_ecb_wrap:
+  97              	.LFB15:
+ 105:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_GCM_C */
+ 106:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 107:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CCM_C)
+ 108:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** /* shared by all CCM ciphers */
+ 109:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void *ccm_ctx_alloc( void )
+ 110:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 111:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_ccm_context ) );
+ 112:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 113:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     if( ctx != NULL )
+ 114:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         mbedtls_ccm_init( (mbedtls_ccm_context *) ctx );
+ 115:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 116:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return( ctx );
+ 117:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 118:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 119:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void ccm_ctx_free( void *ctx )
+GAS LISTING /tmp/ccnPBEjk.s 			page 5
+
+
+ 120:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 121:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_ccm_free( ctx );
+ 122:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_free( ctx );
+ 123:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 124:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CCM_C */
+ 125:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 126:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_AES_C)
+ 127:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 128:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_crypt_ecb_wrap( void *ctx, mbedtls_operation_t operation,
+ 129:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         const unsigned char *input, unsigned char *output )
+ 130:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+  98              		.loc 1 130 1
+  99              		.cfi_startproc
+ 100 0000 F30F1EFA 		endbr64
+ 101 0004 55       		pushq	%rbp
+ 102              	.LCFI6:
+ 103              		.cfi_def_cfa_offset 16
+ 104              		.cfi_offset 6, -16
+ 105 0005 4889E5   		movq	%rsp, %rbp
+ 106              	.LCFI7:
+ 107              		.cfi_def_cfa_register 6
+ 108 0008 4883EC30 		subq	$48, %rsp
+ 109 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 110 0010 8975E4   		movl	%esi, -28(%rbp)
+ 111 0013 488955D8 		movq	%rdx, -40(%rbp)
+ 112 0017 48894DD0 		movq	%rcx, -48(%rbp)
+ 113              		.loc 1 130 1
+ 114 001b 64488B04 		movq	%fs:40, %rax
+ 114      25280000 
+ 114      00
+ 115 0024 488945F8 		movq	%rax, -8(%rbp)
+ 116 0028 31C0     		xorl	%eax, %eax
+ 131:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_crypt_ecb( (mbedtls_aes_context *) ctx, operation, input, output );
+ 117              		.loc 1 131 12
+ 118 002a 488B4DD0 		movq	-48(%rbp), %rcx
+ 119 002e 488B55D8 		movq	-40(%rbp), %rdx
+ 120 0032 8B75E4   		movl	-28(%rbp), %esi
+ 121 0035 488B45E8 		movq	-24(%rbp), %rax
+ 122 0039 4889C7   		movq	%rax, %rdi
+ 123 003c E8000000 		call	mbedtls_aes_crypt_ecb@PLT
+ 123      00
+ 132:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 124              		.loc 1 132 1
+ 125 0041 488B7DF8 		movq	-8(%rbp), %rdi
+ 126 0045 6448333C 		xorq	%fs:40, %rdi
+ 126      25280000 
+ 126      00
+ 127 004e 7405     		je	.L9
+ 128 0050 E8000000 		call	__stack_chk_fail@PLT
+ 128      00
+ 129              	.L9:
+ 130 0055 C9       		leave
+ 131              	.LCFI8:
+ 132              		.cfi_def_cfa 7, 8
+ 133 0056 C3       		ret
+ 134              		.cfi_endproc
+ 135              	.LFE15:
+GAS LISTING /tmp/ccnPBEjk.s 			page 6
+
+
+ 137              		.section	.text.aes_crypt_cbc_wrap,"ax",@progbits
+ 139              	aes_crypt_cbc_wrap:
+ 140              	.LFB16:
+ 133:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 134:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CBC)
+ 135:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_crypt_cbc_wrap( void *ctx, mbedtls_operation_t operation, size_t length,
+ 136:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         unsigned char *iv, const unsigned char *input, unsigned char *output )
+ 137:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 141              		.loc 1 137 1
+ 142              		.cfi_startproc
+ 143 0000 F30F1EFA 		endbr64
+ 144 0004 55       		pushq	%rbp
+ 145              	.LCFI9:
+ 146              		.cfi_def_cfa_offset 16
+ 147              		.cfi_offset 6, -16
+ 148 0005 4889E5   		movq	%rsp, %rbp
+ 149              	.LCFI10:
+ 150              		.cfi_def_cfa_register 6
+ 151 0008 4883EC40 		subq	$64, %rsp
+ 152 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 153 0010 8975E4   		movl	%esi, -28(%rbp)
+ 154 0013 488955D8 		movq	%rdx, -40(%rbp)
+ 155 0017 48894DD0 		movq	%rcx, -48(%rbp)
+ 156 001b 4C8945C8 		movq	%r8, -56(%rbp)
+ 157 001f 4C894DC0 		movq	%r9, -64(%rbp)
+ 158              		.loc 1 137 1
+ 159 0023 64488B04 		movq	%fs:40, %rax
+ 159      25280000 
+ 159      00
+ 160 002c 488945F8 		movq	%rax, -8(%rbp)
+ 161 0030 31C0     		xorl	%eax, %eax
+ 138:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_crypt_cbc( (mbedtls_aes_context *) ctx, operation, length, iv, input,
+ 162              		.loc 1 138 12
+ 163 0032 4C8B45C0 		movq	-64(%rbp), %r8
+ 164 0036 488B7DC8 		movq	-56(%rbp), %rdi
+ 165 003a 488B4DD0 		movq	-48(%rbp), %rcx
+ 166 003e 488B55D8 		movq	-40(%rbp), %rdx
+ 167 0042 8B75E4   		movl	-28(%rbp), %esi
+ 168 0045 488B45E8 		movq	-24(%rbp), %rax
+ 169 0049 4D89C1   		movq	%r8, %r9
+ 170 004c 4989F8   		movq	%rdi, %r8
+ 171 004f 4889C7   		movq	%rax, %rdi
+ 172 0052 E8000000 		call	mbedtls_aes_crypt_cbc@PLT
+ 172      00
+ 139:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                           output );
+ 140:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 173              		.loc 1 140 1
+ 174 0057 488B55F8 		movq	-8(%rbp), %rdx
+ 175 005b 64483314 		xorq	%fs:40, %rdx
+ 175      25280000 
+ 175      00
+ 176 0064 7405     		je	.L12
+ 177 0066 E8000000 		call	__stack_chk_fail@PLT
+ 177      00
+ 178              	.L12:
+ 179 006b C9       		leave
+ 180              	.LCFI11:
+GAS LISTING /tmp/ccnPBEjk.s 			page 7
+
+
+ 181              		.cfi_def_cfa 7, 8
+ 182 006c C3       		ret
+ 183              		.cfi_endproc
+ 184              	.LFE16:
+ 186              		.section	.text.aes_setkey_dec_wrap,"ax",@progbits
+ 188              	aes_setkey_dec_wrap:
+ 189              	.LFB17:
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_CBC */
+ 142:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 143:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CFB)
+ 144:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_crypt_cfb128_wrap( void *ctx, mbedtls_operation_t operation,
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         size_t length, size_t *iv_off, unsigned char *iv,
+ 146:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         const unsigned char *input, unsigned char *output )
+ 147:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 148:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_crypt_cfb128( (mbedtls_aes_context *) ctx, operation, length, iv_off, iv,
+ 149:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                              input, output );
+ 150:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_CFB */
+ 152:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 153:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_OFB)
+ 154:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_crypt_ofb_wrap( void *ctx, size_t length, size_t *iv_off,
+ 155:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         unsigned char *iv, const unsigned char *input, unsigned char *output )
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 157:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_crypt_ofb( (mbedtls_aes_context *) ctx, length, iv_off,
+ 158:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                     iv, input, output );
+ 159:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 160:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_OFB */
+ 161:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 162:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CTR)
+ 163:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_crypt_ctr_wrap( void *ctx, size_t length, size_t *nc_off,
+ 164:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         unsigned char *nonce_counter, unsigned char *stream_block,
+ 165:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         const unsigned char *input, unsigned char *output )
+ 166:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 167:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_crypt_ctr( (mbedtls_aes_context *) ctx, length, nc_off, nonce_counter,
+ 168:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                           stream_block, input, output );
+ 169:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_CTR */
+ 171:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 172:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_XTS)
+ 173:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_crypt_xts_wrap( void *ctx, mbedtls_operation_t operation,
+ 174:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                size_t length,
+ 175:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                const unsigned char data_unit[16],
+ 176:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                const unsigned char *input,
+ 177:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                unsigned char *output )
+ 178:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 179:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_xts_context *xts_ctx = ctx;
+ 180:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     int mode;
+ 181:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 182:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     switch( operation )
+ 183:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     {
+ 184:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         case MBEDTLS_ENCRYPT:
+ 185:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****             mode = MBEDTLS_AES_ENCRYPT;
+ 186:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****             break;
+ 187:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         case MBEDTLS_DECRYPT:
+ 188:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****             mode = MBEDTLS_AES_DECRYPT;
+ 189:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****             break;
+ 190:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         default:
+GAS LISTING /tmp/ccnPBEjk.s 			page 8
+
+
+ 191:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****             return MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA;
+ 192:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     }
+ 193:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 194:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_crypt_xts( xts_ctx, mode, length,
+ 195:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                   data_unit, input, output );
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 197:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_XTS */
+ 198:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 199:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_setkey_dec_wrap( void *ctx, const unsigned char *key,
+ 200:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                 unsigned int key_bitlen )
+ 201:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 190              		.loc 1 201 1
+ 191              		.cfi_startproc
+ 192 0000 F30F1EFA 		endbr64
+ 193 0004 55       		pushq	%rbp
+ 194              	.LCFI12:
+ 195              		.cfi_def_cfa_offset 16
+ 196              		.cfi_offset 6, -16
+ 197 0005 4889E5   		movq	%rsp, %rbp
+ 198              	.LCFI13:
+ 199              		.cfi_def_cfa_register 6
+ 200 0008 4883EC30 		subq	$48, %rsp
+ 201 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 202 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 203 0014 8955DC   		movl	%edx, -36(%rbp)
+ 204              		.loc 1 201 1
+ 205 0017 64488B04 		movq	%fs:40, %rax
+ 205      25280000 
+ 205      00
+ 206 0020 488945F8 		movq	%rax, -8(%rbp)
+ 207 0024 31C0     		xorl	%eax, %eax
+ 202:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_setkey_dec( (mbedtls_aes_context *) ctx, key, key_bitlen );
+ 208              		.loc 1 202 12
+ 209 0026 8B55DC   		movl	-36(%rbp), %edx
+ 210 0029 488B4DE0 		movq	-32(%rbp), %rcx
+ 211 002d 488B45E8 		movq	-24(%rbp), %rax
+ 212 0031 4889CE   		movq	%rcx, %rsi
+ 213 0034 4889C7   		movq	%rax, %rdi
+ 214 0037 E8000000 		call	mbedtls_aes_setkey_dec@PLT
+ 214      00
+ 203:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 215              		.loc 1 203 1
+ 216 003c 488B4DF8 		movq	-8(%rbp), %rcx
+ 217 0040 6448330C 		xorq	%fs:40, %rcx
+ 217      25280000 
+ 217      00
+ 218 0049 7405     		je	.L15
+ 219 004b E8000000 		call	__stack_chk_fail@PLT
+ 219      00
+ 220              	.L15:
+ 221 0050 C9       		leave
+ 222              	.LCFI14:
+ 223              		.cfi_def_cfa 7, 8
+ 224 0051 C3       		ret
+ 225              		.cfi_endproc
+ 226              	.LFE17:
+ 228              		.section	.text.aes_setkey_enc_wrap,"ax",@progbits
+GAS LISTING /tmp/ccnPBEjk.s 			page 9
+
+
+ 230              	aes_setkey_enc_wrap:
+ 231              	.LFB18:
+ 204:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 205:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int aes_setkey_enc_wrap( void *ctx, const unsigned char *key,
+ 206:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                 unsigned int key_bitlen )
+ 207:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 232              		.loc 1 207 1
+ 233              		.cfi_startproc
+ 234 0000 F30F1EFA 		endbr64
+ 235 0004 55       		pushq	%rbp
+ 236              	.LCFI15:
+ 237              		.cfi_def_cfa_offset 16
+ 238              		.cfi_offset 6, -16
+ 239 0005 4889E5   		movq	%rsp, %rbp
+ 240              	.LCFI16:
+ 241              		.cfi_def_cfa_register 6
+ 242 0008 4883EC30 		subq	$48, %rsp
+ 243 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 244 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 245 0014 8955DC   		movl	%edx, -36(%rbp)
+ 246              		.loc 1 207 1
+ 247 0017 64488B04 		movq	%fs:40, %rax
+ 247      25280000 
+ 247      00
+ 248 0020 488945F8 		movq	%rax, -8(%rbp)
+ 249 0024 31C0     		xorl	%eax, %eax
+ 208:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_aes_setkey_enc( (mbedtls_aes_context *) ctx, key, key_bitlen );
+ 250              		.loc 1 208 12
+ 251 0026 8B55DC   		movl	-36(%rbp), %edx
+ 252 0029 488B4DE0 		movq	-32(%rbp), %rcx
+ 253 002d 488B45E8 		movq	-24(%rbp), %rax
+ 254 0031 4889CE   		movq	%rcx, %rsi
+ 255 0034 4889C7   		movq	%rax, %rdi
+ 256 0037 E8000000 		call	mbedtls_aes_setkey_enc@PLT
+ 256      00
+ 209:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 257              		.loc 1 209 1
+ 258 003c 488B4DF8 		movq	-8(%rbp), %rcx
+ 259 0040 6448330C 		xorq	%fs:40, %rcx
+ 259      25280000 
+ 259      00
+ 260 0049 7405     		je	.L18
+ 261 004b E8000000 		call	__stack_chk_fail@PLT
+ 261      00
+ 262              	.L18:
+ 263 0050 C9       		leave
+ 264              	.LCFI17:
+ 265              		.cfi_def_cfa 7, 8
+ 266 0051 C3       		ret
+ 267              		.cfi_endproc
+ 268              	.LFE18:
+ 270              		.section	.text.aes_ctx_alloc,"ax",@progbits
+ 272              	aes_ctx_alloc:
+ 273              	.LFB19:
+ 210:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 211:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void * aes_ctx_alloc( void )
+ 212:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+GAS LISTING /tmp/ccnPBEjk.s 			page 10
+
+
+ 274              		.loc 1 212 1
+ 275              		.cfi_startproc
+ 276 0000 F30F1EFA 		endbr64
+ 277 0004 55       		pushq	%rbp
+ 278              	.LCFI18:
+ 279              		.cfi_def_cfa_offset 16
+ 280              		.cfi_offset 6, -16
+ 281 0005 4889E5   		movq	%rsp, %rbp
+ 282              	.LCFI19:
+ 283              		.cfi_def_cfa_register 6
+ 284 0008 4883EC10 		subq	$16, %rsp
+ 285              		.loc 1 212 1
+ 286 000c 64488B04 		movq	%fs:40, %rax
+ 286      25280000 
+ 286      00
+ 287 0015 488945F8 		movq	%rax, -8(%rbp)
+ 288 0019 31C0     		xorl	%eax, %eax
+ 213:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_context *aes = mbedtls_calloc( 1, sizeof( mbedtls_aes_context ) );
+ 289              		.loc 1 213 32
+ 290 001b BE200100 		movl	$288, %esi
+ 290      00
+ 291 0020 BF010000 		movl	$1, %edi
+ 291      00
+ 292 0025 E8000000 		call	mbedtls_calloc@PLT
+ 292      00
+ 293 002a 488945F0 		movq	%rax, -16(%rbp)
+ 214:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 215:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     if( aes == NULL )
+ 294              		.loc 1 215 7
+ 295 002e 48837DF0 		cmpq	$0, -16(%rbp)
+ 295      00
+ 296 0033 7507     		jne	.L20
+ 216:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         return( NULL );
+ 297              		.loc 1 216 15
+ 298 0035 B8000000 		movl	$0, %eax
+ 298      00
+ 299 003a EB10     		jmp	.L21
+ 300              	.L20:
+ 217:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 218:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_init( aes );
+ 301              		.loc 1 218 5
+ 302 003c 488B45F0 		movq	-16(%rbp), %rax
+ 303 0040 4889C7   		movq	%rax, %rdi
+ 304 0043 E8000000 		call	mbedtls_aes_init@PLT
+ 304      00
+ 219:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return( aes );
+ 305              		.loc 1 220 11
+ 306 0048 488B45F0 		movq	-16(%rbp), %rax
+ 307              	.L21:
+ 221:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 308              		.loc 1 221 1
+ 309 004c 488B55F8 		movq	-8(%rbp), %rdx
+ 310 0050 64483314 		xorq	%fs:40, %rdx
+ 310      25280000 
+ 310      00
+ 311 0059 7405     		je	.L22
+GAS LISTING /tmp/ccnPBEjk.s 			page 11
+
+
+ 312 005b E8000000 		call	__stack_chk_fail@PLT
+ 312      00
+ 313              	.L22:
+ 314 0060 C9       		leave
+ 315              	.LCFI20:
+ 316              		.cfi_def_cfa 7, 8
+ 317 0061 C3       		ret
+ 318              		.cfi_endproc
+ 319              	.LFE19:
+ 321              		.section	.text.aes_ctx_free,"ax",@progbits
+ 323              	aes_ctx_free:
+ 324              	.LFB20:
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 223:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void aes_ctx_free( void *ctx )
+ 224:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 325              		.loc 1 224 1
+ 326              		.cfi_startproc
+ 327 0000 F30F1EFA 		endbr64
+ 328 0004 55       		pushq	%rbp
+ 329              	.LCFI21:
+ 330              		.cfi_def_cfa_offset 16
+ 331              		.cfi_offset 6, -16
+ 332 0005 4889E5   		movq	%rsp, %rbp
+ 333              	.LCFI22:
+ 334              		.cfi_def_cfa_register 6
+ 335 0008 4883EC20 		subq	$32, %rsp
+ 336 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 337              		.loc 1 224 1
+ 338 0010 64488B04 		movq	%fs:40, %rax
+ 338      25280000 
+ 338      00
+ 339 0019 488945F8 		movq	%rax, -8(%rbp)
+ 340 001d 31C0     		xorl	%eax, %eax
+ 225:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_free( (mbedtls_aes_context *) ctx );
+ 341              		.loc 1 225 5
+ 342 001f 488B45E8 		movq	-24(%rbp), %rax
+ 343 0023 4889C7   		movq	%rax, %rdi
+ 344 0026 E8000000 		call	mbedtls_aes_free@PLT
+ 344      00
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_free( ctx );
+ 345              		.loc 1 226 5
+ 346 002b 488B45E8 		movq	-24(%rbp), %rax
+ 347 002f 4889C7   		movq	%rax, %rdi
+ 348 0032 E8000000 		call	mbedtls_free@PLT
+ 348      00
+ 227:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 349              		.loc 1 227 1
+ 350 0037 90       		nop
+ 351 0038 488B45F8 		movq	-8(%rbp), %rax
+ 352 003c 64483304 		xorq	%fs:40, %rax
+ 352      25280000 
+ 352      00
+ 353 0045 7405     		je	.L24
+ 354 0047 E8000000 		call	__stack_chk_fail@PLT
+ 354      00
+ 355              	.L24:
+ 356 004c C9       		leave
+GAS LISTING /tmp/ccnPBEjk.s 			page 12
+
+
+ 357              	.LCFI23:
+ 358              		.cfi_def_cfa 7, 8
+ 359 004d C3       		ret
+ 360              		.cfi_endproc
+ 361              	.LFE20:
+ 363              		.section	.data.rel.ro.local.aes_info,"aw"
+ 364              		.align 32
+ 367              	aes_info:
+ 368 0000 02000000 		.long	2
+ 369 0004 00000000 		.zero	4
+ 370 0008 00000000 		.quad	aes_crypt_ecb_wrap
+ 370      00000000 
+ 371 0010 00000000 		.quad	aes_crypt_cbc_wrap
+ 371      00000000 
+ 372 0018 00000000 		.quad	aes_setkey_enc_wrap
+ 372      00000000 
+ 373 0020 00000000 		.quad	aes_setkey_dec_wrap
+ 373      00000000 
+ 374 0028 00000000 		.quad	aes_ctx_alloc
+ 374      00000000 
+ 375 0030 00000000 		.quad	aes_ctx_free
+ 375      00000000 
+ 376              		.section	.rodata
+ 377              	.LC0:
+ 378 0000 4145532D 		.string	"AES-128-ECB"
+ 378      3132382D 
+ 378      45434200 
+ 379              		.section	.data.rel.ro.local.aes_128_ecb_info,"aw"
+ 380              		.align 32
+ 383              	aes_128_ecb_info:
+ 384 0000 02000000 		.long	2
+ 385 0004 01000000 		.long	1
+ 386 0008 80000000 		.long	128
+ 387 000c 00000000 		.zero	4
+ 388 0010 00000000 		.quad	.LC0
+ 388      00000000 
+ 389 0018 00000000 		.long	0
+ 390 001c 00000000 		.long	0
+ 391 0020 10000000 		.long	16
+ 392 0024 00000000 		.zero	4
+ 393 0028 00000000 		.quad	aes_info
+ 393      00000000 
+ 394              		.section	.rodata
+ 395              	.LC1:
+ 396 000c 4145532D 		.string	"AES-192-ECB"
+ 396      3139322D 
+ 396      45434200 
+ 397              		.section	.data.rel.ro.local.aes_192_ecb_info,"aw"
+ 398              		.align 32
+ 401              	aes_192_ecb_info:
+ 402 0000 03000000 		.long	3
+ 403 0004 01000000 		.long	1
+ 404 0008 C0000000 		.long	192
+ 405 000c 00000000 		.zero	4
+ 406 0010 00000000 		.quad	.LC1
+ 406      00000000 
+ 407 0018 00000000 		.long	0
+GAS LISTING /tmp/ccnPBEjk.s 			page 13
+
+
+ 408 001c 00000000 		.long	0
+ 409 0020 10000000 		.long	16
+ 410 0024 00000000 		.zero	4
+ 411 0028 00000000 		.quad	aes_info
+ 411      00000000 
+ 412              		.section	.rodata
+ 413              	.LC2:
+ 414 0018 4145532D 		.string	"AES-256-ECB"
+ 414      3235362D 
+ 414      45434200 
+ 415              		.section	.data.rel.ro.local.aes_256_ecb_info,"aw"
+ 416              		.align 32
+ 419              	aes_256_ecb_info:
+ 420 0000 04000000 		.long	4
+ 421 0004 01000000 		.long	1
+ 422 0008 00010000 		.long	256
+ 423 000c 00000000 		.zero	4
+ 424 0010 00000000 		.quad	.LC2
+ 424      00000000 
+ 425 0018 00000000 		.long	0
+ 426 001c 00000000 		.long	0
+ 427 0020 10000000 		.long	16
+ 428 0024 00000000 		.zero	4
+ 429 0028 00000000 		.quad	aes_info
+ 429      00000000 
+ 430              		.section	.rodata
+ 431              	.LC3:
+ 432 0024 4145532D 		.string	"AES-128-CBC"
+ 432      3132382D 
+ 432      43424300 
+ 433              		.section	.data.rel.ro.local.aes_128_cbc_info,"aw"
+ 434              		.align 32
+ 437              	aes_128_cbc_info:
+ 438 0000 05000000 		.long	5
+ 439 0004 02000000 		.long	2
+ 440 0008 80000000 		.long	128
+ 441 000c 00000000 		.zero	4
+ 442 0010 00000000 		.quad	.LC3
+ 442      00000000 
+ 443 0018 10000000 		.long	16
+ 444 001c 00000000 		.long	0
+ 445 0020 10000000 		.long	16
+ 446 0024 00000000 		.zero	4
+ 447 0028 00000000 		.quad	aes_info
+ 447      00000000 
+ 448              		.section	.rodata
+ 449              	.LC4:
+ 450 0030 4145532D 		.string	"AES-192-CBC"
+ 450      3139322D 
+ 450      43424300 
+ 451              		.section	.data.rel.ro.local.aes_192_cbc_info,"aw"
+ 452              		.align 32
+ 455              	aes_192_cbc_info:
+ 456 0000 06000000 		.long	6
+ 457 0004 02000000 		.long	2
+ 458 0008 C0000000 		.long	192
+ 459 000c 00000000 		.zero	4
+GAS LISTING /tmp/ccnPBEjk.s 			page 14
+
+
+ 460 0010 00000000 		.quad	.LC4
+ 460      00000000 
+ 461 0018 10000000 		.long	16
+ 462 001c 00000000 		.long	0
+ 463 0020 10000000 		.long	16
+ 464 0024 00000000 		.zero	4
+ 465 0028 00000000 		.quad	aes_info
+ 465      00000000 
+ 466              		.section	.rodata
+ 467              	.LC5:
+ 468 003c 4145532D 		.string	"AES-256-CBC"
+ 468      3235362D 
+ 468      43424300 
+ 469              		.section	.data.rel.ro.local.aes_256_cbc_info,"aw"
+ 470              		.align 32
+ 473              	aes_256_cbc_info:
+ 474 0000 07000000 		.long	7
+ 475 0004 02000000 		.long	2
+ 476 0008 00010000 		.long	256
+ 477 000c 00000000 		.zero	4
+ 478 0010 00000000 		.quad	.LC5
+ 478      00000000 
+ 479 0018 10000000 		.long	16
+ 480 001c 00000000 		.long	0
+ 481 0020 10000000 		.long	16
+ 482 0024 00000000 		.zero	4
+ 483 0028 00000000 		.quad	aes_info
+ 483      00000000 
+ 484              		.section	.text.gcm_aes_setkey_wrap,"ax",@progbits
+ 486              	gcm_aes_setkey_wrap:
+ 487              	.LFB21:
+ 228:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 229:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_base_t aes_info = {
+ 230:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_ID_AES,
+ 231:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_crypt_ecb_wrap,
+ 232:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CBC)
+ 233:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_crypt_cbc_wrap,
+ 234:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 235:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CFB)
+ 236:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_crypt_cfb128_wrap,
+ 237:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 238:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_OFB)
+ 239:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_crypt_ofb_wrap,
+ 240:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 241:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CTR)
+ 242:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_crypt_ctr_wrap,
+ 243:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 244:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_XTS)
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 246:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 247:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_STREAM)
+ 248:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 249:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 250:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_setkey_enc_wrap,
+ 251:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_setkey_dec_wrap,
+ 252:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_ctx_alloc,
+ 253:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_ctx_free
+GAS LISTING /tmp/ccnPBEjk.s 			page 15
+
+
+ 254:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 255:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 256:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_128_ecb_info = {
+ 257:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_128_ECB,
+ 258:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_ECB,
+ 259:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     128,
+ 260:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-128-ECB",
+ 261:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 262:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 263:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 264:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 265:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 267:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_192_ecb_info = {
+ 268:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_192_ECB,
+ 269:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_ECB,
+ 270:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     192,
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-192-ECB",
+ 272:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 273:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 274:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 275:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 276:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 277:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 278:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_256_ecb_info = {
+ 279:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_256_ECB,
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_ECB,
+ 281:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     256,
+ 282:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-256-ECB",
+ 283:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 284:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 285:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 286:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 287:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 288:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 289:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CBC)
+ 290:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_128_cbc_info = {
+ 291:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_128_CBC,
+ 292:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CBC,
+ 293:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     128,
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-128-CBC",
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 296:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 297:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 298:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 299:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 300:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 301:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_192_cbc_info = {
+ 302:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_192_CBC,
+ 303:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CBC,
+ 304:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     192,
+ 305:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-192-CBC",
+ 306:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 308:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 309:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 310:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+GAS LISTING /tmp/ccnPBEjk.s 			page 16
+
+
+ 311:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 312:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_256_cbc_info = {
+ 313:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_256_CBC,
+ 314:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CBC,
+ 315:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     256,
+ 316:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-256-CBC",
+ 317:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 318:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 320:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 321:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 322:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_CBC */
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 324:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CFB)
+ 325:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_128_cfb128_info = {
+ 326:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_128_CFB128,
+ 327:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CFB,
+ 328:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     128,
+ 329:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-128-CFB128",
+ 330:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 331:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 333:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 334:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 335:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 336:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_192_cfb128_info = {
+ 337:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_192_CFB128,
+ 338:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CFB,
+ 339:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     192,
+ 340:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-192-CFB128",
+ 341:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 342:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 343:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 344:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 345:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 346:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 347:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_256_cfb128_info = {
+ 348:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_256_CFB128,
+ 349:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CFB,
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     256,
+ 351:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-256-CFB128",
+ 352:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 353:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 354:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 355:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 356:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 357:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_CFB */
+ 358:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 359:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_OFB)
+ 360:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_128_ofb_info = {
+ 361:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_128_OFB,
+ 362:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_OFB,
+ 363:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     128,
+ 364:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-128-OFB",
+ 365:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 366:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+GAS LISTING /tmp/ccnPBEjk.s 			page 17
+
+
+ 368:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 369:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 370:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 371:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_192_ofb_info = {
+ 372:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_192_OFB,
+ 373:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_OFB,
+ 374:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     192,
+ 375:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-192-OFB",
+ 376:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 377:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 378:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 379:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 380:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 381:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 382:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_256_ofb_info = {
+ 383:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_256_OFB,
+ 384:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_OFB,
+ 385:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     256,
+ 386:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-256-OFB",
+ 387:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 388:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 389:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 390:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 391:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 392:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_OFB */
+ 393:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 394:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CTR)
+ 395:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_128_ctr_info = {
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_128_CTR,
+ 397:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CTR,
+ 398:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     128,
+ 399:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-128-CTR",
+ 400:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 401:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 402:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 403:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 404:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 405:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_192_ctr_info = {
+ 407:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_192_CTR,
+ 408:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CTR,
+ 409:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     192,
+ 410:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-192-CTR",
+ 411:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 412:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 413:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 414:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 415:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 416:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 417:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_256_ctr_info = {
+ 418:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_256_CTR,
+ 419:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_CTR,
+ 420:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     256,
+ 421:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-256-CTR",
+ 422:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 423:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+GAS LISTING /tmp/ccnPBEjk.s 			page 18
+
+
+ 425:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &aes_info
+ 426:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 427:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_CTR */
+ 428:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 429:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_XTS)
+ 430:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int xts_aes_setkey_enc_wrap( void *ctx, const unsigned char *key,
+ 431:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                     unsigned int key_bitlen )
+ 432:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 433:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_xts_context *xts_ctx = ctx;
+ 434:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return( mbedtls_aes_xts_setkey_enc( xts_ctx, key, key_bitlen ) );
+ 435:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 436:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 437:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int xts_aes_setkey_dec_wrap( void *ctx, const unsigned char *key,
+ 438:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                     unsigned int key_bitlen )
+ 439:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 440:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_xts_context *xts_ctx = ctx;
+ 441:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return( mbedtls_aes_xts_setkey_dec( xts_ctx, key, key_bitlen ) );
+ 442:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 443:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 444:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void *xts_aes_ctx_alloc( void )
+ 445:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 446:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_xts_context *xts_ctx = mbedtls_calloc( 1, sizeof( *xts_ctx ) );
+ 447:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 448:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     if( xts_ctx != NULL )
+ 449:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         mbedtls_aes_xts_init( xts_ctx );
+ 450:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 451:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return( xts_ctx );
+ 452:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 453:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 454:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static void xts_aes_ctx_free( void *ctx )
+ 455:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 456:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_xts_context *xts_ctx = ctx;
+ 457:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 458:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     if( xts_ctx == NULL )
+ 459:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****         return;
+ 460:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 461:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_aes_xts_free( xts_ctx );
+ 462:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     mbedtls_free( xts_ctx );
+ 463:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 464:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 465:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_base_t xts_aes_info = {
+ 466:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_ID_AES,
+ 467:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 468:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CBC)
+ 469:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 470:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 471:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CFB)
+ 472:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 473:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 474:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_OFB)
+ 475:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 476:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 477:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_CTR)
+ 478:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 479:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 480:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_XTS)
+ 481:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     aes_crypt_xts_wrap,
+GAS LISTING /tmp/ccnPBEjk.s 			page 19
+
+
+ 482:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 483:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_CIPHER_MODE_STREAM)
+ 484:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     NULL,
+ 485:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif
+ 486:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     xts_aes_setkey_enc_wrap,
+ 487:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     xts_aes_setkey_dec_wrap,
+ 488:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     xts_aes_ctx_alloc,
+ 489:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     xts_aes_ctx_free
+ 490:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 491:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 492:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_128_xts_info = {
+ 493:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_128_XTS,
+ 494:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_XTS,
+ 495:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     256,
+ 496:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-128-XTS",
+ 497:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 498:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 499:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 500:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &xts_aes_info
+ 501:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 502:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 503:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static const mbedtls_cipher_info_t aes_256_xts_info = {
+ 504:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_CIPHER_AES_256_XTS,
+ 505:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     MBEDTLS_MODE_XTS,
+ 506:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     512,
+ 507:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     "AES-256-XTS",
+ 508:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 509:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     0,
+ 510:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     16,
+ 511:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     &xts_aes_info
+ 512:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** };
+ 513:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #endif /* MBEDTLS_CIPHER_MODE_XTS */
+ 514:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** 
+ 515:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** #if defined(MBEDTLS_GCM_C)
+ 516:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** static int gcm_aes_setkey_wrap( void *ctx, const unsigned char *key,
+ 517:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                                 unsigned int key_bitlen )
+ 518:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** {
+ 488              		.loc 1 518 1
+ 489              		.cfi_startproc
+ 490 0000 F30F1EFA 		endbr64
+ 491 0004 55       		pushq	%rbp
+ 492              	.LCFI24:
+ 493              		.cfi_def_cfa_offset 16
+ 494              		.cfi_offset 6, -16
+ 495 0005 4889E5   		movq	%rsp, %rbp
+ 496              	.LCFI25:
+ 497              		.cfi_def_cfa_register 6
+ 498 0008 4883EC30 		subq	$48, %rsp
+ 499 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 500 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 501 0014 8955DC   		movl	%edx, -36(%rbp)
+ 502              		.loc 1 518 1
+ 503 0017 64488B04 		movq	%fs:40, %rax
+ 503      25280000 
+ 503      00
+ 504 0020 488945F8 		movq	%rax, -8(%rbp)
+ 505 0024 31C0     		xorl	%eax, %eax
+GAS LISTING /tmp/ccnPBEjk.s 			page 20
+
+
+ 519:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****     return mbedtls_gcm_setkey( (mbedtls_gcm_context *) ctx, MBEDTLS_CIPHER_ID_AES,
+ 506              		.loc 1 519 12
+ 507 0026 8B4DDC   		movl	-36(%rbp), %ecx
+ 508 0029 488B55E0 		movq	-32(%rbp), %rdx
+ 509 002d 488B45E8 		movq	-24(%rbp), %rax
+ 510 0031 BE020000 		movl	$2, %esi
+ 510      00
+ 511 0036 4889C7   		movq	%rax, %rdi
+ 512 0039 E8000000 		call	mbedtls_gcm_setkey@PLT
+ 512      00
+ 520:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c ****                      key, key_bitlen );
+ 521:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/cipher_wrap.c **** }
+ 513              		.loc 1 521 1
+ 514 003e 488B75F8 		movq	-8(%rbp), %rsi
+ 515 0042 64483334 		xorq	%fs:40, %rsi
+ 515      25280000 
+ 515      00
+ 516 004b 7405     		je	.L27
+ 517 004d E8000000 		call	__stack_chk_fail@PLT
+ 517      00
+ 518              	.L27:
+ 519 0052 C9       		leave
+ 520              	.LCFI26:
+ 521              		.cfi_def_cfa 7, 8
+ 522 0053 C3       		ret
+ 523              		.cfi_endproc
+ 524              	.LFE21:
+ 526              		.section	.data.rel.ro.local.gcm_aes_info,"aw"
+ 527              		.align 32
+ 530              	gcm_aes_info:
+ 531 0000 02000000 		.long	2
+ 532 0004 00000000 		.zero	4
+ 533 0008 00000000 		.quad	0
+ 533      00000000 
+ 534 0010 00000000 		.quad	0
+ 534      00000000 
+ 535 0018 00000000 		.quad	gcm_aes_setkey_wrap
+ 535      00000000 
+ 536 0020 00000000 		.quad	gcm_aes_setkey_wrap
+ 536      00000000 
+ 537 0028 00000000 		.quad	gcm_ctx_alloc
+ 537      00000000 
+ 538 0030 00000000 		.quad	gcm_ctx_free
+ 538      00000000 
+ 539              		.section	.rodata
+ 540              	.LC6:
+ 541 0048 4145532D 		.string	"AES-128-GCM"
+ 541      3132382D 
+ 541      47434D00 
+ 542              		.section	.data.rel.ro.local.aes_128_gcm_info,"aw"
+ 543              		.align 32
+ 546              	aes_128_gcm_info:
+ 547 0000 0E000000 		.long	14
+ 548 0004 06000000 		.long	6
+ 549 0008 80000000 		.long	128
+ 550 000c 00000000 		.zero	4
+ 551 0010 00000000 		.quad	.LC6
+GAS LISTING /tmp/ccnPBEjk.s 			page 21
+
+
+ 551      00000000 
+ 552 0018 0C000000 		.long	12
+ 553 001c 01000000 		.long	1
+ 554 0020 10000000 		.long	16
+ 555 0024 00000000 		.zero	4
+ 556 0028 00000000 		.quad	gcm_aes_info
+ 556      00000000 
+ 557              		.section	.rodata
+ 558              	.LC7:
+ 559 0054 4145532D 		.string	"AES-192-GCM"
+ 559      3139322D 
+ 559      47434D00 
+ 560              		.section	.data.rel.ro.local.aes_192_gcm_info,"aw"
+ 561              		.align 32
+ 564              	aes_192_gcm_info:
+ 565 0000 0F000000 		.long	15
+ 566 0004 06000000 		.long	6
+ 567 0008 C0000000 		.long	192
+ 568 000c 00000000 		.zero	4
+ 569 0010 00000000 		.quad	.LC7
+ 569      00000000 
+ 570 0018 0C000000 		.long	12
+ 571 001c 01000000 		.long	1
+ 572 0020 10000000 		.long	16
+ 573 0024 00000000 		.zero	4
+ 574 0028 00000000 		.quad	gcm_aes_info
+ 574      00000000 
+ 575              		.section	.rodata
+ 576              	.LC8:
+ 577 0060 4145532D 		.string	"AES-256-GCM"
+ 577      3235362D 
+ 577      47434D00 
+ 578              		.section	.data.rel.ro.local.aes_256_gcm_info,"aw"
+ 579              		.align 32
+ 582              	aes_256_gcm_info:
+ 583 0000 10000000 		.long	16
+ 584 0004 06000000 		.long	6
+ 585 0008 00010000 		.long	256
+ 586 000c 00000000 		.zero	4
+ 587 0010 00000000 		.quad	.LC8
+ 587      00000000 
+ 588 0018 0C000000 		.long	12
+ 589 001c 01000000 		.long	1
+ 590 0020 10000000 		.long	16
+ 591 0024 00000000 		.zero	4
+ 592 0028 00000000 		.quad	gcm_aes_info
+ 592      00000000 
+ 593              		.globl	mbedtls_cipher_definitions
+ 594              		.section	.data.rel.ro.local.mbedtls_cipher_definitions,"aw"
+ 595              		.align 32
+ 598              	mbedtls_cipher_definitions:
+ 599 0000 02000000 		.long	2
+ 600 0004 00000000 		.zero	4
+ 601 0008 00000000 		.quad	aes_128_ecb_info
+ 601      00000000 
+ 602 0010 03000000 		.long	3
+ 603 0014 00000000 		.zero	4
+GAS LISTING /tmp/ccnPBEjk.s 			page 22
+
+
+ 604 0018 00000000 		.quad	aes_192_ecb_info
+ 604      00000000 
+ 605 0020 04000000 		.long	4
+ 606 0024 00000000 		.zero	4
+ 607 0028 00000000 		.quad	aes_256_ecb_info
+ 607      00000000 
+ 608 0030 05000000 		.long	5
+ 609 0034 00000000 		.zero	4
+ 610 0038 00000000 		.quad	aes_128_cbc_info
+ 610      00000000 
+ 611 0040 06000000 		.long	6
+ 612 0044 00000000 		.zero	4
+ 613 0048 00000000 		.quad	aes_192_cbc_info
+ 613      00000000 
+ 614 0050 07000000 		.long	7
+ 615 0054 00000000 		.zero	4
+ 616 0058 00000000 		.quad	aes_256_cbc_info
+ 616      00000000 
+ 617 0060 0E000000 		.long	14
+ 618 0064 00000000 		.zero	4
+ 619 0068 00000000 		.quad	aes_128_gcm_info
+ 619      00000000 
+ 620 0070 0F000000 		.long	15
+ 621 0074 00000000 		.zero	4
+ 622 0078 00000000 		.quad	aes_192_gcm_info
+ 622      00000000 
+ 623 0080 10000000 		.long	16
+ 624 0084 00000000 		.zero	4
+ 625 0088 00000000 		.quad	aes_256_gcm_info
+ 625      00000000 
+ 626 0090 00000000 		.long	0
+ 627 0094 00000000 		.zero	4
+ 628 0098 00000000 		.quad	0
+ 628      00000000 
+ 629              		.comm	mbedtls_cipher_supported,40,32
+ 630              		.text
+ 631              	.Letext0:
+ 632              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 633              		.file 3 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/cipher.h"
+ 634              		.file 4 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/cipher_in
+ 635              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 636              		.file 6 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 637              		.file 7 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/aes.h"
+ 638              		.file 8 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/gcm.h"
+ 639              		.file 9 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 640              		.file 10 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 641              		.file 11 "/usr/include/stdio.h"
+ 642              		.file 12 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 643              		.file 13 "/usr/include/time.h"
+ 644              		.file 14 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platform
+ 3953              		.section	.note.gnu.property,"a"
+ 3954              		.align 8
+ 3955 0000 04000000 		.long	 1f - 0f
+ 3956 0004 10000000 		.long	 4f - 1f
+ 3957 0008 05000000 		.long	 5
+ 3958              	0:
+ 3959 000c 474E5500 		.string	 "GNU"
+GAS LISTING /tmp/ccnPBEjk.s 			page 23
+
+
+ 3960              	1:
+ 3961              		.align 8
+ 3962 0010 020000C0 		.long	 0xc0000002
+ 3963 0014 04000000 		.long	 3f - 2f
+ 3964              	2:
+ 3965 0018 03000000 		.long	 0x3
+ 3966              	3:
+ 3967 001c 00000000 		.align 8
+ 3968              	4:
+GAS LISTING /tmp/ccnPBEjk.s 			page 24
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 cipher_wrap.c
+     /tmp/ccnPBEjk.s:6      .text.gcm_ctx_alloc:0000000000000000 gcm_ctx_alloc
+     /tmp/ccnPBEjk.s:54     .text.gcm_ctx_free:0000000000000000 gcm_ctx_free
+     /tmp/ccnPBEjk.s:96     .text.aes_crypt_ecb_wrap:0000000000000000 aes_crypt_ecb_wrap
+     /tmp/ccnPBEjk.s:139    .text.aes_crypt_cbc_wrap:0000000000000000 aes_crypt_cbc_wrap
+     /tmp/ccnPBEjk.s:188    .text.aes_setkey_dec_wrap:0000000000000000 aes_setkey_dec_wrap
+     /tmp/ccnPBEjk.s:230    .text.aes_setkey_enc_wrap:0000000000000000 aes_setkey_enc_wrap
+     /tmp/ccnPBEjk.s:272    .text.aes_ctx_alloc:0000000000000000 aes_ctx_alloc
+     /tmp/ccnPBEjk.s:323    .text.aes_ctx_free:0000000000000000 aes_ctx_free
+     /tmp/ccnPBEjk.s:367    .data.rel.ro.local.aes_info:0000000000000000 aes_info
+     /tmp/ccnPBEjk.s:383    .data.rel.ro.local.aes_128_ecb_info:0000000000000000 aes_128_ecb_info
+     /tmp/ccnPBEjk.s:401    .data.rel.ro.local.aes_192_ecb_info:0000000000000000 aes_192_ecb_info
+     /tmp/ccnPBEjk.s:419    .data.rel.ro.local.aes_256_ecb_info:0000000000000000 aes_256_ecb_info
+     /tmp/ccnPBEjk.s:437    .data.rel.ro.local.aes_128_cbc_info:0000000000000000 aes_128_cbc_info
+     /tmp/ccnPBEjk.s:455    .data.rel.ro.local.aes_192_cbc_info:0000000000000000 aes_192_cbc_info
+     /tmp/ccnPBEjk.s:473    .data.rel.ro.local.aes_256_cbc_info:0000000000000000 aes_256_cbc_info
+     /tmp/ccnPBEjk.s:486    .text.gcm_aes_setkey_wrap:0000000000000000 gcm_aes_setkey_wrap
+     /tmp/ccnPBEjk.s:530    .data.rel.ro.local.gcm_aes_info:0000000000000000 gcm_aes_info
+     /tmp/ccnPBEjk.s:546    .data.rel.ro.local.aes_128_gcm_info:0000000000000000 aes_128_gcm_info
+     /tmp/ccnPBEjk.s:564    .data.rel.ro.local.aes_192_gcm_info:0000000000000000 aes_192_gcm_info
+     /tmp/ccnPBEjk.s:582    .data.rel.ro.local.aes_256_gcm_info:0000000000000000 aes_256_gcm_info
+     /tmp/ccnPBEjk.s:598    .data.rel.ro.local.mbedtls_cipher_definitions:0000000000000000 mbedtls_cipher_definitions
+                            *COM*:0000000000000028 mbedtls_cipher_supported
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+mbedtls_calloc
+mbedtls_gcm_init
+__stack_chk_fail
+mbedtls_gcm_free
+mbedtls_free
+mbedtls_aes_crypt_ecb
+mbedtls_aes_crypt_cbc
+mbedtls_aes_setkey_dec
+mbedtls_aes_setkey_enc
+mbedtls_aes_init
+mbedtls_aes_free
+mbedtls_gcm_setkey

@@ -1,0 +1,208 @@
+GAS LISTING /tmp/ccOip5aS.s 			page 1
+
+
+   1              		.file	"vwscanf_s.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.vwscanf_s,"ax",@progbits
+   5              		.globl	vwscanf_s
+   7              	vwscanf_s:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c"
+   1:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** /*
+   2:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+   3:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *
+   4:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *
+   8:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *
+  10:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  */
+  15:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  16:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** #include "secinput.h"
+  17:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  18:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** /*
+  19:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * <FUNCTION DESCRIPTION>
+  20:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    The  vwscanf_s  function  is  the  wide-character  equivalent  of the vscanf_s function
+  21:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    The vwscanf_s function is the wide-character version of vscanf_s. The
+  22:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    function reads data from the standard input stream stdin and writes the
+  23:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    data into the location that's given by argument. Each argument  must be a
+  24:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    pointer to a variable of a type that corresponds to a type specifier in
+  25:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    format. If copying occurs between strings that overlap, the behavior is
+  26:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    undefined.
+  27:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *
+  28:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * <INPUT PARAMETERS>
+  29:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    format                 Format control string.
+  30:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    argList                pointer to list of arguments
+  31:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *
+  32:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * <OUTPUT PARAMETERS>
+  33:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    argList                the converted value stored in user assigned address
+  34:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *
+  35:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  * <RETURN VALUE>
+  36:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    Returns the number of fields successfully converted and assigned;
+  37:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    the return value does not include fields that were read but not assigned.
+  38:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    A return value of 0 indicates that no fields were assigned.
+  39:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  *    return -1 if an error occurs.
+  40:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****  */
+  41:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** int vwscanf_s(const wchar_t *format, va_list argList)
+  42:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** {
+  10              		.loc 1 42 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccOip5aS.s 			page 2
+
+
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC60 		subq	$96, %rsp
+  21 000c 48897DA8 		movq	%rdi, -88(%rbp)
+  22 0010 488975A0 		movq	%rsi, -96(%rbp)
+  23              		.loc 1 42 1
+  24 0014 64488B04 		movq	%fs:40, %rax
+  24      25280000 
+  24      00
+  25 001d 488945F8 		movq	%rax, -8(%rbp)
+  26 0021 31C0     		xorl	%eax, %eax
+  43:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     int retVal;                 /* If initialization causes  e838 */
+  44:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     SecFileStream fStr;
+  45:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  46:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     SECUREC_INIT_SEC_FILE_STREAM(fStr, SECUREC_FROM_STDIN_FLAG, stdin, 0, NULL, 0);
+  27              		.loc 1 46 5
+  28 0023 C745C004 		movl	$4, -64(%rbp)
+  28      000000
+  29 002a C745C400 		movl	$0, -60(%rbp)
+  29      000000
+  30 0031 48C745C8 		movq	$0, -56(%rbp)
+  30      00000000 
+  31 0039 48C745D0 		movq	$0, -48(%rbp)
+  31      00000000 
+  32 0041 488B0500 		movq	stdin(%rip), %rax
+  32      000000
+  33 0048 488945D8 		movq	%rax, -40(%rbp)
+  34 004c 48C745E0 		movq	$0, -32(%rbp)
+  34      00000000 
+  35 0054 C745E800 		movl	$0, -24(%rbp)
+  35      000000
+  47:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     if (format == NULL || fStr.pf == NULL) {
+  36              		.loc 1 47 8
+  37 005b 48837DA8 		cmpq	$0, -88(%rbp)
+  37      00
+  38 0060 7409     		je	.L2
+  39              		.loc 1 47 31 discriminator 1
+  40 0062 488B45D8 		movq	-40(%rbp), %rax
+  41              		.loc 1 47 24 discriminator 1
+  42 0066 4885C0   		testq	%rax, %rax
+  43 0069 7507     		jne	.L3
+  44              	.L2:
+  48:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vwscanf_s");
+  49:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****         return SECUREC_SCANF_EINVAL;
+  45              		.loc 1 49 16
+  46 006b B8FFFFFF 		movl	$-1, %eax
+  46      FF
+  47 0070 EB2A     		jmp	.L6
+  48              	.L3:
+  50:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     }
+  51:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  52:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     SECUREC_LOCK_STDIN(0, fStr.pf);
+  53:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  54:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     retVal = SecInputSW(&fStr, format, argList);
+  49              		.loc 1 54 14
+  50 0072 488B55A0 		movq	-96(%rbp), %rdx
+GAS LISTING /tmp/ccOip5aS.s 			page 3
+
+
+  51 0076 488B4DA8 		movq	-88(%rbp), %rcx
+  52 007a 488D45C0 		leaq	-64(%rbp), %rax
+  53 007e 4889CE   		movq	%rcx, %rsi
+  54 0081 4889C7   		movq	%rax, %rdi
+  55 0084 E8000000 		call	SecInputSW@PLT
+  55      00
+  56 0089 8945BC   		movl	%eax, -68(%rbp)
+  55:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  56:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     SECUREC_UNLOCK_STDIN(0, fStr.pf);
+  57:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  58:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     if (retVal < 0) {
+  57              		.loc 1 58 8
+  58 008c 837DBC00 		cmpl	$0, -68(%rbp)
+  59 0090 7907     		jns	.L5
+  59:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vwscanf_s");
+  60:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****         return SECUREC_SCANF_EINVAL;
+  60              		.loc 1 60 16
+  61 0092 B8FFFFFF 		movl	$-1, %eax
+  61      FF
+  62 0097 EB03     		jmp	.L6
+  63              	.L5:
+  61:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     }
+  62:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** 
+  63:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c ****     return retVal;
+  64              		.loc 1 63 12
+  65 0099 8B45BC   		movl	-68(%rbp), %eax
+  66              	.L6:
+  64:/home/xingli/share/1205tiny/secure_c/src/vwscanf_s.c **** }
+  67              		.loc 1 64 1 discriminator 1
+  68 009c 488B4DF8 		movq	-8(%rbp), %rcx
+  69 00a0 6448330C 		xorq	%fs:40, %rcx
+  69      25280000 
+  69      00
+  70 00a9 7405     		je	.L7
+  71              		.loc 1 64 1 is_stmt 0
+  72 00ab E8000000 		call	__stack_chk_fail@PLT
+  72      00
+  73              	.L7:
+  74 00b0 C9       		leave
+  75              	.LCFI2:
+  76              		.cfi_def_cfa 7, 8
+  77 00b1 C3       		ret
+  78              		.cfi_endproc
+  79              	.LFE6:
+  81              		.text
+  82              	.Letext0:
+  83              		.file 2 "<built-in>"
+  84              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+  85              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+  86              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+  87              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+  88              		.file 7 "/usr/include/stdio.h"
+  89              		.file 8 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+  90              		.file 9 "/home/xingli/share/1205tiny/secure_c/src/secinput.h"
+ 1250              		.section	.note.gnu.property,"a"
+ 1251              		.align 8
+ 1252 0000 04000000 		.long	 1f - 0f
+GAS LISTING /tmp/ccOip5aS.s 			page 4
+
+
+ 1253 0004 10000000 		.long	 4f - 1f
+ 1254 0008 05000000 		.long	 5
+ 1255              	0:
+ 1256 000c 474E5500 		.string	 "GNU"
+ 1257              	1:
+ 1258              		.align 8
+ 1259 0010 020000C0 		.long	 0xc0000002
+ 1260 0014 04000000 		.long	 3f - 2f
+ 1261              	2:
+ 1262 0018 03000000 		.long	 0x3
+ 1263              	3:
+ 1264 001c 00000000 		.align 8
+ 1265              	4:
+GAS LISTING /tmp/ccOip5aS.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 vwscanf_s.c
+     /tmp/ccOip5aS.s:7      .text.vwscanf_s:0000000000000000 vwscanf_s
+
+UNDEFINED SYMBOLS
+stdin
+_GLOBAL_OFFSET_TABLE_
+SecInputSW
+__stack_chk_fail

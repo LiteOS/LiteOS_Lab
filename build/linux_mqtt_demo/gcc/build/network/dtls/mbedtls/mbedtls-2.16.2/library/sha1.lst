@@ -1,0 +1,4292 @@
+GAS LISTING /tmp/ccdf94mD.s 			page 1
+
+
+   1              		.file	"sha1.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_sha1_init,"ax",@progbits
+   5              		.globl	mbedtls_sha1_init
+   7              	mbedtls_sha1_init:
+   8              	.LFB0:
+   9              		.file 1 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c"
+   1:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** /*
+   2:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  FIPS-180-1 compliant SHA-1 implementation
+   3:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *
+   4:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *
+   7:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *
+  11:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *
+  13:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  limitations under the License.
+  18:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *
+  19:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  */
+  21:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** /*
+  22:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  The SHA-1 standard was published by NIST in 1993.
+  23:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *
+  24:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  *  http://www.itl.nist.gov/fipspubs/fip180-1.htm
+  25:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  */
+  26:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  27:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  28:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #include "mbedtls/config.h"
+  29:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #else
+  30:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #include MBEDTLS_CONFIG_FILE
+  31:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif
+  32:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  33:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if defined(MBEDTLS_SHA1_C)
+  34:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  35:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #include "mbedtls/sha1.h"
+  36:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #include "mbedtls/platform_util.h"
+  37:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  38:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #include <string.h>
+  39:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  40:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if defined(MBEDTLS_SELF_TEST)
+  41:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if defined(MBEDTLS_PLATFORM_C)
+  42:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #include "mbedtls/platform.h"
+  43:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #else
+  44:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #include <stdio.h>
+  45:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define mbedtls_printf printf
+  46:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif /* MBEDTLS_PLATFORM_C */
+  47:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif /* MBEDTLS_SELF_TEST */
+  48:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  49:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define SHA1_VALIDATE_RET(cond)                             \
+GAS LISTING /tmp/ccdf94mD.s 			page 2
+
+
+  50:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     MBEDTLS_INTERNAL_VALIDATE_RET( cond, MBEDTLS_ERR_SHA1_BAD_INPUT_DATA )
+  51:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  52:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define SHA1_VALIDATE(cond)  MBEDTLS_INTERNAL_VALIDATE( cond )
+  53:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  54:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_SHA1_ALT)
+  55:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  56:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** /*
+  57:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  * 32-bit integer manipulation macros (big endian)
+  58:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  */
+  59:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #ifndef GET_UINT32_BE
+  60:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define GET_UINT32_BE(n,b,i)                            \
+  61:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {                                                       \
+  62:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     (n) = ( (uint32_t) (b)[(i)    ] << 24 )             \
+  63:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         | ( (uint32_t) (b)[(i) + 1] << 16 )             \
+  64:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         | ( (uint32_t) (b)[(i) + 2] <<  8 )             \
+  65:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         | ( (uint32_t) (b)[(i) + 3]       );            \
+  66:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+  67:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif
+  68:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  69:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #ifndef PUT_UINT32_BE
+  70:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define PUT_UINT32_BE(n,b,i)                            \
+  71:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {                                                       \
+  72:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     (b)[(i)    ] = (unsigned char) ( (n) >> 24 );       \
+  73:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     (b)[(i) + 1] = (unsigned char) ( (n) >> 16 );       \
+  74:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     (b)[(i) + 2] = (unsigned char) ( (n) >>  8 );       \
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     (b)[(i) + 3] = (unsigned char) ( (n)       );       \
+  76:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+  77:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif
+  78:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  79:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1_init( mbedtls_sha1_context *ctx )
+  80:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+  10              		.loc 1 80 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22              		.loc 1 80 1
+  23 0010 64488B04 		movq	%fs:40, %rax
+  23      25280000 
+  23      00
+  24 0019 488945F8 		movq	%rax, -8(%rbp)
+  25 001d 31C0     		xorl	%eax, %eax
+  81:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE( ctx != NULL );
+  82:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  83:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     memset( ctx, 0, sizeof( mbedtls_sha1_context ) );
+  26              		.loc 1 83 5
+  27 001f 488B45E8 		movq	-24(%rbp), %rax
+  28 0023 BA5C0000 		movl	$92, %edx
+  28      00
+  29 0028 BE000000 		movl	$0, %esi
+GAS LISTING /tmp/ccdf94mD.s 			page 3
+
+
+  29      00
+  30 002d 4889C7   		movq	%rax, %rdi
+  31 0030 E8000000 		call	memset@PLT
+  31      00
+  84:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+  32              		.loc 1 84 1
+  33 0035 90       		nop
+  34 0036 488B45F8 		movq	-8(%rbp), %rax
+  35 003a 64483304 		xorq	%fs:40, %rax
+  35      25280000 
+  35      00
+  36 0043 7405     		je	.L2
+  37 0045 E8000000 		call	__stack_chk_fail@PLT
+  37      00
+  38              	.L2:
+  39 004a C9       		leave
+  40              	.LCFI2:
+  41              		.cfi_def_cfa 7, 8
+  42 004b C3       		ret
+  43              		.cfi_endproc
+  44              	.LFE0:
+  46              		.section	.text.mbedtls_sha1_free,"ax",@progbits
+  47              		.globl	mbedtls_sha1_free
+  49              	mbedtls_sha1_free:
+  50              	.LFB1:
+  85:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1_free( mbedtls_sha1_context *ctx )
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+  51              		.loc 1 87 1
+  52              		.cfi_startproc
+  53 0000 F30F1EFA 		endbr64
+  54 0004 55       		pushq	%rbp
+  55              	.LCFI3:
+  56              		.cfi_def_cfa_offset 16
+  57              		.cfi_offset 6, -16
+  58 0005 4889E5   		movq	%rsp, %rbp
+  59              	.LCFI4:
+  60              		.cfi_def_cfa_register 6
+  61 0008 4883EC20 		subq	$32, %rsp
+  62 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  63              		.loc 1 87 1
+  64 0010 64488B04 		movq	%fs:40, %rax
+  64      25280000 
+  64      00
+  65 0019 488945F8 		movq	%rax, -8(%rbp)
+  66 001d 31C0     		xorl	%eax, %eax
+  88:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ctx == NULL )
+  67              		.loc 1 88 7
+  68 001f 48837DE8 		cmpq	$0, -24(%rbp)
+  68      00
+  69 0024 7413     		je	.L7
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         return;
+  90:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  91:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_platform_zeroize( ctx, sizeof( mbedtls_sha1_context ) );
+  70              		.loc 1 91 5
+  71 0026 488B45E8 		movq	-24(%rbp), %rax
+  72 002a BE5C0000 		movl	$92, %esi
+GAS LISTING /tmp/ccdf94mD.s 			page 4
+
+
+  72      00
+  73 002f 4889C7   		movq	%rax, %rdi
+  74 0032 E8000000 		call	mbedtls_platform_zeroize@PLT
+  74      00
+  75 0037 EB01     		jmp	.L3
+  76              	.L7:
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         return;
+  77              		.loc 1 89 9
+  78 0039 90       		nop
+  79              	.L3:
+  92:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+  80              		.loc 1 92 1
+  81 003a 488B45F8 		movq	-8(%rbp), %rax
+  82 003e 64483304 		xorq	%fs:40, %rax
+  82      25280000 
+  82      00
+  83 0047 7405     		je	.L6
+  84 0049 E8000000 		call	__stack_chk_fail@PLT
+  84      00
+  85              	.L6:
+  86 004e C9       		leave
+  87              	.LCFI5:
+  88              		.cfi_def_cfa 7, 8
+  89 004f C3       		ret
+  90              		.cfi_endproc
+  91              	.LFE1:
+  93              		.section	.text.mbedtls_sha1_clone,"ax",@progbits
+  94              		.globl	mbedtls_sha1_clone
+  96              	mbedtls_sha1_clone:
+  97              	.LFB2:
+  93:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+  94:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1_clone( mbedtls_sha1_context *dst,
+  95:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                          const mbedtls_sha1_context *src )
+  96:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+  98              		.loc 1 96 1
+  99              		.cfi_startproc
+ 100 0000 F30F1EFA 		endbr64
+ 101 0004 55       		pushq	%rbp
+ 102              	.LCFI6:
+ 103              		.cfi_def_cfa_offset 16
+ 104              		.cfi_offset 6, -16
+ 105 0005 4889E5   		movq	%rsp, %rbp
+ 106              	.LCFI7:
+ 107              		.cfi_def_cfa_register 6
+ 108 0008 53       		pushq	%rbx
+ 109 0009 4883EC28 		subq	$40, %rsp
+ 110              		.cfi_offset 3, -24
+ 111 000d 48897DD8 		movq	%rdi, -40(%rbp)
+ 112 0011 488975D0 		movq	%rsi, -48(%rbp)
+ 113              		.loc 1 96 1
+ 114 0015 64488B04 		movq	%fs:40, %rax
+ 114      25280000 
+ 114      00
+ 115 001e 488945E8 		movq	%rax, -24(%rbp)
+ 116 0022 31C0     		xorl	%eax, %eax
+  97:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE( dst != NULL );
+  98:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE( src != NULL );
+GAS LISTING /tmp/ccdf94mD.s 			page 5
+
+
+  99:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 100:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     *dst = *src;
+ 117              		.loc 1 100 10
+ 118 0024 488B45D8 		movq	-40(%rbp), %rax
+ 119 0028 488B55D0 		movq	-48(%rbp), %rdx
+ 120 002c 488B0A   		movq	(%rdx), %rcx
+ 121 002f 488B5A08 		movq	8(%rdx), %rbx
+ 122 0033 488908   		movq	%rcx, (%rax)
+ 123 0036 48895808 		movq	%rbx, 8(%rax)
+ 124 003a 488B4A10 		movq	16(%rdx), %rcx
+ 125 003e 488B5A18 		movq	24(%rdx), %rbx
+ 126 0042 48894810 		movq	%rcx, 16(%rax)
+ 127 0046 48895818 		movq	%rbx, 24(%rax)
+ 128 004a 488B4A20 		movq	32(%rdx), %rcx
+ 129 004e 488B5A28 		movq	40(%rdx), %rbx
+ 130 0052 48894820 		movq	%rcx, 32(%rax)
+ 131 0056 48895828 		movq	%rbx, 40(%rax)
+ 132 005a 488B4A30 		movq	48(%rdx), %rcx
+ 133 005e 488B5A38 		movq	56(%rdx), %rbx
+ 134 0062 48894830 		movq	%rcx, 48(%rax)
+ 135 0066 48895838 		movq	%rbx, 56(%rax)
+ 136 006a 488B4A40 		movq	64(%rdx), %rcx
+ 137 006e 488B5A48 		movq	72(%rdx), %rbx
+ 138 0072 48894840 		movq	%rcx, 64(%rax)
+ 139 0076 48895848 		movq	%rbx, 72(%rax)
+ 140 007a 488B4A50 		movq	80(%rdx), %rcx
+ 141 007e 48894850 		movq	%rcx, 80(%rax)
+ 142 0082 8B5258   		movl	88(%rdx), %edx
+ 143 0085 895058   		movl	%edx, 88(%rax)
+ 101:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 144              		.loc 1 101 1
+ 145 0088 90       		nop
+ 146 0089 488B45E8 		movq	-24(%rbp), %rax
+ 147 008d 64483304 		xorq	%fs:40, %rax
+ 147      25280000 
+ 147      00
+ 148 0096 7405     		je	.L9
+ 149 0098 E8000000 		call	__stack_chk_fail@PLT
+ 149      00
+ 150              	.L9:
+ 151 009d 4883C428 		addq	$40, %rsp
+ 152 00a1 5B       		popq	%rbx
+ 153 00a2 5D       		popq	%rbp
+ 154              	.LCFI8:
+ 155              		.cfi_def_cfa 7, 8
+ 156 00a3 C3       		ret
+ 157              		.cfi_endproc
+ 158              	.LFE2:
+ 160              		.section	.text.mbedtls_sha1_starts_ret,"ax",@progbits
+ 161              		.globl	mbedtls_sha1_starts_ret
+ 163              	mbedtls_sha1_starts_ret:
+ 164              	.LFB3:
+ 102:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 103:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** /*
+ 104:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  * SHA-1 context setup
+ 105:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  */
+ 106:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** int mbedtls_sha1_starts_ret( mbedtls_sha1_context *ctx )
+GAS LISTING /tmp/ccdf94mD.s 			page 6
+
+
+ 107:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 165              		.loc 1 107 1
+ 166              		.cfi_startproc
+ 167 0000 F30F1EFA 		endbr64
+ 168 0004 55       		pushq	%rbp
+ 169              	.LCFI9:
+ 170              		.cfi_def_cfa_offset 16
+ 171              		.cfi_offset 6, -16
+ 172 0005 4889E5   		movq	%rsp, %rbp
+ 173              	.LCFI10:
+ 174              		.cfi_def_cfa_register 6
+ 175 0008 4883EC20 		subq	$32, %rsp
+ 176 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 177              		.loc 1 107 1
+ 178 0010 64488B04 		movq	%fs:40, %rax
+ 178      25280000 
+ 178      00
+ 179 0019 488945F8 		movq	%rax, -8(%rbp)
+ 180 001d 31C0     		xorl	%eax, %eax
+ 108:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( ctx != NULL );
+ 109:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 110:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->total[0] = 0;
+ 181              		.loc 1 110 19
+ 182 001f 488B45E8 		movq	-24(%rbp), %rax
+ 183 0023 C7000000 		movl	$0, (%rax)
+ 183      0000
+ 111:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->total[1] = 0;
+ 184              		.loc 1 111 19
+ 185 0029 488B45E8 		movq	-24(%rbp), %rax
+ 186 002d C7400400 		movl	$0, 4(%rax)
+ 186      000000
+ 112:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 113:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[0] = 0x67452301;
+ 187              		.loc 1 113 19
+ 188 0034 488B45E8 		movq	-24(%rbp), %rax
+ 189 0038 C7400801 		movl	$1732584193, 8(%rax)
+ 189      234567
+ 114:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[1] = 0xEFCDAB89;
+ 190              		.loc 1 114 19
+ 191 003f 488B45E8 		movq	-24(%rbp), %rax
+ 192 0043 C7400C89 		movl	$-271733879, 12(%rax)
+ 192      ABCDEF
+ 115:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[2] = 0x98BADCFE;
+ 193              		.loc 1 115 19
+ 194 004a 488B45E8 		movq	-24(%rbp), %rax
+ 195 004e C74010FE 		movl	$-1732584194, 16(%rax)
+ 195      DCBA98
+ 116:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[3] = 0x10325476;
+ 196              		.loc 1 116 19
+ 197 0055 488B45E8 		movq	-24(%rbp), %rax
+ 198 0059 C7401476 		movl	$271733878, 20(%rax)
+ 198      543210
+ 117:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[4] = 0xC3D2E1F0;
+ 199              		.loc 1 117 19
+ 200 0060 488B45E8 		movq	-24(%rbp), %rax
+ 201 0064 C74018F0 		movl	$-1009589776, 24(%rax)
+ 201      E1D2C3
+GAS LISTING /tmp/ccdf94mD.s 			page 7
+
+
+ 118:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 119:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     return( 0 );
+ 202              		.loc 1 119 11
+ 203 006b B8000000 		movl	$0, %eax
+ 203      00
+ 120:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 204              		.loc 1 120 1
+ 205 0070 488B55F8 		movq	-8(%rbp), %rdx
+ 206 0074 64483314 		xorq	%fs:40, %rdx
+ 206      25280000 
+ 206      00
+ 207 007d 7405     		je	.L12
+ 208 007f E8000000 		call	__stack_chk_fail@PLT
+ 208      00
+ 209              	.L12:
+ 210 0084 C9       		leave
+ 211              	.LCFI11:
+ 212              		.cfi_def_cfa 7, 8
+ 213 0085 C3       		ret
+ 214              		.cfi_endproc
+ 215              	.LFE3:
+ 217              		.section	.text.mbedtls_sha1_starts,"ax",@progbits
+ 218              		.globl	mbedtls_sha1_starts
+ 220              	mbedtls_sha1_starts:
+ 221              	.LFB4:
+ 121:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 122:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 123:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1_starts( mbedtls_sha1_context *ctx )
+ 124:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 222              		.loc 1 124 1
+ 223              		.cfi_startproc
+ 224 0000 F30F1EFA 		endbr64
+ 225 0004 55       		pushq	%rbp
+ 226              	.LCFI12:
+ 227              		.cfi_def_cfa_offset 16
+ 228              		.cfi_offset 6, -16
+ 229 0005 4889E5   		movq	%rsp, %rbp
+ 230              	.LCFI13:
+ 231              		.cfi_def_cfa_register 6
+ 232 0008 4883EC20 		subq	$32, %rsp
+ 233 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 234              		.loc 1 124 1
+ 235 0010 64488B04 		movq	%fs:40, %rax
+ 235      25280000 
+ 235      00
+ 236 0019 488945F8 		movq	%rax, -8(%rbp)
+ 237 001d 31C0     		xorl	%eax, %eax
+ 125:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_sha1_starts_ret( ctx );
+ 238              		.loc 1 125 5
+ 239 001f 488B45E8 		movq	-24(%rbp), %rax
+ 240 0023 4889C7   		movq	%rax, %rdi
+ 241 0026 E8000000 		call	mbedtls_sha1_starts_ret
+ 241      00
+ 126:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 242              		.loc 1 126 1
+ 243 002b 90       		nop
+ 244 002c 488B45F8 		movq	-8(%rbp), %rax
+GAS LISTING /tmp/ccdf94mD.s 			page 8
+
+
+ 245 0030 64483304 		xorq	%fs:40, %rax
+ 245      25280000 
+ 245      00
+ 246 0039 7405     		je	.L14
+ 247 003b E8000000 		call	__stack_chk_fail@PLT
+ 247      00
+ 248              	.L14:
+ 249 0040 C9       		leave
+ 250              	.LCFI14:
+ 251              		.cfi_def_cfa 7, 8
+ 252 0041 C3       		ret
+ 253              		.cfi_endproc
+ 254              	.LFE4:
+ 256              		.section	.text.mbedtls_internal_sha1_process,"ax",@progbits
+ 257              		.globl	mbedtls_internal_sha1_process
+ 259              	mbedtls_internal_sha1_process:
+ 260              	.LFB5:
+ 127:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif
+ 128:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 129:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_SHA1_PROCESS_ALT)
+ 130:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** int mbedtls_internal_sha1_process( mbedtls_sha1_context *ctx,
+ 131:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                                    const unsigned char data[64] )
+ 132:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 261              		.loc 1 132 1
+ 262              		.cfi_startproc
+ 263 0000 F30F1EFA 		endbr64
+ 264 0004 55       		pushq	%rbp
+ 265              	.LCFI15:
+ 266              		.cfi_def_cfa_offset 16
+ 267              		.cfi_offset 6, -16
+ 268 0005 4889E5   		movq	%rsp, %rbp
+ 269              	.LCFI16:
+ 270              		.cfi_def_cfa_register 6
+ 271 0008 4883C480 		addq	$-128, %rsp
+ 272 000c 48897D88 		movq	%rdi, -120(%rbp)
+ 273 0010 48897580 		movq	%rsi, -128(%rbp)
+ 274              		.loc 1 132 1
+ 275 0014 64488B04 		movq	%fs:40, %rax
+ 275      25280000 
+ 275      00
+ 276 001d 488945F8 		movq	%rax, -8(%rbp)
+ 277 0021 31C0     		xorl	%eax, %eax
+ 133:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     uint32_t temp, W[16], A, B, C, D, E;
+ 134:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 135:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( ctx != NULL );
+ 136:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( (const unsigned char *)data != NULL );
+ 137:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 138:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 0], data,  0 );
+ 278              		.loc 1 138 5
+ 279 0023 488B4580 		movq	-128(%rbp), %rax
+ 280 0027 0FB600   		movzbl	(%rax), %eax
+ 281 002a 0FB6C0   		movzbl	%al, %eax
+ 282 002d C1E018   		sall	$24, %eax
+ 283 0030 89C2     		movl	%eax, %edx
+ 284 0032 488B4580 		movq	-128(%rbp), %rax
+ 285 0036 4883C001 		addq	$1, %rax
+ 286 003a 0FB600   		movzbl	(%rax), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 9
+
+
+ 287 003d 0FB6C0   		movzbl	%al, %eax
+ 288 0040 C1E010   		sall	$16, %eax
+ 289 0043 09C2     		orl	%eax, %edx
+ 290 0045 488B4580 		movq	-128(%rbp), %rax
+ 291 0049 4883C002 		addq	$2, %rax
+ 292 004d 0FB600   		movzbl	(%rax), %eax
+ 293 0050 0FB6C0   		movzbl	%al, %eax
+ 294 0053 C1E008   		sall	$8, %eax
+ 295 0056 09C2     		orl	%eax, %edx
+ 296 0058 488B4580 		movq	-128(%rbp), %rax
+ 297 005c 4883C003 		addq	$3, %rax
+ 298 0060 0FB600   		movzbl	(%rax), %eax
+ 299 0063 0FB6C0   		movzbl	%al, %eax
+ 300 0066 09D0     		orl	%edx, %eax
+ 301 0068 8945B0   		movl	%eax, -80(%rbp)
+ 139:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 1], data,  4 );
+ 302              		.loc 1 139 5
+ 303 006b 488B4580 		movq	-128(%rbp), %rax
+ 304 006f 4883C004 		addq	$4, %rax
+ 305 0073 0FB600   		movzbl	(%rax), %eax
+ 306 0076 0FB6C0   		movzbl	%al, %eax
+ 307 0079 C1E018   		sall	$24, %eax
+ 308 007c 89C2     		movl	%eax, %edx
+ 309 007e 488B4580 		movq	-128(%rbp), %rax
+ 310 0082 4883C005 		addq	$5, %rax
+ 311 0086 0FB600   		movzbl	(%rax), %eax
+ 312 0089 0FB6C0   		movzbl	%al, %eax
+ 313 008c C1E010   		sall	$16, %eax
+ 314 008f 09C2     		orl	%eax, %edx
+ 315 0091 488B4580 		movq	-128(%rbp), %rax
+ 316 0095 4883C006 		addq	$6, %rax
+ 317 0099 0FB600   		movzbl	(%rax), %eax
+ 318 009c 0FB6C0   		movzbl	%al, %eax
+ 319 009f C1E008   		sall	$8, %eax
+ 320 00a2 09C2     		orl	%eax, %edx
+ 321 00a4 488B4580 		movq	-128(%rbp), %rax
+ 322 00a8 4883C007 		addq	$7, %rax
+ 323 00ac 0FB600   		movzbl	(%rax), %eax
+ 324 00af 0FB6C0   		movzbl	%al, %eax
+ 325 00b2 09D0     		orl	%edx, %eax
+ 326 00b4 8945B4   		movl	%eax, -76(%rbp)
+ 140:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 2], data,  8 );
+ 327              		.loc 1 140 5
+ 328 00b7 488B4580 		movq	-128(%rbp), %rax
+ 329 00bb 4883C008 		addq	$8, %rax
+ 330 00bf 0FB600   		movzbl	(%rax), %eax
+ 331 00c2 0FB6C0   		movzbl	%al, %eax
+ 332 00c5 C1E018   		sall	$24, %eax
+ 333 00c8 89C2     		movl	%eax, %edx
+ 334 00ca 488B4580 		movq	-128(%rbp), %rax
+ 335 00ce 4883C009 		addq	$9, %rax
+ 336 00d2 0FB600   		movzbl	(%rax), %eax
+ 337 00d5 0FB6C0   		movzbl	%al, %eax
+ 338 00d8 C1E010   		sall	$16, %eax
+ 339 00db 09C2     		orl	%eax, %edx
+ 340 00dd 488B4580 		movq	-128(%rbp), %rax
+ 341 00e1 4883C00A 		addq	$10, %rax
+GAS LISTING /tmp/ccdf94mD.s 			page 10
+
+
+ 342 00e5 0FB600   		movzbl	(%rax), %eax
+ 343 00e8 0FB6C0   		movzbl	%al, %eax
+ 344 00eb C1E008   		sall	$8, %eax
+ 345 00ee 09C2     		orl	%eax, %edx
+ 346 00f0 488B4580 		movq	-128(%rbp), %rax
+ 347 00f4 4883C00B 		addq	$11, %rax
+ 348 00f8 0FB600   		movzbl	(%rax), %eax
+ 349 00fb 0FB6C0   		movzbl	%al, %eax
+ 350 00fe 09D0     		orl	%edx, %eax
+ 351 0100 8945B8   		movl	%eax, -72(%rbp)
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 3], data, 12 );
+ 352              		.loc 1 141 5
+ 353 0103 488B4580 		movq	-128(%rbp), %rax
+ 354 0107 4883C00C 		addq	$12, %rax
+ 355 010b 0FB600   		movzbl	(%rax), %eax
+ 356 010e 0FB6C0   		movzbl	%al, %eax
+ 357 0111 C1E018   		sall	$24, %eax
+ 358 0114 89C2     		movl	%eax, %edx
+ 359 0116 488B4580 		movq	-128(%rbp), %rax
+ 360 011a 4883C00D 		addq	$13, %rax
+ 361 011e 0FB600   		movzbl	(%rax), %eax
+ 362 0121 0FB6C0   		movzbl	%al, %eax
+ 363 0124 C1E010   		sall	$16, %eax
+ 364 0127 09C2     		orl	%eax, %edx
+ 365 0129 488B4580 		movq	-128(%rbp), %rax
+ 366 012d 4883C00E 		addq	$14, %rax
+ 367 0131 0FB600   		movzbl	(%rax), %eax
+ 368 0134 0FB6C0   		movzbl	%al, %eax
+ 369 0137 C1E008   		sall	$8, %eax
+ 370 013a 09C2     		orl	%eax, %edx
+ 371 013c 488B4580 		movq	-128(%rbp), %rax
+ 372 0140 4883C00F 		addq	$15, %rax
+ 373 0144 0FB600   		movzbl	(%rax), %eax
+ 374 0147 0FB6C0   		movzbl	%al, %eax
+ 375 014a 09D0     		orl	%edx, %eax
+ 376 014c 8945BC   		movl	%eax, -68(%rbp)
+ 142:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 4], data, 16 );
+ 377              		.loc 1 142 5
+ 378 014f 488B4580 		movq	-128(%rbp), %rax
+ 379 0153 4883C010 		addq	$16, %rax
+ 380 0157 0FB600   		movzbl	(%rax), %eax
+ 381 015a 0FB6C0   		movzbl	%al, %eax
+ 382 015d C1E018   		sall	$24, %eax
+ 383 0160 89C2     		movl	%eax, %edx
+ 384 0162 488B4580 		movq	-128(%rbp), %rax
+ 385 0166 4883C011 		addq	$17, %rax
+ 386 016a 0FB600   		movzbl	(%rax), %eax
+ 387 016d 0FB6C0   		movzbl	%al, %eax
+ 388 0170 C1E010   		sall	$16, %eax
+ 389 0173 09C2     		orl	%eax, %edx
+ 390 0175 488B4580 		movq	-128(%rbp), %rax
+ 391 0179 4883C012 		addq	$18, %rax
+ 392 017d 0FB600   		movzbl	(%rax), %eax
+ 393 0180 0FB6C0   		movzbl	%al, %eax
+ 394 0183 C1E008   		sall	$8, %eax
+ 395 0186 09C2     		orl	%eax, %edx
+ 396 0188 488B4580 		movq	-128(%rbp), %rax
+GAS LISTING /tmp/ccdf94mD.s 			page 11
+
+
+ 397 018c 4883C013 		addq	$19, %rax
+ 398 0190 0FB600   		movzbl	(%rax), %eax
+ 399 0193 0FB6C0   		movzbl	%al, %eax
+ 400 0196 09D0     		orl	%edx, %eax
+ 401 0198 8945C0   		movl	%eax, -64(%rbp)
+ 143:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 5], data, 20 );
+ 402              		.loc 1 143 5
+ 403 019b 488B4580 		movq	-128(%rbp), %rax
+ 404 019f 4883C014 		addq	$20, %rax
+ 405 01a3 0FB600   		movzbl	(%rax), %eax
+ 406 01a6 0FB6C0   		movzbl	%al, %eax
+ 407 01a9 C1E018   		sall	$24, %eax
+ 408 01ac 89C2     		movl	%eax, %edx
+ 409 01ae 488B4580 		movq	-128(%rbp), %rax
+ 410 01b2 4883C015 		addq	$21, %rax
+ 411 01b6 0FB600   		movzbl	(%rax), %eax
+ 412 01b9 0FB6C0   		movzbl	%al, %eax
+ 413 01bc C1E010   		sall	$16, %eax
+ 414 01bf 09C2     		orl	%eax, %edx
+ 415 01c1 488B4580 		movq	-128(%rbp), %rax
+ 416 01c5 4883C016 		addq	$22, %rax
+ 417 01c9 0FB600   		movzbl	(%rax), %eax
+ 418 01cc 0FB6C0   		movzbl	%al, %eax
+ 419 01cf C1E008   		sall	$8, %eax
+ 420 01d2 09C2     		orl	%eax, %edx
+ 421 01d4 488B4580 		movq	-128(%rbp), %rax
+ 422 01d8 4883C017 		addq	$23, %rax
+ 423 01dc 0FB600   		movzbl	(%rax), %eax
+ 424 01df 0FB6C0   		movzbl	%al, %eax
+ 425 01e2 09D0     		orl	%edx, %eax
+ 426 01e4 8945C4   		movl	%eax, -60(%rbp)
+ 144:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 6], data, 24 );
+ 427              		.loc 1 144 5
+ 428 01e7 488B4580 		movq	-128(%rbp), %rax
+ 429 01eb 4883C018 		addq	$24, %rax
+ 430 01ef 0FB600   		movzbl	(%rax), %eax
+ 431 01f2 0FB6C0   		movzbl	%al, %eax
+ 432 01f5 C1E018   		sall	$24, %eax
+ 433 01f8 89C2     		movl	%eax, %edx
+ 434 01fa 488B4580 		movq	-128(%rbp), %rax
+ 435 01fe 4883C019 		addq	$25, %rax
+ 436 0202 0FB600   		movzbl	(%rax), %eax
+ 437 0205 0FB6C0   		movzbl	%al, %eax
+ 438 0208 C1E010   		sall	$16, %eax
+ 439 020b 09C2     		orl	%eax, %edx
+ 440 020d 488B4580 		movq	-128(%rbp), %rax
+ 441 0211 4883C01A 		addq	$26, %rax
+ 442 0215 0FB600   		movzbl	(%rax), %eax
+ 443 0218 0FB6C0   		movzbl	%al, %eax
+ 444 021b C1E008   		sall	$8, %eax
+ 445 021e 09C2     		orl	%eax, %edx
+ 446 0220 488B4580 		movq	-128(%rbp), %rax
+ 447 0224 4883C01B 		addq	$27, %rax
+ 448 0228 0FB600   		movzbl	(%rax), %eax
+ 449 022b 0FB6C0   		movzbl	%al, %eax
+ 450 022e 09D0     		orl	%edx, %eax
+ 451 0230 8945C8   		movl	%eax, -56(%rbp)
+GAS LISTING /tmp/ccdf94mD.s 			page 12
+
+
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 7], data, 28 );
+ 452              		.loc 1 145 5
+ 453 0233 488B4580 		movq	-128(%rbp), %rax
+ 454 0237 4883C01C 		addq	$28, %rax
+ 455 023b 0FB600   		movzbl	(%rax), %eax
+ 456 023e 0FB6C0   		movzbl	%al, %eax
+ 457 0241 C1E018   		sall	$24, %eax
+ 458 0244 89C2     		movl	%eax, %edx
+ 459 0246 488B4580 		movq	-128(%rbp), %rax
+ 460 024a 4883C01D 		addq	$29, %rax
+ 461 024e 0FB600   		movzbl	(%rax), %eax
+ 462 0251 0FB6C0   		movzbl	%al, %eax
+ 463 0254 C1E010   		sall	$16, %eax
+ 464 0257 09C2     		orl	%eax, %edx
+ 465 0259 488B4580 		movq	-128(%rbp), %rax
+ 466 025d 4883C01E 		addq	$30, %rax
+ 467 0261 0FB600   		movzbl	(%rax), %eax
+ 468 0264 0FB6C0   		movzbl	%al, %eax
+ 469 0267 C1E008   		sall	$8, %eax
+ 470 026a 09C2     		orl	%eax, %edx
+ 471 026c 488B4580 		movq	-128(%rbp), %rax
+ 472 0270 4883C01F 		addq	$31, %rax
+ 473 0274 0FB600   		movzbl	(%rax), %eax
+ 474 0277 0FB6C0   		movzbl	%al, %eax
+ 475 027a 09D0     		orl	%edx, %eax
+ 476 027c 8945CC   		movl	%eax, -52(%rbp)
+ 146:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 8], data, 32 );
+ 477              		.loc 1 146 5
+ 478 027f 488B4580 		movq	-128(%rbp), %rax
+ 479 0283 4883C020 		addq	$32, %rax
+ 480 0287 0FB600   		movzbl	(%rax), %eax
+ 481 028a 0FB6C0   		movzbl	%al, %eax
+ 482 028d C1E018   		sall	$24, %eax
+ 483 0290 89C2     		movl	%eax, %edx
+ 484 0292 488B4580 		movq	-128(%rbp), %rax
+ 485 0296 4883C021 		addq	$33, %rax
+ 486 029a 0FB600   		movzbl	(%rax), %eax
+ 487 029d 0FB6C0   		movzbl	%al, %eax
+ 488 02a0 C1E010   		sall	$16, %eax
+ 489 02a3 09C2     		orl	%eax, %edx
+ 490 02a5 488B4580 		movq	-128(%rbp), %rax
+ 491 02a9 4883C022 		addq	$34, %rax
+ 492 02ad 0FB600   		movzbl	(%rax), %eax
+ 493 02b0 0FB6C0   		movzbl	%al, %eax
+ 494 02b3 C1E008   		sall	$8, %eax
+ 495 02b6 09C2     		orl	%eax, %edx
+ 496 02b8 488B4580 		movq	-128(%rbp), %rax
+ 497 02bc 4883C023 		addq	$35, %rax
+ 498 02c0 0FB600   		movzbl	(%rax), %eax
+ 499 02c3 0FB6C0   		movzbl	%al, %eax
+ 500 02c6 09D0     		orl	%edx, %eax
+ 501 02c8 8945D0   		movl	%eax, -48(%rbp)
+ 147:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[ 9], data, 36 );
+ 502              		.loc 1 147 5
+ 503 02cb 488B4580 		movq	-128(%rbp), %rax
+ 504 02cf 4883C024 		addq	$36, %rax
+ 505 02d3 0FB600   		movzbl	(%rax), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 13
+
+
+ 506 02d6 0FB6C0   		movzbl	%al, %eax
+ 507 02d9 C1E018   		sall	$24, %eax
+ 508 02dc 89C2     		movl	%eax, %edx
+ 509 02de 488B4580 		movq	-128(%rbp), %rax
+ 510 02e2 4883C025 		addq	$37, %rax
+ 511 02e6 0FB600   		movzbl	(%rax), %eax
+ 512 02e9 0FB6C0   		movzbl	%al, %eax
+ 513 02ec C1E010   		sall	$16, %eax
+ 514 02ef 09C2     		orl	%eax, %edx
+ 515 02f1 488B4580 		movq	-128(%rbp), %rax
+ 516 02f5 4883C026 		addq	$38, %rax
+ 517 02f9 0FB600   		movzbl	(%rax), %eax
+ 518 02fc 0FB6C0   		movzbl	%al, %eax
+ 519 02ff C1E008   		sall	$8, %eax
+ 520 0302 09C2     		orl	%eax, %edx
+ 521 0304 488B4580 		movq	-128(%rbp), %rax
+ 522 0308 4883C027 		addq	$39, %rax
+ 523 030c 0FB600   		movzbl	(%rax), %eax
+ 524 030f 0FB6C0   		movzbl	%al, %eax
+ 525 0312 09D0     		orl	%edx, %eax
+ 526 0314 8945D4   		movl	%eax, -44(%rbp)
+ 148:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[10], data, 40 );
+ 527              		.loc 1 148 5
+ 528 0317 488B4580 		movq	-128(%rbp), %rax
+ 529 031b 4883C028 		addq	$40, %rax
+ 530 031f 0FB600   		movzbl	(%rax), %eax
+ 531 0322 0FB6C0   		movzbl	%al, %eax
+ 532 0325 C1E018   		sall	$24, %eax
+ 533 0328 89C2     		movl	%eax, %edx
+ 534 032a 488B4580 		movq	-128(%rbp), %rax
+ 535 032e 4883C029 		addq	$41, %rax
+ 536 0332 0FB600   		movzbl	(%rax), %eax
+ 537 0335 0FB6C0   		movzbl	%al, %eax
+ 538 0338 C1E010   		sall	$16, %eax
+ 539 033b 09C2     		orl	%eax, %edx
+ 540 033d 488B4580 		movq	-128(%rbp), %rax
+ 541 0341 4883C02A 		addq	$42, %rax
+ 542 0345 0FB600   		movzbl	(%rax), %eax
+ 543 0348 0FB6C0   		movzbl	%al, %eax
+ 544 034b C1E008   		sall	$8, %eax
+ 545 034e 09C2     		orl	%eax, %edx
+ 546 0350 488B4580 		movq	-128(%rbp), %rax
+ 547 0354 4883C02B 		addq	$43, %rax
+ 548 0358 0FB600   		movzbl	(%rax), %eax
+ 549 035b 0FB6C0   		movzbl	%al, %eax
+ 550 035e 09D0     		orl	%edx, %eax
+ 551 0360 8945D8   		movl	%eax, -40(%rbp)
+ 149:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[11], data, 44 );
+ 552              		.loc 1 149 5
+ 553 0363 488B4580 		movq	-128(%rbp), %rax
+ 554 0367 4883C02C 		addq	$44, %rax
+ 555 036b 0FB600   		movzbl	(%rax), %eax
+ 556 036e 0FB6C0   		movzbl	%al, %eax
+ 557 0371 C1E018   		sall	$24, %eax
+ 558 0374 89C2     		movl	%eax, %edx
+ 559 0376 488B4580 		movq	-128(%rbp), %rax
+ 560 037a 4883C02D 		addq	$45, %rax
+GAS LISTING /tmp/ccdf94mD.s 			page 14
+
+
+ 561 037e 0FB600   		movzbl	(%rax), %eax
+ 562 0381 0FB6C0   		movzbl	%al, %eax
+ 563 0384 C1E010   		sall	$16, %eax
+ 564 0387 09C2     		orl	%eax, %edx
+ 565 0389 488B4580 		movq	-128(%rbp), %rax
+ 566 038d 4883C02E 		addq	$46, %rax
+ 567 0391 0FB600   		movzbl	(%rax), %eax
+ 568 0394 0FB6C0   		movzbl	%al, %eax
+ 569 0397 C1E008   		sall	$8, %eax
+ 570 039a 09C2     		orl	%eax, %edx
+ 571 039c 488B4580 		movq	-128(%rbp), %rax
+ 572 03a0 4883C02F 		addq	$47, %rax
+ 573 03a4 0FB600   		movzbl	(%rax), %eax
+ 574 03a7 0FB6C0   		movzbl	%al, %eax
+ 575 03aa 09D0     		orl	%edx, %eax
+ 576 03ac 8945DC   		movl	%eax, -36(%rbp)
+ 150:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[12], data, 48 );
+ 577              		.loc 1 150 5
+ 578 03af 488B4580 		movq	-128(%rbp), %rax
+ 579 03b3 4883C030 		addq	$48, %rax
+ 580 03b7 0FB600   		movzbl	(%rax), %eax
+ 581 03ba 0FB6C0   		movzbl	%al, %eax
+ 582 03bd C1E018   		sall	$24, %eax
+ 583 03c0 89C2     		movl	%eax, %edx
+ 584 03c2 488B4580 		movq	-128(%rbp), %rax
+ 585 03c6 4883C031 		addq	$49, %rax
+ 586 03ca 0FB600   		movzbl	(%rax), %eax
+ 587 03cd 0FB6C0   		movzbl	%al, %eax
+ 588 03d0 C1E010   		sall	$16, %eax
+ 589 03d3 09C2     		orl	%eax, %edx
+ 590 03d5 488B4580 		movq	-128(%rbp), %rax
+ 591 03d9 4883C032 		addq	$50, %rax
+ 592 03dd 0FB600   		movzbl	(%rax), %eax
+ 593 03e0 0FB6C0   		movzbl	%al, %eax
+ 594 03e3 C1E008   		sall	$8, %eax
+ 595 03e6 09C2     		orl	%eax, %edx
+ 596 03e8 488B4580 		movq	-128(%rbp), %rax
+ 597 03ec 4883C033 		addq	$51, %rax
+ 598 03f0 0FB600   		movzbl	(%rax), %eax
+ 599 03f3 0FB6C0   		movzbl	%al, %eax
+ 600 03f6 09D0     		orl	%edx, %eax
+ 601 03f8 8945E0   		movl	%eax, -32(%rbp)
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[13], data, 52 );
+ 602              		.loc 1 151 5
+ 603 03fb 488B4580 		movq	-128(%rbp), %rax
+ 604 03ff 4883C034 		addq	$52, %rax
+ 605 0403 0FB600   		movzbl	(%rax), %eax
+ 606 0406 0FB6C0   		movzbl	%al, %eax
+ 607 0409 C1E018   		sall	$24, %eax
+ 608 040c 89C2     		movl	%eax, %edx
+ 609 040e 488B4580 		movq	-128(%rbp), %rax
+ 610 0412 4883C035 		addq	$53, %rax
+ 611 0416 0FB600   		movzbl	(%rax), %eax
+ 612 0419 0FB6C0   		movzbl	%al, %eax
+ 613 041c C1E010   		sall	$16, %eax
+ 614 041f 09C2     		orl	%eax, %edx
+ 615 0421 488B4580 		movq	-128(%rbp), %rax
+GAS LISTING /tmp/ccdf94mD.s 			page 15
+
+
+ 616 0425 4883C036 		addq	$54, %rax
+ 617 0429 0FB600   		movzbl	(%rax), %eax
+ 618 042c 0FB6C0   		movzbl	%al, %eax
+ 619 042f C1E008   		sall	$8, %eax
+ 620 0432 09C2     		orl	%eax, %edx
+ 621 0434 488B4580 		movq	-128(%rbp), %rax
+ 622 0438 4883C037 		addq	$55, %rax
+ 623 043c 0FB600   		movzbl	(%rax), %eax
+ 624 043f 0FB6C0   		movzbl	%al, %eax
+ 625 0442 09D0     		orl	%edx, %eax
+ 626 0444 8945E4   		movl	%eax, -28(%rbp)
+ 152:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[14], data, 56 );
+ 627              		.loc 1 152 5
+ 628 0447 488B4580 		movq	-128(%rbp), %rax
+ 629 044b 4883C038 		addq	$56, %rax
+ 630 044f 0FB600   		movzbl	(%rax), %eax
+ 631 0452 0FB6C0   		movzbl	%al, %eax
+ 632 0455 C1E018   		sall	$24, %eax
+ 633 0458 89C2     		movl	%eax, %edx
+ 634 045a 488B4580 		movq	-128(%rbp), %rax
+ 635 045e 4883C039 		addq	$57, %rax
+ 636 0462 0FB600   		movzbl	(%rax), %eax
+ 637 0465 0FB6C0   		movzbl	%al, %eax
+ 638 0468 C1E010   		sall	$16, %eax
+ 639 046b 09C2     		orl	%eax, %edx
+ 640 046d 488B4580 		movq	-128(%rbp), %rax
+ 641 0471 4883C03A 		addq	$58, %rax
+ 642 0475 0FB600   		movzbl	(%rax), %eax
+ 643 0478 0FB6C0   		movzbl	%al, %eax
+ 644 047b C1E008   		sall	$8, %eax
+ 645 047e 09C2     		orl	%eax, %edx
+ 646 0480 488B4580 		movq	-128(%rbp), %rax
+ 647 0484 4883C03B 		addq	$59, %rax
+ 648 0488 0FB600   		movzbl	(%rax), %eax
+ 649 048b 0FB6C0   		movzbl	%al, %eax
+ 650 048e 09D0     		orl	%edx, %eax
+ 651 0490 8945E8   		movl	%eax, -24(%rbp)
+ 153:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     GET_UINT32_BE( W[15], data, 60 );
+ 652              		.loc 1 153 5
+ 653 0493 488B4580 		movq	-128(%rbp), %rax
+ 654 0497 4883C03C 		addq	$60, %rax
+ 655 049b 0FB600   		movzbl	(%rax), %eax
+ 656 049e 0FB6C0   		movzbl	%al, %eax
+ 657 04a1 C1E018   		sall	$24, %eax
+ 658 04a4 89C2     		movl	%eax, %edx
+ 659 04a6 488B4580 		movq	-128(%rbp), %rax
+ 660 04aa 4883C03D 		addq	$61, %rax
+ 661 04ae 0FB600   		movzbl	(%rax), %eax
+ 662 04b1 0FB6C0   		movzbl	%al, %eax
+ 663 04b4 C1E010   		sall	$16, %eax
+ 664 04b7 09C2     		orl	%eax, %edx
+ 665 04b9 488B4580 		movq	-128(%rbp), %rax
+ 666 04bd 4883C03E 		addq	$62, %rax
+ 667 04c1 0FB600   		movzbl	(%rax), %eax
+ 668 04c4 0FB6C0   		movzbl	%al, %eax
+ 669 04c7 C1E008   		sall	$8, %eax
+ 670 04ca 09C2     		orl	%eax, %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 16
+
+
+ 671 04cc 488B4580 		movq	-128(%rbp), %rax
+ 672 04d0 4883C03F 		addq	$63, %rax
+ 673 04d4 0FB600   		movzbl	(%rax), %eax
+ 674 04d7 0FB6C0   		movzbl	%al, %eax
+ 675 04da 09D0     		orl	%edx, %eax
+ 676 04dc 8945EC   		movl	%eax, -20(%rbp)
+ 154:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 155:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define S(x,n) (((x) << (n)) | (((x) & 0xFFFFFFFF) >> (32 - (n))))
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 157:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define R(t)                                                    \
+ 158:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     (                                                           \
+ 159:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         temp = W[( (t) -  3 ) & 0x0F] ^ W[( (t) - 8 ) & 0x0F] ^ \
+ 160:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                W[( (t) - 14 ) & 0x0F] ^ W[  (t)       & 0x0F],  \
+ 161:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         ( W[(t) & 0x0F] = S(temp,1) )                           \
+ 162:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     )
+ 163:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 164:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define P(a,b,c,d,e,x)                                          \
+ 165:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     do                                                          \
+ 166:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     {                                                           \
+ 167:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         (e) += S((a),5) + F((b),(c),(d)) + K + (x);             \
+ 168:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         (b) = S((b),30);                                        \
+ 169:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     } while( 0 )
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 171:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     A = ctx->state[0];
+ 677              		.loc 1 171 7
+ 678 04df 488B4588 		movq	-120(%rbp), %rax
+ 679 04e3 8B4008   		movl	8(%rax), %eax
+ 680 04e6 894598   		movl	%eax, -104(%rbp)
+ 172:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     B = ctx->state[1];
+ 681              		.loc 1 172 7
+ 682 04e9 488B4588 		movq	-120(%rbp), %rax
+ 683 04ed 8B400C   		movl	12(%rax), %eax
+ 684 04f0 89459C   		movl	%eax, -100(%rbp)
+ 173:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     C = ctx->state[2];
+ 685              		.loc 1 173 7
+ 686 04f3 488B4588 		movq	-120(%rbp), %rax
+ 687 04f7 8B4010   		movl	16(%rax), %eax
+ 688 04fa 8945A0   		movl	%eax, -96(%rbp)
+ 174:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     D = ctx->state[3];
+ 689              		.loc 1 174 7
+ 690 04fd 488B4588 		movq	-120(%rbp), %rax
+ 691 0501 8B4014   		movl	20(%rax), %eax
+ 692 0504 8945A4   		movl	%eax, -92(%rbp)
+ 175:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     E = ctx->state[4];
+ 693              		.loc 1 175 7
+ 694 0507 488B4588 		movq	-120(%rbp), %rax
+ 695 050b 8B4018   		movl	24(%rax), %eax
+ 696 050e 8945A8   		movl	%eax, -88(%rbp)
+ 176:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 177:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define F(x,y,z) ((z) ^ ((x) & ((y) ^ (z))))
+ 178:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define K 0x5A827999
+ 179:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 180:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, W[0]  );
+ 697              		.loc 1 180 5
+ 698 0511 8B4598   		movl	-104(%rbp), %eax
+ 699 0514 C1C005   		roll	$5, %eax
+ 700 0517 89C2     		movl	%eax, %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 17
+
+
+ 701 0519 8B45A0   		movl	-96(%rbp), %eax
+ 702 051c 3345A4   		xorl	-92(%rbp), %eax
+ 703 051f 23459C   		andl	-100(%rbp), %eax
+ 704 0522 3345A4   		xorl	-92(%rbp), %eax
+ 705 0525 01C2     		addl	%eax, %edx
+ 706 0527 8B45B0   		movl	-80(%rbp), %eax
+ 707 052a 01C2     		addl	%eax, %edx
+ 708 052c 8B45A8   		movl	-88(%rbp), %eax
+ 709 052f 01D0     		addl	%edx, %eax
+ 710 0531 05997982 		addl	$1518500249, %eax
+ 710      5A
+ 711 0536 8945A8   		movl	%eax, -88(%rbp)
+ 712 0539 C14D9C02 		rorl	$2, -100(%rbp)
+ 181:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, W[1]  );
+ 713              		.loc 1 181 5
+ 714 053d 8B45A8   		movl	-88(%rbp), %eax
+ 715 0540 C1C005   		roll	$5, %eax
+ 716 0543 89C2     		movl	%eax, %edx
+ 717 0545 8B459C   		movl	-100(%rbp), %eax
+ 718 0548 3345A0   		xorl	-96(%rbp), %eax
+ 719 054b 234598   		andl	-104(%rbp), %eax
+ 720 054e 3345A0   		xorl	-96(%rbp), %eax
+ 721 0551 01C2     		addl	%eax, %edx
+ 722 0553 8B45B4   		movl	-76(%rbp), %eax
+ 723 0556 01C2     		addl	%eax, %edx
+ 724 0558 8B45A4   		movl	-92(%rbp), %eax
+ 725 055b 01D0     		addl	%edx, %eax
+ 726 055d 05997982 		addl	$1518500249, %eax
+ 726      5A
+ 727 0562 8945A4   		movl	%eax, -92(%rbp)
+ 728 0565 C14D9802 		rorl	$2, -104(%rbp)
+ 182:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, W[2]  );
+ 729              		.loc 1 182 5
+ 730 0569 8B45A4   		movl	-92(%rbp), %eax
+ 731 056c C1C005   		roll	$5, %eax
+ 732 056f 89C2     		movl	%eax, %edx
+ 733 0571 8B4598   		movl	-104(%rbp), %eax
+ 734 0574 33459C   		xorl	-100(%rbp), %eax
+ 735 0577 2345A8   		andl	-88(%rbp), %eax
+ 736 057a 33459C   		xorl	-100(%rbp), %eax
+ 737 057d 01C2     		addl	%eax, %edx
+ 738 057f 8B45B8   		movl	-72(%rbp), %eax
+ 739 0582 01C2     		addl	%eax, %edx
+ 740 0584 8B45A0   		movl	-96(%rbp), %eax
+ 741 0587 01D0     		addl	%edx, %eax
+ 742 0589 05997982 		addl	$1518500249, %eax
+ 742      5A
+ 743 058e 8945A0   		movl	%eax, -96(%rbp)
+ 744 0591 C14DA802 		rorl	$2, -88(%rbp)
+ 183:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, W[3]  );
+ 745              		.loc 1 183 5
+ 746 0595 8B45A0   		movl	-96(%rbp), %eax
+ 747 0598 C1C005   		roll	$5, %eax
+ 748 059b 89C2     		movl	%eax, %edx
+ 749 059d 8B45A8   		movl	-88(%rbp), %eax
+ 750 05a0 334598   		xorl	-104(%rbp), %eax
+ 751 05a3 2345A4   		andl	-92(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 18
+
+
+ 752 05a6 334598   		xorl	-104(%rbp), %eax
+ 753 05a9 01C2     		addl	%eax, %edx
+ 754 05ab 8B45BC   		movl	-68(%rbp), %eax
+ 755 05ae 01C2     		addl	%eax, %edx
+ 756 05b0 8B459C   		movl	-100(%rbp), %eax
+ 757 05b3 01D0     		addl	%edx, %eax
+ 758 05b5 05997982 		addl	$1518500249, %eax
+ 758      5A
+ 759 05ba 89459C   		movl	%eax, -100(%rbp)
+ 760 05bd C14DA402 		rorl	$2, -92(%rbp)
+ 184:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, W[4]  );
+ 761              		.loc 1 184 5
+ 762 05c1 8B459C   		movl	-100(%rbp), %eax
+ 763 05c4 C1C005   		roll	$5, %eax
+ 764 05c7 89C2     		movl	%eax, %edx
+ 765 05c9 8B45A4   		movl	-92(%rbp), %eax
+ 766 05cc 3345A8   		xorl	-88(%rbp), %eax
+ 767 05cf 2345A0   		andl	-96(%rbp), %eax
+ 768 05d2 3345A8   		xorl	-88(%rbp), %eax
+ 769 05d5 01C2     		addl	%eax, %edx
+ 770 05d7 8B45C0   		movl	-64(%rbp), %eax
+ 771 05da 01C2     		addl	%eax, %edx
+ 772 05dc 8B4598   		movl	-104(%rbp), %eax
+ 773 05df 01D0     		addl	%edx, %eax
+ 774 05e1 05997982 		addl	$1518500249, %eax
+ 774      5A
+ 775 05e6 894598   		movl	%eax, -104(%rbp)
+ 776 05e9 C14DA002 		rorl	$2, -96(%rbp)
+ 185:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, W[5]  );
+ 777              		.loc 1 185 5
+ 778 05ed 8B4598   		movl	-104(%rbp), %eax
+ 779 05f0 C1C005   		roll	$5, %eax
+ 780 05f3 89C2     		movl	%eax, %edx
+ 781 05f5 8B45A0   		movl	-96(%rbp), %eax
+ 782 05f8 3345A4   		xorl	-92(%rbp), %eax
+ 783 05fb 23459C   		andl	-100(%rbp), %eax
+ 784 05fe 3345A4   		xorl	-92(%rbp), %eax
+ 785 0601 01C2     		addl	%eax, %edx
+ 786 0603 8B45C4   		movl	-60(%rbp), %eax
+ 787 0606 01C2     		addl	%eax, %edx
+ 788 0608 8B45A8   		movl	-88(%rbp), %eax
+ 789 060b 01D0     		addl	%edx, %eax
+ 790 060d 05997982 		addl	$1518500249, %eax
+ 790      5A
+ 791 0612 8945A8   		movl	%eax, -88(%rbp)
+ 792 0615 C14D9C02 		rorl	$2, -100(%rbp)
+ 186:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, W[6]  );
+ 793              		.loc 1 186 5
+ 794 0619 8B45A8   		movl	-88(%rbp), %eax
+ 795 061c C1C005   		roll	$5, %eax
+ 796 061f 89C2     		movl	%eax, %edx
+ 797 0621 8B459C   		movl	-100(%rbp), %eax
+ 798 0624 3345A0   		xorl	-96(%rbp), %eax
+ 799 0627 234598   		andl	-104(%rbp), %eax
+ 800 062a 3345A0   		xorl	-96(%rbp), %eax
+ 801 062d 01C2     		addl	%eax, %edx
+ 802 062f 8B45C8   		movl	-56(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 19
+
+
+ 803 0632 01C2     		addl	%eax, %edx
+ 804 0634 8B45A4   		movl	-92(%rbp), %eax
+ 805 0637 01D0     		addl	%edx, %eax
+ 806 0639 05997982 		addl	$1518500249, %eax
+ 806      5A
+ 807 063e 8945A4   		movl	%eax, -92(%rbp)
+ 808 0641 C14D9802 		rorl	$2, -104(%rbp)
+ 187:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, W[7]  );
+ 809              		.loc 1 187 5
+ 810 0645 8B45A4   		movl	-92(%rbp), %eax
+ 811 0648 C1C005   		roll	$5, %eax
+ 812 064b 89C2     		movl	%eax, %edx
+ 813 064d 8B4598   		movl	-104(%rbp), %eax
+ 814 0650 33459C   		xorl	-100(%rbp), %eax
+ 815 0653 2345A8   		andl	-88(%rbp), %eax
+ 816 0656 33459C   		xorl	-100(%rbp), %eax
+ 817 0659 01C2     		addl	%eax, %edx
+ 818 065b 8B45CC   		movl	-52(%rbp), %eax
+ 819 065e 01C2     		addl	%eax, %edx
+ 820 0660 8B45A0   		movl	-96(%rbp), %eax
+ 821 0663 01D0     		addl	%edx, %eax
+ 822 0665 05997982 		addl	$1518500249, %eax
+ 822      5A
+ 823 066a 8945A0   		movl	%eax, -96(%rbp)
+ 824 066d C14DA802 		rorl	$2, -88(%rbp)
+ 188:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, W[8]  );
+ 825              		.loc 1 188 5
+ 826 0671 8B45A0   		movl	-96(%rbp), %eax
+ 827 0674 C1C005   		roll	$5, %eax
+ 828 0677 89C2     		movl	%eax, %edx
+ 829 0679 8B45A8   		movl	-88(%rbp), %eax
+ 830 067c 334598   		xorl	-104(%rbp), %eax
+ 831 067f 2345A4   		andl	-92(%rbp), %eax
+ 832 0682 334598   		xorl	-104(%rbp), %eax
+ 833 0685 01C2     		addl	%eax, %edx
+ 834 0687 8B45D0   		movl	-48(%rbp), %eax
+ 835 068a 01C2     		addl	%eax, %edx
+ 836 068c 8B459C   		movl	-100(%rbp), %eax
+ 837 068f 01D0     		addl	%edx, %eax
+ 838 0691 05997982 		addl	$1518500249, %eax
+ 838      5A
+ 839 0696 89459C   		movl	%eax, -100(%rbp)
+ 840 0699 C14DA402 		rorl	$2, -92(%rbp)
+ 189:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, W[9]  );
+ 841              		.loc 1 189 5
+ 842 069d 8B459C   		movl	-100(%rbp), %eax
+ 843 06a0 C1C005   		roll	$5, %eax
+ 844 06a3 89C2     		movl	%eax, %edx
+ 845 06a5 8B45A4   		movl	-92(%rbp), %eax
+ 846 06a8 3345A8   		xorl	-88(%rbp), %eax
+ 847 06ab 2345A0   		andl	-96(%rbp), %eax
+ 848 06ae 3345A8   		xorl	-88(%rbp), %eax
+ 849 06b1 01C2     		addl	%eax, %edx
+ 850 06b3 8B45D4   		movl	-44(%rbp), %eax
+ 851 06b6 01C2     		addl	%eax, %edx
+ 852 06b8 8B4598   		movl	-104(%rbp), %eax
+ 853 06bb 01D0     		addl	%edx, %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 20
+
+
+ 854 06bd 05997982 		addl	$1518500249, %eax
+ 854      5A
+ 855 06c2 894598   		movl	%eax, -104(%rbp)
+ 856 06c5 C14DA002 		rorl	$2, -96(%rbp)
+ 190:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, W[10] );
+ 857              		.loc 1 190 5
+ 858 06c9 8B4598   		movl	-104(%rbp), %eax
+ 859 06cc C1C005   		roll	$5, %eax
+ 860 06cf 89C2     		movl	%eax, %edx
+ 861 06d1 8B45A0   		movl	-96(%rbp), %eax
+ 862 06d4 3345A4   		xorl	-92(%rbp), %eax
+ 863 06d7 23459C   		andl	-100(%rbp), %eax
+ 864 06da 3345A4   		xorl	-92(%rbp), %eax
+ 865 06dd 01C2     		addl	%eax, %edx
+ 866 06df 8B45D8   		movl	-40(%rbp), %eax
+ 867 06e2 01C2     		addl	%eax, %edx
+ 868 06e4 8B45A8   		movl	-88(%rbp), %eax
+ 869 06e7 01D0     		addl	%edx, %eax
+ 870 06e9 05997982 		addl	$1518500249, %eax
+ 870      5A
+ 871 06ee 8945A8   		movl	%eax, -88(%rbp)
+ 872 06f1 C14D9C02 		rorl	$2, -100(%rbp)
+ 191:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, W[11] );
+ 873              		.loc 1 191 5
+ 874 06f5 8B45A8   		movl	-88(%rbp), %eax
+ 875 06f8 C1C005   		roll	$5, %eax
+ 876 06fb 89C2     		movl	%eax, %edx
+ 877 06fd 8B459C   		movl	-100(%rbp), %eax
+ 878 0700 3345A0   		xorl	-96(%rbp), %eax
+ 879 0703 234598   		andl	-104(%rbp), %eax
+ 880 0706 3345A0   		xorl	-96(%rbp), %eax
+ 881 0709 01C2     		addl	%eax, %edx
+ 882 070b 8B45DC   		movl	-36(%rbp), %eax
+ 883 070e 01C2     		addl	%eax, %edx
+ 884 0710 8B45A4   		movl	-92(%rbp), %eax
+ 885 0713 01D0     		addl	%edx, %eax
+ 886 0715 05997982 		addl	$1518500249, %eax
+ 886      5A
+ 887 071a 8945A4   		movl	%eax, -92(%rbp)
+ 888 071d C14D9802 		rorl	$2, -104(%rbp)
+ 192:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, W[12] );
+ 889              		.loc 1 192 5
+ 890 0721 8B45A4   		movl	-92(%rbp), %eax
+ 891 0724 C1C005   		roll	$5, %eax
+ 892 0727 89C2     		movl	%eax, %edx
+ 893 0729 8B4598   		movl	-104(%rbp), %eax
+ 894 072c 33459C   		xorl	-100(%rbp), %eax
+ 895 072f 2345A8   		andl	-88(%rbp), %eax
+ 896 0732 33459C   		xorl	-100(%rbp), %eax
+ 897 0735 01C2     		addl	%eax, %edx
+ 898 0737 8B45E0   		movl	-32(%rbp), %eax
+ 899 073a 01C2     		addl	%eax, %edx
+ 900 073c 8B45A0   		movl	-96(%rbp), %eax
+ 901 073f 01D0     		addl	%edx, %eax
+ 902 0741 05997982 		addl	$1518500249, %eax
+ 902      5A
+ 903 0746 8945A0   		movl	%eax, -96(%rbp)
+GAS LISTING /tmp/ccdf94mD.s 			page 21
+
+
+ 904 0749 C14DA802 		rorl	$2, -88(%rbp)
+ 193:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, W[13] );
+ 905              		.loc 1 193 5
+ 906 074d 8B45A0   		movl	-96(%rbp), %eax
+ 907 0750 C1C005   		roll	$5, %eax
+ 908 0753 89C2     		movl	%eax, %edx
+ 909 0755 8B45A8   		movl	-88(%rbp), %eax
+ 910 0758 334598   		xorl	-104(%rbp), %eax
+ 911 075b 2345A4   		andl	-92(%rbp), %eax
+ 912 075e 334598   		xorl	-104(%rbp), %eax
+ 913 0761 01C2     		addl	%eax, %edx
+ 914 0763 8B45E4   		movl	-28(%rbp), %eax
+ 915 0766 01C2     		addl	%eax, %edx
+ 916 0768 8B459C   		movl	-100(%rbp), %eax
+ 917 076b 01D0     		addl	%edx, %eax
+ 918 076d 05997982 		addl	$1518500249, %eax
+ 918      5A
+ 919 0772 89459C   		movl	%eax, -100(%rbp)
+ 920 0775 C14DA402 		rorl	$2, -92(%rbp)
+ 194:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, W[14] );
+ 921              		.loc 1 194 5
+ 922 0779 8B459C   		movl	-100(%rbp), %eax
+ 923 077c C1C005   		roll	$5, %eax
+ 924 077f 89C2     		movl	%eax, %edx
+ 925 0781 8B45A4   		movl	-92(%rbp), %eax
+ 926 0784 3345A8   		xorl	-88(%rbp), %eax
+ 927 0787 2345A0   		andl	-96(%rbp), %eax
+ 928 078a 3345A8   		xorl	-88(%rbp), %eax
+ 929 078d 01C2     		addl	%eax, %edx
+ 930 078f 8B45E8   		movl	-24(%rbp), %eax
+ 931 0792 01C2     		addl	%eax, %edx
+ 932 0794 8B4598   		movl	-104(%rbp), %eax
+ 933 0797 01D0     		addl	%edx, %eax
+ 934 0799 05997982 		addl	$1518500249, %eax
+ 934      5A
+ 935 079e 894598   		movl	%eax, -104(%rbp)
+ 936 07a1 C14DA002 		rorl	$2, -96(%rbp)
+ 195:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, W[15] );
+ 937              		.loc 1 195 5
+ 938 07a5 8B4598   		movl	-104(%rbp), %eax
+ 939 07a8 C1C005   		roll	$5, %eax
+ 940 07ab 89C2     		movl	%eax, %edx
+ 941 07ad 8B45A0   		movl	-96(%rbp), %eax
+ 942 07b0 3345A4   		xorl	-92(%rbp), %eax
+ 943 07b3 23459C   		andl	-100(%rbp), %eax
+ 944 07b6 3345A4   		xorl	-92(%rbp), %eax
+ 945 07b9 01C2     		addl	%eax, %edx
+ 946 07bb 8B45EC   		movl	-20(%rbp), %eax
+ 947 07be 01C2     		addl	%eax, %edx
+ 948 07c0 8B45A8   		movl	-88(%rbp), %eax
+ 949 07c3 01D0     		addl	%edx, %eax
+ 950 07c5 05997982 		addl	$1518500249, %eax
+ 950      5A
+ 951 07ca 8945A8   		movl	%eax, -88(%rbp)
+ 952 07cd C14D9C02 		rorl	$2, -100(%rbp)
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(16) );
+ 953              		.loc 1 196 5
+GAS LISTING /tmp/ccdf94mD.s 			page 22
+
+
+ 954 07d1 8B55E4   		movl	-28(%rbp), %edx
+ 955 07d4 8B45D0   		movl	-48(%rbp), %eax
+ 956 07d7 31C2     		xorl	%eax, %edx
+ 957 07d9 8B45B8   		movl	-72(%rbp), %eax
+ 958 07dc 31C2     		xorl	%eax, %edx
+ 959 07de 8B45B0   		movl	-80(%rbp), %eax
+ 960 07e1 31D0     		xorl	%edx, %eax
+ 961 07e3 8945AC   		movl	%eax, -84(%rbp)
+ 962 07e6 8B45A8   		movl	-88(%rbp), %eax
+ 963 07e9 C1C005   		roll	$5, %eax
+ 964 07ec 89C2     		movl	%eax, %edx
+ 965 07ee 8B459C   		movl	-100(%rbp), %eax
+ 966 07f1 3345A0   		xorl	-96(%rbp), %eax
+ 967 07f4 234598   		andl	-104(%rbp), %eax
+ 968 07f7 3345A0   		xorl	-96(%rbp), %eax
+ 969 07fa 01C2     		addl	%eax, %edx
+ 970 07fc 8B45AC   		movl	-84(%rbp), %eax
+ 971 07ff D1C0     		roll	%eax
+ 972 0801 8945B0   		movl	%eax, -80(%rbp)
+ 973 0804 8B45B0   		movl	-80(%rbp), %eax
+ 974 0807 01D0     		addl	%edx, %eax
+ 975 0809 05997982 		addl	$1518500249, %eax
+ 975      5A
+ 976 080e 0145A4   		addl	%eax, -92(%rbp)
+ 977 0811 C14D9802 		rorl	$2, -104(%rbp)
+ 197:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(17) );
+ 978              		.loc 1 197 5
+ 979 0815 8B55E8   		movl	-24(%rbp), %edx
+ 980 0818 8B45D4   		movl	-44(%rbp), %eax
+ 981 081b 31C2     		xorl	%eax, %edx
+ 982 081d 8B45BC   		movl	-68(%rbp), %eax
+ 983 0820 31C2     		xorl	%eax, %edx
+ 984 0822 8B45B4   		movl	-76(%rbp), %eax
+ 985 0825 31D0     		xorl	%edx, %eax
+ 986 0827 8945AC   		movl	%eax, -84(%rbp)
+ 987 082a 8B45A4   		movl	-92(%rbp), %eax
+ 988 082d C1C005   		roll	$5, %eax
+ 989 0830 89C2     		movl	%eax, %edx
+ 990 0832 8B4598   		movl	-104(%rbp), %eax
+ 991 0835 33459C   		xorl	-100(%rbp), %eax
+ 992 0838 2345A8   		andl	-88(%rbp), %eax
+ 993 083b 33459C   		xorl	-100(%rbp), %eax
+ 994 083e 01C2     		addl	%eax, %edx
+ 995 0840 8B45AC   		movl	-84(%rbp), %eax
+ 996 0843 D1C0     		roll	%eax
+ 997 0845 8945B4   		movl	%eax, -76(%rbp)
+ 998 0848 8B45B4   		movl	-76(%rbp), %eax
+ 999 084b 01D0     		addl	%edx, %eax
+ 1000 084d 05997982 		addl	$1518500249, %eax
+ 1000      5A
+ 1001 0852 0145A0   		addl	%eax, -96(%rbp)
+ 1002 0855 C14DA802 		rorl	$2, -88(%rbp)
+ 198:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(18) );
+ 1003              		.loc 1 198 5
+ 1004 0859 8B55EC   		movl	-20(%rbp), %edx
+ 1005 085c 8B45D8   		movl	-40(%rbp), %eax
+ 1006 085f 31C2     		xorl	%eax, %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 23
+
+
+ 1007 0861 8B45C0   		movl	-64(%rbp), %eax
+ 1008 0864 31C2     		xorl	%eax, %edx
+ 1009 0866 8B45B8   		movl	-72(%rbp), %eax
+ 1010 0869 31D0     		xorl	%edx, %eax
+ 1011 086b 8945AC   		movl	%eax, -84(%rbp)
+ 1012 086e 8B45A0   		movl	-96(%rbp), %eax
+ 1013 0871 C1C005   		roll	$5, %eax
+ 1014 0874 89C2     		movl	%eax, %edx
+ 1015 0876 8B45A8   		movl	-88(%rbp), %eax
+ 1016 0879 334598   		xorl	-104(%rbp), %eax
+ 1017 087c 2345A4   		andl	-92(%rbp), %eax
+ 1018 087f 334598   		xorl	-104(%rbp), %eax
+ 1019 0882 01C2     		addl	%eax, %edx
+ 1020 0884 8B45AC   		movl	-84(%rbp), %eax
+ 1021 0887 D1C0     		roll	%eax
+ 1022 0889 8945B8   		movl	%eax, -72(%rbp)
+ 1023 088c 8B45B8   		movl	-72(%rbp), %eax
+ 1024 088f 01D0     		addl	%edx, %eax
+ 1025 0891 05997982 		addl	$1518500249, %eax
+ 1025      5A
+ 1026 0896 01459C   		addl	%eax, -100(%rbp)
+ 1027 0899 C14DA402 		rorl	$2, -92(%rbp)
+ 199:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(19) );
+ 1028              		.loc 1 199 5
+ 1029 089d 8B55B0   		movl	-80(%rbp), %edx
+ 1030 08a0 8B45DC   		movl	-36(%rbp), %eax
+ 1031 08a3 31C2     		xorl	%eax, %edx
+ 1032 08a5 8B45C4   		movl	-60(%rbp), %eax
+ 1033 08a8 31C2     		xorl	%eax, %edx
+ 1034 08aa 8B45BC   		movl	-68(%rbp), %eax
+ 1035 08ad 31D0     		xorl	%edx, %eax
+ 1036 08af 8945AC   		movl	%eax, -84(%rbp)
+ 1037 08b2 8B459C   		movl	-100(%rbp), %eax
+ 1038 08b5 C1C005   		roll	$5, %eax
+ 1039 08b8 89C2     		movl	%eax, %edx
+ 1040 08ba 8B45A4   		movl	-92(%rbp), %eax
+ 1041 08bd 3345A8   		xorl	-88(%rbp), %eax
+ 1042 08c0 2345A0   		andl	-96(%rbp), %eax
+ 1043 08c3 3345A8   		xorl	-88(%rbp), %eax
+ 1044 08c6 01C2     		addl	%eax, %edx
+ 1045 08c8 8B45AC   		movl	-84(%rbp), %eax
+ 1046 08cb D1C0     		roll	%eax
+ 1047 08cd 8945BC   		movl	%eax, -68(%rbp)
+ 1048 08d0 8B45BC   		movl	-68(%rbp), %eax
+ 1049 08d3 01D0     		addl	%edx, %eax
+ 1050 08d5 05997982 		addl	$1518500249, %eax
+ 1050      5A
+ 1051 08da 014598   		addl	%eax, -104(%rbp)
+ 1052 08dd C14DA002 		rorl	$2, -96(%rbp)
+ 200:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 201:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef K
+ 202:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef F
+ 203:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 204:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define F(x,y,z) ((x) ^ (y) ^ (z))
+ 205:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define K 0x6ED9EBA1
+ 206:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 207:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(20) );
+GAS LISTING /tmp/ccdf94mD.s 			page 24
+
+
+ 1053              		.loc 1 207 5
+ 1054 08e1 8B55B4   		movl	-76(%rbp), %edx
+ 1055 08e4 8B45E0   		movl	-32(%rbp), %eax
+ 1056 08e7 31C2     		xorl	%eax, %edx
+ 1057 08e9 8B45C8   		movl	-56(%rbp), %eax
+ 1058 08ec 31C2     		xorl	%eax, %edx
+ 1059 08ee 8B45C0   		movl	-64(%rbp), %eax
+ 1060 08f1 31D0     		xorl	%edx, %eax
+ 1061 08f3 8945AC   		movl	%eax, -84(%rbp)
+ 1062 08f6 8B4598   		movl	-104(%rbp), %eax
+ 1063 08f9 C1C005   		roll	$5, %eax
+ 1064 08fc 89C2     		movl	%eax, %edx
+ 1065 08fe 8B459C   		movl	-100(%rbp), %eax
+ 1066 0901 3345A0   		xorl	-96(%rbp), %eax
+ 1067 0904 3345A4   		xorl	-92(%rbp), %eax
+ 1068 0907 01C2     		addl	%eax, %edx
+ 1069 0909 8B45AC   		movl	-84(%rbp), %eax
+ 1070 090c D1C0     		roll	%eax
+ 1071 090e 8945C0   		movl	%eax, -64(%rbp)
+ 1072 0911 8B45C0   		movl	-64(%rbp), %eax
+ 1073 0914 01D0     		addl	%edx, %eax
+ 1074 0916 05A1EBD9 		addl	$1859775393, %eax
+ 1074      6E
+ 1075 091b 0145A8   		addl	%eax, -88(%rbp)
+ 1076 091e C14D9C02 		rorl	$2, -100(%rbp)
+ 208:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(21) );
+ 1077              		.loc 1 208 5
+ 1078 0922 8B55B8   		movl	-72(%rbp), %edx
+ 1079 0925 8B45E4   		movl	-28(%rbp), %eax
+ 1080 0928 31C2     		xorl	%eax, %edx
+ 1081 092a 8B45CC   		movl	-52(%rbp), %eax
+ 1082 092d 31C2     		xorl	%eax, %edx
+ 1083 092f 8B45C4   		movl	-60(%rbp), %eax
+ 1084 0932 31D0     		xorl	%edx, %eax
+ 1085 0934 8945AC   		movl	%eax, -84(%rbp)
+ 1086 0937 8B45A8   		movl	-88(%rbp), %eax
+ 1087 093a C1C005   		roll	$5, %eax
+ 1088 093d 89C2     		movl	%eax, %edx
+ 1089 093f 8B4598   		movl	-104(%rbp), %eax
+ 1090 0942 33459C   		xorl	-100(%rbp), %eax
+ 1091 0945 3345A0   		xorl	-96(%rbp), %eax
+ 1092 0948 01C2     		addl	%eax, %edx
+ 1093 094a 8B45AC   		movl	-84(%rbp), %eax
+ 1094 094d D1C0     		roll	%eax
+ 1095 094f 8945C4   		movl	%eax, -60(%rbp)
+ 1096 0952 8B45C4   		movl	-60(%rbp), %eax
+ 1097 0955 01D0     		addl	%edx, %eax
+ 1098 0957 05A1EBD9 		addl	$1859775393, %eax
+ 1098      6E
+ 1099 095c 0145A4   		addl	%eax, -92(%rbp)
+ 1100 095f C14D9802 		rorl	$2, -104(%rbp)
+ 209:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(22) );
+ 1101              		.loc 1 209 5
+ 1102 0963 8B55BC   		movl	-68(%rbp), %edx
+ 1103 0966 8B45E8   		movl	-24(%rbp), %eax
+ 1104 0969 31C2     		xorl	%eax, %edx
+ 1105 096b 8B45D0   		movl	-48(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 25
+
+
+ 1106 096e 31C2     		xorl	%eax, %edx
+ 1107 0970 8B45C8   		movl	-56(%rbp), %eax
+ 1108 0973 31D0     		xorl	%edx, %eax
+ 1109 0975 8945AC   		movl	%eax, -84(%rbp)
+ 1110 0978 8B45A4   		movl	-92(%rbp), %eax
+ 1111 097b C1C005   		roll	$5, %eax
+ 1112 097e 89C2     		movl	%eax, %edx
+ 1113 0980 8B45A8   		movl	-88(%rbp), %eax
+ 1114 0983 334598   		xorl	-104(%rbp), %eax
+ 1115 0986 33459C   		xorl	-100(%rbp), %eax
+ 1116 0989 01C2     		addl	%eax, %edx
+ 1117 098b 8B45AC   		movl	-84(%rbp), %eax
+ 1118 098e D1C0     		roll	%eax
+ 1119 0990 8945C8   		movl	%eax, -56(%rbp)
+ 1120 0993 8B45C8   		movl	-56(%rbp), %eax
+ 1121 0996 01D0     		addl	%edx, %eax
+ 1122 0998 05A1EBD9 		addl	$1859775393, %eax
+ 1122      6E
+ 1123 099d 0145A0   		addl	%eax, -96(%rbp)
+ 1124 09a0 C14DA802 		rorl	$2, -88(%rbp)
+ 210:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(23) );
+ 1125              		.loc 1 210 5
+ 1126 09a4 8B55C0   		movl	-64(%rbp), %edx
+ 1127 09a7 8B45EC   		movl	-20(%rbp), %eax
+ 1128 09aa 31C2     		xorl	%eax, %edx
+ 1129 09ac 8B45D4   		movl	-44(%rbp), %eax
+ 1130 09af 31C2     		xorl	%eax, %edx
+ 1131 09b1 8B45CC   		movl	-52(%rbp), %eax
+ 1132 09b4 31D0     		xorl	%edx, %eax
+ 1133 09b6 8945AC   		movl	%eax, -84(%rbp)
+ 1134 09b9 8B45A0   		movl	-96(%rbp), %eax
+ 1135 09bc C1C005   		roll	$5, %eax
+ 1136 09bf 89C2     		movl	%eax, %edx
+ 1137 09c1 8B45A4   		movl	-92(%rbp), %eax
+ 1138 09c4 3345A8   		xorl	-88(%rbp), %eax
+ 1139 09c7 334598   		xorl	-104(%rbp), %eax
+ 1140 09ca 01C2     		addl	%eax, %edx
+ 1141 09cc 8B45AC   		movl	-84(%rbp), %eax
+ 1142 09cf D1C0     		roll	%eax
+ 1143 09d1 8945CC   		movl	%eax, -52(%rbp)
+ 1144 09d4 8B45CC   		movl	-52(%rbp), %eax
+ 1145 09d7 01D0     		addl	%edx, %eax
+ 1146 09d9 05A1EBD9 		addl	$1859775393, %eax
+ 1146      6E
+ 1147 09de 01459C   		addl	%eax, -100(%rbp)
+ 1148 09e1 C14DA402 		rorl	$2, -92(%rbp)
+ 211:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(24) );
+ 1149              		.loc 1 211 5
+ 1150 09e5 8B55C4   		movl	-60(%rbp), %edx
+ 1151 09e8 8B45B0   		movl	-80(%rbp), %eax
+ 1152 09eb 31C2     		xorl	%eax, %edx
+ 1153 09ed 8B45D8   		movl	-40(%rbp), %eax
+ 1154 09f0 31C2     		xorl	%eax, %edx
+ 1155 09f2 8B45D0   		movl	-48(%rbp), %eax
+ 1156 09f5 31D0     		xorl	%edx, %eax
+ 1157 09f7 8945AC   		movl	%eax, -84(%rbp)
+ 1158 09fa 8B459C   		movl	-100(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 26
+
+
+ 1159 09fd C1C005   		roll	$5, %eax
+ 1160 0a00 89C2     		movl	%eax, %edx
+ 1161 0a02 8B45A0   		movl	-96(%rbp), %eax
+ 1162 0a05 3345A4   		xorl	-92(%rbp), %eax
+ 1163 0a08 3345A8   		xorl	-88(%rbp), %eax
+ 1164 0a0b 01C2     		addl	%eax, %edx
+ 1165 0a0d 8B45AC   		movl	-84(%rbp), %eax
+ 1166 0a10 D1C0     		roll	%eax
+ 1167 0a12 8945D0   		movl	%eax, -48(%rbp)
+ 1168 0a15 8B45D0   		movl	-48(%rbp), %eax
+ 1169 0a18 01D0     		addl	%edx, %eax
+ 1170 0a1a 05A1EBD9 		addl	$1859775393, %eax
+ 1170      6E
+ 1171 0a1f 014598   		addl	%eax, -104(%rbp)
+ 1172 0a22 C14DA002 		rorl	$2, -96(%rbp)
+ 212:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(25) );
+ 1173              		.loc 1 212 5
+ 1174 0a26 8B55C8   		movl	-56(%rbp), %edx
+ 1175 0a29 8B45B4   		movl	-76(%rbp), %eax
+ 1176 0a2c 31C2     		xorl	%eax, %edx
+ 1177 0a2e 8B45DC   		movl	-36(%rbp), %eax
+ 1178 0a31 31C2     		xorl	%eax, %edx
+ 1179 0a33 8B45D4   		movl	-44(%rbp), %eax
+ 1180 0a36 31D0     		xorl	%edx, %eax
+ 1181 0a38 8945AC   		movl	%eax, -84(%rbp)
+ 1182 0a3b 8B4598   		movl	-104(%rbp), %eax
+ 1183 0a3e C1C005   		roll	$5, %eax
+ 1184 0a41 89C2     		movl	%eax, %edx
+ 1185 0a43 8B459C   		movl	-100(%rbp), %eax
+ 1186 0a46 3345A0   		xorl	-96(%rbp), %eax
+ 1187 0a49 3345A4   		xorl	-92(%rbp), %eax
+ 1188 0a4c 01C2     		addl	%eax, %edx
+ 1189 0a4e 8B45AC   		movl	-84(%rbp), %eax
+ 1190 0a51 D1C0     		roll	%eax
+ 1191 0a53 8945D4   		movl	%eax, -44(%rbp)
+ 1192 0a56 8B45D4   		movl	-44(%rbp), %eax
+ 1193 0a59 01D0     		addl	%edx, %eax
+ 1194 0a5b 05A1EBD9 		addl	$1859775393, %eax
+ 1194      6E
+ 1195 0a60 0145A8   		addl	%eax, -88(%rbp)
+ 1196 0a63 C14D9C02 		rorl	$2, -100(%rbp)
+ 213:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(26) );
+ 1197              		.loc 1 213 5
+ 1198 0a67 8B55CC   		movl	-52(%rbp), %edx
+ 1199 0a6a 8B45B8   		movl	-72(%rbp), %eax
+ 1200 0a6d 31C2     		xorl	%eax, %edx
+ 1201 0a6f 8B45E0   		movl	-32(%rbp), %eax
+ 1202 0a72 31C2     		xorl	%eax, %edx
+ 1203 0a74 8B45D8   		movl	-40(%rbp), %eax
+ 1204 0a77 31D0     		xorl	%edx, %eax
+ 1205 0a79 8945AC   		movl	%eax, -84(%rbp)
+ 1206 0a7c 8B45A8   		movl	-88(%rbp), %eax
+ 1207 0a7f C1C005   		roll	$5, %eax
+ 1208 0a82 89C2     		movl	%eax, %edx
+ 1209 0a84 8B4598   		movl	-104(%rbp), %eax
+ 1210 0a87 33459C   		xorl	-100(%rbp), %eax
+ 1211 0a8a 3345A0   		xorl	-96(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 27
+
+
+ 1212 0a8d 01C2     		addl	%eax, %edx
+ 1213 0a8f 8B45AC   		movl	-84(%rbp), %eax
+ 1214 0a92 D1C0     		roll	%eax
+ 1215 0a94 8945D8   		movl	%eax, -40(%rbp)
+ 1216 0a97 8B45D8   		movl	-40(%rbp), %eax
+ 1217 0a9a 01D0     		addl	%edx, %eax
+ 1218 0a9c 05A1EBD9 		addl	$1859775393, %eax
+ 1218      6E
+ 1219 0aa1 0145A4   		addl	%eax, -92(%rbp)
+ 1220 0aa4 C14D9802 		rorl	$2, -104(%rbp)
+ 214:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(27) );
+ 1221              		.loc 1 214 5
+ 1222 0aa8 8B55D0   		movl	-48(%rbp), %edx
+ 1223 0aab 8B45BC   		movl	-68(%rbp), %eax
+ 1224 0aae 31C2     		xorl	%eax, %edx
+ 1225 0ab0 8B45E4   		movl	-28(%rbp), %eax
+ 1226 0ab3 31C2     		xorl	%eax, %edx
+ 1227 0ab5 8B45DC   		movl	-36(%rbp), %eax
+ 1228 0ab8 31D0     		xorl	%edx, %eax
+ 1229 0aba 8945AC   		movl	%eax, -84(%rbp)
+ 1230 0abd 8B45A4   		movl	-92(%rbp), %eax
+ 1231 0ac0 C1C005   		roll	$5, %eax
+ 1232 0ac3 89C2     		movl	%eax, %edx
+ 1233 0ac5 8B45A8   		movl	-88(%rbp), %eax
+ 1234 0ac8 334598   		xorl	-104(%rbp), %eax
+ 1235 0acb 33459C   		xorl	-100(%rbp), %eax
+ 1236 0ace 01C2     		addl	%eax, %edx
+ 1237 0ad0 8B45AC   		movl	-84(%rbp), %eax
+ 1238 0ad3 D1C0     		roll	%eax
+ 1239 0ad5 8945DC   		movl	%eax, -36(%rbp)
+ 1240 0ad8 8B45DC   		movl	-36(%rbp), %eax
+ 1241 0adb 01D0     		addl	%edx, %eax
+ 1242 0add 05A1EBD9 		addl	$1859775393, %eax
+ 1242      6E
+ 1243 0ae2 0145A0   		addl	%eax, -96(%rbp)
+ 1244 0ae5 C14DA802 		rorl	$2, -88(%rbp)
+ 215:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(28) );
+ 1245              		.loc 1 215 5
+ 1246 0ae9 8B55D4   		movl	-44(%rbp), %edx
+ 1247 0aec 8B45C0   		movl	-64(%rbp), %eax
+ 1248 0aef 31C2     		xorl	%eax, %edx
+ 1249 0af1 8B45E8   		movl	-24(%rbp), %eax
+ 1250 0af4 31C2     		xorl	%eax, %edx
+ 1251 0af6 8B45E0   		movl	-32(%rbp), %eax
+ 1252 0af9 31D0     		xorl	%edx, %eax
+ 1253 0afb 8945AC   		movl	%eax, -84(%rbp)
+ 1254 0afe 8B45A0   		movl	-96(%rbp), %eax
+ 1255 0b01 C1C005   		roll	$5, %eax
+ 1256 0b04 89C2     		movl	%eax, %edx
+ 1257 0b06 8B45A4   		movl	-92(%rbp), %eax
+ 1258 0b09 3345A8   		xorl	-88(%rbp), %eax
+ 1259 0b0c 334598   		xorl	-104(%rbp), %eax
+ 1260 0b0f 01C2     		addl	%eax, %edx
+ 1261 0b11 8B45AC   		movl	-84(%rbp), %eax
+ 1262 0b14 D1C0     		roll	%eax
+ 1263 0b16 8945E0   		movl	%eax, -32(%rbp)
+ 1264 0b19 8B45E0   		movl	-32(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 28
+
+
+ 1265 0b1c 01D0     		addl	%edx, %eax
+ 1266 0b1e 05A1EBD9 		addl	$1859775393, %eax
+ 1266      6E
+ 1267 0b23 01459C   		addl	%eax, -100(%rbp)
+ 1268 0b26 C14DA402 		rorl	$2, -92(%rbp)
+ 216:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(29) );
+ 1269              		.loc 1 216 5
+ 1270 0b2a 8B55D8   		movl	-40(%rbp), %edx
+ 1271 0b2d 8B45C4   		movl	-60(%rbp), %eax
+ 1272 0b30 31C2     		xorl	%eax, %edx
+ 1273 0b32 8B45EC   		movl	-20(%rbp), %eax
+ 1274 0b35 31C2     		xorl	%eax, %edx
+ 1275 0b37 8B45E4   		movl	-28(%rbp), %eax
+ 1276 0b3a 31D0     		xorl	%edx, %eax
+ 1277 0b3c 8945AC   		movl	%eax, -84(%rbp)
+ 1278 0b3f 8B459C   		movl	-100(%rbp), %eax
+ 1279 0b42 C1C005   		roll	$5, %eax
+ 1280 0b45 89C2     		movl	%eax, %edx
+ 1281 0b47 8B45A0   		movl	-96(%rbp), %eax
+ 1282 0b4a 3345A4   		xorl	-92(%rbp), %eax
+ 1283 0b4d 3345A8   		xorl	-88(%rbp), %eax
+ 1284 0b50 01C2     		addl	%eax, %edx
+ 1285 0b52 8B45AC   		movl	-84(%rbp), %eax
+ 1286 0b55 D1C0     		roll	%eax
+ 1287 0b57 8945E4   		movl	%eax, -28(%rbp)
+ 1288 0b5a 8B45E4   		movl	-28(%rbp), %eax
+ 1289 0b5d 01D0     		addl	%edx, %eax
+ 1290 0b5f 05A1EBD9 		addl	$1859775393, %eax
+ 1290      6E
+ 1291 0b64 014598   		addl	%eax, -104(%rbp)
+ 1292 0b67 C14DA002 		rorl	$2, -96(%rbp)
+ 217:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(30) );
+ 1293              		.loc 1 217 5
+ 1294 0b6b 8B55DC   		movl	-36(%rbp), %edx
+ 1295 0b6e 8B45C8   		movl	-56(%rbp), %eax
+ 1296 0b71 31C2     		xorl	%eax, %edx
+ 1297 0b73 8B45B0   		movl	-80(%rbp), %eax
+ 1298 0b76 31C2     		xorl	%eax, %edx
+ 1299 0b78 8B45E8   		movl	-24(%rbp), %eax
+ 1300 0b7b 31D0     		xorl	%edx, %eax
+ 1301 0b7d 8945AC   		movl	%eax, -84(%rbp)
+ 1302 0b80 8B4598   		movl	-104(%rbp), %eax
+ 1303 0b83 C1C005   		roll	$5, %eax
+ 1304 0b86 89C2     		movl	%eax, %edx
+ 1305 0b88 8B459C   		movl	-100(%rbp), %eax
+ 1306 0b8b 3345A0   		xorl	-96(%rbp), %eax
+ 1307 0b8e 3345A4   		xorl	-92(%rbp), %eax
+ 1308 0b91 01C2     		addl	%eax, %edx
+ 1309 0b93 8B45AC   		movl	-84(%rbp), %eax
+ 1310 0b96 D1C0     		roll	%eax
+ 1311 0b98 8945E8   		movl	%eax, -24(%rbp)
+ 1312 0b9b 8B45E8   		movl	-24(%rbp), %eax
+ 1313 0b9e 01D0     		addl	%edx, %eax
+ 1314 0ba0 05A1EBD9 		addl	$1859775393, %eax
+ 1314      6E
+ 1315 0ba5 0145A8   		addl	%eax, -88(%rbp)
+ 1316 0ba8 C14D9C02 		rorl	$2, -100(%rbp)
+GAS LISTING /tmp/ccdf94mD.s 			page 29
+
+
+ 218:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(31) );
+ 1317              		.loc 1 218 5
+ 1318 0bac 8B55E0   		movl	-32(%rbp), %edx
+ 1319 0baf 8B45CC   		movl	-52(%rbp), %eax
+ 1320 0bb2 31C2     		xorl	%eax, %edx
+ 1321 0bb4 8B45B4   		movl	-76(%rbp), %eax
+ 1322 0bb7 31C2     		xorl	%eax, %edx
+ 1323 0bb9 8B45EC   		movl	-20(%rbp), %eax
+ 1324 0bbc 31D0     		xorl	%edx, %eax
+ 1325 0bbe 8945AC   		movl	%eax, -84(%rbp)
+ 1326 0bc1 8B45A8   		movl	-88(%rbp), %eax
+ 1327 0bc4 C1C005   		roll	$5, %eax
+ 1328 0bc7 89C2     		movl	%eax, %edx
+ 1329 0bc9 8B4598   		movl	-104(%rbp), %eax
+ 1330 0bcc 33459C   		xorl	-100(%rbp), %eax
+ 1331 0bcf 3345A0   		xorl	-96(%rbp), %eax
+ 1332 0bd2 01C2     		addl	%eax, %edx
+ 1333 0bd4 8B45AC   		movl	-84(%rbp), %eax
+ 1334 0bd7 D1C0     		roll	%eax
+ 1335 0bd9 8945EC   		movl	%eax, -20(%rbp)
+ 1336 0bdc 8B45EC   		movl	-20(%rbp), %eax
+ 1337 0bdf 01D0     		addl	%edx, %eax
+ 1338 0be1 05A1EBD9 		addl	$1859775393, %eax
+ 1338      6E
+ 1339 0be6 0145A4   		addl	%eax, -92(%rbp)
+ 1340 0be9 C14D9802 		rorl	$2, -104(%rbp)
+ 219:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(32) );
+ 1341              		.loc 1 219 5
+ 1342 0bed 8B55E4   		movl	-28(%rbp), %edx
+ 1343 0bf0 8B45D0   		movl	-48(%rbp), %eax
+ 1344 0bf3 31C2     		xorl	%eax, %edx
+ 1345 0bf5 8B45B8   		movl	-72(%rbp), %eax
+ 1346 0bf8 31C2     		xorl	%eax, %edx
+ 1347 0bfa 8B45B0   		movl	-80(%rbp), %eax
+ 1348 0bfd 31D0     		xorl	%edx, %eax
+ 1349 0bff 8945AC   		movl	%eax, -84(%rbp)
+ 1350 0c02 8B45A4   		movl	-92(%rbp), %eax
+ 1351 0c05 C1C005   		roll	$5, %eax
+ 1352 0c08 89C2     		movl	%eax, %edx
+ 1353 0c0a 8B45A8   		movl	-88(%rbp), %eax
+ 1354 0c0d 334598   		xorl	-104(%rbp), %eax
+ 1355 0c10 33459C   		xorl	-100(%rbp), %eax
+ 1356 0c13 01C2     		addl	%eax, %edx
+ 1357 0c15 8B45AC   		movl	-84(%rbp), %eax
+ 1358 0c18 D1C0     		roll	%eax
+ 1359 0c1a 8945B0   		movl	%eax, -80(%rbp)
+ 1360 0c1d 8B45B0   		movl	-80(%rbp), %eax
+ 1361 0c20 01D0     		addl	%edx, %eax
+ 1362 0c22 05A1EBD9 		addl	$1859775393, %eax
+ 1362      6E
+ 1363 0c27 0145A0   		addl	%eax, -96(%rbp)
+ 1364 0c2a C14DA802 		rorl	$2, -88(%rbp)
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(33) );
+ 1365              		.loc 1 220 5
+ 1366 0c2e 8B55E8   		movl	-24(%rbp), %edx
+ 1367 0c31 8B45D4   		movl	-44(%rbp), %eax
+ 1368 0c34 31C2     		xorl	%eax, %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 30
+
+
+ 1369 0c36 8B45BC   		movl	-68(%rbp), %eax
+ 1370 0c39 31C2     		xorl	%eax, %edx
+ 1371 0c3b 8B45B4   		movl	-76(%rbp), %eax
+ 1372 0c3e 31D0     		xorl	%edx, %eax
+ 1373 0c40 8945AC   		movl	%eax, -84(%rbp)
+ 1374 0c43 8B45A0   		movl	-96(%rbp), %eax
+ 1375 0c46 C1C005   		roll	$5, %eax
+ 1376 0c49 89C2     		movl	%eax, %edx
+ 1377 0c4b 8B45A4   		movl	-92(%rbp), %eax
+ 1378 0c4e 3345A8   		xorl	-88(%rbp), %eax
+ 1379 0c51 334598   		xorl	-104(%rbp), %eax
+ 1380 0c54 01C2     		addl	%eax, %edx
+ 1381 0c56 8B45AC   		movl	-84(%rbp), %eax
+ 1382 0c59 D1C0     		roll	%eax
+ 1383 0c5b 8945B4   		movl	%eax, -76(%rbp)
+ 1384 0c5e 8B45B4   		movl	-76(%rbp), %eax
+ 1385 0c61 01D0     		addl	%edx, %eax
+ 1386 0c63 05A1EBD9 		addl	$1859775393, %eax
+ 1386      6E
+ 1387 0c68 01459C   		addl	%eax, -100(%rbp)
+ 1388 0c6b C14DA402 		rorl	$2, -92(%rbp)
+ 221:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(34) );
+ 1389              		.loc 1 221 5
+ 1390 0c6f 8B55EC   		movl	-20(%rbp), %edx
+ 1391 0c72 8B45D8   		movl	-40(%rbp), %eax
+ 1392 0c75 31C2     		xorl	%eax, %edx
+ 1393 0c77 8B45C0   		movl	-64(%rbp), %eax
+ 1394 0c7a 31C2     		xorl	%eax, %edx
+ 1395 0c7c 8B45B8   		movl	-72(%rbp), %eax
+ 1396 0c7f 31D0     		xorl	%edx, %eax
+ 1397 0c81 8945AC   		movl	%eax, -84(%rbp)
+ 1398 0c84 8B459C   		movl	-100(%rbp), %eax
+ 1399 0c87 C1C005   		roll	$5, %eax
+ 1400 0c8a 89C2     		movl	%eax, %edx
+ 1401 0c8c 8B45A0   		movl	-96(%rbp), %eax
+ 1402 0c8f 3345A4   		xorl	-92(%rbp), %eax
+ 1403 0c92 3345A8   		xorl	-88(%rbp), %eax
+ 1404 0c95 01C2     		addl	%eax, %edx
+ 1405 0c97 8B45AC   		movl	-84(%rbp), %eax
+ 1406 0c9a D1C0     		roll	%eax
+ 1407 0c9c 8945B8   		movl	%eax, -72(%rbp)
+ 1408 0c9f 8B45B8   		movl	-72(%rbp), %eax
+ 1409 0ca2 01D0     		addl	%edx, %eax
+ 1410 0ca4 05A1EBD9 		addl	$1859775393, %eax
+ 1410      6E
+ 1411 0ca9 014598   		addl	%eax, -104(%rbp)
+ 1412 0cac C14DA002 		rorl	$2, -96(%rbp)
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(35) );
+ 1413              		.loc 1 222 5
+ 1414 0cb0 8B55B0   		movl	-80(%rbp), %edx
+ 1415 0cb3 8B45DC   		movl	-36(%rbp), %eax
+ 1416 0cb6 31C2     		xorl	%eax, %edx
+ 1417 0cb8 8B45C4   		movl	-60(%rbp), %eax
+ 1418 0cbb 31C2     		xorl	%eax, %edx
+ 1419 0cbd 8B45BC   		movl	-68(%rbp), %eax
+ 1420 0cc0 31D0     		xorl	%edx, %eax
+ 1421 0cc2 8945AC   		movl	%eax, -84(%rbp)
+GAS LISTING /tmp/ccdf94mD.s 			page 31
+
+
+ 1422 0cc5 8B4598   		movl	-104(%rbp), %eax
+ 1423 0cc8 C1C005   		roll	$5, %eax
+ 1424 0ccb 89C2     		movl	%eax, %edx
+ 1425 0ccd 8B459C   		movl	-100(%rbp), %eax
+ 1426 0cd0 3345A0   		xorl	-96(%rbp), %eax
+ 1427 0cd3 3345A4   		xorl	-92(%rbp), %eax
+ 1428 0cd6 01C2     		addl	%eax, %edx
+ 1429 0cd8 8B45AC   		movl	-84(%rbp), %eax
+ 1430 0cdb D1C0     		roll	%eax
+ 1431 0cdd 8945BC   		movl	%eax, -68(%rbp)
+ 1432 0ce0 8B45BC   		movl	-68(%rbp), %eax
+ 1433 0ce3 01D0     		addl	%edx, %eax
+ 1434 0ce5 05A1EBD9 		addl	$1859775393, %eax
+ 1434      6E
+ 1435 0cea 0145A8   		addl	%eax, -88(%rbp)
+ 1436 0ced C14D9C02 		rorl	$2, -100(%rbp)
+ 223:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(36) );
+ 1437              		.loc 1 223 5
+ 1438 0cf1 8B55B4   		movl	-76(%rbp), %edx
+ 1439 0cf4 8B45E0   		movl	-32(%rbp), %eax
+ 1440 0cf7 31C2     		xorl	%eax, %edx
+ 1441 0cf9 8B45C8   		movl	-56(%rbp), %eax
+ 1442 0cfc 31C2     		xorl	%eax, %edx
+ 1443 0cfe 8B45C0   		movl	-64(%rbp), %eax
+ 1444 0d01 31D0     		xorl	%edx, %eax
+ 1445 0d03 8945AC   		movl	%eax, -84(%rbp)
+ 1446 0d06 8B45A8   		movl	-88(%rbp), %eax
+ 1447 0d09 C1C005   		roll	$5, %eax
+ 1448 0d0c 89C2     		movl	%eax, %edx
+ 1449 0d0e 8B4598   		movl	-104(%rbp), %eax
+ 1450 0d11 33459C   		xorl	-100(%rbp), %eax
+ 1451 0d14 3345A0   		xorl	-96(%rbp), %eax
+ 1452 0d17 01C2     		addl	%eax, %edx
+ 1453 0d19 8B45AC   		movl	-84(%rbp), %eax
+ 1454 0d1c D1C0     		roll	%eax
+ 1455 0d1e 8945C0   		movl	%eax, -64(%rbp)
+ 1456 0d21 8B45C0   		movl	-64(%rbp), %eax
+ 1457 0d24 01D0     		addl	%edx, %eax
+ 1458 0d26 05A1EBD9 		addl	$1859775393, %eax
+ 1458      6E
+ 1459 0d2b 0145A4   		addl	%eax, -92(%rbp)
+ 1460 0d2e C14D9802 		rorl	$2, -104(%rbp)
+ 224:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(37) );
+ 1461              		.loc 1 224 5
+ 1462 0d32 8B55B8   		movl	-72(%rbp), %edx
+ 1463 0d35 8B45E4   		movl	-28(%rbp), %eax
+ 1464 0d38 31C2     		xorl	%eax, %edx
+ 1465 0d3a 8B45CC   		movl	-52(%rbp), %eax
+ 1466 0d3d 31C2     		xorl	%eax, %edx
+ 1467 0d3f 8B45C4   		movl	-60(%rbp), %eax
+ 1468 0d42 31D0     		xorl	%edx, %eax
+ 1469 0d44 8945AC   		movl	%eax, -84(%rbp)
+ 1470 0d47 8B45A4   		movl	-92(%rbp), %eax
+ 1471 0d4a C1C005   		roll	$5, %eax
+ 1472 0d4d 89C2     		movl	%eax, %edx
+ 1473 0d4f 8B45A8   		movl	-88(%rbp), %eax
+ 1474 0d52 334598   		xorl	-104(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 32
+
+
+ 1475 0d55 33459C   		xorl	-100(%rbp), %eax
+ 1476 0d58 01C2     		addl	%eax, %edx
+ 1477 0d5a 8B45AC   		movl	-84(%rbp), %eax
+ 1478 0d5d D1C0     		roll	%eax
+ 1479 0d5f 8945C4   		movl	%eax, -60(%rbp)
+ 1480 0d62 8B45C4   		movl	-60(%rbp), %eax
+ 1481 0d65 01D0     		addl	%edx, %eax
+ 1482 0d67 05A1EBD9 		addl	$1859775393, %eax
+ 1482      6E
+ 1483 0d6c 0145A0   		addl	%eax, -96(%rbp)
+ 1484 0d6f C14DA802 		rorl	$2, -88(%rbp)
+ 225:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(38) );
+ 1485              		.loc 1 225 5
+ 1486 0d73 8B55BC   		movl	-68(%rbp), %edx
+ 1487 0d76 8B45E8   		movl	-24(%rbp), %eax
+ 1488 0d79 31C2     		xorl	%eax, %edx
+ 1489 0d7b 8B45D0   		movl	-48(%rbp), %eax
+ 1490 0d7e 31C2     		xorl	%eax, %edx
+ 1491 0d80 8B45C8   		movl	-56(%rbp), %eax
+ 1492 0d83 31D0     		xorl	%edx, %eax
+ 1493 0d85 8945AC   		movl	%eax, -84(%rbp)
+ 1494 0d88 8B45A0   		movl	-96(%rbp), %eax
+ 1495 0d8b C1C005   		roll	$5, %eax
+ 1496 0d8e 89C2     		movl	%eax, %edx
+ 1497 0d90 8B45A4   		movl	-92(%rbp), %eax
+ 1498 0d93 3345A8   		xorl	-88(%rbp), %eax
+ 1499 0d96 334598   		xorl	-104(%rbp), %eax
+ 1500 0d99 01C2     		addl	%eax, %edx
+ 1501 0d9b 8B45AC   		movl	-84(%rbp), %eax
+ 1502 0d9e D1C0     		roll	%eax
+ 1503 0da0 8945C8   		movl	%eax, -56(%rbp)
+ 1504 0da3 8B45C8   		movl	-56(%rbp), %eax
+ 1505 0da6 01D0     		addl	%edx, %eax
+ 1506 0da8 05A1EBD9 		addl	$1859775393, %eax
+ 1506      6E
+ 1507 0dad 01459C   		addl	%eax, -100(%rbp)
+ 1508 0db0 C14DA402 		rorl	$2, -92(%rbp)
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(39) );
+ 1509              		.loc 1 226 5
+ 1510 0db4 8B55C0   		movl	-64(%rbp), %edx
+ 1511 0db7 8B45EC   		movl	-20(%rbp), %eax
+ 1512 0dba 31C2     		xorl	%eax, %edx
+ 1513 0dbc 8B45D4   		movl	-44(%rbp), %eax
+ 1514 0dbf 31C2     		xorl	%eax, %edx
+ 1515 0dc1 8B45CC   		movl	-52(%rbp), %eax
+ 1516 0dc4 31D0     		xorl	%edx, %eax
+ 1517 0dc6 8945AC   		movl	%eax, -84(%rbp)
+ 1518 0dc9 8B459C   		movl	-100(%rbp), %eax
+ 1519 0dcc C1C005   		roll	$5, %eax
+ 1520 0dcf 89C2     		movl	%eax, %edx
+ 1521 0dd1 8B45A0   		movl	-96(%rbp), %eax
+ 1522 0dd4 3345A4   		xorl	-92(%rbp), %eax
+ 1523 0dd7 3345A8   		xorl	-88(%rbp), %eax
+ 1524 0dda 01C2     		addl	%eax, %edx
+ 1525 0ddc 8B45AC   		movl	-84(%rbp), %eax
+ 1526 0ddf D1C0     		roll	%eax
+ 1527 0de1 8945CC   		movl	%eax, -52(%rbp)
+GAS LISTING /tmp/ccdf94mD.s 			page 33
+
+
+ 1528 0de4 8B45CC   		movl	-52(%rbp), %eax
+ 1529 0de7 01D0     		addl	%edx, %eax
+ 1530 0de9 05A1EBD9 		addl	$1859775393, %eax
+ 1530      6E
+ 1531 0dee 014598   		addl	%eax, -104(%rbp)
+ 1532 0df1 C14DA002 		rorl	$2, -96(%rbp)
+ 227:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 228:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef K
+ 229:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef F
+ 230:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 231:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define F(x,y,z) (((x) & (y)) | ((z) & ((x) | (y))))
+ 232:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define K 0x8F1BBCDC
+ 233:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 234:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(40) );
+ 1533              		.loc 1 234 5
+ 1534 0df5 8B55C4   		movl	-60(%rbp), %edx
+ 1535 0df8 8B45B0   		movl	-80(%rbp), %eax
+ 1536 0dfb 31C2     		xorl	%eax, %edx
+ 1537 0dfd 8B45D8   		movl	-40(%rbp), %eax
+ 1538 0e00 31C2     		xorl	%eax, %edx
+ 1539 0e02 8B45D0   		movl	-48(%rbp), %eax
+ 1540 0e05 31D0     		xorl	%edx, %eax
+ 1541 0e07 8945AC   		movl	%eax, -84(%rbp)
+ 1542 0e0a 8B4598   		movl	-104(%rbp), %eax
+ 1543 0e0d C1C005   		roll	$5, %eax
+ 1544 0e10 89C1     		movl	%eax, %ecx
+ 1545 0e12 8B459C   		movl	-100(%rbp), %eax
+ 1546 0e15 2345A0   		andl	-96(%rbp), %eax
+ 1547 0e18 89C2     		movl	%eax, %edx
+ 1548 0e1a 8B459C   		movl	-100(%rbp), %eax
+ 1549 0e1d 0B45A0   		orl	-96(%rbp), %eax
+ 1550 0e20 2345A4   		andl	-92(%rbp), %eax
+ 1551 0e23 09D0     		orl	%edx, %eax
+ 1552 0e25 8D1401   		leal	(%rcx,%rax), %edx
+ 1553 0e28 8B45AC   		movl	-84(%rbp), %eax
+ 1554 0e2b D1C0     		roll	%eax
+ 1555 0e2d 8945D0   		movl	%eax, -48(%rbp)
+ 1556 0e30 8B45D0   		movl	-48(%rbp), %eax
+ 1557 0e33 01D0     		addl	%edx, %eax
+ 1558 0e35 2D2443E4 		subl	$1894007588, %eax
+ 1558      70
+ 1559 0e3a 0145A8   		addl	%eax, -88(%rbp)
+ 1560 0e3d C14D9C02 		rorl	$2, -100(%rbp)
+ 235:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(41) );
+ 1561              		.loc 1 235 5
+ 1562 0e41 8B55C8   		movl	-56(%rbp), %edx
+ 1563 0e44 8B45B4   		movl	-76(%rbp), %eax
+ 1564 0e47 31C2     		xorl	%eax, %edx
+ 1565 0e49 8B45DC   		movl	-36(%rbp), %eax
+ 1566 0e4c 31C2     		xorl	%eax, %edx
+ 1567 0e4e 8B45D4   		movl	-44(%rbp), %eax
+ 1568 0e51 31D0     		xorl	%edx, %eax
+ 1569 0e53 8945AC   		movl	%eax, -84(%rbp)
+ 1570 0e56 8B45A8   		movl	-88(%rbp), %eax
+ 1571 0e59 C1C005   		roll	$5, %eax
+ 1572 0e5c 89C1     		movl	%eax, %ecx
+ 1573 0e5e 8B4598   		movl	-104(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 34
+
+
+ 1574 0e61 23459C   		andl	-100(%rbp), %eax
+ 1575 0e64 89C2     		movl	%eax, %edx
+ 1576 0e66 8B4598   		movl	-104(%rbp), %eax
+ 1577 0e69 0B459C   		orl	-100(%rbp), %eax
+ 1578 0e6c 2345A0   		andl	-96(%rbp), %eax
+ 1579 0e6f 09D0     		orl	%edx, %eax
+ 1580 0e71 8D1401   		leal	(%rcx,%rax), %edx
+ 1581 0e74 8B45AC   		movl	-84(%rbp), %eax
+ 1582 0e77 D1C0     		roll	%eax
+ 1583 0e79 8945D4   		movl	%eax, -44(%rbp)
+ 1584 0e7c 8B45D4   		movl	-44(%rbp), %eax
+ 1585 0e7f 01D0     		addl	%edx, %eax
+ 1586 0e81 2D2443E4 		subl	$1894007588, %eax
+ 1586      70
+ 1587 0e86 0145A4   		addl	%eax, -92(%rbp)
+ 1588 0e89 C14D9802 		rorl	$2, -104(%rbp)
+ 236:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(42) );
+ 1589              		.loc 1 236 5
+ 1590 0e8d 8B55CC   		movl	-52(%rbp), %edx
+ 1591 0e90 8B45B8   		movl	-72(%rbp), %eax
+ 1592 0e93 31C2     		xorl	%eax, %edx
+ 1593 0e95 8B45E0   		movl	-32(%rbp), %eax
+ 1594 0e98 31C2     		xorl	%eax, %edx
+ 1595 0e9a 8B45D8   		movl	-40(%rbp), %eax
+ 1596 0e9d 31D0     		xorl	%edx, %eax
+ 1597 0e9f 8945AC   		movl	%eax, -84(%rbp)
+ 1598 0ea2 8B45A4   		movl	-92(%rbp), %eax
+ 1599 0ea5 C1C005   		roll	$5, %eax
+ 1600 0ea8 89C1     		movl	%eax, %ecx
+ 1601 0eaa 8B45A8   		movl	-88(%rbp), %eax
+ 1602 0ead 234598   		andl	-104(%rbp), %eax
+ 1603 0eb0 89C2     		movl	%eax, %edx
+ 1604 0eb2 8B45A8   		movl	-88(%rbp), %eax
+ 1605 0eb5 0B4598   		orl	-104(%rbp), %eax
+ 1606 0eb8 23459C   		andl	-100(%rbp), %eax
+ 1607 0ebb 09D0     		orl	%edx, %eax
+ 1608 0ebd 8D1401   		leal	(%rcx,%rax), %edx
+ 1609 0ec0 8B45AC   		movl	-84(%rbp), %eax
+ 1610 0ec3 D1C0     		roll	%eax
+ 1611 0ec5 8945D8   		movl	%eax, -40(%rbp)
+ 1612 0ec8 8B45D8   		movl	-40(%rbp), %eax
+ 1613 0ecb 01D0     		addl	%edx, %eax
+ 1614 0ecd 2D2443E4 		subl	$1894007588, %eax
+ 1614      70
+ 1615 0ed2 0145A0   		addl	%eax, -96(%rbp)
+ 1616 0ed5 C14DA802 		rorl	$2, -88(%rbp)
+ 237:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(43) );
+ 1617              		.loc 1 237 5
+ 1618 0ed9 8B55D0   		movl	-48(%rbp), %edx
+ 1619 0edc 8B45BC   		movl	-68(%rbp), %eax
+ 1620 0edf 31C2     		xorl	%eax, %edx
+ 1621 0ee1 8B45E4   		movl	-28(%rbp), %eax
+ 1622 0ee4 31C2     		xorl	%eax, %edx
+ 1623 0ee6 8B45DC   		movl	-36(%rbp), %eax
+ 1624 0ee9 31D0     		xorl	%edx, %eax
+ 1625 0eeb 8945AC   		movl	%eax, -84(%rbp)
+ 1626 0eee 8B45A0   		movl	-96(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 35
+
+
+ 1627 0ef1 C1C005   		roll	$5, %eax
+ 1628 0ef4 89C1     		movl	%eax, %ecx
+ 1629 0ef6 8B45A4   		movl	-92(%rbp), %eax
+ 1630 0ef9 2345A8   		andl	-88(%rbp), %eax
+ 1631 0efc 89C2     		movl	%eax, %edx
+ 1632 0efe 8B45A4   		movl	-92(%rbp), %eax
+ 1633 0f01 0B45A8   		orl	-88(%rbp), %eax
+ 1634 0f04 234598   		andl	-104(%rbp), %eax
+ 1635 0f07 09D0     		orl	%edx, %eax
+ 1636 0f09 8D1401   		leal	(%rcx,%rax), %edx
+ 1637 0f0c 8B45AC   		movl	-84(%rbp), %eax
+ 1638 0f0f D1C0     		roll	%eax
+ 1639 0f11 8945DC   		movl	%eax, -36(%rbp)
+ 1640 0f14 8B45DC   		movl	-36(%rbp), %eax
+ 1641 0f17 01D0     		addl	%edx, %eax
+ 1642 0f19 2D2443E4 		subl	$1894007588, %eax
+ 1642      70
+ 1643 0f1e 01459C   		addl	%eax, -100(%rbp)
+ 1644 0f21 C14DA402 		rorl	$2, -92(%rbp)
+ 238:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(44) );
+ 1645              		.loc 1 238 5
+ 1646 0f25 8B55D4   		movl	-44(%rbp), %edx
+ 1647 0f28 8B45C0   		movl	-64(%rbp), %eax
+ 1648 0f2b 31C2     		xorl	%eax, %edx
+ 1649 0f2d 8B45E8   		movl	-24(%rbp), %eax
+ 1650 0f30 31C2     		xorl	%eax, %edx
+ 1651 0f32 8B45E0   		movl	-32(%rbp), %eax
+ 1652 0f35 31D0     		xorl	%edx, %eax
+ 1653 0f37 8945AC   		movl	%eax, -84(%rbp)
+ 1654 0f3a 8B459C   		movl	-100(%rbp), %eax
+ 1655 0f3d C1C005   		roll	$5, %eax
+ 1656 0f40 89C1     		movl	%eax, %ecx
+ 1657 0f42 8B45A0   		movl	-96(%rbp), %eax
+ 1658 0f45 2345A4   		andl	-92(%rbp), %eax
+ 1659 0f48 89C2     		movl	%eax, %edx
+ 1660 0f4a 8B45A0   		movl	-96(%rbp), %eax
+ 1661 0f4d 0B45A4   		orl	-92(%rbp), %eax
+ 1662 0f50 2345A8   		andl	-88(%rbp), %eax
+ 1663 0f53 09D0     		orl	%edx, %eax
+ 1664 0f55 8D1401   		leal	(%rcx,%rax), %edx
+ 1665 0f58 8B45AC   		movl	-84(%rbp), %eax
+ 1666 0f5b D1C0     		roll	%eax
+ 1667 0f5d 8945E0   		movl	%eax, -32(%rbp)
+ 1668 0f60 8B45E0   		movl	-32(%rbp), %eax
+ 1669 0f63 01D0     		addl	%edx, %eax
+ 1670 0f65 2D2443E4 		subl	$1894007588, %eax
+ 1670      70
+ 1671 0f6a 014598   		addl	%eax, -104(%rbp)
+ 1672 0f6d C14DA002 		rorl	$2, -96(%rbp)
+ 239:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(45) );
+ 1673              		.loc 1 239 5
+ 1674 0f71 8B55D8   		movl	-40(%rbp), %edx
+ 1675 0f74 8B45C4   		movl	-60(%rbp), %eax
+ 1676 0f77 31C2     		xorl	%eax, %edx
+ 1677 0f79 8B45EC   		movl	-20(%rbp), %eax
+ 1678 0f7c 31C2     		xorl	%eax, %edx
+ 1679 0f7e 8B45E4   		movl	-28(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 36
+
+
+ 1680 0f81 31D0     		xorl	%edx, %eax
+ 1681 0f83 8945AC   		movl	%eax, -84(%rbp)
+ 1682 0f86 8B4598   		movl	-104(%rbp), %eax
+ 1683 0f89 C1C005   		roll	$5, %eax
+ 1684 0f8c 89C1     		movl	%eax, %ecx
+ 1685 0f8e 8B459C   		movl	-100(%rbp), %eax
+ 1686 0f91 2345A0   		andl	-96(%rbp), %eax
+ 1687 0f94 89C2     		movl	%eax, %edx
+ 1688 0f96 8B459C   		movl	-100(%rbp), %eax
+ 1689 0f99 0B45A0   		orl	-96(%rbp), %eax
+ 1690 0f9c 2345A4   		andl	-92(%rbp), %eax
+ 1691 0f9f 09D0     		orl	%edx, %eax
+ 1692 0fa1 8D1401   		leal	(%rcx,%rax), %edx
+ 1693 0fa4 8B45AC   		movl	-84(%rbp), %eax
+ 1694 0fa7 D1C0     		roll	%eax
+ 1695 0fa9 8945E4   		movl	%eax, -28(%rbp)
+ 1696 0fac 8B45E4   		movl	-28(%rbp), %eax
+ 1697 0faf 01D0     		addl	%edx, %eax
+ 1698 0fb1 2D2443E4 		subl	$1894007588, %eax
+ 1698      70
+ 1699 0fb6 0145A8   		addl	%eax, -88(%rbp)
+ 1700 0fb9 C14D9C02 		rorl	$2, -100(%rbp)
+ 240:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(46) );
+ 1701              		.loc 1 240 5
+ 1702 0fbd 8B55DC   		movl	-36(%rbp), %edx
+ 1703 0fc0 8B45C8   		movl	-56(%rbp), %eax
+ 1704 0fc3 31C2     		xorl	%eax, %edx
+ 1705 0fc5 8B45B0   		movl	-80(%rbp), %eax
+ 1706 0fc8 31C2     		xorl	%eax, %edx
+ 1707 0fca 8B45E8   		movl	-24(%rbp), %eax
+ 1708 0fcd 31D0     		xorl	%edx, %eax
+ 1709 0fcf 8945AC   		movl	%eax, -84(%rbp)
+ 1710 0fd2 8B45A8   		movl	-88(%rbp), %eax
+ 1711 0fd5 C1C005   		roll	$5, %eax
+ 1712 0fd8 89C1     		movl	%eax, %ecx
+ 1713 0fda 8B4598   		movl	-104(%rbp), %eax
+ 1714 0fdd 23459C   		andl	-100(%rbp), %eax
+ 1715 0fe0 89C2     		movl	%eax, %edx
+ 1716 0fe2 8B4598   		movl	-104(%rbp), %eax
+ 1717 0fe5 0B459C   		orl	-100(%rbp), %eax
+ 1718 0fe8 2345A0   		andl	-96(%rbp), %eax
+ 1719 0feb 09D0     		orl	%edx, %eax
+ 1720 0fed 8D1401   		leal	(%rcx,%rax), %edx
+ 1721 0ff0 8B45AC   		movl	-84(%rbp), %eax
+ 1722 0ff3 D1C0     		roll	%eax
+ 1723 0ff5 8945E8   		movl	%eax, -24(%rbp)
+ 1724 0ff8 8B45E8   		movl	-24(%rbp), %eax
+ 1725 0ffb 01D0     		addl	%edx, %eax
+ 1726 0ffd 2D2443E4 		subl	$1894007588, %eax
+ 1726      70
+ 1727 1002 0145A4   		addl	%eax, -92(%rbp)
+ 1728 1005 C14D9802 		rorl	$2, -104(%rbp)
+ 241:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(47) );
+ 1729              		.loc 1 241 5
+ 1730 1009 8B55E0   		movl	-32(%rbp), %edx
+ 1731 100c 8B45CC   		movl	-52(%rbp), %eax
+ 1732 100f 31C2     		xorl	%eax, %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 37
+
+
+ 1733 1011 8B45B4   		movl	-76(%rbp), %eax
+ 1734 1014 31C2     		xorl	%eax, %edx
+ 1735 1016 8B45EC   		movl	-20(%rbp), %eax
+ 1736 1019 31D0     		xorl	%edx, %eax
+ 1737 101b 8945AC   		movl	%eax, -84(%rbp)
+ 1738 101e 8B45A4   		movl	-92(%rbp), %eax
+ 1739 1021 C1C005   		roll	$5, %eax
+ 1740 1024 89C1     		movl	%eax, %ecx
+ 1741 1026 8B45A8   		movl	-88(%rbp), %eax
+ 1742 1029 234598   		andl	-104(%rbp), %eax
+ 1743 102c 89C2     		movl	%eax, %edx
+ 1744 102e 8B45A8   		movl	-88(%rbp), %eax
+ 1745 1031 0B4598   		orl	-104(%rbp), %eax
+ 1746 1034 23459C   		andl	-100(%rbp), %eax
+ 1747 1037 09D0     		orl	%edx, %eax
+ 1748 1039 8D1401   		leal	(%rcx,%rax), %edx
+ 1749 103c 8B45AC   		movl	-84(%rbp), %eax
+ 1750 103f D1C0     		roll	%eax
+ 1751 1041 8945EC   		movl	%eax, -20(%rbp)
+ 1752 1044 8B45EC   		movl	-20(%rbp), %eax
+ 1753 1047 01D0     		addl	%edx, %eax
+ 1754 1049 2D2443E4 		subl	$1894007588, %eax
+ 1754      70
+ 1755 104e 0145A0   		addl	%eax, -96(%rbp)
+ 1756 1051 C14DA802 		rorl	$2, -88(%rbp)
+ 242:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(48) );
+ 1757              		.loc 1 242 5
+ 1758 1055 8B55E4   		movl	-28(%rbp), %edx
+ 1759 1058 8B45D0   		movl	-48(%rbp), %eax
+ 1760 105b 31C2     		xorl	%eax, %edx
+ 1761 105d 8B45B8   		movl	-72(%rbp), %eax
+ 1762 1060 31C2     		xorl	%eax, %edx
+ 1763 1062 8B45B0   		movl	-80(%rbp), %eax
+ 1764 1065 31D0     		xorl	%edx, %eax
+ 1765 1067 8945AC   		movl	%eax, -84(%rbp)
+ 1766 106a 8B45A0   		movl	-96(%rbp), %eax
+ 1767 106d C1C005   		roll	$5, %eax
+ 1768 1070 89C1     		movl	%eax, %ecx
+ 1769 1072 8B45A4   		movl	-92(%rbp), %eax
+ 1770 1075 2345A8   		andl	-88(%rbp), %eax
+ 1771 1078 89C2     		movl	%eax, %edx
+ 1772 107a 8B45A4   		movl	-92(%rbp), %eax
+ 1773 107d 0B45A8   		orl	-88(%rbp), %eax
+ 1774 1080 234598   		andl	-104(%rbp), %eax
+ 1775 1083 09D0     		orl	%edx, %eax
+ 1776 1085 8D1401   		leal	(%rcx,%rax), %edx
+ 1777 1088 8B45AC   		movl	-84(%rbp), %eax
+ 1778 108b D1C0     		roll	%eax
+ 1779 108d 8945B0   		movl	%eax, -80(%rbp)
+ 1780 1090 8B45B0   		movl	-80(%rbp), %eax
+ 1781 1093 01D0     		addl	%edx, %eax
+ 1782 1095 2D2443E4 		subl	$1894007588, %eax
+ 1782      70
+ 1783 109a 01459C   		addl	%eax, -100(%rbp)
+ 1784 109d C14DA402 		rorl	$2, -92(%rbp)
+ 243:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(49) );
+ 1785              		.loc 1 243 5
+GAS LISTING /tmp/ccdf94mD.s 			page 38
+
+
+ 1786 10a1 8B55E8   		movl	-24(%rbp), %edx
+ 1787 10a4 8B45D4   		movl	-44(%rbp), %eax
+ 1788 10a7 31C2     		xorl	%eax, %edx
+ 1789 10a9 8B45BC   		movl	-68(%rbp), %eax
+ 1790 10ac 31C2     		xorl	%eax, %edx
+ 1791 10ae 8B45B4   		movl	-76(%rbp), %eax
+ 1792 10b1 31D0     		xorl	%edx, %eax
+ 1793 10b3 8945AC   		movl	%eax, -84(%rbp)
+ 1794 10b6 8B459C   		movl	-100(%rbp), %eax
+ 1795 10b9 C1C005   		roll	$5, %eax
+ 1796 10bc 89C1     		movl	%eax, %ecx
+ 1797 10be 8B45A0   		movl	-96(%rbp), %eax
+ 1798 10c1 2345A4   		andl	-92(%rbp), %eax
+ 1799 10c4 89C2     		movl	%eax, %edx
+ 1800 10c6 8B45A0   		movl	-96(%rbp), %eax
+ 1801 10c9 0B45A4   		orl	-92(%rbp), %eax
+ 1802 10cc 2345A8   		andl	-88(%rbp), %eax
+ 1803 10cf 09D0     		orl	%edx, %eax
+ 1804 10d1 8D1401   		leal	(%rcx,%rax), %edx
+ 1805 10d4 8B45AC   		movl	-84(%rbp), %eax
+ 1806 10d7 D1C0     		roll	%eax
+ 1807 10d9 8945B4   		movl	%eax, -76(%rbp)
+ 1808 10dc 8B45B4   		movl	-76(%rbp), %eax
+ 1809 10df 01D0     		addl	%edx, %eax
+ 1810 10e1 2D2443E4 		subl	$1894007588, %eax
+ 1810      70
+ 1811 10e6 014598   		addl	%eax, -104(%rbp)
+ 1812 10e9 C14DA002 		rorl	$2, -96(%rbp)
+ 244:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(50) );
+ 1813              		.loc 1 244 5
+ 1814 10ed 8B55EC   		movl	-20(%rbp), %edx
+ 1815 10f0 8B45D8   		movl	-40(%rbp), %eax
+ 1816 10f3 31C2     		xorl	%eax, %edx
+ 1817 10f5 8B45C0   		movl	-64(%rbp), %eax
+ 1818 10f8 31C2     		xorl	%eax, %edx
+ 1819 10fa 8B45B8   		movl	-72(%rbp), %eax
+ 1820 10fd 31D0     		xorl	%edx, %eax
+ 1821 10ff 8945AC   		movl	%eax, -84(%rbp)
+ 1822 1102 8B4598   		movl	-104(%rbp), %eax
+ 1823 1105 C1C005   		roll	$5, %eax
+ 1824 1108 89C1     		movl	%eax, %ecx
+ 1825 110a 8B459C   		movl	-100(%rbp), %eax
+ 1826 110d 2345A0   		andl	-96(%rbp), %eax
+ 1827 1110 89C2     		movl	%eax, %edx
+ 1828 1112 8B459C   		movl	-100(%rbp), %eax
+ 1829 1115 0B45A0   		orl	-96(%rbp), %eax
+ 1830 1118 2345A4   		andl	-92(%rbp), %eax
+ 1831 111b 09D0     		orl	%edx, %eax
+ 1832 111d 8D1401   		leal	(%rcx,%rax), %edx
+ 1833 1120 8B45AC   		movl	-84(%rbp), %eax
+ 1834 1123 D1C0     		roll	%eax
+ 1835 1125 8945B8   		movl	%eax, -72(%rbp)
+ 1836 1128 8B45B8   		movl	-72(%rbp), %eax
+ 1837 112b 01D0     		addl	%edx, %eax
+ 1838 112d 2D2443E4 		subl	$1894007588, %eax
+ 1838      70
+ 1839 1132 0145A8   		addl	%eax, -88(%rbp)
+GAS LISTING /tmp/ccdf94mD.s 			page 39
+
+
+ 1840 1135 C14D9C02 		rorl	$2, -100(%rbp)
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(51) );
+ 1841              		.loc 1 245 5
+ 1842 1139 8B55B0   		movl	-80(%rbp), %edx
+ 1843 113c 8B45DC   		movl	-36(%rbp), %eax
+ 1844 113f 31C2     		xorl	%eax, %edx
+ 1845 1141 8B45C4   		movl	-60(%rbp), %eax
+ 1846 1144 31C2     		xorl	%eax, %edx
+ 1847 1146 8B45BC   		movl	-68(%rbp), %eax
+ 1848 1149 31D0     		xorl	%edx, %eax
+ 1849 114b 8945AC   		movl	%eax, -84(%rbp)
+ 1850 114e 8B45A8   		movl	-88(%rbp), %eax
+ 1851 1151 C1C005   		roll	$5, %eax
+ 1852 1154 89C1     		movl	%eax, %ecx
+ 1853 1156 8B4598   		movl	-104(%rbp), %eax
+ 1854 1159 23459C   		andl	-100(%rbp), %eax
+ 1855 115c 89C2     		movl	%eax, %edx
+ 1856 115e 8B4598   		movl	-104(%rbp), %eax
+ 1857 1161 0B459C   		orl	-100(%rbp), %eax
+ 1858 1164 2345A0   		andl	-96(%rbp), %eax
+ 1859 1167 09D0     		orl	%edx, %eax
+ 1860 1169 8D1401   		leal	(%rcx,%rax), %edx
+ 1861 116c 8B45AC   		movl	-84(%rbp), %eax
+ 1862 116f D1C0     		roll	%eax
+ 1863 1171 8945BC   		movl	%eax, -68(%rbp)
+ 1864 1174 8B45BC   		movl	-68(%rbp), %eax
+ 1865 1177 01D0     		addl	%edx, %eax
+ 1866 1179 2D2443E4 		subl	$1894007588, %eax
+ 1866      70
+ 1867 117e 0145A4   		addl	%eax, -92(%rbp)
+ 1868 1181 C14D9802 		rorl	$2, -104(%rbp)
+ 246:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(52) );
+ 1869              		.loc 1 246 5
+ 1870 1185 8B55B4   		movl	-76(%rbp), %edx
+ 1871 1188 8B45E0   		movl	-32(%rbp), %eax
+ 1872 118b 31C2     		xorl	%eax, %edx
+ 1873 118d 8B45C8   		movl	-56(%rbp), %eax
+ 1874 1190 31C2     		xorl	%eax, %edx
+ 1875 1192 8B45C0   		movl	-64(%rbp), %eax
+ 1876 1195 31D0     		xorl	%edx, %eax
+ 1877 1197 8945AC   		movl	%eax, -84(%rbp)
+ 1878 119a 8B45A4   		movl	-92(%rbp), %eax
+ 1879 119d C1C005   		roll	$5, %eax
+ 1880 11a0 89C1     		movl	%eax, %ecx
+ 1881 11a2 8B45A8   		movl	-88(%rbp), %eax
+ 1882 11a5 234598   		andl	-104(%rbp), %eax
+ 1883 11a8 89C2     		movl	%eax, %edx
+ 1884 11aa 8B45A8   		movl	-88(%rbp), %eax
+ 1885 11ad 0B4598   		orl	-104(%rbp), %eax
+ 1886 11b0 23459C   		andl	-100(%rbp), %eax
+ 1887 11b3 09D0     		orl	%edx, %eax
+ 1888 11b5 8D1401   		leal	(%rcx,%rax), %edx
+ 1889 11b8 8B45AC   		movl	-84(%rbp), %eax
+ 1890 11bb D1C0     		roll	%eax
+ 1891 11bd 8945C0   		movl	%eax, -64(%rbp)
+ 1892 11c0 8B45C0   		movl	-64(%rbp), %eax
+ 1893 11c3 01D0     		addl	%edx, %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 40
+
+
+ 1894 11c5 2D2443E4 		subl	$1894007588, %eax
+ 1894      70
+ 1895 11ca 0145A0   		addl	%eax, -96(%rbp)
+ 1896 11cd C14DA802 		rorl	$2, -88(%rbp)
+ 247:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(53) );
+ 1897              		.loc 1 247 5
+ 1898 11d1 8B55B8   		movl	-72(%rbp), %edx
+ 1899 11d4 8B45E4   		movl	-28(%rbp), %eax
+ 1900 11d7 31C2     		xorl	%eax, %edx
+ 1901 11d9 8B45CC   		movl	-52(%rbp), %eax
+ 1902 11dc 31C2     		xorl	%eax, %edx
+ 1903 11de 8B45C4   		movl	-60(%rbp), %eax
+ 1904 11e1 31D0     		xorl	%edx, %eax
+ 1905 11e3 8945AC   		movl	%eax, -84(%rbp)
+ 1906 11e6 8B45A0   		movl	-96(%rbp), %eax
+ 1907 11e9 C1C005   		roll	$5, %eax
+ 1908 11ec 89C1     		movl	%eax, %ecx
+ 1909 11ee 8B45A4   		movl	-92(%rbp), %eax
+ 1910 11f1 2345A8   		andl	-88(%rbp), %eax
+ 1911 11f4 89C2     		movl	%eax, %edx
+ 1912 11f6 8B45A4   		movl	-92(%rbp), %eax
+ 1913 11f9 0B45A8   		orl	-88(%rbp), %eax
+ 1914 11fc 234598   		andl	-104(%rbp), %eax
+ 1915 11ff 09D0     		orl	%edx, %eax
+ 1916 1201 8D1401   		leal	(%rcx,%rax), %edx
+ 1917 1204 8B45AC   		movl	-84(%rbp), %eax
+ 1918 1207 D1C0     		roll	%eax
+ 1919 1209 8945C4   		movl	%eax, -60(%rbp)
+ 1920 120c 8B45C4   		movl	-60(%rbp), %eax
+ 1921 120f 01D0     		addl	%edx, %eax
+ 1922 1211 2D2443E4 		subl	$1894007588, %eax
+ 1922      70
+ 1923 1216 01459C   		addl	%eax, -100(%rbp)
+ 1924 1219 C14DA402 		rorl	$2, -92(%rbp)
+ 248:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(54) );
+ 1925              		.loc 1 248 5
+ 1926 121d 8B55BC   		movl	-68(%rbp), %edx
+ 1927 1220 8B45E8   		movl	-24(%rbp), %eax
+ 1928 1223 31C2     		xorl	%eax, %edx
+ 1929 1225 8B45D0   		movl	-48(%rbp), %eax
+ 1930 1228 31C2     		xorl	%eax, %edx
+ 1931 122a 8B45C8   		movl	-56(%rbp), %eax
+ 1932 122d 31D0     		xorl	%edx, %eax
+ 1933 122f 8945AC   		movl	%eax, -84(%rbp)
+ 1934 1232 8B459C   		movl	-100(%rbp), %eax
+ 1935 1235 C1C005   		roll	$5, %eax
+ 1936 1238 89C1     		movl	%eax, %ecx
+ 1937 123a 8B45A0   		movl	-96(%rbp), %eax
+ 1938 123d 2345A4   		andl	-92(%rbp), %eax
+ 1939 1240 89C2     		movl	%eax, %edx
+ 1940 1242 8B45A0   		movl	-96(%rbp), %eax
+ 1941 1245 0B45A4   		orl	-92(%rbp), %eax
+ 1942 1248 2345A8   		andl	-88(%rbp), %eax
+ 1943 124b 09D0     		orl	%edx, %eax
+ 1944 124d 8D1401   		leal	(%rcx,%rax), %edx
+ 1945 1250 8B45AC   		movl	-84(%rbp), %eax
+ 1946 1253 D1C0     		roll	%eax
+GAS LISTING /tmp/ccdf94mD.s 			page 41
+
+
+ 1947 1255 8945C8   		movl	%eax, -56(%rbp)
+ 1948 1258 8B45C8   		movl	-56(%rbp), %eax
+ 1949 125b 01D0     		addl	%edx, %eax
+ 1950 125d 2D2443E4 		subl	$1894007588, %eax
+ 1950      70
+ 1951 1262 014598   		addl	%eax, -104(%rbp)
+ 1952 1265 C14DA002 		rorl	$2, -96(%rbp)
+ 249:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(55) );
+ 1953              		.loc 1 249 5
+ 1954 1269 8B55C0   		movl	-64(%rbp), %edx
+ 1955 126c 8B45EC   		movl	-20(%rbp), %eax
+ 1956 126f 31C2     		xorl	%eax, %edx
+ 1957 1271 8B45D4   		movl	-44(%rbp), %eax
+ 1958 1274 31C2     		xorl	%eax, %edx
+ 1959 1276 8B45CC   		movl	-52(%rbp), %eax
+ 1960 1279 31D0     		xorl	%edx, %eax
+ 1961 127b 8945AC   		movl	%eax, -84(%rbp)
+ 1962 127e 8B4598   		movl	-104(%rbp), %eax
+ 1963 1281 C1C005   		roll	$5, %eax
+ 1964 1284 89C1     		movl	%eax, %ecx
+ 1965 1286 8B459C   		movl	-100(%rbp), %eax
+ 1966 1289 2345A0   		andl	-96(%rbp), %eax
+ 1967 128c 89C2     		movl	%eax, %edx
+ 1968 128e 8B459C   		movl	-100(%rbp), %eax
+ 1969 1291 0B45A0   		orl	-96(%rbp), %eax
+ 1970 1294 2345A4   		andl	-92(%rbp), %eax
+ 1971 1297 09D0     		orl	%edx, %eax
+ 1972 1299 8D1401   		leal	(%rcx,%rax), %edx
+ 1973 129c 8B45AC   		movl	-84(%rbp), %eax
+ 1974 129f D1C0     		roll	%eax
+ 1975 12a1 8945CC   		movl	%eax, -52(%rbp)
+ 1976 12a4 8B45CC   		movl	-52(%rbp), %eax
+ 1977 12a7 01D0     		addl	%edx, %eax
+ 1978 12a9 2D2443E4 		subl	$1894007588, %eax
+ 1978      70
+ 1979 12ae 0145A8   		addl	%eax, -88(%rbp)
+ 1980 12b1 C14D9C02 		rorl	$2, -100(%rbp)
+ 250:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(56) );
+ 1981              		.loc 1 250 5
+ 1982 12b5 8B55C4   		movl	-60(%rbp), %edx
+ 1983 12b8 8B45B0   		movl	-80(%rbp), %eax
+ 1984 12bb 31C2     		xorl	%eax, %edx
+ 1985 12bd 8B45D8   		movl	-40(%rbp), %eax
+ 1986 12c0 31C2     		xorl	%eax, %edx
+ 1987 12c2 8B45D0   		movl	-48(%rbp), %eax
+ 1988 12c5 31D0     		xorl	%edx, %eax
+ 1989 12c7 8945AC   		movl	%eax, -84(%rbp)
+ 1990 12ca 8B45A8   		movl	-88(%rbp), %eax
+ 1991 12cd C1C005   		roll	$5, %eax
+ 1992 12d0 89C1     		movl	%eax, %ecx
+ 1993 12d2 8B4598   		movl	-104(%rbp), %eax
+ 1994 12d5 23459C   		andl	-100(%rbp), %eax
+ 1995 12d8 89C2     		movl	%eax, %edx
+ 1996 12da 8B4598   		movl	-104(%rbp), %eax
+ 1997 12dd 0B459C   		orl	-100(%rbp), %eax
+ 1998 12e0 2345A0   		andl	-96(%rbp), %eax
+ 1999 12e3 09D0     		orl	%edx, %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 42
+
+
+ 2000 12e5 8D1401   		leal	(%rcx,%rax), %edx
+ 2001 12e8 8B45AC   		movl	-84(%rbp), %eax
+ 2002 12eb D1C0     		roll	%eax
+ 2003 12ed 8945D0   		movl	%eax, -48(%rbp)
+ 2004 12f0 8B45D0   		movl	-48(%rbp), %eax
+ 2005 12f3 01D0     		addl	%edx, %eax
+ 2006 12f5 2D2443E4 		subl	$1894007588, %eax
+ 2006      70
+ 2007 12fa 0145A4   		addl	%eax, -92(%rbp)
+ 2008 12fd C14D9802 		rorl	$2, -104(%rbp)
+ 251:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(57) );
+ 2009              		.loc 1 251 5
+ 2010 1301 8B55C8   		movl	-56(%rbp), %edx
+ 2011 1304 8B45B4   		movl	-76(%rbp), %eax
+ 2012 1307 31C2     		xorl	%eax, %edx
+ 2013 1309 8B45DC   		movl	-36(%rbp), %eax
+ 2014 130c 31C2     		xorl	%eax, %edx
+ 2015 130e 8B45D4   		movl	-44(%rbp), %eax
+ 2016 1311 31D0     		xorl	%edx, %eax
+ 2017 1313 8945AC   		movl	%eax, -84(%rbp)
+ 2018 1316 8B45A4   		movl	-92(%rbp), %eax
+ 2019 1319 C1C005   		roll	$5, %eax
+ 2020 131c 89C1     		movl	%eax, %ecx
+ 2021 131e 8B45A8   		movl	-88(%rbp), %eax
+ 2022 1321 234598   		andl	-104(%rbp), %eax
+ 2023 1324 89C2     		movl	%eax, %edx
+ 2024 1326 8B45A8   		movl	-88(%rbp), %eax
+ 2025 1329 0B4598   		orl	-104(%rbp), %eax
+ 2026 132c 23459C   		andl	-100(%rbp), %eax
+ 2027 132f 09D0     		orl	%edx, %eax
+ 2028 1331 8D1401   		leal	(%rcx,%rax), %edx
+ 2029 1334 8B45AC   		movl	-84(%rbp), %eax
+ 2030 1337 D1C0     		roll	%eax
+ 2031 1339 8945D4   		movl	%eax, -44(%rbp)
+ 2032 133c 8B45D4   		movl	-44(%rbp), %eax
+ 2033 133f 01D0     		addl	%edx, %eax
+ 2034 1341 2D2443E4 		subl	$1894007588, %eax
+ 2034      70
+ 2035 1346 0145A0   		addl	%eax, -96(%rbp)
+ 2036 1349 C14DA802 		rorl	$2, -88(%rbp)
+ 252:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(58) );
+ 2037              		.loc 1 252 5
+ 2038 134d 8B55CC   		movl	-52(%rbp), %edx
+ 2039 1350 8B45B8   		movl	-72(%rbp), %eax
+ 2040 1353 31C2     		xorl	%eax, %edx
+ 2041 1355 8B45E0   		movl	-32(%rbp), %eax
+ 2042 1358 31C2     		xorl	%eax, %edx
+ 2043 135a 8B45D8   		movl	-40(%rbp), %eax
+ 2044 135d 31D0     		xorl	%edx, %eax
+ 2045 135f 8945AC   		movl	%eax, -84(%rbp)
+ 2046 1362 8B45A0   		movl	-96(%rbp), %eax
+ 2047 1365 C1C005   		roll	$5, %eax
+ 2048 1368 89C1     		movl	%eax, %ecx
+ 2049 136a 8B45A4   		movl	-92(%rbp), %eax
+ 2050 136d 2345A8   		andl	-88(%rbp), %eax
+ 2051 1370 89C2     		movl	%eax, %edx
+ 2052 1372 8B45A4   		movl	-92(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 43
+
+
+ 2053 1375 0B45A8   		orl	-88(%rbp), %eax
+ 2054 1378 234598   		andl	-104(%rbp), %eax
+ 2055 137b 09D0     		orl	%edx, %eax
+ 2056 137d 8D1401   		leal	(%rcx,%rax), %edx
+ 2057 1380 8B45AC   		movl	-84(%rbp), %eax
+ 2058 1383 D1C0     		roll	%eax
+ 2059 1385 8945D8   		movl	%eax, -40(%rbp)
+ 2060 1388 8B45D8   		movl	-40(%rbp), %eax
+ 2061 138b 01D0     		addl	%edx, %eax
+ 2062 138d 2D2443E4 		subl	$1894007588, %eax
+ 2062      70
+ 2063 1392 01459C   		addl	%eax, -100(%rbp)
+ 2064 1395 C14DA402 		rorl	$2, -92(%rbp)
+ 253:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(59) );
+ 2065              		.loc 1 253 5
+ 2066 1399 8B55D0   		movl	-48(%rbp), %edx
+ 2067 139c 8B45BC   		movl	-68(%rbp), %eax
+ 2068 139f 31C2     		xorl	%eax, %edx
+ 2069 13a1 8B45E4   		movl	-28(%rbp), %eax
+ 2070 13a4 31C2     		xorl	%eax, %edx
+ 2071 13a6 8B45DC   		movl	-36(%rbp), %eax
+ 2072 13a9 31D0     		xorl	%edx, %eax
+ 2073 13ab 8945AC   		movl	%eax, -84(%rbp)
+ 2074 13ae 8B459C   		movl	-100(%rbp), %eax
+ 2075 13b1 C1C005   		roll	$5, %eax
+ 2076 13b4 89C1     		movl	%eax, %ecx
+ 2077 13b6 8B45A0   		movl	-96(%rbp), %eax
+ 2078 13b9 2345A4   		andl	-92(%rbp), %eax
+ 2079 13bc 89C2     		movl	%eax, %edx
+ 2080 13be 8B45A0   		movl	-96(%rbp), %eax
+ 2081 13c1 0B45A4   		orl	-92(%rbp), %eax
+ 2082 13c4 2345A8   		andl	-88(%rbp), %eax
+ 2083 13c7 09D0     		orl	%edx, %eax
+ 2084 13c9 8D1401   		leal	(%rcx,%rax), %edx
+ 2085 13cc 8B45AC   		movl	-84(%rbp), %eax
+ 2086 13cf D1C0     		roll	%eax
+ 2087 13d1 8945DC   		movl	%eax, -36(%rbp)
+ 2088 13d4 8B45DC   		movl	-36(%rbp), %eax
+ 2089 13d7 01D0     		addl	%edx, %eax
+ 2090 13d9 2D2443E4 		subl	$1894007588, %eax
+ 2090      70
+ 2091 13de 014598   		addl	%eax, -104(%rbp)
+ 2092 13e1 C14DA002 		rorl	$2, -96(%rbp)
+ 254:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 255:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef K
+ 256:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef F
+ 257:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 258:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define F(x,y,z) ((x) ^ (y) ^ (z))
+ 259:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #define K 0xCA62C1D6
+ 260:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 261:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(60) );
+ 2093              		.loc 1 261 5
+ 2094 13e5 8B55D4   		movl	-44(%rbp), %edx
+ 2095 13e8 8B45C0   		movl	-64(%rbp), %eax
+ 2096 13eb 31C2     		xorl	%eax, %edx
+ 2097 13ed 8B45E8   		movl	-24(%rbp), %eax
+ 2098 13f0 31C2     		xorl	%eax, %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 44
+
+
+ 2099 13f2 8B45E0   		movl	-32(%rbp), %eax
+ 2100 13f5 31D0     		xorl	%edx, %eax
+ 2101 13f7 8945AC   		movl	%eax, -84(%rbp)
+ 2102 13fa 8B4598   		movl	-104(%rbp), %eax
+ 2103 13fd C1C005   		roll	$5, %eax
+ 2104 1400 89C2     		movl	%eax, %edx
+ 2105 1402 8B459C   		movl	-100(%rbp), %eax
+ 2106 1405 3345A0   		xorl	-96(%rbp), %eax
+ 2107 1408 3345A4   		xorl	-92(%rbp), %eax
+ 2108 140b 01C2     		addl	%eax, %edx
+ 2109 140d 8B45AC   		movl	-84(%rbp), %eax
+ 2110 1410 D1C0     		roll	%eax
+ 2111 1412 8945E0   		movl	%eax, -32(%rbp)
+ 2112 1415 8B45E0   		movl	-32(%rbp), %eax
+ 2113 1418 01D0     		addl	%edx, %eax
+ 2114 141a 2D2A3E9D 		subl	$899497514, %eax
+ 2114      35
+ 2115 141f 0145A8   		addl	%eax, -88(%rbp)
+ 2116 1422 C14D9C02 		rorl	$2, -100(%rbp)
+ 262:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(61) );
+ 2117              		.loc 1 262 5
+ 2118 1426 8B55D8   		movl	-40(%rbp), %edx
+ 2119 1429 8B45C4   		movl	-60(%rbp), %eax
+ 2120 142c 31C2     		xorl	%eax, %edx
+ 2121 142e 8B45EC   		movl	-20(%rbp), %eax
+ 2122 1431 31C2     		xorl	%eax, %edx
+ 2123 1433 8B45E4   		movl	-28(%rbp), %eax
+ 2124 1436 31D0     		xorl	%edx, %eax
+ 2125 1438 8945AC   		movl	%eax, -84(%rbp)
+ 2126 143b 8B45A8   		movl	-88(%rbp), %eax
+ 2127 143e C1C005   		roll	$5, %eax
+ 2128 1441 89C2     		movl	%eax, %edx
+ 2129 1443 8B4598   		movl	-104(%rbp), %eax
+ 2130 1446 33459C   		xorl	-100(%rbp), %eax
+ 2131 1449 3345A0   		xorl	-96(%rbp), %eax
+ 2132 144c 01C2     		addl	%eax, %edx
+ 2133 144e 8B45AC   		movl	-84(%rbp), %eax
+ 2134 1451 D1C0     		roll	%eax
+ 2135 1453 8945E4   		movl	%eax, -28(%rbp)
+ 2136 1456 8B45E4   		movl	-28(%rbp), %eax
+ 2137 1459 01D0     		addl	%edx, %eax
+ 2138 145b 2D2A3E9D 		subl	$899497514, %eax
+ 2138      35
+ 2139 1460 0145A4   		addl	%eax, -92(%rbp)
+ 2140 1463 C14D9802 		rorl	$2, -104(%rbp)
+ 263:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(62) );
+ 2141              		.loc 1 263 5
+ 2142 1467 8B55DC   		movl	-36(%rbp), %edx
+ 2143 146a 8B45C8   		movl	-56(%rbp), %eax
+ 2144 146d 31C2     		xorl	%eax, %edx
+ 2145 146f 8B45B0   		movl	-80(%rbp), %eax
+ 2146 1472 31C2     		xorl	%eax, %edx
+ 2147 1474 8B45E8   		movl	-24(%rbp), %eax
+ 2148 1477 31D0     		xorl	%edx, %eax
+ 2149 1479 8945AC   		movl	%eax, -84(%rbp)
+ 2150 147c 8B45A4   		movl	-92(%rbp), %eax
+ 2151 147f C1C005   		roll	$5, %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 45
+
+
+ 2152 1482 89C2     		movl	%eax, %edx
+ 2153 1484 8B45A8   		movl	-88(%rbp), %eax
+ 2154 1487 334598   		xorl	-104(%rbp), %eax
+ 2155 148a 33459C   		xorl	-100(%rbp), %eax
+ 2156 148d 01C2     		addl	%eax, %edx
+ 2157 148f 8B45AC   		movl	-84(%rbp), %eax
+ 2158 1492 D1C0     		roll	%eax
+ 2159 1494 8945E8   		movl	%eax, -24(%rbp)
+ 2160 1497 8B45E8   		movl	-24(%rbp), %eax
+ 2161 149a 01D0     		addl	%edx, %eax
+ 2162 149c 2D2A3E9D 		subl	$899497514, %eax
+ 2162      35
+ 2163 14a1 0145A0   		addl	%eax, -96(%rbp)
+ 2164 14a4 C14DA802 		rorl	$2, -88(%rbp)
+ 264:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(63) );
+ 2165              		.loc 1 264 5
+ 2166 14a8 8B55E0   		movl	-32(%rbp), %edx
+ 2167 14ab 8B45CC   		movl	-52(%rbp), %eax
+ 2168 14ae 31C2     		xorl	%eax, %edx
+ 2169 14b0 8B45B4   		movl	-76(%rbp), %eax
+ 2170 14b3 31C2     		xorl	%eax, %edx
+ 2171 14b5 8B45EC   		movl	-20(%rbp), %eax
+ 2172 14b8 31D0     		xorl	%edx, %eax
+ 2173 14ba 8945AC   		movl	%eax, -84(%rbp)
+ 2174 14bd 8B45A0   		movl	-96(%rbp), %eax
+ 2175 14c0 C1C005   		roll	$5, %eax
+ 2176 14c3 89C2     		movl	%eax, %edx
+ 2177 14c5 8B45A4   		movl	-92(%rbp), %eax
+ 2178 14c8 3345A8   		xorl	-88(%rbp), %eax
+ 2179 14cb 334598   		xorl	-104(%rbp), %eax
+ 2180 14ce 01C2     		addl	%eax, %edx
+ 2181 14d0 8B45AC   		movl	-84(%rbp), %eax
+ 2182 14d3 D1C0     		roll	%eax
+ 2183 14d5 8945EC   		movl	%eax, -20(%rbp)
+ 2184 14d8 8B45EC   		movl	-20(%rbp), %eax
+ 2185 14db 01D0     		addl	%edx, %eax
+ 2186 14dd 2D2A3E9D 		subl	$899497514, %eax
+ 2186      35
+ 2187 14e2 01459C   		addl	%eax, -100(%rbp)
+ 2188 14e5 C14DA402 		rorl	$2, -92(%rbp)
+ 265:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(64) );
+ 2189              		.loc 1 265 5
+ 2190 14e9 8B55E4   		movl	-28(%rbp), %edx
+ 2191 14ec 8B45D0   		movl	-48(%rbp), %eax
+ 2192 14ef 31C2     		xorl	%eax, %edx
+ 2193 14f1 8B45B8   		movl	-72(%rbp), %eax
+ 2194 14f4 31C2     		xorl	%eax, %edx
+ 2195 14f6 8B45B0   		movl	-80(%rbp), %eax
+ 2196 14f9 31D0     		xorl	%edx, %eax
+ 2197 14fb 8945AC   		movl	%eax, -84(%rbp)
+ 2198 14fe 8B459C   		movl	-100(%rbp), %eax
+ 2199 1501 C1C005   		roll	$5, %eax
+ 2200 1504 89C2     		movl	%eax, %edx
+ 2201 1506 8B45A0   		movl	-96(%rbp), %eax
+ 2202 1509 3345A4   		xorl	-92(%rbp), %eax
+ 2203 150c 3345A8   		xorl	-88(%rbp), %eax
+ 2204 150f 01C2     		addl	%eax, %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 46
+
+
+ 2205 1511 8B45AC   		movl	-84(%rbp), %eax
+ 2206 1514 D1C0     		roll	%eax
+ 2207 1516 8945B0   		movl	%eax, -80(%rbp)
+ 2208 1519 8B45B0   		movl	-80(%rbp), %eax
+ 2209 151c 01D0     		addl	%edx, %eax
+ 2210 151e 2D2A3E9D 		subl	$899497514, %eax
+ 2210      35
+ 2211 1523 014598   		addl	%eax, -104(%rbp)
+ 2212 1526 C14DA002 		rorl	$2, -96(%rbp)
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(65) );
+ 2213              		.loc 1 266 5
+ 2214 152a 8B55E8   		movl	-24(%rbp), %edx
+ 2215 152d 8B45D4   		movl	-44(%rbp), %eax
+ 2216 1530 31C2     		xorl	%eax, %edx
+ 2217 1532 8B45BC   		movl	-68(%rbp), %eax
+ 2218 1535 31C2     		xorl	%eax, %edx
+ 2219 1537 8B45B4   		movl	-76(%rbp), %eax
+ 2220 153a 31D0     		xorl	%edx, %eax
+ 2221 153c 8945AC   		movl	%eax, -84(%rbp)
+ 2222 153f 8B4598   		movl	-104(%rbp), %eax
+ 2223 1542 C1C005   		roll	$5, %eax
+ 2224 1545 89C2     		movl	%eax, %edx
+ 2225 1547 8B459C   		movl	-100(%rbp), %eax
+ 2226 154a 3345A0   		xorl	-96(%rbp), %eax
+ 2227 154d 3345A4   		xorl	-92(%rbp), %eax
+ 2228 1550 01C2     		addl	%eax, %edx
+ 2229 1552 8B45AC   		movl	-84(%rbp), %eax
+ 2230 1555 D1C0     		roll	%eax
+ 2231 1557 8945B4   		movl	%eax, -76(%rbp)
+ 2232 155a 8B45B4   		movl	-76(%rbp), %eax
+ 2233 155d 01D0     		addl	%edx, %eax
+ 2234 155f 2D2A3E9D 		subl	$899497514, %eax
+ 2234      35
+ 2235 1564 0145A8   		addl	%eax, -88(%rbp)
+ 2236 1567 C14D9C02 		rorl	$2, -100(%rbp)
+ 267:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(66) );
+ 2237              		.loc 1 267 5
+ 2238 156b 8B55EC   		movl	-20(%rbp), %edx
+ 2239 156e 8B45D8   		movl	-40(%rbp), %eax
+ 2240 1571 31C2     		xorl	%eax, %edx
+ 2241 1573 8B45C0   		movl	-64(%rbp), %eax
+ 2242 1576 31C2     		xorl	%eax, %edx
+ 2243 1578 8B45B8   		movl	-72(%rbp), %eax
+ 2244 157b 31D0     		xorl	%edx, %eax
+ 2245 157d 8945AC   		movl	%eax, -84(%rbp)
+ 2246 1580 8B45A8   		movl	-88(%rbp), %eax
+ 2247 1583 C1C005   		roll	$5, %eax
+ 2248 1586 89C2     		movl	%eax, %edx
+ 2249 1588 8B4598   		movl	-104(%rbp), %eax
+ 2250 158b 33459C   		xorl	-100(%rbp), %eax
+ 2251 158e 3345A0   		xorl	-96(%rbp), %eax
+ 2252 1591 01C2     		addl	%eax, %edx
+ 2253 1593 8B45AC   		movl	-84(%rbp), %eax
+ 2254 1596 D1C0     		roll	%eax
+ 2255 1598 8945B8   		movl	%eax, -72(%rbp)
+ 2256 159b 8B45B8   		movl	-72(%rbp), %eax
+ 2257 159e 01D0     		addl	%edx, %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 47
+
+
+ 2258 15a0 2D2A3E9D 		subl	$899497514, %eax
+ 2258      35
+ 2259 15a5 0145A4   		addl	%eax, -92(%rbp)
+ 2260 15a8 C14D9802 		rorl	$2, -104(%rbp)
+ 268:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(67) );
+ 2261              		.loc 1 268 5
+ 2262 15ac 8B55B0   		movl	-80(%rbp), %edx
+ 2263 15af 8B45DC   		movl	-36(%rbp), %eax
+ 2264 15b2 31C2     		xorl	%eax, %edx
+ 2265 15b4 8B45C4   		movl	-60(%rbp), %eax
+ 2266 15b7 31C2     		xorl	%eax, %edx
+ 2267 15b9 8B45BC   		movl	-68(%rbp), %eax
+ 2268 15bc 31D0     		xorl	%edx, %eax
+ 2269 15be 8945AC   		movl	%eax, -84(%rbp)
+ 2270 15c1 8B45A4   		movl	-92(%rbp), %eax
+ 2271 15c4 C1C005   		roll	$5, %eax
+ 2272 15c7 89C2     		movl	%eax, %edx
+ 2273 15c9 8B45A8   		movl	-88(%rbp), %eax
+ 2274 15cc 334598   		xorl	-104(%rbp), %eax
+ 2275 15cf 33459C   		xorl	-100(%rbp), %eax
+ 2276 15d2 01C2     		addl	%eax, %edx
+ 2277 15d4 8B45AC   		movl	-84(%rbp), %eax
+ 2278 15d7 D1C0     		roll	%eax
+ 2279 15d9 8945BC   		movl	%eax, -68(%rbp)
+ 2280 15dc 8B45BC   		movl	-68(%rbp), %eax
+ 2281 15df 01D0     		addl	%edx, %eax
+ 2282 15e1 2D2A3E9D 		subl	$899497514, %eax
+ 2282      35
+ 2283 15e6 0145A0   		addl	%eax, -96(%rbp)
+ 2284 15e9 C14DA802 		rorl	$2, -88(%rbp)
+ 269:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(68) );
+ 2285              		.loc 1 269 5
+ 2286 15ed 8B55B4   		movl	-76(%rbp), %edx
+ 2287 15f0 8B45E0   		movl	-32(%rbp), %eax
+ 2288 15f3 31C2     		xorl	%eax, %edx
+ 2289 15f5 8B45C8   		movl	-56(%rbp), %eax
+ 2290 15f8 31C2     		xorl	%eax, %edx
+ 2291 15fa 8B45C0   		movl	-64(%rbp), %eax
+ 2292 15fd 31D0     		xorl	%edx, %eax
+ 2293 15ff 8945AC   		movl	%eax, -84(%rbp)
+ 2294 1602 8B45A0   		movl	-96(%rbp), %eax
+ 2295 1605 C1C005   		roll	$5, %eax
+ 2296 1608 89C2     		movl	%eax, %edx
+ 2297 160a 8B45A4   		movl	-92(%rbp), %eax
+ 2298 160d 3345A8   		xorl	-88(%rbp), %eax
+ 2299 1610 334598   		xorl	-104(%rbp), %eax
+ 2300 1613 01C2     		addl	%eax, %edx
+ 2301 1615 8B45AC   		movl	-84(%rbp), %eax
+ 2302 1618 D1C0     		roll	%eax
+ 2303 161a 8945C0   		movl	%eax, -64(%rbp)
+ 2304 161d 8B45C0   		movl	-64(%rbp), %eax
+ 2305 1620 01D0     		addl	%edx, %eax
+ 2306 1622 2D2A3E9D 		subl	$899497514, %eax
+ 2306      35
+ 2307 1627 01459C   		addl	%eax, -100(%rbp)
+ 2308 162a C14DA402 		rorl	$2, -92(%rbp)
+ 270:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(69) );
+GAS LISTING /tmp/ccdf94mD.s 			page 48
+
+
+ 2309              		.loc 1 270 5
+ 2310 162e 8B55B8   		movl	-72(%rbp), %edx
+ 2311 1631 8B45E4   		movl	-28(%rbp), %eax
+ 2312 1634 31C2     		xorl	%eax, %edx
+ 2313 1636 8B45CC   		movl	-52(%rbp), %eax
+ 2314 1639 31C2     		xorl	%eax, %edx
+ 2315 163b 8B45C4   		movl	-60(%rbp), %eax
+ 2316 163e 31D0     		xorl	%edx, %eax
+ 2317 1640 8945AC   		movl	%eax, -84(%rbp)
+ 2318 1643 8B459C   		movl	-100(%rbp), %eax
+ 2319 1646 C1C005   		roll	$5, %eax
+ 2320 1649 89C2     		movl	%eax, %edx
+ 2321 164b 8B45A0   		movl	-96(%rbp), %eax
+ 2322 164e 3345A4   		xorl	-92(%rbp), %eax
+ 2323 1651 3345A8   		xorl	-88(%rbp), %eax
+ 2324 1654 01C2     		addl	%eax, %edx
+ 2325 1656 8B45AC   		movl	-84(%rbp), %eax
+ 2326 1659 D1C0     		roll	%eax
+ 2327 165b 8945C4   		movl	%eax, -60(%rbp)
+ 2328 165e 8B45C4   		movl	-60(%rbp), %eax
+ 2329 1661 01D0     		addl	%edx, %eax
+ 2330 1663 2D2A3E9D 		subl	$899497514, %eax
+ 2330      35
+ 2331 1668 014598   		addl	%eax, -104(%rbp)
+ 2332 166b C14DA002 		rorl	$2, -96(%rbp)
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(70) );
+ 2333              		.loc 1 271 5
+ 2334 166f 8B55BC   		movl	-68(%rbp), %edx
+ 2335 1672 8B45E8   		movl	-24(%rbp), %eax
+ 2336 1675 31C2     		xorl	%eax, %edx
+ 2337 1677 8B45D0   		movl	-48(%rbp), %eax
+ 2338 167a 31C2     		xorl	%eax, %edx
+ 2339 167c 8B45C8   		movl	-56(%rbp), %eax
+ 2340 167f 31D0     		xorl	%edx, %eax
+ 2341 1681 8945AC   		movl	%eax, -84(%rbp)
+ 2342 1684 8B4598   		movl	-104(%rbp), %eax
+ 2343 1687 C1C005   		roll	$5, %eax
+ 2344 168a 89C2     		movl	%eax, %edx
+ 2345 168c 8B459C   		movl	-100(%rbp), %eax
+ 2346 168f 3345A0   		xorl	-96(%rbp), %eax
+ 2347 1692 3345A4   		xorl	-92(%rbp), %eax
+ 2348 1695 01C2     		addl	%eax, %edx
+ 2349 1697 8B45AC   		movl	-84(%rbp), %eax
+ 2350 169a D1C0     		roll	%eax
+ 2351 169c 8945C8   		movl	%eax, -56(%rbp)
+ 2352 169f 8B45C8   		movl	-56(%rbp), %eax
+ 2353 16a2 01D0     		addl	%edx, %eax
+ 2354 16a4 2D2A3E9D 		subl	$899497514, %eax
+ 2354      35
+ 2355 16a9 0145A8   		addl	%eax, -88(%rbp)
+ 2356 16ac C14D9C02 		rorl	$2, -100(%rbp)
+ 272:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(71) );
+ 2357              		.loc 1 272 5
+ 2358 16b0 8B55C0   		movl	-64(%rbp), %edx
+ 2359 16b3 8B45EC   		movl	-20(%rbp), %eax
+ 2360 16b6 31C2     		xorl	%eax, %edx
+ 2361 16b8 8B45D4   		movl	-44(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 49
+
+
+ 2362 16bb 31C2     		xorl	%eax, %edx
+ 2363 16bd 8B45CC   		movl	-52(%rbp), %eax
+ 2364 16c0 31D0     		xorl	%edx, %eax
+ 2365 16c2 8945AC   		movl	%eax, -84(%rbp)
+ 2366 16c5 8B45A8   		movl	-88(%rbp), %eax
+ 2367 16c8 C1C005   		roll	$5, %eax
+ 2368 16cb 89C2     		movl	%eax, %edx
+ 2369 16cd 8B4598   		movl	-104(%rbp), %eax
+ 2370 16d0 33459C   		xorl	-100(%rbp), %eax
+ 2371 16d3 3345A0   		xorl	-96(%rbp), %eax
+ 2372 16d6 01C2     		addl	%eax, %edx
+ 2373 16d8 8B45AC   		movl	-84(%rbp), %eax
+ 2374 16db D1C0     		roll	%eax
+ 2375 16dd 8945CC   		movl	%eax, -52(%rbp)
+ 2376 16e0 8B45CC   		movl	-52(%rbp), %eax
+ 2377 16e3 01D0     		addl	%edx, %eax
+ 2378 16e5 2D2A3E9D 		subl	$899497514, %eax
+ 2378      35
+ 2379 16ea 0145A4   		addl	%eax, -92(%rbp)
+ 2380 16ed C14D9802 		rorl	$2, -104(%rbp)
+ 273:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(72) );
+ 2381              		.loc 1 273 5
+ 2382 16f1 8B55C4   		movl	-60(%rbp), %edx
+ 2383 16f4 8B45B0   		movl	-80(%rbp), %eax
+ 2384 16f7 31C2     		xorl	%eax, %edx
+ 2385 16f9 8B45D8   		movl	-40(%rbp), %eax
+ 2386 16fc 31C2     		xorl	%eax, %edx
+ 2387 16fe 8B45D0   		movl	-48(%rbp), %eax
+ 2388 1701 31D0     		xorl	%edx, %eax
+ 2389 1703 8945AC   		movl	%eax, -84(%rbp)
+ 2390 1706 8B45A4   		movl	-92(%rbp), %eax
+ 2391 1709 C1C005   		roll	$5, %eax
+ 2392 170c 89C2     		movl	%eax, %edx
+ 2393 170e 8B45A8   		movl	-88(%rbp), %eax
+ 2394 1711 334598   		xorl	-104(%rbp), %eax
+ 2395 1714 33459C   		xorl	-100(%rbp), %eax
+ 2396 1717 01C2     		addl	%eax, %edx
+ 2397 1719 8B45AC   		movl	-84(%rbp), %eax
+ 2398 171c D1C0     		roll	%eax
+ 2399 171e 8945D0   		movl	%eax, -48(%rbp)
+ 2400 1721 8B45D0   		movl	-48(%rbp), %eax
+ 2401 1724 01D0     		addl	%edx, %eax
+ 2402 1726 2D2A3E9D 		subl	$899497514, %eax
+ 2402      35
+ 2403 172b 0145A0   		addl	%eax, -96(%rbp)
+ 2404 172e C14DA802 		rorl	$2, -88(%rbp)
+ 274:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(73) );
+ 2405              		.loc 1 274 5
+ 2406 1732 8B55C8   		movl	-56(%rbp), %edx
+ 2407 1735 8B45B4   		movl	-76(%rbp), %eax
+ 2408 1738 31C2     		xorl	%eax, %edx
+ 2409 173a 8B45DC   		movl	-36(%rbp), %eax
+ 2410 173d 31C2     		xorl	%eax, %edx
+ 2411 173f 8B45D4   		movl	-44(%rbp), %eax
+ 2412 1742 31D0     		xorl	%edx, %eax
+ 2413 1744 8945AC   		movl	%eax, -84(%rbp)
+ 2414 1747 8B45A0   		movl	-96(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 50
+
+
+ 2415 174a C1C005   		roll	$5, %eax
+ 2416 174d 89C2     		movl	%eax, %edx
+ 2417 174f 8B45A4   		movl	-92(%rbp), %eax
+ 2418 1752 3345A8   		xorl	-88(%rbp), %eax
+ 2419 1755 334598   		xorl	-104(%rbp), %eax
+ 2420 1758 01C2     		addl	%eax, %edx
+ 2421 175a 8B45AC   		movl	-84(%rbp), %eax
+ 2422 175d D1C0     		roll	%eax
+ 2423 175f 8945D4   		movl	%eax, -44(%rbp)
+ 2424 1762 8B45D4   		movl	-44(%rbp), %eax
+ 2425 1765 01D0     		addl	%edx, %eax
+ 2426 1767 2D2A3E9D 		subl	$899497514, %eax
+ 2426      35
+ 2427 176c 01459C   		addl	%eax, -100(%rbp)
+ 2428 176f C14DA402 		rorl	$2, -92(%rbp)
+ 275:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(74) );
+ 2429              		.loc 1 275 5
+ 2430 1773 8B55CC   		movl	-52(%rbp), %edx
+ 2431 1776 8B45B8   		movl	-72(%rbp), %eax
+ 2432 1779 31C2     		xorl	%eax, %edx
+ 2433 177b 8B45E0   		movl	-32(%rbp), %eax
+ 2434 177e 31C2     		xorl	%eax, %edx
+ 2435 1780 8B45D8   		movl	-40(%rbp), %eax
+ 2436 1783 31D0     		xorl	%edx, %eax
+ 2437 1785 8945AC   		movl	%eax, -84(%rbp)
+ 2438 1788 8B459C   		movl	-100(%rbp), %eax
+ 2439 178b C1C005   		roll	$5, %eax
+ 2440 178e 89C2     		movl	%eax, %edx
+ 2441 1790 8B45A0   		movl	-96(%rbp), %eax
+ 2442 1793 3345A4   		xorl	-92(%rbp), %eax
+ 2443 1796 3345A8   		xorl	-88(%rbp), %eax
+ 2444 1799 01C2     		addl	%eax, %edx
+ 2445 179b 8B45AC   		movl	-84(%rbp), %eax
+ 2446 179e D1C0     		roll	%eax
+ 2447 17a0 8945D8   		movl	%eax, -40(%rbp)
+ 2448 17a3 8B45D8   		movl	-40(%rbp), %eax
+ 2449 17a6 01D0     		addl	%edx, %eax
+ 2450 17a8 2D2A3E9D 		subl	$899497514, %eax
+ 2450      35
+ 2451 17ad 014598   		addl	%eax, -104(%rbp)
+ 2452 17b0 C14DA002 		rorl	$2, -96(%rbp)
+ 276:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( A, B, C, D, E, R(75) );
+ 2453              		.loc 1 276 5
+ 2454 17b4 8B55D0   		movl	-48(%rbp), %edx
+ 2455 17b7 8B45BC   		movl	-68(%rbp), %eax
+ 2456 17ba 31C2     		xorl	%eax, %edx
+ 2457 17bc 8B45E4   		movl	-28(%rbp), %eax
+ 2458 17bf 31C2     		xorl	%eax, %edx
+ 2459 17c1 8B45DC   		movl	-36(%rbp), %eax
+ 2460 17c4 31D0     		xorl	%edx, %eax
+ 2461 17c6 8945AC   		movl	%eax, -84(%rbp)
+ 2462 17c9 8B4598   		movl	-104(%rbp), %eax
+ 2463 17cc C1C005   		roll	$5, %eax
+ 2464 17cf 89C2     		movl	%eax, %edx
+ 2465 17d1 8B459C   		movl	-100(%rbp), %eax
+ 2466 17d4 3345A0   		xorl	-96(%rbp), %eax
+ 2467 17d7 3345A4   		xorl	-92(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 51
+
+
+ 2468 17da 01C2     		addl	%eax, %edx
+ 2469 17dc 8B45AC   		movl	-84(%rbp), %eax
+ 2470 17df D1C0     		roll	%eax
+ 2471 17e1 8945DC   		movl	%eax, -36(%rbp)
+ 2472 17e4 8B45DC   		movl	-36(%rbp), %eax
+ 2473 17e7 01D0     		addl	%edx, %eax
+ 2474 17e9 2D2A3E9D 		subl	$899497514, %eax
+ 2474      35
+ 2475 17ee 0145A8   		addl	%eax, -88(%rbp)
+ 2476 17f1 C14D9C02 		rorl	$2, -100(%rbp)
+ 277:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( E, A, B, C, D, R(76) );
+ 2477              		.loc 1 277 5
+ 2478 17f5 8B55D4   		movl	-44(%rbp), %edx
+ 2479 17f8 8B45C0   		movl	-64(%rbp), %eax
+ 2480 17fb 31C2     		xorl	%eax, %edx
+ 2481 17fd 8B45E8   		movl	-24(%rbp), %eax
+ 2482 1800 31C2     		xorl	%eax, %edx
+ 2483 1802 8B45E0   		movl	-32(%rbp), %eax
+ 2484 1805 31D0     		xorl	%edx, %eax
+ 2485 1807 8945AC   		movl	%eax, -84(%rbp)
+ 2486 180a 8B45A8   		movl	-88(%rbp), %eax
+ 2487 180d C1C005   		roll	$5, %eax
+ 2488 1810 89C2     		movl	%eax, %edx
+ 2489 1812 8B4598   		movl	-104(%rbp), %eax
+ 2490 1815 33459C   		xorl	-100(%rbp), %eax
+ 2491 1818 3345A0   		xorl	-96(%rbp), %eax
+ 2492 181b 01C2     		addl	%eax, %edx
+ 2493 181d 8B45AC   		movl	-84(%rbp), %eax
+ 2494 1820 D1C0     		roll	%eax
+ 2495 1822 8945E0   		movl	%eax, -32(%rbp)
+ 2496 1825 8B45E0   		movl	-32(%rbp), %eax
+ 2497 1828 01D0     		addl	%edx, %eax
+ 2498 182a 2D2A3E9D 		subl	$899497514, %eax
+ 2498      35
+ 2499 182f 0145A4   		addl	%eax, -92(%rbp)
+ 2500 1832 C14D9802 		rorl	$2, -104(%rbp)
+ 278:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( D, E, A, B, C, R(77) );
+ 2501              		.loc 1 278 5
+ 2502 1836 8B55D8   		movl	-40(%rbp), %edx
+ 2503 1839 8B45C4   		movl	-60(%rbp), %eax
+ 2504 183c 31C2     		xorl	%eax, %edx
+ 2505 183e 8B45EC   		movl	-20(%rbp), %eax
+ 2506 1841 31C2     		xorl	%eax, %edx
+ 2507 1843 8B45E4   		movl	-28(%rbp), %eax
+ 2508 1846 31D0     		xorl	%edx, %eax
+ 2509 1848 8945AC   		movl	%eax, -84(%rbp)
+ 2510 184b 8B45A4   		movl	-92(%rbp), %eax
+ 2511 184e C1C005   		roll	$5, %eax
+ 2512 1851 89C2     		movl	%eax, %edx
+ 2513 1853 8B45A8   		movl	-88(%rbp), %eax
+ 2514 1856 334598   		xorl	-104(%rbp), %eax
+ 2515 1859 33459C   		xorl	-100(%rbp), %eax
+ 2516 185c 01C2     		addl	%eax, %edx
+ 2517 185e 8B45AC   		movl	-84(%rbp), %eax
+ 2518 1861 D1C0     		roll	%eax
+ 2519 1863 8945E4   		movl	%eax, -28(%rbp)
+ 2520 1866 8B45E4   		movl	-28(%rbp), %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 52
+
+
+ 2521 1869 01D0     		addl	%edx, %eax
+ 2522 186b 2D2A3E9D 		subl	$899497514, %eax
+ 2522      35
+ 2523 1870 0145A0   		addl	%eax, -96(%rbp)
+ 2524 1873 C14DA802 		rorl	$2, -88(%rbp)
+ 279:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( C, D, E, A, B, R(78) );
+ 2525              		.loc 1 279 5
+ 2526 1877 8B55DC   		movl	-36(%rbp), %edx
+ 2527 187a 8B45C8   		movl	-56(%rbp), %eax
+ 2528 187d 31C2     		xorl	%eax, %edx
+ 2529 187f 8B45B0   		movl	-80(%rbp), %eax
+ 2530 1882 31C2     		xorl	%eax, %edx
+ 2531 1884 8B45E8   		movl	-24(%rbp), %eax
+ 2532 1887 31D0     		xorl	%edx, %eax
+ 2533 1889 8945AC   		movl	%eax, -84(%rbp)
+ 2534 188c 8B45A0   		movl	-96(%rbp), %eax
+ 2535 188f C1C005   		roll	$5, %eax
+ 2536 1892 89C2     		movl	%eax, %edx
+ 2537 1894 8B45A4   		movl	-92(%rbp), %eax
+ 2538 1897 3345A8   		xorl	-88(%rbp), %eax
+ 2539 189a 334598   		xorl	-104(%rbp), %eax
+ 2540 189d 01C2     		addl	%eax, %edx
+ 2541 189f 8B45AC   		movl	-84(%rbp), %eax
+ 2542 18a2 D1C0     		roll	%eax
+ 2543 18a4 8945E8   		movl	%eax, -24(%rbp)
+ 2544 18a7 8B45E8   		movl	-24(%rbp), %eax
+ 2545 18aa 01D0     		addl	%edx, %eax
+ 2546 18ac 2D2A3E9D 		subl	$899497514, %eax
+ 2546      35
+ 2547 18b1 01459C   		addl	%eax, -100(%rbp)
+ 2548 18b4 C14DA402 		rorl	$2, -92(%rbp)
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     P( B, C, D, E, A, R(79) );
+ 2549              		.loc 1 280 5
+ 2550 18b8 8B55E0   		movl	-32(%rbp), %edx
+ 2551 18bb 8B45CC   		movl	-52(%rbp), %eax
+ 2552 18be 31C2     		xorl	%eax, %edx
+ 2553 18c0 8B45B4   		movl	-76(%rbp), %eax
+ 2554 18c3 31C2     		xorl	%eax, %edx
+ 2555 18c5 8B45EC   		movl	-20(%rbp), %eax
+ 2556 18c8 31D0     		xorl	%edx, %eax
+ 2557 18ca 8945AC   		movl	%eax, -84(%rbp)
+ 2558 18cd 8B459C   		movl	-100(%rbp), %eax
+ 2559 18d0 C1C005   		roll	$5, %eax
+ 2560 18d3 89C2     		movl	%eax, %edx
+ 2561 18d5 8B45A0   		movl	-96(%rbp), %eax
+ 2562 18d8 3345A4   		xorl	-92(%rbp), %eax
+ 2563 18db 3345A8   		xorl	-88(%rbp), %eax
+ 2564 18de 01C2     		addl	%eax, %edx
+ 2565 18e0 8B45AC   		movl	-84(%rbp), %eax
+ 2566 18e3 D1C0     		roll	%eax
+ 2567 18e5 8945EC   		movl	%eax, -20(%rbp)
+ 2568 18e8 8B45EC   		movl	-20(%rbp), %eax
+ 2569 18eb 01D0     		addl	%edx, %eax
+ 2570 18ed 2D2A3E9D 		subl	$899497514, %eax
+ 2570      35
+ 2571 18f2 014598   		addl	%eax, -104(%rbp)
+ 2572 18f5 C14DA002 		rorl	$2, -96(%rbp)
+GAS LISTING /tmp/ccdf94mD.s 			page 53
+
+
+ 281:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 282:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef K
+ 283:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #undef F
+ 284:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 285:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[0] += A;
+ 2573              		.loc 1 285 19
+ 2574 18f9 488B4588 		movq	-120(%rbp), %rax
+ 2575 18fd 8B5008   		movl	8(%rax), %edx
+ 2576 1900 8B4598   		movl	-104(%rbp), %eax
+ 2577 1903 01C2     		addl	%eax, %edx
+ 2578 1905 488B4588 		movq	-120(%rbp), %rax
+ 2579 1909 895008   		movl	%edx, 8(%rax)
+ 286:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[1] += B;
+ 2580              		.loc 1 286 19
+ 2581 190c 488B4588 		movq	-120(%rbp), %rax
+ 2582 1910 8B500C   		movl	12(%rax), %edx
+ 2583 1913 8B459C   		movl	-100(%rbp), %eax
+ 2584 1916 01C2     		addl	%eax, %edx
+ 2585 1918 488B4588 		movq	-120(%rbp), %rax
+ 2586 191c 89500C   		movl	%edx, 12(%rax)
+ 287:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[2] += C;
+ 2587              		.loc 1 287 19
+ 2588 191f 488B4588 		movq	-120(%rbp), %rax
+ 2589 1923 8B5010   		movl	16(%rax), %edx
+ 2590 1926 8B45A0   		movl	-96(%rbp), %eax
+ 2591 1929 01C2     		addl	%eax, %edx
+ 2592 192b 488B4588 		movq	-120(%rbp), %rax
+ 2593 192f 895010   		movl	%edx, 16(%rax)
+ 288:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[3] += D;
+ 2594              		.loc 1 288 19
+ 2595 1932 488B4588 		movq	-120(%rbp), %rax
+ 2596 1936 8B5014   		movl	20(%rax), %edx
+ 2597 1939 8B45A4   		movl	-92(%rbp), %eax
+ 2598 193c 01C2     		addl	%eax, %edx
+ 2599 193e 488B4588 		movq	-120(%rbp), %rax
+ 2600 1942 895014   		movl	%edx, 20(%rax)
+ 289:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->state[4] += E;
+ 2601              		.loc 1 289 19
+ 2602 1945 488B4588 		movq	-120(%rbp), %rax
+ 2603 1949 8B5018   		movl	24(%rax), %edx
+ 2604 194c 8B45A8   		movl	-88(%rbp), %eax
+ 2605 194f 01C2     		addl	%eax, %edx
+ 2606 1951 488B4588 		movq	-120(%rbp), %rax
+ 2607 1955 895018   		movl	%edx, 24(%rax)
+ 290:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 291:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     return( 0 );
+ 2608              		.loc 1 291 11
+ 2609 1958 B8000000 		movl	$0, %eax
+ 2609      00
+ 292:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 2610              		.loc 1 292 1
+ 2611 195d 488B75F8 		movq	-8(%rbp), %rsi
+ 2612 1961 64483334 		xorq	%fs:40, %rsi
+ 2612      25280000 
+ 2612      00
+ 2613 196a 7405     		je	.L17
+ 2614 196c E8000000 		call	__stack_chk_fail@PLT
+GAS LISTING /tmp/ccdf94mD.s 			page 54
+
+
+ 2614      00
+ 2615              	.L17:
+ 2616 1971 C9       		leave
+ 2617              	.LCFI17:
+ 2618              		.cfi_def_cfa 7, 8
+ 2619 1972 C3       		ret
+ 2620              		.cfi_endproc
+ 2621              	.LFE5:
+ 2623              		.section	.text.mbedtls_sha1_process,"ax",@progbits
+ 2624              		.globl	mbedtls_sha1_process
+ 2626              	mbedtls_sha1_process:
+ 2627              	.LFB6:
+ 293:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1_process( mbedtls_sha1_context *ctx,
+ 296:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                            const unsigned char data[64] )
+ 297:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 2628              		.loc 1 297 1
+ 2629              		.cfi_startproc
+ 2630 0000 F30F1EFA 		endbr64
+ 2631 0004 55       		pushq	%rbp
+ 2632              	.LCFI18:
+ 2633              		.cfi_def_cfa_offset 16
+ 2634              		.cfi_offset 6, -16
+ 2635 0005 4889E5   		movq	%rsp, %rbp
+ 2636              	.LCFI19:
+ 2637              		.cfi_def_cfa_register 6
+ 2638 0008 4883EC20 		subq	$32, %rsp
+ 2639 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 2640 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 2641              		.loc 1 297 1
+ 2642 0014 64488B04 		movq	%fs:40, %rax
+ 2642      25280000 
+ 2642      00
+ 2643 001d 488945F8 		movq	%rax, -8(%rbp)
+ 2644 0021 31C0     		xorl	%eax, %eax
+ 298:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_internal_sha1_process( ctx, data );
+ 2645              		.loc 1 298 5
+ 2646 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 2647 0027 488B45E8 		movq	-24(%rbp), %rax
+ 2648 002b 4889D6   		movq	%rdx, %rsi
+ 2649 002e 4889C7   		movq	%rax, %rdi
+ 2650 0031 E8000000 		call	mbedtls_internal_sha1_process
+ 2650      00
+ 299:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 2651              		.loc 1 299 1
+ 2652 0036 90       		nop
+ 2653 0037 488B45F8 		movq	-8(%rbp), %rax
+ 2654 003b 64483304 		xorq	%fs:40, %rax
+ 2654      25280000 
+ 2654      00
+ 2655 0044 7405     		je	.L19
+ 2656 0046 E8000000 		call	__stack_chk_fail@PLT
+ 2656      00
+ 2657              	.L19:
+ 2658 004b C9       		leave
+ 2659              	.LCFI20:
+GAS LISTING /tmp/ccdf94mD.s 			page 55
+
+
+ 2660              		.cfi_def_cfa 7, 8
+ 2661 004c C3       		ret
+ 2662              		.cfi_endproc
+ 2663              	.LFE6:
+ 2665              		.section	.text.mbedtls_sha1_update_ret,"ax",@progbits
+ 2666              		.globl	mbedtls_sha1_update_ret
+ 2668              	mbedtls_sha1_update_ret:
+ 2669              	.LFB7:
+ 300:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif
+ 301:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif /* !MBEDTLS_SHA1_PROCESS_ALT */
+ 302:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 303:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** /*
+ 304:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  * SHA-1 process buffer
+ 305:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  */
+ 306:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** int mbedtls_sha1_update_ret( mbedtls_sha1_context *ctx,
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                              const unsigned char *input,
+ 308:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                              size_t ilen )
+ 309:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 2670              		.loc 1 309 1
+ 2671              		.cfi_startproc
+ 2672 0000 F30F1EFA 		endbr64
+ 2673 0004 55       		pushq	%rbp
+ 2674              	.LCFI21:
+ 2675              		.cfi_def_cfa_offset 16
+ 2676              		.cfi_offset 6, -16
+ 2677 0005 4889E5   		movq	%rsp, %rbp
+ 2678              	.LCFI22:
+ 2679              		.cfi_def_cfa_register 6
+ 2680 0008 4883EC40 		subq	$64, %rsp
+ 2681 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 2682 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 2683 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 2684              		.loc 1 309 1
+ 2685 0018 64488B04 		movq	%fs:40, %rax
+ 2685      25280000 
+ 2685      00
+ 2686 0021 488945F8 		movq	%rax, -8(%rbp)
+ 2687 0025 31C0     		xorl	%eax, %eax
+ 310:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     int ret;
+ 311:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     size_t fill;
+ 312:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     uint32_t left;
+ 313:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 314:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( ctx != NULL );
+ 315:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( ilen == 0 || input != NULL );
+ 316:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 317:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ilen == 0 )
+ 2688              		.loc 1 317 7
+ 2689 0027 48837DC8 		cmpq	$0, -56(%rbp)
+ 2689      00
+ 2690 002c 750A     		jne	.L21
+ 318:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         return( 0 );
+ 2691              		.loc 1 318 15
+ 2692 002e B8000000 		movl	$0, %eax
+ 2692      00
+ 2693 0033 E92F0100 		jmp	.L22
+ 2693      00
+ 2694              	.L21:
+GAS LISTING /tmp/ccdf94mD.s 			page 56
+
+
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 320:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     left = ctx->total[0] & 0x3F;
+ 2695              		.loc 1 320 22
+ 2696 0038 488B45D8 		movq	-40(%rbp), %rax
+ 2697 003c 8B00     		movl	(%rax), %eax
+ 2698              		.loc 1 320 10
+ 2699 003e 83E03F   		andl	$63, %eax
+ 2700 0041 8945E8   		movl	%eax, -24(%rbp)
+ 321:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     fill = 64 - left;
+ 2701              		.loc 1 321 15
+ 2702 0044 B8400000 		movl	$64, %eax
+ 2702      00
+ 2703 0049 2B45E8   		subl	-24(%rbp), %eax
+ 2704              		.loc 1 321 10
+ 2705 004c 89C0     		movl	%eax, %eax
+ 2706 004e 488945F0 		movq	%rax, -16(%rbp)
+ 322:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->total[0] += (uint32_t) ilen;
+ 2707              		.loc 1 323 19
+ 2708 0052 488B45D8 		movq	-40(%rbp), %rax
+ 2709 0056 8B00     		movl	(%rax), %eax
+ 2710              		.loc 1 323 22
+ 2711 0058 488B55C8 		movq	-56(%rbp), %rdx
+ 2712              		.loc 1 323 19
+ 2713 005c 01C2     		addl	%eax, %edx
+ 2714 005e 488B45D8 		movq	-40(%rbp), %rax
+ 2715 0062 8910     		movl	%edx, (%rax)
+ 324:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->total[0] &= 0xFFFFFFFF;
+ 2716              		.loc 1 324 19
+ 2717 0064 488B45D8 		movq	-40(%rbp), %rax
+ 2718 0068 8B10     		movl	(%rax), %edx
+ 2719 006a 488B45D8 		movq	-40(%rbp), %rax
+ 2720 006e 8910     		movl	%edx, (%rax)
+ 325:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 326:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ctx->total[0] < (uint32_t) ilen )
+ 2721              		.loc 1 326 19
+ 2722 0070 488B45D8 		movq	-40(%rbp), %rax
+ 2723 0074 8B00     		movl	(%rax), %eax
+ 2724              		.loc 1 326 25
+ 2725 0076 488B55C8 		movq	-56(%rbp), %rdx
+ 2726              		.loc 1 326 7
+ 2727 007a 39D0     		cmpl	%edx, %eax
+ 2728 007c 7311     		jnb	.L23
+ 327:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         ctx->total[1]++;
+ 2729              		.loc 1 327 19
+ 2730 007e 488B45D8 		movq	-40(%rbp), %rax
+ 2731 0082 8B4004   		movl	4(%rax), %eax
+ 2732              		.loc 1 327 22
+ 2733 0085 8D5001   		leal	1(%rax), %edx
+ 2734 0088 488B45D8 		movq	-40(%rbp), %rax
+ 2735 008c 895004   		movl	%edx, 4(%rax)
+ 2736              	.L23:
+ 328:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 329:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( left && ilen >= fill )
+ 2737              		.loc 1 329 7
+ 2738 008f 837DE800 		cmpl	$0, -24(%rbp)
+ 2739 0093 0F849900 		je	.L26
+GAS LISTING /tmp/ccdf94mD.s 			page 57
+
+
+ 2739      0000
+ 2740              		.loc 1 329 14 discriminator 1
+ 2741 0099 488B45C8 		movq	-56(%rbp), %rax
+ 2742 009d 483B45F0 		cmpq	-16(%rbp), %rax
+ 2743 00a1 0F828B00 		jb	.L26
+ 2743      0000
+ 330:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     {
+ 331:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         memcpy( (void *) (ctx->buffer + left), input, fill );
+ 2744              		.loc 1 331 27
+ 2745 00a7 488B45D8 		movq	-40(%rbp), %rax
+ 2746 00ab 488D501C 		leaq	28(%rax), %rdx
+ 2747              		.loc 1 331 9
+ 2748 00af 8B45E8   		movl	-24(%rbp), %eax
+ 2749 00b2 488D0C02 		leaq	(%rdx,%rax), %rcx
+ 2750 00b6 488B55F0 		movq	-16(%rbp), %rdx
+ 2751 00ba 488B45D0 		movq	-48(%rbp), %rax
+ 2752 00be 4889C6   		movq	%rax, %rsi
+ 2753 00c1 4889CF   		movq	%rcx, %rdi
+ 2754 00c4 E8000000 		call	memcpy@PLT
+ 2754      00
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 333:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         if( ( ret = mbedtls_internal_sha1_process( ctx, ctx->buffer ) ) != 0 )
+ 2755              		.loc 1 333 60
+ 2756 00c9 488B45D8 		movq	-40(%rbp), %rax
+ 2757 00cd 488D501C 		leaq	28(%rax), %rdx
+ 2758              		.loc 1 333 21
+ 2759 00d1 488B45D8 		movq	-40(%rbp), %rax
+ 2760 00d5 4889D6   		movq	%rdx, %rsi
+ 2761 00d8 4889C7   		movq	%rax, %rdi
+ 2762 00db E8000000 		call	mbedtls_internal_sha1_process
+ 2762      00
+ 2763 00e0 8945EC   		movl	%eax, -20(%rbp)
+ 2764              		.loc 1 333 11
+ 2765 00e3 837DEC00 		cmpl	$0, -20(%rbp)
+ 2766 00e7 7405     		je	.L25
+ 334:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****             return( ret );
+ 2767              		.loc 1 334 19
+ 2768 00e9 8B45EC   		movl	-20(%rbp), %eax
+ 2769 00ec EB79     		jmp	.L22
+ 2770              	.L25:
+ 335:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 336:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         input += fill;
+ 2771              		.loc 1 336 15
+ 2772 00ee 488B45F0 		movq	-16(%rbp), %rax
+ 2773 00f2 480145D0 		addq	%rax, -48(%rbp)
+ 337:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         ilen  -= fill;
+ 2774              		.loc 1 337 15
+ 2775 00f6 488B45F0 		movq	-16(%rbp), %rax
+ 2776 00fa 482945C8 		subq	%rax, -56(%rbp)
+ 338:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         left = 0;
+ 2777              		.loc 1 338 14
+ 2778 00fe C745E800 		movl	$0, -24(%rbp)
+ 2778      000000
+ 339:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     }
+ 340:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 341:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     while( ilen >= 64 )
+ 2779              		.loc 1 341 10
+GAS LISTING /tmp/ccdf94mD.s 			page 58
+
+
+ 2780 0105 EB2B     		jmp	.L26
+ 2781              	.L28:
+ 342:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     {
+ 343:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         if( ( ret = mbedtls_internal_sha1_process( ctx, input ) ) != 0 )
+ 2782              		.loc 1 343 21
+ 2783 0107 488B55D0 		movq	-48(%rbp), %rdx
+ 2784 010b 488B45D8 		movq	-40(%rbp), %rax
+ 2785 010f 4889D6   		movq	%rdx, %rsi
+ 2786 0112 4889C7   		movq	%rax, %rdi
+ 2787 0115 E8000000 		call	mbedtls_internal_sha1_process
+ 2787      00
+ 2788 011a 8945EC   		movl	%eax, -20(%rbp)
+ 2789              		.loc 1 343 11
+ 2790 011d 837DEC00 		cmpl	$0, -20(%rbp)
+ 2791 0121 7405     		je	.L27
+ 344:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****             return( ret );
+ 2792              		.loc 1 344 19
+ 2793 0123 8B45EC   		movl	-20(%rbp), %eax
+ 2794 0126 EB3F     		jmp	.L22
+ 2795              	.L27:
+ 345:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 346:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         input += 64;
+ 2796              		.loc 1 346 15
+ 2797 0128 488345D0 		addq	$64, -48(%rbp)
+ 2797      40
+ 347:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         ilen  -= 64;
+ 2798              		.loc 1 347 15
+ 2799 012d 48836DC8 		subq	$64, -56(%rbp)
+ 2799      40
+ 2800              	.L26:
+ 341:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     {
+ 2801              		.loc 1 341 10
+ 2802 0132 48837DC8 		cmpq	$63, -56(%rbp)
+ 2802      3F
+ 2803 0137 77CE     		ja	.L28
+ 348:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     }
+ 349:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ilen > 0 )
+ 2804              		.loc 1 350 7
+ 2805 0139 48837DC8 		cmpq	$0, -56(%rbp)
+ 2805      00
+ 2806 013e 7422     		je	.L29
+ 351:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         memcpy( (void *) (ctx->buffer + left), input, ilen );
+ 2807              		.loc 1 351 27
+ 2808 0140 488B45D8 		movq	-40(%rbp), %rax
+ 2809 0144 488D501C 		leaq	28(%rax), %rdx
+ 2810              		.loc 1 351 9
+ 2811 0148 8B45E8   		movl	-24(%rbp), %eax
+ 2812 014b 488D0C02 		leaq	(%rdx,%rax), %rcx
+ 2813 014f 488B55C8 		movq	-56(%rbp), %rdx
+ 2814 0153 488B45D0 		movq	-48(%rbp), %rax
+ 2815 0157 4889C6   		movq	%rax, %rsi
+ 2816 015a 4889CF   		movq	%rcx, %rdi
+ 2817 015d E8000000 		call	memcpy@PLT
+ 2817      00
+ 2818              	.L29:
+ 352:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+GAS LISTING /tmp/ccdf94mD.s 			page 59
+
+
+ 353:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     return( 0 );
+ 2819              		.loc 1 353 11
+ 2820 0162 B8000000 		movl	$0, %eax
+ 2820      00
+ 2821              	.L22:
+ 354:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 2822              		.loc 1 354 1
+ 2823 0167 488B4DF8 		movq	-8(%rbp), %rcx
+ 2824 016b 6448330C 		xorq	%fs:40, %rcx
+ 2824      25280000 
+ 2824      00
+ 2825 0174 7405     		je	.L30
+ 2826 0176 E8000000 		call	__stack_chk_fail@PLT
+ 2826      00
+ 2827              	.L30:
+ 2828 017b C9       		leave
+ 2829              	.LCFI23:
+ 2830              		.cfi_def_cfa 7, 8
+ 2831 017c C3       		ret
+ 2832              		.cfi_endproc
+ 2833              	.LFE7:
+ 2835              		.section	.text.mbedtls_sha1_update,"ax",@progbits
+ 2836              		.globl	mbedtls_sha1_update
+ 2838              	mbedtls_sha1_update:
+ 2839              	.LFB8:
+ 355:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 356:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 357:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1_update( mbedtls_sha1_context *ctx,
+ 358:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                           const unsigned char *input,
+ 359:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                           size_t ilen )
+ 360:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 2840              		.loc 1 360 1
+ 2841              		.cfi_startproc
+ 2842 0000 F30F1EFA 		endbr64
+ 2843 0004 55       		pushq	%rbp
+ 2844              	.LCFI24:
+ 2845              		.cfi_def_cfa_offset 16
+ 2846              		.cfi_offset 6, -16
+ 2847 0005 4889E5   		movq	%rsp, %rbp
+ 2848              	.LCFI25:
+ 2849              		.cfi_def_cfa_register 6
+ 2850 0008 4883EC30 		subq	$48, %rsp
+ 2851 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 2852 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 2853 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 2854              		.loc 1 360 1
+ 2855 0018 64488B04 		movq	%fs:40, %rax
+ 2855      25280000 
+ 2855      00
+ 2856 0021 488945F8 		movq	%rax, -8(%rbp)
+ 2857 0025 31C0     		xorl	%eax, %eax
+ 361:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_sha1_update_ret( ctx, input, ilen );
+ 2858              		.loc 1 361 5
+ 2859 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 2860 002b 488B4DE0 		movq	-32(%rbp), %rcx
+ 2861 002f 488B45E8 		movq	-24(%rbp), %rax
+ 2862 0033 4889CE   		movq	%rcx, %rsi
+GAS LISTING /tmp/ccdf94mD.s 			page 60
+
+
+ 2863 0036 4889C7   		movq	%rax, %rdi
+ 2864 0039 E8000000 		call	mbedtls_sha1_update_ret
+ 2864      00
+ 362:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 2865              		.loc 1 362 1
+ 2866 003e 90       		nop
+ 2867 003f 488B45F8 		movq	-8(%rbp), %rax
+ 2868 0043 64483304 		xorq	%fs:40, %rax
+ 2868      25280000 
+ 2868      00
+ 2869 004c 7405     		je	.L32
+ 2870 004e E8000000 		call	__stack_chk_fail@PLT
+ 2870      00
+ 2871              	.L32:
+ 2872 0053 C9       		leave
+ 2873              	.LCFI26:
+ 2874              		.cfi_def_cfa 7, 8
+ 2875 0054 C3       		ret
+ 2876              		.cfi_endproc
+ 2877              	.LFE8:
+ 2879              		.section	.text.mbedtls_sha1_finish_ret,"ax",@progbits
+ 2880              		.globl	mbedtls_sha1_finish_ret
+ 2882              	mbedtls_sha1_finish_ret:
+ 2883              	.LFB9:
+ 363:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif
+ 364:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 365:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** /*
+ 366:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  * SHA-1 final digest
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  */
+ 368:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** int mbedtls_sha1_finish_ret( mbedtls_sha1_context *ctx,
+ 369:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                              unsigned char output[20] )
+ 370:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 2884              		.loc 1 370 1
+ 2885              		.cfi_startproc
+ 2886 0000 F30F1EFA 		endbr64
+ 2887 0004 55       		pushq	%rbp
+ 2888              	.LCFI27:
+ 2889              		.cfi_def_cfa_offset 16
+ 2890              		.cfi_offset 6, -16
+ 2891 0005 4889E5   		movq	%rsp, %rbp
+ 2892              	.LCFI28:
+ 2893              		.cfi_def_cfa_register 6
+ 2894 0008 4883EC30 		subq	$48, %rsp
+ 2895 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 2896 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 2897              		.loc 1 370 1
+ 2898 0014 64488B04 		movq	%fs:40, %rax
+ 2898      25280000 
+ 2898      00
+ 2899 001d 488945F8 		movq	%rax, -8(%rbp)
+ 2900 0021 31C0     		xorl	%eax, %eax
+ 371:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     int ret;
+ 372:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     uint32_t used;
+ 373:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     uint32_t high, low;
+ 374:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 375:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( ctx != NULL );
+ 376:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( (unsigned char *)output != NULL );
+GAS LISTING /tmp/ccdf94mD.s 			page 61
+
+
+ 377:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 378:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     /*
+ 379:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****      * Add padding: 0x80 then 0x00 until 8 bytes remain for the length
+ 380:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****      */
+ 381:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     used = ctx->total[0] & 0x3F;
+ 2901              		.loc 1 381 22
+ 2902 0023 488B45D8 		movq	-40(%rbp), %rax
+ 2903 0027 8B00     		movl	(%rax), %eax
+ 2904              		.loc 1 381 10
+ 2905 0029 83E03F   		andl	$63, %eax
+ 2906 002c 8945E8   		movl	%eax, -24(%rbp)
+ 382:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 383:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     ctx->buffer[used++] = 0x80;
+ 2907              		.loc 1 383 21
+ 2908 002f 8B45E8   		movl	-24(%rbp), %eax
+ 2909 0032 8D5001   		leal	1(%rax), %edx
+ 2910 0035 8955E8   		movl	%edx, -24(%rbp)
+ 2911              		.loc 1 383 25
+ 2912 0038 488B55D8 		movq	-40(%rbp), %rdx
+ 2913 003c 89C0     		movl	%eax, %eax
+ 2914 003e C644021C 		movb	$-128, 28(%rdx,%rax)
+ 2914      80
+ 384:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 385:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( used <= 56 )
+ 2915              		.loc 1 385 7
+ 2916 0043 837DE838 		cmpl	$56, -24(%rbp)
+ 2917 0047 772A     		ja	.L34
+ 386:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     {
+ 387:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         /* Enough room for padding + length in current block */
+ 388:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         memset( ctx->buffer + used, 0, 56 - used );
+ 2918              		.loc 1 388 43
+ 2919 0049 B8380000 		movl	$56, %eax
+ 2919      00
+ 2920 004e 2B45E8   		subl	-24(%rbp), %eax
+ 2921              		.loc 1 388 9
+ 2922 0051 89C1     		movl	%eax, %ecx
+ 2923              		.loc 1 388 17
+ 2924 0053 488B45D8 		movq	-40(%rbp), %rax
+ 2925 0057 488D501C 		leaq	28(%rax), %rdx
+ 2926              		.loc 1 388 9
+ 2927 005b 8B45E8   		movl	-24(%rbp), %eax
+ 2928 005e 4801D0   		addq	%rdx, %rax
+ 2929 0061 4889CA   		movq	%rcx, %rdx
+ 2930 0064 BE000000 		movl	$0, %esi
+ 2930      00
+ 2931 0069 4889C7   		movq	%rax, %rdi
+ 2932 006c E8000000 		call	memset@PLT
+ 2932      00
+ 2933 0071 EB6A     		jmp	.L35
+ 2934              	.L34:
+ 389:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     }
+ 390:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     else
+ 391:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     {
+ 392:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         /* We'll need an extra block */
+ 393:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         memset( ctx->buffer + used, 0, 64 - used );
+ 2935              		.loc 1 393 43
+ 2936 0073 B8400000 		movl	$64, %eax
+GAS LISTING /tmp/ccdf94mD.s 			page 62
+
+
+ 2936      00
+ 2937 0078 2B45E8   		subl	-24(%rbp), %eax
+ 2938              		.loc 1 393 9
+ 2939 007b 89C1     		movl	%eax, %ecx
+ 2940              		.loc 1 393 17
+ 2941 007d 488B45D8 		movq	-40(%rbp), %rax
+ 2942 0081 488D501C 		leaq	28(%rax), %rdx
+ 2943              		.loc 1 393 9
+ 2944 0085 8B45E8   		movl	-24(%rbp), %eax
+ 2945 0088 4801D0   		addq	%rdx, %rax
+ 2946 008b 4889CA   		movq	%rcx, %rdx
+ 2947 008e BE000000 		movl	$0, %esi
+ 2947      00
+ 2948 0093 4889C7   		movq	%rax, %rdi
+ 2949 0096 E8000000 		call	memset@PLT
+ 2949      00
+ 394:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 395:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         if( ( ret = mbedtls_internal_sha1_process( ctx, ctx->buffer ) ) != 0 )
+ 2950              		.loc 1 395 60
+ 2951 009b 488B45D8 		movq	-40(%rbp), %rax
+ 2952 009f 488D501C 		leaq	28(%rax), %rdx
+ 2953              		.loc 1 395 21
+ 2954 00a3 488B45D8 		movq	-40(%rbp), %rax
+ 2955 00a7 4889D6   		movq	%rdx, %rsi
+ 2956 00aa 4889C7   		movq	%rax, %rdi
+ 2957 00ad E8000000 		call	mbedtls_internal_sha1_process
+ 2957      00
+ 2958 00b2 8945EC   		movl	%eax, -20(%rbp)
+ 2959              		.loc 1 395 11
+ 2960 00b5 837DEC00 		cmpl	$0, -20(%rbp)
+ 2961 00b9 7408     		je	.L36
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****             return( ret );
+ 2962              		.loc 1 396 19
+ 2963 00bb 8B45EC   		movl	-20(%rbp), %eax
+ 2964 00be E97A0200 		jmp	.L37
+ 2964      00
+ 2965              	.L36:
+ 397:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 398:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         memset( ctx->buffer, 0, 56 );
+ 2966              		.loc 1 398 20
+ 2967 00c3 488B45D8 		movq	-40(%rbp), %rax
+ 2968 00c7 4883C01C 		addq	$28, %rax
+ 2969              		.loc 1 398 9
+ 2970 00cb BA380000 		movl	$56, %edx
+ 2970      00
+ 2971 00d0 BE000000 		movl	$0, %esi
+ 2971      00
+ 2972 00d5 4889C7   		movq	%rax, %rdi
+ 2973 00d8 E8000000 		call	memset@PLT
+ 2973      00
+ 2974              	.L35:
+ 399:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     }
+ 400:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 401:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     /*
+ 402:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****      * Add message length
+ 403:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****      */
+ 404:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     high = ( ctx->total[0] >> 29 )
+GAS LISTING /tmp/ccdf94mD.s 			page 63
+
+
+ 2975              		.loc 1 404 24
+ 2976 00dd 488B45D8 		movq	-40(%rbp), %rax
+ 2977 00e1 8B00     		movl	(%rax), %eax
+ 2978              		.loc 1 404 28
+ 2979 00e3 C1E81D   		shrl	$29, %eax
+ 2980 00e6 89C2     		movl	%eax, %edx
+ 405:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****          | ( ctx->total[1] <<  3 );
+ 2981              		.loc 1 405 24
+ 2982 00e8 488B45D8 		movq	-40(%rbp), %rax
+ 2983 00ec 8B4004   		movl	4(%rax), %eax
+ 2984              		.loc 1 405 28
+ 2985 00ef C1E003   		sall	$3, %eax
+ 404:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****          | ( ctx->total[1] <<  3 );
+ 2986              		.loc 1 404 10
+ 2987 00f2 09D0     		orl	%edx, %eax
+ 2988 00f4 8945F0   		movl	%eax, -16(%rbp)
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     low  = ( ctx->total[0] <<  3 );
+ 2989              		.loc 1 406 24
+ 2990 00f7 488B45D8 		movq	-40(%rbp), %rax
+ 2991 00fb 8B00     		movl	(%rax), %eax
+ 2992              		.loc 1 406 10
+ 2993 00fd C1E003   		sall	$3, %eax
+ 2994 0100 8945F4   		movl	%eax, -12(%rbp)
+ 407:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 408:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     PUT_UINT32_BE( high, ctx->buffer, 56 );
+ 2995              		.loc 1 408 5
+ 2996 0103 8B45F0   		movl	-16(%rbp), %eax
+ 2997 0106 C1E818   		shrl	$24, %eax
+ 2998 0109 89C2     		movl	%eax, %edx
+ 2999 010b 488B45D8 		movq	-40(%rbp), %rax
+ 3000 010f 885054   		movb	%dl, 84(%rax)
+ 3001 0112 8B45F0   		movl	-16(%rbp), %eax
+ 3002 0115 C1E810   		shrl	$16, %eax
+ 3003 0118 89C2     		movl	%eax, %edx
+ 3004 011a 488B45D8 		movq	-40(%rbp), %rax
+ 3005 011e 885055   		movb	%dl, 85(%rax)
+ 3006 0121 8B45F0   		movl	-16(%rbp), %eax
+ 3007 0124 C1E808   		shrl	$8, %eax
+ 3008 0127 89C2     		movl	%eax, %edx
+ 3009 0129 488B45D8 		movq	-40(%rbp), %rax
+ 3010 012d 885056   		movb	%dl, 86(%rax)
+ 3011 0130 8B45F0   		movl	-16(%rbp), %eax
+ 3012 0133 89C2     		movl	%eax, %edx
+ 3013 0135 488B45D8 		movq	-40(%rbp), %rax
+ 3014 0139 885057   		movb	%dl, 87(%rax)
+ 409:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     PUT_UINT32_BE( low,  ctx->buffer, 60 );
+ 3015              		.loc 1 409 5
+ 3016 013c 8B45F4   		movl	-12(%rbp), %eax
+ 3017 013f C1E818   		shrl	$24, %eax
+ 3018 0142 89C2     		movl	%eax, %edx
+ 3019 0144 488B45D8 		movq	-40(%rbp), %rax
+ 3020 0148 885058   		movb	%dl, 88(%rax)
+ 3021 014b 8B45F4   		movl	-12(%rbp), %eax
+ 3022 014e C1E810   		shrl	$16, %eax
+ 3023 0151 89C2     		movl	%eax, %edx
+ 3024 0153 488B45D8 		movq	-40(%rbp), %rax
+ 3025 0157 885059   		movb	%dl, 89(%rax)
+GAS LISTING /tmp/ccdf94mD.s 			page 64
+
+
+ 3026 015a 8B45F4   		movl	-12(%rbp), %eax
+ 3027 015d C1E808   		shrl	$8, %eax
+ 3028 0160 89C2     		movl	%eax, %edx
+ 3029 0162 488B45D8 		movq	-40(%rbp), %rax
+ 3030 0166 88505A   		movb	%dl, 90(%rax)
+ 3031 0169 8B45F4   		movl	-12(%rbp), %eax
+ 3032 016c 89C2     		movl	%eax, %edx
+ 3033 016e 488B45D8 		movq	-40(%rbp), %rax
+ 3034 0172 88505B   		movb	%dl, 91(%rax)
+ 410:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 411:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ( ret = mbedtls_internal_sha1_process( ctx, ctx->buffer ) ) != 0 )
+ 3035              		.loc 1 411 56
+ 3036 0175 488B45D8 		movq	-40(%rbp), %rax
+ 3037 0179 488D501C 		leaq	28(%rax), %rdx
+ 3038              		.loc 1 411 17
+ 3039 017d 488B45D8 		movq	-40(%rbp), %rax
+ 3040 0181 4889D6   		movq	%rdx, %rsi
+ 3041 0184 4889C7   		movq	%rax, %rdi
+ 3042 0187 E8000000 		call	mbedtls_internal_sha1_process
+ 3042      00
+ 3043 018c 8945EC   		movl	%eax, -20(%rbp)
+ 3044              		.loc 1 411 7
+ 3045 018f 837DEC00 		cmpl	$0, -20(%rbp)
+ 3046 0193 7408     		je	.L38
+ 412:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         return( ret );
+ 3047              		.loc 1 412 15
+ 3048 0195 8B45EC   		movl	-20(%rbp), %eax
+ 3049 0198 E9A00100 		jmp	.L37
+ 3049      00
+ 3050              	.L38:
+ 413:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 414:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     /*
+ 415:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****      * Output final state
+ 416:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****      */
+ 417:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     PUT_UINT32_BE( ctx->state[0], output,  0 );
+ 3051              		.loc 1 417 5
+ 3052 019d 488B45D8 		movq	-40(%rbp), %rax
+ 3053 01a1 8B4008   		movl	8(%rax), %eax
+ 3054 01a4 C1E818   		shrl	$24, %eax
+ 3055 01a7 89C2     		movl	%eax, %edx
+ 3056 01a9 488B45D0 		movq	-48(%rbp), %rax
+ 3057 01ad 8810     		movb	%dl, (%rax)
+ 3058 01af 488B45D8 		movq	-40(%rbp), %rax
+ 3059 01b3 8B4008   		movl	8(%rax), %eax
+ 3060 01b6 C1E810   		shrl	$16, %eax
+ 3061 01b9 89C2     		movl	%eax, %edx
+ 3062 01bb 488B45D0 		movq	-48(%rbp), %rax
+ 3063 01bf 4883C001 		addq	$1, %rax
+ 3064 01c3 8810     		movb	%dl, (%rax)
+ 3065 01c5 488B45D8 		movq	-40(%rbp), %rax
+ 3066 01c9 8B4008   		movl	8(%rax), %eax
+ 3067 01cc C1E808   		shrl	$8, %eax
+ 3068 01cf 89C2     		movl	%eax, %edx
+ 3069 01d1 488B45D0 		movq	-48(%rbp), %rax
+ 3070 01d5 4883C002 		addq	$2, %rax
+ 3071 01d9 8810     		movb	%dl, (%rax)
+ 3072 01db 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/ccdf94mD.s 			page 65
+
+
+ 3073 01df 8B5008   		movl	8(%rax), %edx
+ 3074 01e2 488B45D0 		movq	-48(%rbp), %rax
+ 3075 01e6 4883C003 		addq	$3, %rax
+ 3076 01ea 8810     		movb	%dl, (%rax)
+ 418:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     PUT_UINT32_BE( ctx->state[1], output,  4 );
+ 3077              		.loc 1 418 5
+ 3078 01ec 488B45D8 		movq	-40(%rbp), %rax
+ 3079 01f0 8B400C   		movl	12(%rax), %eax
+ 3080 01f3 C1E818   		shrl	$24, %eax
+ 3081 01f6 89C2     		movl	%eax, %edx
+ 3082 01f8 488B45D0 		movq	-48(%rbp), %rax
+ 3083 01fc 4883C004 		addq	$4, %rax
+ 3084 0200 8810     		movb	%dl, (%rax)
+ 3085 0202 488B45D8 		movq	-40(%rbp), %rax
+ 3086 0206 8B400C   		movl	12(%rax), %eax
+ 3087 0209 C1E810   		shrl	$16, %eax
+ 3088 020c 89C2     		movl	%eax, %edx
+ 3089 020e 488B45D0 		movq	-48(%rbp), %rax
+ 3090 0212 4883C005 		addq	$5, %rax
+ 3091 0216 8810     		movb	%dl, (%rax)
+ 3092 0218 488B45D8 		movq	-40(%rbp), %rax
+ 3093 021c 8B400C   		movl	12(%rax), %eax
+ 3094 021f C1E808   		shrl	$8, %eax
+ 3095 0222 89C2     		movl	%eax, %edx
+ 3096 0224 488B45D0 		movq	-48(%rbp), %rax
+ 3097 0228 4883C006 		addq	$6, %rax
+ 3098 022c 8810     		movb	%dl, (%rax)
+ 3099 022e 488B45D8 		movq	-40(%rbp), %rax
+ 3100 0232 8B500C   		movl	12(%rax), %edx
+ 3101 0235 488B45D0 		movq	-48(%rbp), %rax
+ 3102 0239 4883C007 		addq	$7, %rax
+ 3103 023d 8810     		movb	%dl, (%rax)
+ 419:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     PUT_UINT32_BE( ctx->state[2], output,  8 );
+ 3104              		.loc 1 419 5
+ 3105 023f 488B45D8 		movq	-40(%rbp), %rax
+ 3106 0243 8B4010   		movl	16(%rax), %eax
+ 3107 0246 C1E818   		shrl	$24, %eax
+ 3108 0249 89C2     		movl	%eax, %edx
+ 3109 024b 488B45D0 		movq	-48(%rbp), %rax
+ 3110 024f 4883C008 		addq	$8, %rax
+ 3111 0253 8810     		movb	%dl, (%rax)
+ 3112 0255 488B45D8 		movq	-40(%rbp), %rax
+ 3113 0259 8B4010   		movl	16(%rax), %eax
+ 3114 025c C1E810   		shrl	$16, %eax
+ 3115 025f 89C2     		movl	%eax, %edx
+ 3116 0261 488B45D0 		movq	-48(%rbp), %rax
+ 3117 0265 4883C009 		addq	$9, %rax
+ 3118 0269 8810     		movb	%dl, (%rax)
+ 3119 026b 488B45D8 		movq	-40(%rbp), %rax
+ 3120 026f 8B4010   		movl	16(%rax), %eax
+ 3121 0272 C1E808   		shrl	$8, %eax
+ 3122 0275 89C2     		movl	%eax, %edx
+ 3123 0277 488B45D0 		movq	-48(%rbp), %rax
+ 3124 027b 4883C00A 		addq	$10, %rax
+ 3125 027f 8810     		movb	%dl, (%rax)
+ 3126 0281 488B45D8 		movq	-40(%rbp), %rax
+ 3127 0285 8B5010   		movl	16(%rax), %edx
+GAS LISTING /tmp/ccdf94mD.s 			page 66
+
+
+ 3128 0288 488B45D0 		movq	-48(%rbp), %rax
+ 3129 028c 4883C00B 		addq	$11, %rax
+ 3130 0290 8810     		movb	%dl, (%rax)
+ 420:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     PUT_UINT32_BE( ctx->state[3], output, 12 );
+ 3131              		.loc 1 420 5
+ 3132 0292 488B45D8 		movq	-40(%rbp), %rax
+ 3133 0296 8B4014   		movl	20(%rax), %eax
+ 3134 0299 C1E818   		shrl	$24, %eax
+ 3135 029c 89C2     		movl	%eax, %edx
+ 3136 029e 488B45D0 		movq	-48(%rbp), %rax
+ 3137 02a2 4883C00C 		addq	$12, %rax
+ 3138 02a6 8810     		movb	%dl, (%rax)
+ 3139 02a8 488B45D8 		movq	-40(%rbp), %rax
+ 3140 02ac 8B4014   		movl	20(%rax), %eax
+ 3141 02af C1E810   		shrl	$16, %eax
+ 3142 02b2 89C2     		movl	%eax, %edx
+ 3143 02b4 488B45D0 		movq	-48(%rbp), %rax
+ 3144 02b8 4883C00D 		addq	$13, %rax
+ 3145 02bc 8810     		movb	%dl, (%rax)
+ 3146 02be 488B45D8 		movq	-40(%rbp), %rax
+ 3147 02c2 8B4014   		movl	20(%rax), %eax
+ 3148 02c5 C1E808   		shrl	$8, %eax
+ 3149 02c8 89C2     		movl	%eax, %edx
+ 3150 02ca 488B45D0 		movq	-48(%rbp), %rax
+ 3151 02ce 4883C00E 		addq	$14, %rax
+ 3152 02d2 8810     		movb	%dl, (%rax)
+ 3153 02d4 488B45D8 		movq	-40(%rbp), %rax
+ 3154 02d8 8B5014   		movl	20(%rax), %edx
+ 3155 02db 488B45D0 		movq	-48(%rbp), %rax
+ 3156 02df 4883C00F 		addq	$15, %rax
+ 3157 02e3 8810     		movb	%dl, (%rax)
+ 421:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     PUT_UINT32_BE( ctx->state[4], output, 16 );
+ 3158              		.loc 1 421 5
+ 3159 02e5 488B45D8 		movq	-40(%rbp), %rax
+ 3160 02e9 8B4018   		movl	24(%rax), %eax
+ 3161 02ec C1E818   		shrl	$24, %eax
+ 3162 02ef 89C2     		movl	%eax, %edx
+ 3163 02f1 488B45D0 		movq	-48(%rbp), %rax
+ 3164 02f5 4883C010 		addq	$16, %rax
+ 3165 02f9 8810     		movb	%dl, (%rax)
+ 3166 02fb 488B45D8 		movq	-40(%rbp), %rax
+ 3167 02ff 8B4018   		movl	24(%rax), %eax
+ 3168 0302 C1E810   		shrl	$16, %eax
+ 3169 0305 89C2     		movl	%eax, %edx
+ 3170 0307 488B45D0 		movq	-48(%rbp), %rax
+ 3171 030b 4883C011 		addq	$17, %rax
+ 3172 030f 8810     		movb	%dl, (%rax)
+ 3173 0311 488B45D8 		movq	-40(%rbp), %rax
+ 3174 0315 8B4018   		movl	24(%rax), %eax
+ 3175 0318 C1E808   		shrl	$8, %eax
+ 3176 031b 89C2     		movl	%eax, %edx
+ 3177 031d 488B45D0 		movq	-48(%rbp), %rax
+ 3178 0321 4883C012 		addq	$18, %rax
+ 3179 0325 8810     		movb	%dl, (%rax)
+ 3180 0327 488B45D8 		movq	-40(%rbp), %rax
+ 3181 032b 8B5018   		movl	24(%rax), %edx
+ 3182 032e 488B45D0 		movq	-48(%rbp), %rax
+GAS LISTING /tmp/ccdf94mD.s 			page 67
+
+
+ 3183 0332 4883C013 		addq	$19, %rax
+ 3184 0336 8810     		movb	%dl, (%rax)
+ 422:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 423:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     return( 0 );
+ 3185              		.loc 1 423 11
+ 3186 0338 B8000000 		movl	$0, %eax
+ 3186      00
+ 3187              	.L37:
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 3188              		.loc 1 424 1
+ 3189 033d 488B4DF8 		movq	-8(%rbp), %rcx
+ 3190 0341 6448330C 		xorq	%fs:40, %rcx
+ 3190      25280000 
+ 3190      00
+ 3191 034a 7405     		je	.L39
+ 3192 034c E8000000 		call	__stack_chk_fail@PLT
+ 3192      00
+ 3193              	.L39:
+ 3194 0351 C9       		leave
+ 3195              	.LCFI29:
+ 3196              		.cfi_def_cfa 7, 8
+ 3197 0352 C3       		ret
+ 3198              		.cfi_endproc
+ 3199              	.LFE9:
+ 3201              		.section	.text.mbedtls_sha1_finish,"ax",@progbits
+ 3202              		.globl	mbedtls_sha1_finish
+ 3204              	mbedtls_sha1_finish:
+ 3205              	.LFB10:
+ 425:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 426:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 427:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1_finish( mbedtls_sha1_context *ctx,
+ 428:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                           unsigned char output[20] )
+ 429:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 3206              		.loc 1 429 1
+ 3207              		.cfi_startproc
+ 3208 0000 F30F1EFA 		endbr64
+ 3209 0004 55       		pushq	%rbp
+ 3210              	.LCFI30:
+ 3211              		.cfi_def_cfa_offset 16
+ 3212              		.cfi_offset 6, -16
+ 3213 0005 4889E5   		movq	%rsp, %rbp
+ 3214              	.LCFI31:
+ 3215              		.cfi_def_cfa_register 6
+ 3216 0008 4883EC20 		subq	$32, %rsp
+ 3217 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 3218 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 3219              		.loc 1 429 1
+ 3220 0014 64488B04 		movq	%fs:40, %rax
+ 3220      25280000 
+ 3220      00
+ 3221 001d 488945F8 		movq	%rax, -8(%rbp)
+ 3222 0021 31C0     		xorl	%eax, %eax
+ 430:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_sha1_finish_ret( ctx, output );
+ 3223              		.loc 1 430 5
+ 3224 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 3225 0027 488B45E8 		movq	-24(%rbp), %rax
+ 3226 002b 4889D6   		movq	%rdx, %rsi
+GAS LISTING /tmp/ccdf94mD.s 			page 68
+
+
+ 3227 002e 4889C7   		movq	%rax, %rdi
+ 3228 0031 E8000000 		call	mbedtls_sha1_finish_ret
+ 3228      00
+ 431:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 3229              		.loc 1 431 1
+ 3230 0036 90       		nop
+ 3231 0037 488B45F8 		movq	-8(%rbp), %rax
+ 3232 003b 64483304 		xorq	%fs:40, %rax
+ 3232      25280000 
+ 3232      00
+ 3233 0044 7405     		je	.L41
+ 3234 0046 E8000000 		call	__stack_chk_fail@PLT
+ 3234      00
+ 3235              	.L41:
+ 3236 004b C9       		leave
+ 3237              	.LCFI32:
+ 3238              		.cfi_def_cfa 7, 8
+ 3239 004c C3       		ret
+ 3240              		.cfi_endproc
+ 3241              	.LFE10:
+ 3243              		.section	.text.mbedtls_sha1_ret,"ax",@progbits
+ 3244              		.globl	mbedtls_sha1_ret
+ 3246              	mbedtls_sha1_ret:
+ 3247              	.LFB11:
+ 432:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif
+ 433:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 434:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #endif /* !MBEDTLS_SHA1_ALT */
+ 435:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 436:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** /*
+ 437:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  * output = SHA-1( input buffer )
+ 438:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****  */
+ 439:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** int mbedtls_sha1_ret( const unsigned char *input,
+ 440:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                       size_t ilen,
+ 441:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                       unsigned char output[20] )
+ 442:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 3248              		.loc 1 442 1
+ 3249              		.cfi_startproc
+ 3250 0000 F30F1EFA 		endbr64
+ 3251 0004 55       		pushq	%rbp
+ 3252              	.LCFI33:
+ 3253              		.cfi_def_cfa_offset 16
+ 3254              		.cfi_offset 6, -16
+ 3255 0005 4889E5   		movq	%rsp, %rbp
+ 3256              	.LCFI34:
+ 3257              		.cfi_def_cfa_register 6
+ 3258 0008 4881ECA0 		subq	$160, %rsp
+ 3258      000000
+ 3259 000f 4889BD78 		movq	%rdi, -136(%rbp)
+ 3259      FFFFFF
+ 3260 0016 4889B570 		movq	%rsi, -144(%rbp)
+ 3260      FFFFFF
+ 3261 001d 48899568 		movq	%rdx, -152(%rbp)
+ 3261      FFFFFF
+ 3262              		.loc 1 442 1
+ 3263 0024 64488B04 		movq	%fs:40, %rax
+ 3263      25280000 
+ 3263      00
+GAS LISTING /tmp/ccdf94mD.s 			page 69
+
+
+ 3264 002d 488945F8 		movq	%rax, -8(%rbp)
+ 3265 0031 31C0     		xorl	%eax, %eax
+ 443:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     int ret;
+ 444:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_sha1_context ctx;
+ 445:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 446:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( ilen == 0 || input != NULL );
+ 447:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     SHA1_VALIDATE_RET( (unsigned char *)output != NULL );
+ 448:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 449:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_sha1_init( &ctx );
+ 3266              		.loc 1 449 5
+ 3267 0033 488D4590 		leaq	-112(%rbp), %rax
+ 3268 0037 4889C7   		movq	%rax, %rdi
+ 3269 003a E8000000 		call	mbedtls_sha1_init
+ 3269      00
+ 450:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 451:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ( ret = mbedtls_sha1_starts_ret( &ctx ) ) != 0 )
+ 3270              		.loc 1 451 17
+ 3271 003f 488D4590 		leaq	-112(%rbp), %rax
+ 3272 0043 4889C7   		movq	%rax, %rdi
+ 3273 0046 E8000000 		call	mbedtls_sha1_starts_ret
+ 3273      00
+ 3274 004b 89458C   		movl	%eax, -116(%rbp)
+ 3275              		.loc 1 451 7
+ 3276 004e 837D8C00 		cmpl	$0, -116(%rbp)
+ 3277 0052 7545     		jne	.L48
+ 452:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         goto exit;
+ 453:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 454:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ( ret = mbedtls_sha1_update_ret( &ctx, input, ilen ) ) != 0 )
+ 3278              		.loc 1 454 17
+ 3279 0054 488B9570 		movq	-144(%rbp), %rdx
+ 3279      FFFFFF
+ 3280 005b 488B8D78 		movq	-136(%rbp), %rcx
+ 3280      FFFFFF
+ 3281 0062 488D4590 		leaq	-112(%rbp), %rax
+ 3282 0066 4889CE   		movq	%rcx, %rsi
+ 3283 0069 4889C7   		movq	%rax, %rdi
+ 3284 006c E8000000 		call	mbedtls_sha1_update_ret
+ 3284      00
+ 3285 0071 89458C   		movl	%eax, -116(%rbp)
+ 3286              		.loc 1 454 7
+ 3287 0074 837D8C00 		cmpl	$0, -116(%rbp)
+ 3288 0078 7522     		jne	.L49
+ 455:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         goto exit;
+ 456:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 457:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     if( ( ret = mbedtls_sha1_finish_ret( &ctx, output ) ) != 0 )
+ 3289              		.loc 1 457 17
+ 3290 007a 488B9568 		movq	-152(%rbp), %rdx
+ 3290      FFFFFF
+ 3291 0081 488D4590 		leaq	-112(%rbp), %rax
+ 3292 0085 4889D6   		movq	%rdx, %rsi
+ 3293 0088 4889C7   		movq	%rax, %rdi
+ 3294 008b E8000000 		call	mbedtls_sha1_finish_ret
+ 3294      00
+ 3295 0090 89458C   		movl	%eax, -116(%rbp)
+ 3296              		.loc 1 457 7
+ 3297 0093 837D8C00 		cmpl	$0, -116(%rbp)
+ 458:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         goto exit;
+GAS LISTING /tmp/ccdf94mD.s 			page 70
+
+
+ 459:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 460:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** exit:
+ 3298              		.loc 1 460 1
+ 3299 0097 EB04     		jmp	.L44
+ 3300              	.L48:
+ 452:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 3301              		.loc 1 452 9
+ 3302 0099 90       		nop
+ 3303 009a EB01     		jmp	.L44
+ 3304              	.L49:
+ 455:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****         goto exit;
+ 3305              		.loc 1 455 9
+ 3306 009c 90       		nop
+ 3307              	.L44:
+ 461:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_sha1_free( &ctx );
+ 3308              		.loc 1 461 5
+ 3309 009d 488D4590 		leaq	-112(%rbp), %rax
+ 3310 00a1 4889C7   		movq	%rax, %rdi
+ 3311 00a4 E8000000 		call	mbedtls_sha1_free
+ 3311      00
+ 462:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 463:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     return( ret );
+ 3312              		.loc 1 463 11
+ 3313 00a9 8B458C   		movl	-116(%rbp), %eax
+ 464:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 3314              		.loc 1 464 1
+ 3315 00ac 488B4DF8 		movq	-8(%rbp), %rcx
+ 3316 00b0 6448330C 		xorq	%fs:40, %rcx
+ 3316      25280000 
+ 3316      00
+ 3317 00b9 7405     		je	.L47
+ 3318 00bb E8000000 		call	__stack_chk_fail@PLT
+ 3318      00
+ 3319              	.L47:
+ 3320 00c0 C9       		leave
+ 3321              	.LCFI35:
+ 3322              		.cfi_def_cfa 7, 8
+ 3323 00c1 C3       		ret
+ 3324              		.cfi_endproc
+ 3325              	.LFE11:
+ 3327              		.section	.text.mbedtls_sha1,"ax",@progbits
+ 3328              		.globl	mbedtls_sha1
+ 3330              	mbedtls_sha1:
+ 3331              	.LFB12:
+ 465:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** 
+ 466:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** #if !defined(MBEDTLS_DEPRECATED_REMOVED)
+ 467:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** void mbedtls_sha1( const unsigned char *input,
+ 468:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                    size_t ilen,
+ 469:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****                    unsigned char output[20] )
+ 470:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** {
+ 3332              		.loc 1 470 1
+ 3333              		.cfi_startproc
+ 3334 0000 F30F1EFA 		endbr64
+ 3335 0004 55       		pushq	%rbp
+ 3336              	.LCFI36:
+ 3337              		.cfi_def_cfa_offset 16
+ 3338              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccdf94mD.s 			page 71
+
+
+ 3339 0005 4889E5   		movq	%rsp, %rbp
+ 3340              	.LCFI37:
+ 3341              		.cfi_def_cfa_register 6
+ 3342 0008 4883EC30 		subq	$48, %rsp
+ 3343 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 3344 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 3345 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 3346              		.loc 1 470 1
+ 3347 0018 64488B04 		movq	%fs:40, %rax
+ 3347      25280000 
+ 3347      00
+ 3348 0021 488945F8 		movq	%rax, -8(%rbp)
+ 3349 0025 31C0     		xorl	%eax, %eax
+ 471:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c ****     mbedtls_sha1_ret( input, ilen, output );
+ 3350              		.loc 1 471 5
+ 3351 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 3352 002b 488B4DE0 		movq	-32(%rbp), %rcx
+ 3353 002f 488B45E8 		movq	-24(%rbp), %rax
+ 3354 0033 4889CE   		movq	%rcx, %rsi
+ 3355 0036 4889C7   		movq	%rax, %rdi
+ 3356 0039 E8000000 		call	mbedtls_sha1_ret
+ 3356      00
+ 472:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/sha1.c **** }
+ 3357              		.loc 1 472 1
+ 3358 003e 90       		nop
+ 3359 003f 488B45F8 		movq	-8(%rbp), %rax
+ 3360 0043 64483304 		xorq	%fs:40, %rax
+ 3360      25280000 
+ 3360      00
+ 3361 004c 7405     		je	.L51
+ 3362 004e E8000000 		call	__stack_chk_fail@PLT
+ 3362      00
+ 3363              	.L51:
+ 3364 0053 C9       		leave
+ 3365              	.LCFI38:
+ 3366              		.cfi_def_cfa 7, 8
+ 3367 0054 C3       		ret
+ 3368              		.cfi_endproc
+ 3369              	.LFE12:
+ 3371              		.text
+ 3372              	.Letext0:
+ 3373              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 3374              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 3375              		.file 4 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 3376              		.file 5 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/sha1.h"
+ 4972              		.section	.note.gnu.property,"a"
+ 4973              		.align 8
+ 4974 0000 04000000 		.long	 1f - 0f
+ 4975 0004 10000000 		.long	 4f - 1f
+ 4976 0008 05000000 		.long	 5
+ 4977              	0:
+ 4978 000c 474E5500 		.string	 "GNU"
+ 4979              	1:
+ 4980              		.align 8
+ 4981 0010 020000C0 		.long	 0xc0000002
+ 4982 0014 04000000 		.long	 3f - 2f
+ 4983              	2:
+GAS LISTING /tmp/ccdf94mD.s 			page 72
+
+
+ 4984 0018 03000000 		.long	 0x3
+ 4985              	3:
+ 4986 001c 00000000 		.align 8
+ 4987              	4:
+GAS LISTING /tmp/ccdf94mD.s 			page 73
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 sha1.c
+     /tmp/ccdf94mD.s:7      .text.mbedtls_sha1_init:0000000000000000 mbedtls_sha1_init
+     /tmp/ccdf94mD.s:49     .text.mbedtls_sha1_free:0000000000000000 mbedtls_sha1_free
+     /tmp/ccdf94mD.s:96     .text.mbedtls_sha1_clone:0000000000000000 mbedtls_sha1_clone
+     /tmp/ccdf94mD.s:163    .text.mbedtls_sha1_starts_ret:0000000000000000 mbedtls_sha1_starts_ret
+     /tmp/ccdf94mD.s:220    .text.mbedtls_sha1_starts:0000000000000000 mbedtls_sha1_starts
+     /tmp/ccdf94mD.s:259    .text.mbedtls_internal_sha1_process:0000000000000000 mbedtls_internal_sha1_process
+     /tmp/ccdf94mD.s:2626   .text.mbedtls_sha1_process:0000000000000000 mbedtls_sha1_process
+     /tmp/ccdf94mD.s:2668   .text.mbedtls_sha1_update_ret:0000000000000000 mbedtls_sha1_update_ret
+     /tmp/ccdf94mD.s:2838   .text.mbedtls_sha1_update:0000000000000000 mbedtls_sha1_update
+     /tmp/ccdf94mD.s:2882   .text.mbedtls_sha1_finish_ret:0000000000000000 mbedtls_sha1_finish_ret
+     /tmp/ccdf94mD.s:3204   .text.mbedtls_sha1_finish:0000000000000000 mbedtls_sha1_finish
+     /tmp/ccdf94mD.s:3246   .text.mbedtls_sha1_ret:0000000000000000 mbedtls_sha1_ret
+     /tmp/ccdf94mD.s:3330   .text.mbedtls_sha1:0000000000000000 mbedtls_sha1
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+memset
+__stack_chk_fail
+mbedtls_platform_zeroize
+memcpy

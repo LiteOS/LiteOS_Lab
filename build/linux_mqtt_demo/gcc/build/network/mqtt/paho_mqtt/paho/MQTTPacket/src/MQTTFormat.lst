@@ -1,0 +1,1105 @@
+GAS LISTING /tmp/cc3N55w8.s 			page 1
+
+
+   1              		.file	"MQTTFormat.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.globl	MQTTPacket_names
+   5              		.section	.rodata
+   6              	.LC0:
+   7 0000 52455345 		.string	"RESERVED"
+   7      52564544 
+   7      00
+   8              	.LC1:
+   9 0009 434F4E4E 		.string	"CONNECT"
+   9      45435400 
+  10              	.LC2:
+  11 0011 434F4E4E 		.string	"CONNACK"
+  11      41434B00 
+  12              	.LC3:
+  13 0019 5055424C 		.string	"PUBLISH"
+  13      49534800 
+  14              	.LC4:
+  15 0021 50554241 		.string	"PUBACK"
+  15      434B00
+  16              	.LC5:
+  17 0028 50554252 		.string	"PUBREC"
+  17      454300
+  18              	.LC6:
+  19 002f 50554252 		.string	"PUBREL"
+  19      454C00
+  20              	.LC7:
+  21 0036 50554243 		.string	"PUBCOMP"
+  21      4F4D5000 
+  22              	.LC8:
+  23 003e 53554253 		.string	"SUBSCRIBE"
+  23      43524942 
+  23      4500
+  24              	.LC9:
+  25 0048 53554241 		.string	"SUBACK"
+  25      434B00
+  26              	.LC10:
+  27 004f 554E5355 		.string	"UNSUBSCRIBE"
+  27      42534352 
+  27      49424500 
+  28              	.LC11:
+  29 005b 554E5355 		.string	"UNSUBACK"
+  29      4241434B 
+  29      00
+  30              	.LC12:
+  31 0064 50494E47 		.string	"PINGREQ"
+  31      52455100 
+  32              	.LC13:
+  33 006c 50494E47 		.string	"PINGRESP"
+  33      52455350 
+  33      00
+  34              	.LC14:
+  35 0075 44495343 		.string	"DISCONNECT"
+  35      4F4E4E45 
+  35      435400
+  36              		.section	.data.rel.local.MQTTPacket_names,"aw"
+GAS LISTING /tmp/cc3N55w8.s 			page 2
+
+
+  37              		.align 32
+  40              	MQTTPacket_names:
+  41 0000 00000000 		.quad	.LC0
+  41      00000000 
+  42 0008 00000000 		.quad	.LC1
+  42      00000000 
+  43 0010 00000000 		.quad	.LC2
+  43      00000000 
+  44 0018 00000000 		.quad	.LC3
+  44      00000000 
+  45 0020 00000000 		.quad	.LC4
+  45      00000000 
+  46 0028 00000000 		.quad	.LC5
+  46      00000000 
+  47 0030 00000000 		.quad	.LC6
+  47      00000000 
+  48 0038 00000000 		.quad	.LC7
+  48      00000000 
+  49 0040 00000000 		.quad	.LC8
+  49      00000000 
+  50 0048 00000000 		.quad	.LC9
+  50      00000000 
+  51 0050 00000000 		.quad	.LC10
+  51      00000000 
+  52 0058 00000000 		.quad	.LC11
+  52      00000000 
+  53 0060 00000000 		.quad	.LC12
+  53      00000000 
+  54 0068 00000000 		.quad	.LC13
+  54      00000000 
+  55 0070 00000000 		.quad	.LC14
+  55      00000000 
+  56              		.section	.text.MQTTPacket_getName,"ax",@progbits
+  57              		.globl	MQTTPacket_getName
+  59              	MQTTPacket_getName:
+  60              	.LFB0:
+  61              		.file 1 "/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c"
+   1:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** /*******************************************************************************
+   2:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  * Copyright (c) 2014 IBM Corp.
+   3:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  *
+   4:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  * All rights reserved. This program and the accompanying materials
+   5:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  * are made available under the terms of the Eclipse Public License v1.0
+   6:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  * and Eclipse Distribution License v1.0 which accompany this distribution.
+   7:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  *
+   8:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  * The Eclipse Public License is available at
+   9:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  *    http://www.eclipse.org/legal/epl-v10.html
+  10:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  * and the Eclipse Distribution License is available at
+  11:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  *   http://www.eclipse.org/org/documents/edl-v10.php.
+  12:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  *
+  13:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  * Contributors:
+  14:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  *    Ian Craggs - initial API and implementation and/or initial documentation
+  15:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c ****  *******************************************************************************/
+  16:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  17:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** #include "StackTrace.h"
+  18:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** #include "MQTTPacket.h"
+  19:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  20:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** #include <string.h>
+GAS LISTING /tmp/cc3N55w8.s 			page 3
+
+
+  21:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  22:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  23:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** const char* MQTTPacket_names[] =
+  24:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+  25:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	"RESERVED", "CONNECT", "CONNACK", "PUBLISH", "PUBACK", "PUBREC", "PUBREL",
+  26:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	"PUBCOMP", "SUBSCRIBE", "SUBACK", "UNSUBSCRIBE", "UNSUBACK",
+  27:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	"PINGREQ", "PINGRESP", "DISCONNECT"
+  28:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** };
+  29:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  30:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  31:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** const char* MQTTPacket_getName(unsigned short packetid)
+  32:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+  62              		.loc 1 32 1
+  63              		.cfi_startproc
+  64 0000 F30F1EFA 		endbr64
+  65 0004 55       		pushq	%rbp
+  66              	.LCFI0:
+  67              		.cfi_def_cfa_offset 16
+  68              		.cfi_offset 6, -16
+  69 0005 4889E5   		movq	%rsp, %rbp
+  70              	.LCFI1:
+  71              		.cfi_def_cfa_register 6
+  72 0008 4883EC20 		subq	$32, %rsp
+  73 000c 89F8     		movl	%edi, %eax
+  74 000e 668945EC 		movw	%ax, -20(%rbp)
+  75              		.loc 1 32 1
+  76 0012 64488B04 		movq	%fs:40, %rax
+  76      25280000 
+  76      00
+  77 001b 488945F8 		movq	%rax, -8(%rbp)
+  78 001f 31C0     		xorl	%eax, %eax
+  33:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return MQTTPacket_names[packetid];
+  79              		.loc 1 33 25
+  80 0021 0FB745EC 		movzwl	-20(%rbp), %eax
+  81 0025 4898     		cltq
+  82 0027 488D14C5 		leaq	0(,%rax,8), %rdx
+  82      00000000 
+  83 002f 488D0500 		leaq	MQTTPacket_names(%rip), %rax
+  83      000000
+  84 0036 488B0402 		movq	(%rdx,%rax), %rax
+  34:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+  85              		.loc 1 34 1
+  86 003a 488B4DF8 		movq	-8(%rbp), %rcx
+  87 003e 6448330C 		xorq	%fs:40, %rcx
+  87      25280000 
+  87      00
+  88 0047 7405     		je	.L3
+  89 0049 E8000000 		call	__stack_chk_fail@PLT
+  89      00
+  90              	.L3:
+  91 004e C9       		leave
+  92              	.LCFI2:
+  93              		.cfi_def_cfa 7, 8
+  94 004f C3       		ret
+  95              		.cfi_endproc
+  96              	.LFE0:
+  98              		.section	.rodata
+GAS LISTING /tmp/cc3N55w8.s 			page 4
+
+
+  99              		.align 8
+ 100              	.LC15:
+ 101 0080 434F4E4E 		.string	"CONNECT MQTT version %d, client id %.*s, clean session %d, keep alive %d"
+ 101      45435420 
+ 101      4D515454 
+ 101      20766572 
+ 101      73696F6E 
+ 102 00c9 00000000 		.align 8
+ 102      000000
+ 103              	.LC16:
+ 104 00d0 2C207769 		.string	", will QoS %d, will retain %d, will topic %.*s, will message %.*s"
+ 104      6C6C2051 
+ 104      6F532025 
+ 104      642C2077 
+ 104      696C6C20 
+ 105              	.LC17:
+ 106 0112 2C207573 		.string	", user name %.*s"
+ 106      6572206E 
+ 106      616D6520 
+ 106      252E2A73 
+ 106      00
+ 107              	.LC18:
+ 108 0123 2C207061 		.string	", password %.*s"
+ 108      7373776F 
+ 108      72642025 
+ 108      2E2A7300 
+ 109              		.section	.text.MQTTStringFormat_connect,"ax",@progbits
+ 110              		.globl	MQTTStringFormat_connect
+ 112              	MQTTStringFormat_connect:
+ 113              	.LFB1:
+  35:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  36:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  37:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** int MQTTStringFormat_connect(char* strbuf, int strbuflen, MQTTPacket_connectData* data)
+  38:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+ 114              		.loc 1 38 1
+ 115              		.cfi_startproc
+ 116 0000 F30F1EFA 		endbr64
+ 117 0004 55       		pushq	%rbp
+ 118              	.LCFI3:
+ 119              		.cfi_def_cfa_offset 16
+ 120              		.cfi_offset 6, -16
+ 121 0005 4889E5   		movq	%rsp, %rbp
+ 122              	.LCFI4:
+ 123              		.cfi_def_cfa_register 6
+ 124 0008 4883EC30 		subq	$48, %rsp
+ 125 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 126 0010 8975E4   		movl	%esi, -28(%rbp)
+ 127 0013 488955D8 		movq	%rdx, -40(%rbp)
+ 128              		.loc 1 38 1
+ 129 0017 64488B04 		movq	%fs:40, %rax
+ 129      25280000 
+ 129      00
+ 130 0020 488945F8 		movq	%rax, -8(%rbp)
+ 131 0024 31C0     		xorl	%eax, %eax
+  39:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	int strindex = 0;
+ 132              		.loc 1 39 6
+ 133 0026 C745F400 		movl	$0, -12(%rbp)
+GAS LISTING /tmp/cc3N55w8.s 			page 5
+
+
+ 133      000000
+  40:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  41:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	strindex = snprintf(strbuf, strbuflen,
+  42:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 			"CONNECT MQTT version %d, client id %.*s, clean session %d, keep alive %d",
+  43:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 			(int)data->MQTTVersion, data->clientID.lenstring.len, data->clientID.lenstring.data,
+  44:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 			(int)data->cleansession, data->keepAliveInterval);
+ 134              		.loc 1 44 33
+ 135 002d 488B45D8 		movq	-40(%rbp), %rax
+ 136 0031 0FB74028 		movzwl	40(%rax), %eax
+  41:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 			"CONNECT MQTT version %d, client id %.*s, clean session %d, keep alive %d",
+ 137              		.loc 1 41 13
+ 138 0035 0FB7F8   		movzwl	%ax, %edi
+ 139              		.loc 1 44 13
+ 140 0038 488B45D8 		movq	-40(%rbp), %rax
+ 141 003c 0FB6402A 		movzbl	42(%rax), %eax
+  41:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 			"CONNECT MQTT version %d, client id %.*s, clean session %d, keep alive %d",
+ 142              		.loc 1 41 13
+ 143 0040 0FB6C8   		movzbl	%al, %ecx
+ 144 0043 488B45D8 		movq	-40(%rbp), %rax
+ 145 0047 4C8B4820 		movq	32(%rax), %r9
+ 146 004b 488B45D8 		movq	-40(%rbp), %rax
+ 147 004f 448B4018 		movl	24(%rax), %r8d
+  43:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 			(int)data->cleansession, data->keepAliveInterval);
+ 148              		.loc 1 43 13
+ 149 0053 488B45D8 		movq	-40(%rbp), %rax
+ 150 0057 0FB64008 		movzbl	8(%rax), %eax
+  41:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 			"CONNECT MQTT version %d, client id %.*s, clean session %d, keep alive %d",
+ 151              		.loc 1 41 13
+ 152 005b 0FB6D0   		movzbl	%al, %edx
+ 153 005e 8B45E4   		movl	-28(%rbp), %eax
+ 154 0061 4863F0   		movslq	%eax, %rsi
+ 155 0064 488B45E8 		movq	-24(%rbp), %rax
+ 156 0068 57       		pushq	%rdi
+ 157 0069 51       		pushq	%rcx
+ 158 006a 89D1     		movl	%edx, %ecx
+ 159 006c 488D1500 		leaq	.LC15(%rip), %rdx
+ 159      000000
+ 160 0073 4889C7   		movq	%rax, %rdi
+ 161 0076 B8000000 		movl	$0, %eax
+ 161      00
+ 162 007b E8000000 		call	snprintf@PLT
+ 162      00
+ 163 0080 4883C410 		addq	$16, %rsp
+ 164 0084 8945F4   		movl	%eax, -12(%rbp)
+  45:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	if (data->willFlag)
+ 165              		.loc 1 45 10
+ 166 0087 488B45D8 		movq	-40(%rbp), %rax
+ 167 008b 0FB6402B 		movzbl	43(%rax), %eax
+ 168              		.loc 1 45 5
+ 169 008f 84C0     		testb	%al, %al
+ 170 0091 7476     		je	.L5
+  46:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 171              		.loc 1 46 15
+ 172 0093 488B45D8 		movq	-40(%rbp), %rax
+ 173 0097 4C8B4060 		movq	96(%rax), %r8
+ 174 009b 488B45D8 		movq	-40(%rbp), %rax
+ 175 009f 8B7058   		movl	88(%rax), %esi
+GAS LISTING /tmp/cc3N55w8.s 			page 6
+
+
+ 176 00a2 488B45D8 		movq	-40(%rbp), %rax
+ 177 00a6 488B4848 		movq	72(%rax), %rcx
+ 178 00aa 488B45D8 		movq	-40(%rbp), %rax
+ 179 00ae 448B5840 		movl	64(%rax), %r11d
+  47:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				", will QoS %d, will retain %d, will topic %.*s, will message %.*s",
+  48:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				data->will.qos, data->will.retained,
+ 180              		.loc 1 48 31
+ 181 00b2 488B45D8 		movq	-40(%rbp), %rax
+ 182 00b6 0FB64068 		movzbl	104(%rax), %eax
+  46:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 183              		.loc 1 46 15
+ 184 00ba 440FB6D0 		movzbl	%al, %r10d
+ 185              		.loc 1 48 15
+ 186 00be 488B45D8 		movq	-40(%rbp), %rax
+ 187 00c2 0FB64069 		movzbl	105(%rax), %eax
+  46:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 188              		.loc 1 46 15
+ 189 00c6 0FBED0   		movsbl	%al, %edx
+  46:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 190              		.loc 1 46 53
+ 191 00c9 8B45E4   		movl	-28(%rbp), %eax
+ 192 00cc 2B45F4   		subl	-12(%rbp), %eax
+  46:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 193              		.loc 1 46 15
+ 194 00cf 4898     		cltq
+ 195 00d1 8B7DF4   		movl	-12(%rbp), %edi
+ 196 00d4 4C63CF   		movslq	%edi, %r9
+ 197 00d7 488B7DE8 		movq	-24(%rbp), %rdi
+ 198 00db 4C01CF   		addq	%r9, %rdi
+ 199 00de 4883EC08 		subq	$8, %rsp
+ 200 00e2 4150     		pushq	%r8
+ 201 00e4 56       		pushq	%rsi
+ 202 00e5 51       		pushq	%rcx
+ 203 00e6 4589D9   		movl	%r11d, %r9d
+ 204 00e9 4589D0   		movl	%r10d, %r8d
+ 205 00ec 89D1     		movl	%edx, %ecx
+ 206 00ee 488D1500 		leaq	.LC16(%rip), %rdx
+ 206      000000
+ 207 00f5 4889C6   		movq	%rax, %rsi
+ 208 00f8 B8000000 		movl	$0, %eax
+ 208      00
+ 209 00fd E8000000 		call	snprintf@PLT
+ 209      00
+ 210 0102 4883C420 		addq	$32, %rsp
+  46:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 211              		.loc 1 46 12
+ 212 0106 0145F4   		addl	%eax, -12(%rbp)
+ 213              	.L5:
+  49:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				data->will.topicName.lenstring.len, data->will.topicName.lenstring.data,
+  50:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				data->will.message.lenstring.len, data->will.message.lenstring.data);
+  51:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	if (data->username.lenstring.data && data->username.lenstring.len > 0)
+ 214              		.loc 1 51 30
+ 215 0109 488B45D8 		movq	-40(%rbp), %rax
+ 216 010d 488B8080 		movq	128(%rax), %rax
+ 216      000000
+ 217              		.loc 1 51 5
+ 218 0114 4885C0   		testq	%rax, %rax
+GAS LISTING /tmp/cc3N55w8.s 			page 7
+
+
+ 219 0117 744C     		je	.L6
+ 220              		.loc 1 51 63 discriminator 1
+ 221 0119 488B45D8 		movq	-40(%rbp), %rax
+ 222 011d 8B4078   		movl	120(%rax), %eax
+ 223              		.loc 1 51 36 discriminator 1
+ 224 0120 85C0     		testl	%eax, %eax
+ 225 0122 7E41     		jle	.L6
+  52:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 226              		.loc 1 52 15
+ 227 0124 488B45D8 		movq	-40(%rbp), %rax
+ 228 0128 4C8B8080 		movq	128(%rax), %r8
+ 228      000000
+ 229 012f 488B45D8 		movq	-40(%rbp), %rax
+ 230 0133 8B5078   		movl	120(%rax), %edx
+ 231              		.loc 1 52 53
+ 232 0136 8B45E4   		movl	-28(%rbp), %eax
+ 233 0139 2B45F4   		subl	-12(%rbp), %eax
+ 234              		.loc 1 52 15
+ 235 013c 4898     		cltq
+ 236 013e 8B4DF4   		movl	-12(%rbp), %ecx
+ 237 0141 4863F1   		movslq	%ecx, %rsi
+ 238 0144 488B4DE8 		movq	-24(%rbp), %rcx
+ 239 0148 488D3C0E 		leaq	(%rsi,%rcx), %rdi
+ 240 014c 89D1     		movl	%edx, %ecx
+ 241 014e 488D1500 		leaq	.LC17(%rip), %rdx
+ 241      000000
+ 242 0155 4889C6   		movq	%rax, %rsi
+ 243 0158 B8000000 		movl	$0, %eax
+ 243      00
+ 244 015d E8000000 		call	snprintf@PLT
+ 244      00
+ 245              		.loc 1 52 12
+ 246 0162 0145F4   		addl	%eax, -12(%rbp)
+ 247              	.L6:
+  53:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				", user name %.*s", data->username.lenstring.len, data->username.lenstring.data);
+  54:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	if (data->password.lenstring.data && data->password.lenstring.len > 0)
+ 248              		.loc 1 54 30
+ 249 0165 488B45D8 		movq	-40(%rbp), %rax
+ 250 0169 488B8098 		movq	152(%rax), %rax
+ 250      000000
+ 251              		.loc 1 54 5
+ 252 0170 4885C0   		testq	%rax, %rax
+ 253 0173 7452     		je	.L7
+ 254              		.loc 1 54 63 discriminator 1
+ 255 0175 488B45D8 		movq	-40(%rbp), %rax
+ 256 0179 8B809000 		movl	144(%rax), %eax
+ 256      0000
+ 257              		.loc 1 54 36 discriminator 1
+ 258 017f 85C0     		testl	%eax, %eax
+ 259 0181 7E44     		jle	.L7
+  55:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(&strbuf[strindex], strbuflen - strindex,
+ 260              		.loc 1 55 15
+ 261 0183 488B45D8 		movq	-40(%rbp), %rax
+ 262 0187 4C8B8098 		movq	152(%rax), %r8
+ 262      000000
+ 263 018e 488B45D8 		movq	-40(%rbp), %rax
+ 264 0192 8B909000 		movl	144(%rax), %edx
+GAS LISTING /tmp/cc3N55w8.s 			page 8
+
+
+ 264      0000
+ 265              		.loc 1 55 53
+ 266 0198 8B45E4   		movl	-28(%rbp), %eax
+ 267 019b 2B45F4   		subl	-12(%rbp), %eax
+ 268              		.loc 1 55 15
+ 269 019e 4898     		cltq
+ 270 01a0 8B4DF4   		movl	-12(%rbp), %ecx
+ 271 01a3 4863F1   		movslq	%ecx, %rsi
+ 272 01a6 488B4DE8 		movq	-24(%rbp), %rcx
+ 273 01aa 488D3C0E 		leaq	(%rsi,%rcx), %rdi
+ 274 01ae 89D1     		movl	%edx, %ecx
+ 275 01b0 488D1500 		leaq	.LC18(%rip), %rdx
+ 275      000000
+ 276 01b7 4889C6   		movq	%rax, %rsi
+ 277 01ba B8000000 		movl	$0, %eax
+ 277      00
+ 278 01bf E8000000 		call	snprintf@PLT
+ 278      00
+ 279              		.loc 1 55 12
+ 280 01c4 0145F4   		addl	%eax, -12(%rbp)
+ 281              	.L7:
+  56:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				", password %.*s", data->password.lenstring.len, data->password.lenstring.data);
+  57:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return strindex;
+ 282              		.loc 1 57 9
+ 283 01c7 8B45F4   		movl	-12(%rbp), %eax
+  58:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+ 284              		.loc 1 58 1
+ 285 01ca 488B55F8 		movq	-8(%rbp), %rdx
+ 286 01ce 64483314 		xorq	%fs:40, %rdx
+ 286      25280000 
+ 286      00
+ 287 01d7 7405     		je	.L9
+ 288 01d9 E8000000 		call	__stack_chk_fail@PLT
+ 288      00
+ 289              	.L9:
+ 290 01de C9       		leave
+ 291              	.LCFI5:
+ 292              		.cfi_def_cfa 7, 8
+ 293 01df C3       		ret
+ 294              		.cfi_endproc
+ 295              	.LFE1:
+ 297              		.section	.rodata
+ 298 0133 00000000 		.align 8
+ 298      00
+ 299              	.LC19:
+ 300 0138 434F4E4E 		.string	"CONNACK session present %d, rc %d"
+ 300      41434B20 
+ 300      73657373 
+ 300      696F6E20 
+ 300      70726573 
+ 301              		.section	.text.MQTTStringFormat_connack,"ax",@progbits
+ 302              		.globl	MQTTStringFormat_connack
+ 304              	MQTTStringFormat_connack:
+ 305              	.LFB2:
+  59:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  60:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  61:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** int MQTTStringFormat_connack(char* strbuf, int strbuflen, unsigned char connack_rc, unsigned char s
+GAS LISTING /tmp/cc3N55w8.s 			page 9
+
+
+  62:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+ 306              		.loc 1 62 1
+ 307              		.cfi_startproc
+ 308 0000 F30F1EFA 		endbr64
+ 309 0004 55       		pushq	%rbp
+ 310              	.LCFI6:
+ 311              		.cfi_def_cfa_offset 16
+ 312              		.cfi_offset 6, -16
+ 313 0005 4889E5   		movq	%rsp, %rbp
+ 314              	.LCFI7:
+ 315              		.cfi_def_cfa_register 6
+ 316 0008 4883EC30 		subq	$48, %rsp
+ 317 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 318 0010 8975E4   		movl	%esi, -28(%rbp)
+ 319 0013 89C8     		movl	%ecx, %eax
+ 320 0015 8855E0   		movb	%dl, -32(%rbp)
+ 321 0018 8845DC   		movb	%al, -36(%rbp)
+ 322              		.loc 1 62 1
+ 323 001b 64488B04 		movq	%fs:40, %rax
+ 323      25280000 
+ 323      00
+ 324 0024 488945F8 		movq	%rax, -8(%rbp)
+ 325 0028 31C0     		xorl	%eax, %eax
+  63:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	int strindex = snprintf(strbuf, strbuflen, "CONNACK session present %d, rc %d", sessionPresent, co
+ 326              		.loc 1 63 17
+ 327 002a 0FB64DE0 		movzbl	-32(%rbp), %ecx
+ 328 002e 0FB655DC 		movzbl	-36(%rbp), %edx
+ 329 0032 8B45E4   		movl	-28(%rbp), %eax
+ 330 0035 4863F0   		movslq	%eax, %rsi
+ 331 0038 488B45E8 		movq	-24(%rbp), %rax
+ 332 003c 4189C8   		movl	%ecx, %r8d
+ 333 003f 89D1     		movl	%edx, %ecx
+ 334 0041 488D1500 		leaq	.LC19(%rip), %rdx
+ 334      000000
+ 335 0048 4889C7   		movq	%rax, %rdi
+ 336 004b B8000000 		movl	$0, %eax
+ 336      00
+ 337 0050 E8000000 		call	snprintf@PLT
+ 337      00
+ 338 0055 8945F4   		movl	%eax, -12(%rbp)
+  64:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return strindex;
+ 339              		.loc 1 64 9
+ 340 0058 8B45F4   		movl	-12(%rbp), %eax
+  65:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+ 341              		.loc 1 65 1
+ 342 005b 488B7DF8 		movq	-8(%rbp), %rdi
+ 343 005f 6448333C 		xorq	%fs:40, %rdi
+ 343      25280000 
+ 343      00
+ 344 0068 7405     		je	.L12
+ 345 006a E8000000 		call	__stack_chk_fail@PLT
+ 345      00
+ 346              	.L12:
+ 347 006f C9       		leave
+ 348              	.LCFI8:
+ 349              		.cfi_def_cfa 7, 8
+ 350 0070 C3       		ret
+GAS LISTING /tmp/cc3N55w8.s 			page 10
+
+
+ 351              		.cfi_endproc
+ 352              	.LFE2:
+ 354              		.section	.rodata
+ 355 015a 00000000 		.align 8
+ 355      0000
+ 356              	.LC20:
+ 357 0160 5055424C 		.string	"PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, payload length %d, payload
+ 357      49534820 
+ 357      64757020 
+ 357      25642C20 
+ 357      516F5320 
+ 358              		.section	.text.MQTTStringFormat_publish,"ax",@progbits
+ 359              		.globl	MQTTStringFormat_publish
+ 361              	MQTTStringFormat_publish:
+ 362              	.LFB3:
+  66:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  67:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  68:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** int MQTTStringFormat_publish(char* strbuf, int strbuflen, unsigned char dup, int qos, unsigned char
+  69:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		unsigned short packetid, MQTTString topicName, unsigned char* payload, int payloadlen)
+  70:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+ 363              		.loc 1 70 1
+ 364              		.cfi_startproc
+ 365 0000 F30F1EFA 		endbr64
+ 366 0004 55       		pushq	%rbp
+ 367              	.LCFI9:
+ 368              		.cfi_def_cfa_offset 16
+ 369              		.cfi_offset 6, -16
+ 370 0005 4889E5   		movq	%rsp, %rbp
+ 371              	.LCFI10:
+ 372              		.cfi_def_cfa_register 6
+ 373 0008 4883EC50 		subq	$80, %rsp
+ 374 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 375 0010 8975E4   		movl	%esi, -28(%rbp)
+ 376 0013 894DDC   		movl	%ecx, -36(%rbp)
+ 377 0016 4489C1   		movl	%r8d, %ecx
+ 378 0019 4489C8   		movl	%r9d, %eax
+ 379 001c 8855E0   		movb	%dl, -32(%rbp)
+ 380 001f 89CA     		movl	%ecx, %edx
+ 381 0021 8855D8   		movb	%dl, -40(%rbp)
+ 382 0024 668945D4 		movw	%ax, -44(%rbp)
+ 383 0028 488B4510 		movq	16(%rbp), %rax
+ 384 002c 488B5518 		movq	24(%rbp), %rdx
+ 385 0030 488945B8 		movq	%rax, -72(%rbp)
+ 386 0034 488955C0 		movq	%rdx, -64(%rbp)
+ 387 0038 488B4520 		movq	32(%rbp), %rax
+ 388 003c 488945C8 		movq	%rax, -56(%rbp)
+ 389 0040 488B4528 		movq	40(%rbp), %rax
+ 390 0044 488945B0 		movq	%rax, -80(%rbp)
+ 391 0048 8B4530   		movl	48(%rbp), %eax
+ 392 004b 8945D0   		movl	%eax, -48(%rbp)
+ 393              		.loc 1 70 1
+ 394 004e 64488B04 		movq	%fs:40, %rax
+ 394      25280000 
+ 394      00
+ 395 0057 488945F8 		movq	%rax, -8(%rbp)
+ 396 005b 31C0     		xorl	%eax, %eax
+  71:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	int strindex = snprintf(strbuf, strbuflen,
+GAS LISTING /tmp/cc3N55w8.s 			page 11
+
+
+ 397              		.loc 1 71 17
+ 398 005d B8140000 		movl	$20, %eax
+ 398      00
+ 399 0062 837DD014 		cmpl	$20, -48(%rbp)
+ 400 0066 0F4E45D0 		cmovle	-48(%rbp), %eax
+ 401 006a 4189C1   		movl	%eax, %r9d
+ 402 006d 4C8B45C8 		movq	-56(%rbp), %r8
+  72:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				"PUBLISH dup %d, QoS %d, retained %d, packet id %d, topic %.*s, payload length %d, payload %.*s
+  73:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				dup, qos, retained, packetid,
+  74:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				(topicName.lenstring.len < 20) ? topicName.lenstring.len : 20, topicName.lenstring.data,
+ 403              		.loc 1 74 25
+ 404 0071 8B45C0   		movl	-64(%rbp), %eax
+  71:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	int strindex = snprintf(strbuf, strbuflen,
+ 405              		.loc 1 71 17
+ 406 0074 BA140000 		movl	$20, %edx
+ 406      00
+ 407 0079 83F814   		cmpl	$20, %eax
+ 408 007c 89D7     		movl	%edx, %edi
+ 409 007e 0F4EF8   		cmovle	%eax, %edi
+ 410 0081 0FB74DD4 		movzwl	-44(%rbp), %ecx
+ 411 0085 440FB65D 		movzbl	-40(%rbp), %r11d
+ 411      D8
+ 412 008a 0FB655E0 		movzbl	-32(%rbp), %edx
+ 413 008e 8B45E4   		movl	-28(%rbp), %eax
+ 414 0091 4863F0   		movslq	%eax, %rsi
+ 415 0094 448B55DC 		movl	-36(%rbp), %r10d
+ 416 0098 488B45E8 		movq	-24(%rbp), %rax
+ 417 009c FF75B0   		pushq	-80(%rbp)
+ 418 009f 4151     		pushq	%r9
+ 419 00a1 448B4DD0 		movl	-48(%rbp), %r9d
+ 420 00a5 4151     		pushq	%r9
+ 421 00a7 4150     		pushq	%r8
+ 422 00a9 57       		pushq	%rdi
+ 423 00aa 51       		pushq	%rcx
+ 424 00ab 4589D9   		movl	%r11d, %r9d
+ 425 00ae 4589D0   		movl	%r10d, %r8d
+ 426 00b1 89D1     		movl	%edx, %ecx
+ 427 00b3 488D1500 		leaq	.LC20(%rip), %rdx
+ 427      000000
+ 428 00ba 4889C7   		movq	%rax, %rdi
+ 429 00bd B8000000 		movl	$0, %eax
+ 429      00
+ 430 00c2 E8000000 		call	snprintf@PLT
+ 430      00
+ 431 00c7 4883C430 		addq	$48, %rsp
+ 432 00cb 8945F4   		movl	%eax, -12(%rbp)
+  75:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 				payloadlen, (payloadlen < 20) ? payloadlen : 20, payload);
+  76:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return strindex;
+ 433              		.loc 1 76 9
+ 434 00ce 8B45F4   		movl	-12(%rbp), %eax
+  77:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+ 435              		.loc 1 77 1
+ 436 00d1 488B75F8 		movq	-8(%rbp), %rsi
+ 437 00d5 64483334 		xorq	%fs:40, %rsi
+ 437      25280000 
+ 437      00
+ 438 00de 7405     		je	.L15
+GAS LISTING /tmp/cc3N55w8.s 			page 12
+
+
+ 439 00e0 E8000000 		call	__stack_chk_fail@PLT
+ 439      00
+ 440              	.L15:
+ 441 00e5 C9       		leave
+ 442              	.LCFI11:
+ 443              		.cfi_def_cfa 7, 8
+ 444 00e6 C3       		ret
+ 445              		.cfi_endproc
+ 446              	.LFE3:
+ 448              		.section	.rodata
+ 449              	.LC21:
+ 450 01bf 25732C20 		.string	"%s, packet id %d"
+ 450      7061636B 
+ 450      65742069 
+ 450      64202564 
+ 450      00
+ 451              	.LC22:
+ 452 01d0 2C206475 		.string	", dup %d"
+ 452      70202564 
+ 452      00
+ 453              		.section	.text.MQTTStringFormat_ack,"ax",@progbits
+ 454              		.globl	MQTTStringFormat_ack
+ 456              	MQTTStringFormat_ack:
+ 457              	.LFB4:
+  78:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  79:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  80:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** int MQTTStringFormat_ack(char* strbuf, int strbuflen, unsigned char packettype, unsigned char dup, 
+  81:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+ 458              		.loc 1 81 1
+ 459              		.cfi_startproc
+ 460 0000 F30F1EFA 		endbr64
+ 461 0004 55       		pushq	%rbp
+ 462              	.LCFI12:
+ 463              		.cfi_def_cfa_offset 16
+ 464              		.cfi_offset 6, -16
+ 465 0005 4889E5   		movq	%rsp, %rbp
+ 466              	.LCFI13:
+ 467              		.cfi_def_cfa_register 6
+ 468 0008 4883EC30 		subq	$48, %rsp
+ 469 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 470 0010 8975E4   		movl	%esi, -28(%rbp)
+ 471 0013 89D6     		movl	%edx, %esi
+ 472 0015 89CA     		movl	%ecx, %edx
+ 473 0017 4489C0   		movl	%r8d, %eax
+ 474 001a 89F1     		movl	%esi, %ecx
+ 475 001c 884DE0   		movb	%cl, -32(%rbp)
+ 476 001f 8855DC   		movb	%dl, -36(%rbp)
+ 477 0022 668945D8 		movw	%ax, -40(%rbp)
+ 478              		.loc 1 81 1
+ 479 0026 64488B04 		movq	%fs:40, %rax
+ 479      25280000 
+ 479      00
+ 480 002f 488945F8 		movq	%rax, -8(%rbp)
+ 481 0033 31C0     		xorl	%eax, %eax
+  82:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	int strindex = snprintf(strbuf, strbuflen, "%s, packet id %d", MQTTPacket_names[packettype], packe
+ 482              		.loc 1 82 17
+ 483 0035 0FB74DD8 		movzwl	-40(%rbp), %ecx
+GAS LISTING /tmp/cc3N55w8.s 			page 13
+
+
+ 484 0039 0FB645E0 		movzbl	-32(%rbp), %eax
+ 485 003d 4898     		cltq
+ 486 003f 488D14C5 		leaq	0(,%rax,8), %rdx
+ 486      00000000 
+ 487 0047 488D0500 		leaq	MQTTPacket_names(%rip), %rax
+ 487      000000
+ 488 004e 488B1402 		movq	(%rdx,%rax), %rdx
+ 489 0052 8B45E4   		movl	-28(%rbp), %eax
+ 490 0055 4863F0   		movslq	%eax, %rsi
+ 491 0058 488B45E8 		movq	-24(%rbp), %rax
+ 492 005c 4189C8   		movl	%ecx, %r8d
+ 493 005f 4889D1   		movq	%rdx, %rcx
+ 494 0062 488D1500 		leaq	.LC21(%rip), %rdx
+ 494      000000
+ 495 0069 4889C7   		movq	%rax, %rdi
+ 496 006c B8000000 		movl	$0, %eax
+ 496      00
+ 497 0071 E8000000 		call	snprintf@PLT
+ 497      00
+ 498 0076 8945F4   		movl	%eax, -12(%rbp)
+  83:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	if (dup)
+ 499              		.loc 1 83 5
+ 500 0079 807DDC00 		cmpb	$0, -36(%rbp)
+ 501 007d 7433     		je	.L17
+  84:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		strindex += snprintf(strbuf + strindex, strbuflen - strindex, ", dup %d", dup);
+ 502              		.loc 1 84 15
+ 503 007f 0FB655DC 		movzbl	-36(%rbp), %edx
+ 504              		.loc 1 84 53
+ 505 0083 8B45E4   		movl	-28(%rbp), %eax
+ 506 0086 2B45F4   		subl	-12(%rbp), %eax
+ 507              		.loc 1 84 15
+ 508 0089 4898     		cltq
+ 509 008b 8B4DF4   		movl	-12(%rbp), %ecx
+ 510 008e 4863F1   		movslq	%ecx, %rsi
+ 511 0091 488B4DE8 		movq	-24(%rbp), %rcx
+ 512 0095 488D3C0E 		leaq	(%rsi,%rcx), %rdi
+ 513 0099 89D1     		movl	%edx, %ecx
+ 514 009b 488D1500 		leaq	.LC22(%rip), %rdx
+ 514      000000
+ 515 00a2 4889C6   		movq	%rax, %rsi
+ 516 00a5 B8000000 		movl	$0, %eax
+ 516      00
+ 517 00aa E8000000 		call	snprintf@PLT
+ 517      00
+ 518              		.loc 1 84 12
+ 519 00af 0145F4   		addl	%eax, -12(%rbp)
+ 520              	.L17:
+  85:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return strindex;
+ 521              		.loc 1 85 9
+ 522 00b2 8B45F4   		movl	-12(%rbp), %eax
+  86:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+ 523              		.loc 1 86 1
+ 524 00b5 488B7DF8 		movq	-8(%rbp), %rdi
+ 525 00b9 6448333C 		xorq	%fs:40, %rdi
+ 525      25280000 
+ 525      00
+ 526 00c2 7405     		je	.L19
+GAS LISTING /tmp/cc3N55w8.s 			page 14
+
+
+ 527 00c4 E8000000 		call	__stack_chk_fail@PLT
+ 527      00
+ 528              	.L19:
+ 529 00c9 C9       		leave
+ 530              	.LCFI14:
+ 531              		.cfi_def_cfa 7, 8
+ 532 00ca C3       		ret
+ 533              		.cfi_endproc
+ 534              	.LFE4:
+ 536              		.section	.rodata
+ 537 01d9 00000000 		.align 8
+ 537      000000
+ 538              	.LC23:
+ 539 01e0 53554253 		.string	"SUBSCRIBE dup %d, packet id %d count %d topic %.*s qos %d"
+ 539      43524942 
+ 539      45206475 
+ 539      70202564 
+ 539      2C207061 
+ 540              		.section	.text.MQTTStringFormat_subscribe,"ax",@progbits
+ 541              		.globl	MQTTStringFormat_subscribe
+ 543              	MQTTStringFormat_subscribe:
+ 544              	.LFB5:
+  87:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  88:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  89:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** int MQTTStringFormat_subscribe(char* strbuf, int strbuflen, unsigned char dup, unsigned short packe
+  90:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		MQTTString topicFilters[], int requestedQoSs[])
+  91:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+ 545              		.loc 1 91 1
+ 546              		.cfi_startproc
+ 547 0000 F30F1EFA 		endbr64
+ 548 0004 55       		pushq	%rbp
+ 549              	.LCFI15:
+ 550              		.cfi_def_cfa_offset 16
+ 551              		.cfi_offset 6, -16
+ 552 0005 4889E5   		movq	%rsp, %rbp
+ 553              	.LCFI16:
+ 554              		.cfi_def_cfa_register 6
+ 555 0008 4883EC40 		subq	$64, %rsp
+ 556 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 557 0010 8975E4   		movl	%esi, -28(%rbp)
+ 558 0013 89C8     		movl	%ecx, %eax
+ 559 0015 448945D8 		movl	%r8d, -40(%rbp)
+ 560 0019 4C894DD0 		movq	%r9, -48(%rbp)
+ 561 001d 8855E0   		movb	%dl, -32(%rbp)
+ 562 0020 668945DC 		movw	%ax, -36(%rbp)
+ 563 0024 488B4510 		movq	16(%rbp), %rax
+ 564 0028 488945C8 		movq	%rax, -56(%rbp)
+ 565              		.loc 1 91 1
+ 566 002c 64488B04 		movq	%fs:40, %rax
+ 566      25280000 
+ 566      00
+ 567 0035 488945F8 		movq	%rax, -8(%rbp)
+ 568 0039 31C0     		xorl	%eax, %eax
+  92:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return snprintf(strbuf, strbuflen,
+ 569              		.loc 1 92 9
+ 570 003b 488B45C8 		movq	-56(%rbp), %rax
+ 571 003f 448B00   		movl	(%rax), %r8d
+GAS LISTING /tmp/cc3N55w8.s 			page 15
+
+
+ 572 0042 488B45D0 		movq	-48(%rbp), %rax
+ 573 0046 488B7810 		movq	16(%rax), %rdi
+ 574 004a 488B45D0 		movq	-48(%rbp), %rax
+ 575 004e 8B4808   		movl	8(%rax), %ecx
+ 576 0051 440FB755 		movzwl	-36(%rbp), %r10d
+ 576      DC
+ 577 0056 0FB655E0 		movzbl	-32(%rbp), %edx
+ 578 005a 8B45E4   		movl	-28(%rbp), %eax
+ 579 005d 4863F0   		movslq	%eax, %rsi
+ 580 0060 448B4DD8 		movl	-40(%rbp), %r9d
+ 581 0064 488B45E8 		movq	-24(%rbp), %rax
+ 582 0068 4883EC08 		subq	$8, %rsp
+ 583 006c 4150     		pushq	%r8
+ 584 006e 57       		pushq	%rdi
+ 585 006f 51       		pushq	%rcx
+ 586 0070 4589D0   		movl	%r10d, %r8d
+ 587 0073 89D1     		movl	%edx, %ecx
+ 588 0075 488D1500 		leaq	.LC23(%rip), %rdx
+ 588      000000
+ 589 007c 4889C7   		movq	%rax, %rdi
+ 590 007f B8000000 		movl	$0, %eax
+ 590      00
+ 591 0084 E8000000 		call	snprintf@PLT
+ 591      00
+ 592 0089 4883C420 		addq	$32, %rsp
+  93:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		"SUBSCRIBE dup %d, packet id %d count %d topic %.*s qos %d",
+  94:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		dup, packetid, count,
+  95:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		topicFilters[0].lenstring.len, topicFilters[0].lenstring.data,
+  96:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		requestedQoSs[0]);
+  97:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+ 593              		.loc 1 97 1
+ 594 008d 488B4DF8 		movq	-8(%rbp), %rcx
+ 595 0091 6448330C 		xorq	%fs:40, %rcx
+ 595      25280000 
+ 595      00
+ 596 009a 7405     		je	.L22
+ 597 009c E8000000 		call	__stack_chk_fail@PLT
+ 597      00
+ 598              	.L22:
+ 599 00a1 C9       		leave
+ 600              	.LCFI17:
+ 601              		.cfi_def_cfa 7, 8
+ 602 00a2 C3       		ret
+ 603              		.cfi_endproc
+ 604              	.LFE5:
+ 606              		.section	.rodata
+ 607 021a 00000000 		.align 8
+ 607      0000
+ 608              	.LC24:
+ 609 0220 53554241 		.string	"SUBACK packet id %d count %d granted qos %d"
+ 609      434B2070 
+ 609      61636B65 
+ 609      74206964 
+ 609      20256420 
+ 610              		.section	.text.MQTTStringFormat_suback,"ax",@progbits
+ 611              		.globl	MQTTStringFormat_suback
+ 613              	MQTTStringFormat_suback:
+GAS LISTING /tmp/cc3N55w8.s 			page 16
+
+
+ 614              	.LFB6:
+  98:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+  99:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+ 100:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** int MQTTStringFormat_suback(char* strbuf, int strbuflen, unsigned short packetid, int count, int* g
+ 101:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+ 615              		.loc 1 101 1
+ 616              		.cfi_startproc
+ 617 0000 F30F1EFA 		endbr64
+ 618 0004 55       		pushq	%rbp
+ 619              	.LCFI18:
+ 620              		.cfi_def_cfa_offset 16
+ 621              		.cfi_offset 6, -16
+ 622 0005 4889E5   		movq	%rsp, %rbp
+ 623              	.LCFI19:
+ 624              		.cfi_def_cfa_register 6
+ 625 0008 4883EC30 		subq	$48, %rsp
+ 626 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 627 0010 8975E4   		movl	%esi, -28(%rbp)
+ 628 0013 89D0     		movl	%edx, %eax
+ 629 0015 894DDC   		movl	%ecx, -36(%rbp)
+ 630 0018 4C8945D0 		movq	%r8, -48(%rbp)
+ 631 001c 668945E0 		movw	%ax, -32(%rbp)
+ 632              		.loc 1 101 1
+ 633 0020 64488B04 		movq	%fs:40, %rax
+ 633      25280000 
+ 633      00
+ 634 0029 488945F8 		movq	%rax, -8(%rbp)
+ 635 002d 31C0     		xorl	%eax, %eax
+ 102:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return snprintf(strbuf, strbuflen,
+ 636              		.loc 1 102 9
+ 637 002f 488B45D0 		movq	-48(%rbp), %rax
+ 638 0033 8B38     		movl	(%rax), %edi
+ 639 0035 0FB755E0 		movzwl	-32(%rbp), %edx
+ 640 0039 8B45E4   		movl	-28(%rbp), %eax
+ 641 003c 4863F0   		movslq	%eax, %rsi
+ 642 003f 8B4DDC   		movl	-36(%rbp), %ecx
+ 643 0042 488B45E8 		movq	-24(%rbp), %rax
+ 644 0046 4189F9   		movl	%edi, %r9d
+ 645 0049 4189C8   		movl	%ecx, %r8d
+ 646 004c 89D1     		movl	%edx, %ecx
+ 647 004e 488D1500 		leaq	.LC24(%rip), %rdx
+ 647      000000
+ 648 0055 4889C7   		movq	%rax, %rdi
+ 649 0058 B8000000 		movl	$0, %eax
+ 649      00
+ 650 005d E8000000 		call	snprintf@PLT
+ 650      00
+ 103:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		"SUBACK packet id %d count %d granted qos %d", packetid, count, grantedQoSs[0]);
+ 104:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+ 651              		.loc 1 104 1
+ 652 0062 488B55F8 		movq	-8(%rbp), %rdx
+ 653 0066 64483314 		xorq	%fs:40, %rdx
+ 653      25280000 
+ 653      00
+ 654 006f 7405     		je	.L25
+ 655 0071 E8000000 		call	__stack_chk_fail@PLT
+ 655      00
+GAS LISTING /tmp/cc3N55w8.s 			page 17
+
+
+ 656              	.L25:
+ 657 0076 C9       		leave
+ 658              	.LCFI20:
+ 659              		.cfi_def_cfa 7, 8
+ 660 0077 C3       		ret
+ 661              		.cfi_endproc
+ 662              	.LFE6:
+ 664              		.section	.rodata
+ 665 024c 00000000 		.align 8
+ 666              	.LC25:
+ 667 0250 554E5355 		.string	"UNSUBSCRIBE dup %d, packet id %d count %d topic %.*s"
+ 667      42534352 
+ 667      49424520 
+ 667      64757020 
+ 667      25642C20 
+ 668              		.section	.text.MQTTStringFormat_unsubscribe,"ax",@progbits
+ 669              		.globl	MQTTStringFormat_unsubscribe
+ 671              	MQTTStringFormat_unsubscribe:
+ 672              	.LFB7:
+ 105:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+ 106:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 
+ 107:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** int MQTTStringFormat_unsubscribe(char* strbuf, int strbuflen, unsigned char dup, unsigned short pac
+ 108:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 		int count, MQTTString topicFilters[])
+ 109:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** {
+ 673              		.loc 1 109 1
+ 674              		.cfi_startproc
+ 675 0000 F30F1EFA 		endbr64
+ 676 0004 55       		pushq	%rbp
+ 677              	.LCFI21:
+ 678              		.cfi_def_cfa_offset 16
+ 679              		.cfi_offset 6, -16
+ 680 0005 4889E5   		movq	%rsp, %rbp
+ 681              	.LCFI22:
+ 682              		.cfi_def_cfa_register 6
+ 683 0008 4883EC30 		subq	$48, %rsp
+ 684 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 685 0010 8975E4   		movl	%esi, -28(%rbp)
+ 686 0013 89C8     		movl	%ecx, %eax
+ 687 0015 448945D8 		movl	%r8d, -40(%rbp)
+ 688 0019 4C894DD0 		movq	%r9, -48(%rbp)
+ 689 001d 8855E0   		movb	%dl, -32(%rbp)
+ 690 0020 668945DC 		movw	%ax, -36(%rbp)
+ 691              		.loc 1 109 1
+ 692 0024 64488B04 		movq	%fs:40, %rax
+ 692      25280000 
+ 692      00
+ 693 002d 488945F8 		movq	%rax, -8(%rbp)
+ 694 0031 31C0     		xorl	%eax, %eax
+ 110:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 	return snprintf(strbuf, strbuflen,
+ 695              		.loc 1 110 9
+ 696 0033 488B45D0 		movq	-48(%rbp), %rax
+ 697 0037 488B7810 		movq	16(%rax), %rdi
+ 698 003b 488B45D0 		movq	-48(%rbp), %rax
+ 699 003f 8B4808   		movl	8(%rax), %ecx
+ 700 0042 440FB745 		movzwl	-36(%rbp), %r8d
+ 700      DC
+ 701 0047 0FB655E0 		movzbl	-32(%rbp), %edx
+GAS LISTING /tmp/cc3N55w8.s 			page 18
+
+
+ 702 004b 8B45E4   		movl	-28(%rbp), %eax
+ 703 004e 4863F0   		movslq	%eax, %rsi
+ 704 0051 448B4DD8 		movl	-40(%rbp), %r9d
+ 705 0055 488B45E8 		movq	-24(%rbp), %rax
+ 706 0059 57       		pushq	%rdi
+ 707 005a 51       		pushq	%rcx
+ 708 005b 89D1     		movl	%edx, %ecx
+ 709 005d 488D1500 		leaq	.LC25(%rip), %rdx
+ 709      000000
+ 710 0064 4889C7   		movq	%rax, %rdi
+ 711 0067 B8000000 		movl	$0, %eax
+ 711      00
+ 712 006c E8000000 		call	snprintf@PLT
+ 712      00
+ 713 0071 4883C410 		addq	$16, %rsp
+ 111:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 					"UNSUBSCRIBE dup %d, packet id %d count %d topic %.*s",
+ 112:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 					dup, packetid, count,
+ 113:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** 					topicFilters[0].lenstring.len, topicFilters[0].lenstring.data);
+ 114:/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c **** }
+ 714              		.loc 1 114 1
+ 715 0075 488B4DF8 		movq	-8(%rbp), %rcx
+ 716 0079 6448330C 		xorq	%fs:40, %rcx
+ 716      25280000 
+ 716      00
+ 717 0082 7405     		je	.L28
+ 718 0084 E8000000 		call	__stack_chk_fail@PLT
+ 718      00
+ 719              	.L28:
+ 720 0089 C9       		leave
+ 721              	.LCFI23:
+ 722              		.cfi_def_cfa 7, 8
+ 723 008a C3       		ret
+ 724              		.cfi_endproc
+ 725              	.LFE7:
+ 727              		.text
+ 728              	.Letext0:
+ 729              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 730              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 731              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 732              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 733              		.file 6 "/usr/include/stdio.h"
+ 734              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 735              		.file 8 "/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTPacket.h"
+ 736              		.file 9 "/home/xingli/share/1205tiny/network/mqtt/paho_mqtt/paho/MQTTPacket/src/MQTTConnect.h"
+ 2731              		.section	.note.gnu.property,"a"
+ 2732              		.align 8
+ 2733 0000 04000000 		.long	 1f - 0f
+ 2734 0004 10000000 		.long	 4f - 1f
+ 2735 0008 05000000 		.long	 5
+ 2736              	0:
+ 2737 000c 474E5500 		.string	 "GNU"
+ 2738              	1:
+ 2739              		.align 8
+ 2740 0010 020000C0 		.long	 0xc0000002
+ 2741 0014 04000000 		.long	 3f - 2f
+ 2742              	2:
+ 2743 0018 03000000 		.long	 0x3
+GAS LISTING /tmp/cc3N55w8.s 			page 19
+
+
+ 2744              	3:
+ 2745 001c 00000000 		.align 8
+ 2746              	4:
+GAS LISTING /tmp/cc3N55w8.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 MQTTFormat.c
+     /tmp/cc3N55w8.s:40     .data.rel.local.MQTTPacket_names:0000000000000000 MQTTPacket_names
+     /tmp/cc3N55w8.s:59     .text.MQTTPacket_getName:0000000000000000 MQTTPacket_getName
+     /tmp/cc3N55w8.s:112    .text.MQTTStringFormat_connect:0000000000000000 MQTTStringFormat_connect
+     /tmp/cc3N55w8.s:304    .text.MQTTStringFormat_connack:0000000000000000 MQTTStringFormat_connack
+     /tmp/cc3N55w8.s:361    .text.MQTTStringFormat_publish:0000000000000000 MQTTStringFormat_publish
+     /tmp/cc3N55w8.s:456    .text.MQTTStringFormat_ack:0000000000000000 MQTTStringFormat_ack
+     /tmp/cc3N55w8.s:543    .text.MQTTStringFormat_subscribe:0000000000000000 MQTTStringFormat_subscribe
+     /tmp/cc3N55w8.s:613    .text.MQTTStringFormat_suback:0000000000000000 MQTTStringFormat_suback
+     /tmp/cc3N55w8.s:671    .text.MQTTStringFormat_unsubscribe:0000000000000000 MQTTStringFormat_unsubscribe
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+__stack_chk_fail
+snprintf

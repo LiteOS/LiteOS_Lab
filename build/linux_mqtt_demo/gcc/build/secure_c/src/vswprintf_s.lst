@@ -1,0 +1,214 @@
+GAS LISTING /tmp/ccHUXK1U.s 			page 1
+
+
+   1              		.file	"vswprintf_s.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.vswprintf_s,"ax",@progbits
+   5              		.globl	vswprintf_s
+   7              	vswprintf_s:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c"
+   1:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** /*
+   2:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * Copyright (c) [2019] Huawei Technologies Co.,Ltd.All rights reserved.
+   3:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *
+   4:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * OpenArkCompiler is licensed under the Mulan PSL v1. 
+   5:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * You can use this software according to the terms and conditions of the Mulan PSL v1.
+   6:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * You may obtain a copy of Mulan PSL v1 at:
+   7:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *
+   8:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * 	http://license.coscl.org.cn/MulanPSL 
+   9:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *
+  10:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER 
+  11:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR
+  12:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * FIT FOR A PARTICULAR PURPOSE.  
+  13:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * See the Mulan PSL v1 for more details.  
+  14:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  */
+  15:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** 
+  16:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** #include "secureprintoutput.h"
+  17:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** 
+  18:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** 
+  19:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** /*
+  20:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * <FUNCTION DESCRIPTION>
+  21:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    The  vswprintf_s  function  is  the  wide-character  equivalent  of the vsprintf_s function
+  22:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *
+  23:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * <INPUT PARAMETERS>
+  24:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    strDest                  Storage location for the output.
+  25:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    destMax                Size of strDest
+  26:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    format                  Format specification.
+  27:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    argList                   pointer to list of arguments
+  28:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *
+  29:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * <OUTPUT PARAMETERS>
+  30:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    strDest                 is updated
+  31:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *
+  32:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * <RETURN VALUE>
+  33:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    return  the number of wide characters stored in strDest, not  counting the terminating null w
+  34:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *    return -1  if an error occurred.
+  35:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  *
+  36:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  * If there is a runtime-constraint violation, strDest[0] will be set to the '\0' when strDest and 
+  37:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****  */
+  38:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** int vswprintf_s(wchar_t *strDest, size_t destMax, const wchar_t *format, va_list argList)
+  39:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** {
+  10              		.loc 1 39 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+GAS LISTING /tmp/ccHUXK1U.s 			page 2
+
+
+  20 0008 4883EC30 		subq	$48, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22 0010 488975E0 		movq	%rsi, -32(%rbp)
+  23 0014 488955D8 		movq	%rdx, -40(%rbp)
+  24 0018 48894DD0 		movq	%rcx, -48(%rbp)
+  25              		.loc 1 39 1
+  26 001c 64488B04 		movq	%fs:40, %rax
+  26      25280000 
+  26      00
+  27 0025 488945F8 		movq	%rax, -8(%rbp)
+  28 0029 31C0     		xorl	%eax, %eax
+  40:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****     int retVal;               /* If initialization causes  e838 */
+  41:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** 
+  42:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****     if (format == NULL || strDest == NULL || destMax == 0 || destMax > (SECUREC_WCHAR_STRING_MAX_LE
+  29              		.loc 1 42 8
+  30 002b 48837DD8 		cmpq	$0, -40(%rbp)
+  30      00
+  31 0030 7418     		je	.L2
+  32              		.loc 1 42 24 discriminator 1
+  33 0032 48837DE8 		cmpq	$0, -24(%rbp)
+  33      00
+  34 0037 7411     		je	.L2
+  35              		.loc 1 42 43 discriminator 2
+  36 0039 48837DE0 		cmpq	$0, -32(%rbp)
+  36      00
+  37 003e 740A     		je	.L2
+  38              		.loc 1 42 59 discriminator 3
+  39 0040 48817DE0 		cmpq	$536870911, -32(%rbp)
+  39      FFFFFF1F 
+  40 0048 761F     		jbe	.L3
+  41              	.L2:
+  43:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         if (strDest != NULL && destMax > 0) {
+  42              		.loc 1 43 12
+  43 004a 48837DE8 		cmpq	$0, -24(%rbp)
+  43      00
+  44 004f 7411     		je	.L4
+  45              		.loc 1 43 29 discriminator 1
+  46 0051 48837DE0 		cmpq	$0, -32(%rbp)
+  46      00
+  47 0056 740A     		je	.L4
+  44:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****             strDest[0] = '\0';
+  48              		.loc 1 44 24
+  49 0058 488B45E8 		movq	-24(%rbp), %rax
+  50 005c C7000000 		movl	$0, (%rax)
+  50      0000
+  51              	.L4:
+  45:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         }
+  46:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vswprintf_s");
+  47:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         return -1;
+  52              		.loc 1 47 16
+  53 0062 B8FFFFFF 		movl	$-1, %eax
+  53      FF
+  54 0067 EB35     		jmp	.L5
+  55              	.L3:
+  48:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****     }
+  49:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** 
+  50:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****     retVal = SecVswprintfImpl(strDest, destMax, format, argList);
+GAS LISTING /tmp/ccHUXK1U.s 			page 3
+
+
+  56              		.loc 1 50 14
+  57 0069 488B4DD0 		movq	-48(%rbp), %rcx
+  58 006d 488B55D8 		movq	-40(%rbp), %rdx
+  59 0071 488B75E0 		movq	-32(%rbp), %rsi
+  60 0075 488B45E8 		movq	-24(%rbp), %rax
+  61 0079 4889C7   		movq	%rax, %rdi
+  62 007c E8000000 		call	SecVswprintfImpl@PLT
+  62      00
+  63 0081 8945F4   		movl	%eax, -12(%rbp)
+  51:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** 
+  52:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****     if (retVal < 0) {
+  64              		.loc 1 52 8
+  65 0084 837DF400 		cmpl	$0, -12(%rbp)
+  66 0088 7911     		jns	.L6
+  53:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         strDest[0] = '\0';
+  67              		.loc 1 53 20
+  68 008a 488B45E8 		movq	-24(%rbp), %rax
+  69 008e C7000000 		movl	$0, (%rax)
+  69      0000
+  54:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         if (retVal == SECUREC_PRINTF_TRUNCATE) {
+  55:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****             /* Buffer too small */
+  56:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****             SECUREC_ERROR_INVALID_RANGE("vswprintf_s");
+  57:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         }
+  58:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         SECUREC_ERROR_INVALID_PARAMTER("vswprintf_s");
+  59:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****         return -1;
+  70              		.loc 1 59 16
+  71 0094 B8FFFFFF 		movl	$-1, %eax
+  71      FF
+  72 0099 EB03     		jmp	.L5
+  73              	.L6:
+  60:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****     }
+  61:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** 
+  62:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c ****     return retVal;
+  74              		.loc 1 62 12
+  75 009b 8B45F4   		movl	-12(%rbp), %eax
+  76              	.L5:
+  63:/home/xingli/share/1205tiny/secure_c/src/vswprintf_s.c **** }
+  77              		.loc 1 63 1
+  78 009e 488B7DF8 		movq	-8(%rbp), %rdi
+  79 00a2 6448333C 		xorq	%fs:40, %rdi
+  79      25280000 
+  79      00
+  80 00ab 7405     		je	.L7
+  81 00ad E8000000 		call	__stack_chk_fail@PLT
+  81      00
+  82              	.L7:
+  83 00b2 C9       		leave
+  84              	.LCFI2:
+  85              		.cfi_def_cfa 7, 8
+  86 00b3 C3       		ret
+  87              		.cfi_endproc
+  88              	.LFE6:
+  90              		.text
+  91              	.Letext0:
+  92              		.file 2 "<built-in>"
+  93              		.file 3 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+  94              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+GAS LISTING /tmp/ccHUXK1U.s 			page 4
+
+
+  95              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+  96              		.file 6 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+  97              		.file 7 "/usr/include/stdio.h"
+  98              		.file 8 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 1152              		.section	.note.gnu.property,"a"
+ 1153              		.align 8
+ 1154 0000 04000000 		.long	 1f - 0f
+ 1155 0004 10000000 		.long	 4f - 1f
+ 1156 0008 05000000 		.long	 5
+ 1157              	0:
+ 1158 000c 474E5500 		.string	 "GNU"
+ 1159              	1:
+ 1160              		.align 8
+ 1161 0010 020000C0 		.long	 0xc0000002
+ 1162 0014 04000000 		.long	 3f - 2f
+ 1163              	2:
+ 1164 0018 03000000 		.long	 0x3
+ 1165              	3:
+ 1166 001c 00000000 		.align 8
+ 1167              	4:
+GAS LISTING /tmp/ccHUXK1U.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 vswprintf_s.c
+     /tmp/ccHUXK1U.s:7      .text.vswprintf_s:0000000000000000 vswprintf_s
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+SecVswprintfImpl
+__stack_chk_fail

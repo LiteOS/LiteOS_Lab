@@ -1,0 +1,1148 @@
+GAS LISTING /tmp/cccDqx84.s 			page 1
+
+
+   1              		.file	"ssl_cache.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_ssl_cache_init,"ax",@progbits
+   5              		.globl	mbedtls_ssl_cache_init
+   7              	mbedtls_ssl_cache_init:
+   8              	.LFB21:
+   9              		.file 1 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c"
+   1:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** /*
+   2:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  SSL session cache implementation
+   3:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *
+   4:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *
+   7:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *
+  11:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *
+  13:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  limitations under the License.
+  18:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *
+  19:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  */
+  21:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** /*
+  22:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  * These session callbacks use a simple chained list
+  23:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  * to store and retrieve the session information.
+  24:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****  */
+  25:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  26:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  27:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #include "mbedtls/config.h"
+  28:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #else
+  29:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #include MBEDTLS_CONFIG_FILE
+  30:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+  31:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  32:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_SSL_CACHE_C)
+  33:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  34:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_PLATFORM_C)
+  35:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #include "mbedtls/platform.h"
+  36:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #else
+  37:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #include <stdlib.h>
+  38:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #define mbedtls_calloc    calloc
+  39:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #define mbedtls_free      free
+  40:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+  41:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  42:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #include "mbedtls/ssl_cache.h"
+  43:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  44:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #include <string.h>
+  45:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  46:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** void mbedtls_ssl_cache_init( mbedtls_ssl_cache_context *cache )
+  47:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** {
+  10              		.loc 1 47 1
+  11              		.cfi_startproc
+GAS LISTING /tmp/cccDqx84.s 			page 2
+
+
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22              		.loc 1 47 1
+  23 0010 64488B04 		movq	%fs:40, %rax
+  23      25280000 
+  23      00
+  24 0019 488945F8 		movq	%rax, -8(%rbp)
+  25 001d 31C0     		xorl	%eax, %eax
+  48:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     memset( cache, 0, sizeof( mbedtls_ssl_cache_context ) );
+  26              		.loc 1 48 5
+  27 001f 488B45E8 		movq	-24(%rbp), %rax
+  28 0023 BA100000 		movl	$16, %edx
+  28      00
+  29 0028 BE000000 		movl	$0, %esi
+  29      00
+  30 002d 4889C7   		movq	%rax, %rdi
+  31 0030 E8000000 		call	memset@PLT
+  31      00
+  49:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  50:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cache->timeout = MBEDTLS_SSL_CACHE_DEFAULT_TIMEOUT;
+  32              		.loc 1 50 20
+  33 0035 488B45E8 		movq	-24(%rbp), %rax
+  34 0039 C7400880 		movl	$86400, 8(%rax)
+  34      510100
+  51:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cache->max_entries = MBEDTLS_SSL_CACHE_DEFAULT_MAX_ENTRIES;
+  35              		.loc 1 51 24
+  36 0040 488B45E8 		movq	-24(%rbp), %rax
+  37 0044 C7400C32 		movl	$50, 12(%rax)
+  37      000000
+  52:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  53:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_THREADING_C)
+  54:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_mutex_init( &cache->mutex );
+  55:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+  56:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** }
+  38              		.loc 1 56 1
+  39 004b 90       		nop
+  40 004c 488B45F8 		movq	-8(%rbp), %rax
+  41 0050 64483304 		xorq	%fs:40, %rax
+  41      25280000 
+  41      00
+  42 0059 7405     		je	.L2
+  43 005b E8000000 		call	__stack_chk_fail@PLT
+  43      00
+  44              	.L2:
+  45 0060 C9       		leave
+  46              	.LCFI2:
+  47              		.cfi_def_cfa 7, 8
+  48 0061 C3       		ret
+  49              		.cfi_endproc
+GAS LISTING /tmp/cccDqx84.s 			page 3
+
+
+  50              	.LFE21:
+  52              		.section	.text.mbedtls_ssl_cache_get,"ax",@progbits
+  53              		.globl	mbedtls_ssl_cache_get
+  55              	mbedtls_ssl_cache_get:
+  56              	.LFB22:
+  57:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  58:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** int mbedtls_ssl_cache_get( void *data, mbedtls_ssl_session *session )
+  59:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** {
+  57              		.loc 1 59 1
+  58              		.cfi_startproc
+  59 0000 F30F1EFA 		endbr64
+  60 0004 55       		pushq	%rbp
+  61              	.LCFI3:
+  62              		.cfi_def_cfa_offset 16
+  63              		.cfi_offset 6, -16
+  64 0005 4889E5   		movq	%rsp, %rbp
+  65              	.LCFI4:
+  66              		.cfi_def_cfa_register 6
+  67 0008 4883EC40 		subq	$64, %rsp
+  68 000c 48897DC8 		movq	%rdi, -56(%rbp)
+  69 0010 488975C0 		movq	%rsi, -64(%rbp)
+  70              		.loc 1 59 1
+  71 0014 64488B04 		movq	%fs:40, %rax
+  71      25280000 
+  71      00
+  72 001d 488945F8 		movq	%rax, -8(%rbp)
+  73 0021 31C0     		xorl	%eax, %eax
+  60:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     int ret = 1;
+  74              		.loc 1 60 9
+  75 0023 C745DC01 		movl	$1, -36(%rbp)
+  75      000000
+  61:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+  62:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_time_t t = mbedtls_time( NULL );
+  63:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+  64:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_ssl_cache_context *cache = (mbedtls_ssl_cache_context *) data;
+  76              		.loc 1 64 32
+  77 002a 488B45C8 		movq	-56(%rbp), %rax
+  78 002e 488945E8 		movq	%rax, -24(%rbp)
+  65:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_ssl_cache_entry *cur, *entry;
+  66:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  67:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_THREADING_C)
+  68:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( mbedtls_mutex_lock( &cache->mutex ) != 0 )
+  69:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         return( 1 );
+  70:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+  71:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  72:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cur = cache->chain;
+  79              		.loc 1 72 9
+  80 0032 488B45E8 		movq	-24(%rbp), %rax
+  81 0036 488B00   		movq	(%rax), %rax
+  82 0039 488945E0 		movq	%rax, -32(%rbp)
+  73:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     entry = NULL;
+  83              		.loc 1 73 11
+  84 003d 48C745F0 		movq	$0, -16(%rbp)
+  84      00000000 
+  74:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     while( cur != NULL )
+  85              		.loc 1 75 10
+GAS LISTING /tmp/cccDqx84.s 			page 4
+
+
+  86 0045 E9610100 		jmp	.L4
+  86      00
+  87              	.L11:
+  76:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+  77:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         entry = cur;
+  88              		.loc 1 77 15
+  89 004a 488B45E0 		movq	-32(%rbp), %rax
+  90 004e 488945F0 		movq	%rax, -16(%rbp)
+  78:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         cur = cur->next;
+  91              		.loc 1 78 13
+  92 0052 488B45E0 		movq	-32(%rbp), %rax
+  93 0056 488B80A0 		movq	160(%rax), %rax
+  93      000000
+  94 005d 488945E0 		movq	%rax, -32(%rbp)
+  79:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  80:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+  81:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( cache->timeout != 0 &&
+  82:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             (int) ( t - entry->timestamp ) > cache->timeout )
+  83:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             continue;
+  84:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+  85:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( session->ciphersuite != entry->session.ciphersuite ||
+  95              		.loc 1 86 20
+  96 0061 488B45C0 		movq	-64(%rbp), %rax
+  97 0065 8B10     		movl	(%rax), %edx
+  98              		.loc 1 86 51
+  99 0067 488B45F0 		movq	-16(%rbp), %rax
+ 100 006b 8B00     		movl	(%rax), %eax
+ 101              		.loc 1 86 11
+ 102 006d 39C2     		cmpl	%eax, %edx
+ 103 006f 0F853601 		jne	.L4
+ 103      0000
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             session->compression != entry->session.compression ||
+ 104              		.loc 1 87 20 discriminator 1
+ 105 0075 488B45C0 		movq	-64(%rbp), %rax
+ 106 0079 8B5004   		movl	4(%rax), %edx
+ 107              		.loc 1 87 51 discriminator 1
+ 108 007c 488B45F0 		movq	-16(%rbp), %rax
+ 109 0080 8B4004   		movl	4(%rax), %eax
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             session->compression != entry->session.compression ||
+ 110              		.loc 1 86 64 discriminator 1
+ 111 0083 39C2     		cmpl	%eax, %edx
+ 112 0085 0F852001 		jne	.L4
+ 112      0000
+  88:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             session->id_len != entry->session.id_len )
+ 113              		.loc 1 88 20
+ 114 008b 488B45C0 		movq	-64(%rbp), %rax
+ 115 008f 488B5008 		movq	8(%rax), %rdx
+ 116              		.loc 1 88 46
+ 117 0093 488B45F0 		movq	-16(%rbp), %rax
+ 118 0097 488B4008 		movq	8(%rax), %rax
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             session->compression != entry->session.compression ||
+ 119              		.loc 1 87 64
+ 120 009b 4839C2   		cmpq	%rax, %rdx
+ 121 009e 7405     		je	.L6
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             continue;
+ 122              		.loc 1 89 13
+GAS LISTING /tmp/cccDqx84.s 			page 5
+
+
+ 123 00a0 E9060100 		jmp	.L4
+ 123      00
+ 124              	.L6:
+  90:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  91:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( memcmp( session->id, entry->session.id,
+ 125              		.loc 1 91 13
+ 126 00a5 488B45F0 		movq	-16(%rbp), %rax
+ 127 00a9 488B4008 		movq	8(%rax), %rax
+ 128              		.loc 1 91 48
+ 129 00ad 488B55F0 		movq	-16(%rbp), %rdx
+ 130 00b1 488D7210 		leaq	16(%rdx), %rsi
+ 131              		.loc 1 91 28
+ 132 00b5 488B55C0 		movq	-64(%rbp), %rdx
+ 133 00b9 488D4A10 		leaq	16(%rdx), %rcx
+ 134              		.loc 1 91 13
+ 135 00bd 4889C2   		movq	%rax, %rdx
+ 136 00c0 4889CF   		movq	%rcx, %rdi
+ 137 00c3 E8000000 		call	memcmp@PLT
+ 137      00
+ 138              		.loc 1 91 11
+ 139 00c8 85C0     		testl	%eax, %eax
+ 140 00ca 7405     		je	.L7
+  92:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                     entry->session.id_len ) != 0 )
+  93:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             continue;
+ 141              		.loc 1 93 13
+ 142 00cc E9DA0000 		jmp	.L4
+ 142      00
+ 143              	.L7:
+  94:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  95:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         memcpy( session->master, entry->session.master, 48 );
+ 144              		.loc 1 95 48
+ 145 00d1 488B45F0 		movq	-16(%rbp), %rax
+ 146 00d5 488D4830 		leaq	48(%rax), %rcx
+ 147              		.loc 1 95 24
+ 148 00d9 488B45C0 		movq	-64(%rbp), %rax
+ 149 00dd 4883C030 		addq	$48, %rax
+ 150              		.loc 1 95 9
+ 151 00e1 BA300000 		movl	$48, %edx
+ 151      00
+ 152 00e6 4889CE   		movq	%rcx, %rsi
+ 153 00e9 4889C7   		movq	%rax, %rdi
+ 154 00ec E8000000 		call	memcpy@PLT
+ 154      00
+  96:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  97:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         session->verify_result = entry->session.verify_result;
+ 155              		.loc 1 97 48
+ 156 00f1 488B45F0 		movq	-16(%rbp), %rax
+ 157 00f5 8B5068   		movl	104(%rax), %edx
+ 158              		.loc 1 97 32
+ 159 00f8 488B45C0 		movq	-64(%rbp), %rax
+ 160 00fc 895068   		movl	%edx, 104(%rax)
+  98:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+  99:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_X509_CRT_PARSE_C)
+ 100:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         /*
+ 101:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****          * Restore peer certificate (without rest of the original chain)
+ 102:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****          */
+ 103:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( entry->peer_cert.p != NULL )
+GAS LISTING /tmp/cccDqx84.s 			page 6
+
+
+ 161              		.loc 1 103 29
+ 162 00ff 488B45F0 		movq	-16(%rbp), %rax
+ 163 0103 488B8098 		movq	152(%rax), %rax
+ 163      000000
+ 164              		.loc 1 103 11
+ 165 010a 4885C0   		testq	%rax, %rax
+ 166 010d 0F848F00 		je	.L8
+ 166      0000
+ 104:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         {
+ 105:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             if( ( session->peer_cert = mbedtls_calloc( 1,
+ 167              		.loc 1 105 40
+ 168 0113 BE280200 		movl	$552, %esi
+ 168      00
+ 169 0118 BF010000 		movl	$1, %edi
+ 169      00
+ 170 011d E8000000 		call	mbedtls_calloc@PLT
+ 170      00
+ 171              		.loc 1 105 38
+ 172 0122 488B55C0 		movq	-64(%rbp), %rdx
+ 173 0126 48894260 		movq	%rax, 96(%rdx)
+ 174              		.loc 1 105 26
+ 175 012a 488B45C0 		movq	-64(%rbp), %rax
+ 176 012e 488B4060 		movq	96(%rax), %rax
+ 177              		.loc 1 105 15
+ 178 0132 4885C0   		testq	%rax, %rax
+ 179 0135 7509     		jne	.L9
+ 106:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                                  sizeof(mbedtls_x509_crt) ) ) == NULL )
+ 107:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             {
+ 108:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 ret = 1;
+ 180              		.loc 1 108 21
+ 181 0137 C745DC01 		movl	$1, -36(%rbp)
+ 181      000000
+ 109:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 goto exit;
+ 182              		.loc 1 109 17
+ 183 013e EB77     		jmp	.L10
+ 184              	.L9:
+ 110:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             }
+ 111:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 112:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             mbedtls_x509_crt_init( session->peer_cert );
+ 185              		.loc 1 112 13
+ 186 0140 488B45C0 		movq	-64(%rbp), %rax
+ 187 0144 488B4060 		movq	96(%rax), %rax
+ 188 0148 4889C7   		movq	%rax, %rdi
+ 189 014b E8000000 		call	mbedtls_x509_crt_init@PLT
+ 189      00
+ 113:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             if( mbedtls_x509_crt_parse( session->peer_cert, entry->peer_cert.p,
+ 190              		.loc 1 113 17
+ 191 0150 488B45F0 		movq	-16(%rbp), %rax
+ 192 0154 488B9090 		movq	144(%rax), %rdx
+ 192      000000
+ 193              		.loc 1 113 77
+ 194 015b 488B45F0 		movq	-16(%rbp), %rax
+ 195 015f 488B8898 		movq	152(%rax), %rcx
+ 195      000000
+ 196              		.loc 1 113 17
+ 197 0166 488B45C0 		movq	-64(%rbp), %rax
+ 198 016a 488B4060 		movq	96(%rax), %rax
+GAS LISTING /tmp/cccDqx84.s 			page 7
+
+
+ 199 016e 4889CE   		movq	%rcx, %rsi
+ 200 0171 4889C7   		movq	%rax, %rdi
+ 201 0174 E8000000 		call	mbedtls_x509_crt_parse@PLT
+ 201      00
+ 202              		.loc 1 113 15
+ 203 0179 85C0     		testl	%eax, %eax
+ 204 017b 7425     		je	.L8
+ 114:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                                 entry->peer_cert.len ) != 0 )
+ 115:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             {
+ 116:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 mbedtls_free( session->peer_cert );
+ 205              		.loc 1 116 38
+ 206 017d 488B45C0 		movq	-64(%rbp), %rax
+ 207 0181 488B4060 		movq	96(%rax), %rax
+ 208              		.loc 1 116 17
+ 209 0185 4889C7   		movq	%rax, %rdi
+ 210 0188 E8000000 		call	mbedtls_free@PLT
+ 210      00
+ 117:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 session->peer_cert = NULL;
+ 211              		.loc 1 117 36
+ 212 018d 488B45C0 		movq	-64(%rbp), %rax
+ 213 0191 48C74060 		movq	$0, 96(%rax)
+ 213      00000000 
+ 118:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 ret = 1;
+ 214              		.loc 1 118 21
+ 215 0199 C745DC01 		movl	$1, -36(%rbp)
+ 215      000000
+ 119:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 goto exit;
+ 216              		.loc 1 119 17
+ 217 01a0 EB15     		jmp	.L10
+ 218              	.L8:
+ 120:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             }
+ 121:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         }
+ 122:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif /* MBEDTLS_X509_CRT_PARSE_C */
+ 123:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 124:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         ret = 0;
+ 219              		.loc 1 124 13
+ 220 01a2 C745DC00 		movl	$0, -36(%rbp)
+ 220      000000
+ 125:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         goto exit;
+ 221              		.loc 1 125 9
+ 222 01a9 EB0C     		jmp	.L10
+ 223              	.L4:
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 224              		.loc 1 75 10
+ 225 01ab 48837DE0 		cmpq	$0, -32(%rbp)
+ 225      00
+ 226 01b0 0F8594FE 		jne	.L11
+ 226      FFFF
+ 126:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     }
+ 127:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 128:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** exit:
+ 227              		.loc 1 128 1
+ 228 01b6 90       		nop
+ 229              	.L10:
+ 129:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_THREADING_C)
+ 130:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( mbedtls_mutex_unlock( &cache->mutex ) != 0 )
+ 131:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         ret = 1;
+GAS LISTING /tmp/cccDqx84.s 			page 8
+
+
+ 132:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 133:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 134:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     return( ret );
+ 230              		.loc 1 134 11
+ 231 01b7 8B45DC   		movl	-36(%rbp), %eax
+ 135:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** }
+ 232              		.loc 1 135 1
+ 233 01ba 488B4DF8 		movq	-8(%rbp), %rcx
+ 234 01be 6448330C 		xorq	%fs:40, %rcx
+ 234      25280000 
+ 234      00
+ 235 01c7 7405     		je	.L13
+ 236 01c9 E8000000 		call	__stack_chk_fail@PLT
+ 236      00
+ 237              	.L13:
+ 238 01ce C9       		leave
+ 239              	.LCFI5:
+ 240              		.cfi_def_cfa 7, 8
+ 241 01cf C3       		ret
+ 242              		.cfi_endproc
+ 243              	.LFE22:
+ 245              		.section	.text.mbedtls_ssl_cache_set,"ax",@progbits
+ 246              		.globl	mbedtls_ssl_cache_set
+ 248              	mbedtls_ssl_cache_set:
+ 249              	.LFB23:
+ 136:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 137:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
+ 138:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** {
+ 250              		.loc 1 138 1
+ 251              		.cfi_startproc
+ 252 0000 F30F1EFA 		endbr64
+ 253 0004 55       		pushq	%rbp
+ 254              	.LCFI6:
+ 255              		.cfi_def_cfa_offset 16
+ 256              		.cfi_offset 6, -16
+ 257 0005 4889E5   		movq	%rsp, %rbp
+ 258              	.LCFI7:
+ 259              		.cfi_def_cfa_register 6
+ 260 0008 4883EC40 		subq	$64, %rsp
+ 261 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 262 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 263              		.loc 1 138 1
+ 264 0014 64488B04 		movq	%fs:40, %rax
+ 264      25280000 
+ 264      00
+ 265 001d 488945F8 		movq	%rax, -8(%rbp)
+ 266 0021 31C0     		xorl	%eax, %eax
+ 139:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     int ret = 1;
+ 267              		.loc 1 139 9
+ 268 0023 C745D801 		movl	$1, -40(%rbp)
+ 268      000000
+ 140:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_time_t t = mbedtls_time( NULL ), oldest = 0;
+ 142:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_ssl_cache_entry *old = NULL;
+ 143:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 144:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_ssl_cache_context *cache = (mbedtls_ssl_cache_context *) data;
+ 269              		.loc 1 144 32
+GAS LISTING /tmp/cccDqx84.s 			page 9
+
+
+ 270 002a 488B45C8 		movq	-56(%rbp), %rax
+ 271 002e 488945F0 		movq	%rax, -16(%rbp)
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_ssl_cache_entry *cur, *prv;
+ 146:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     int count = 0;
+ 272              		.loc 1 146 9
+ 273 0032 C745DC00 		movl	$0, -36(%rbp)
+ 273      000000
+ 147:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 148:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_THREADING_C)
+ 149:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( ( ret = mbedtls_mutex_lock( &cache->mutex ) ) != 0 )
+ 150:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         return( ret );
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 152:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 153:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cur = cache->chain;
+ 274              		.loc 1 153 9
+ 275 0039 488B45F0 		movq	-16(%rbp), %rax
+ 276 003d 488B00   		movq	(%rax), %rax
+ 277 0040 488945E0 		movq	%rax, -32(%rbp)
+ 154:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     prv = NULL;
+ 278              		.loc 1 154 9
+ 279 0044 48C745E8 		movq	$0, -24(%rbp)
+ 279      00000000 
+ 155:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     while( cur != NULL )
+ 280              		.loc 1 156 10
+ 281 004c EB42     		jmp	.L15
+ 282              	.L18:
+ 157:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 158:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         count++;
+ 283              		.loc 1 158 14
+ 284 004e 8345DC01 		addl	$1, -36(%rbp)
+ 159:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 160:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+ 161:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( cache->timeout != 0 &&
+ 162:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             (int) ( t - cur->timestamp ) > cache->timeout )
+ 163:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         {
+ 164:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             cur->timestamp = t;
+ 165:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             break; /* expired, reuse this slot, update timestamp */
+ 166:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         }
+ 167:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 168:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 169:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( memcmp( session->id, cur->session.id, cur->session.id_len ) == 0 )
+ 285              		.loc 1 169 13
+ 286 0052 488B45E0 		movq	-32(%rbp), %rax
+ 287 0056 488B4008 		movq	8(%rax), %rax
+ 288              		.loc 1 169 46
+ 289 005a 488B55E0 		movq	-32(%rbp), %rdx
+ 290 005e 488D7210 		leaq	16(%rdx), %rsi
+ 291              		.loc 1 169 28
+ 292 0062 488B55C0 		movq	-64(%rbp), %rdx
+ 293 0066 488D4A10 		leaq	16(%rdx), %rcx
+ 294              		.loc 1 169 13
+ 295 006a 4889C2   		movq	%rax, %rdx
+ 296 006d 4889CF   		movq	%rcx, %rdi
+ 297 0070 E8000000 		call	memcmp@PLT
+ 297      00
+ 298              		.loc 1 169 11
+GAS LISTING /tmp/cccDqx84.s 			page 10
+
+
+ 299 0075 85C0     		testl	%eax, %eax
+ 300 0077 7420     		je	.L30
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             break; /* client reconnected, keep timestamp for session id */
+ 171:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 172:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+ 173:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( oldest == 0 || cur->timestamp < oldest )
+ 174:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         {
+ 175:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             oldest = cur->timestamp;
+ 176:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             old = cur;
+ 177:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         }
+ 178:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 179:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 180:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         prv = cur;
+ 301              		.loc 1 180 13
+ 302 0079 488B45E0 		movq	-32(%rbp), %rax
+ 303 007d 488945E8 		movq	%rax, -24(%rbp)
+ 181:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         cur = cur->next;
+ 304              		.loc 1 181 13
+ 305 0081 488B45E0 		movq	-32(%rbp), %rax
+ 306 0085 488B80A0 		movq	160(%rax), %rax
+ 306      000000
+ 307 008c 488945E0 		movq	%rax, -32(%rbp)
+ 308              	.L15:
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 309              		.loc 1 156 10
+ 310 0090 48837DE0 		cmpq	$0, -32(%rbp)
+ 310      00
+ 311 0095 75B7     		jne	.L18
+ 312 0097 EB01     		jmp	.L17
+ 313              	.L30:
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             break; /* client reconnected, keep timestamp for session id */
+ 314              		.loc 1 170 13
+ 315 0099 90       		nop
+ 316              	.L17:
+ 182:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     }
+ 183:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 184:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( cur == NULL )
+ 317              		.loc 1 184 7
+ 318 009a 48837DE0 		cmpq	$0, -32(%rbp)
+ 318      00
+ 319 009f 0F85AA00 		jne	.L19
+ 319      0000
+ 185:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 186:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+ 187:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         /*
+ 188:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****          * Reuse oldest entry if max_entries reached
+ 189:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****          */
+ 190:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( count >= cache->max_entries )
+ 191:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         {
+ 192:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             if( old == NULL )
+ 193:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             {
+ 194:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 ret = 1;
+ 195:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 goto exit;
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             }
+ 197:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 198:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             cur = old;
+ 199:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         }
+GAS LISTING /tmp/cccDqx84.s 			page 11
+
+
+ 200:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #else /* MBEDTLS_HAVE_TIME */
+ 201:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         /*
+ 202:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****          * Reuse first entry in chain if max_entries reached,
+ 203:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****          * but move to last place
+ 204:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****          */
+ 205:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( count >= cache->max_entries )
+ 320              		.loc 1 205 27
+ 321 00a5 488B45F0 		movq	-16(%rbp), %rax
+ 322 00a9 8B400C   		movl	12(%rax), %eax
+ 323              		.loc 1 205 11
+ 324 00ac 3945DC   		cmpl	%eax, -36(%rbp)
+ 325 00af 7C55     		jl	.L20
+ 206:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         {
+ 207:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             if( cache->chain == NULL )
+ 326              		.loc 1 207 22
+ 327 00b1 488B45F0 		movq	-16(%rbp), %rax
+ 328 00b5 488B00   		movq	(%rax), %rax
+ 329              		.loc 1 207 15
+ 330 00b8 4885C0   		testq	%rax, %rax
+ 331 00bb 750C     		jne	.L21
+ 208:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             {
+ 209:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 ret = 1;
+ 332              		.loc 1 209 21
+ 333 00bd C745D801 		movl	$1, -40(%rbp)
+ 333      000000
+ 210:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 goto exit;
+ 334              		.loc 1 210 17
+ 335 00c4 E9830100 		jmp	.L22
+ 335      00
+ 336              	.L21:
+ 211:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             }
+ 212:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 213:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             cur = cache->chain;
+ 337              		.loc 1 213 17
+ 338 00c9 488B45F0 		movq	-16(%rbp), %rax
+ 339 00cd 488B00   		movq	(%rax), %rax
+ 340 00d0 488945E0 		movq	%rax, -32(%rbp)
+ 214:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             cache->chain = cur->next;
+ 341              		.loc 1 214 31
+ 342 00d4 488B45E0 		movq	-32(%rbp), %rax
+ 343 00d8 488B90A0 		movq	160(%rax), %rdx
+ 343      000000
+ 344              		.loc 1 214 26
+ 345 00df 488B45F0 		movq	-16(%rbp), %rax
+ 346 00e3 488910   		movq	%rdx, (%rax)
+ 215:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             cur->next = NULL;
+ 347              		.loc 1 215 23
+ 348 00e6 488B45E0 		movq	-32(%rbp), %rax
+ 349 00ea 48C780A0 		movq	$0, 160(%rax)
+ 349      00000000 
+ 349      000000
+ 216:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             prv->next = cur;
+ 350              		.loc 1 216 23
+ 351 00f5 488B45E8 		movq	-24(%rbp), %rax
+ 352 00f9 488B55E0 		movq	-32(%rbp), %rdx
+ 353 00fd 488990A0 		movq	%rdx, 160(%rax)
+ 353      000000
+GAS LISTING /tmp/cccDqx84.s 			page 12
+
+
+ 354 0104 EB49     		jmp	.L19
+ 355              	.L20:
+ 217:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         }
+ 218:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif /* MBEDTLS_HAVE_TIME */
+ 219:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         else
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         {
+ 221:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             /*
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****              * max_entries not reached, create new entry
+ 223:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****              */
+ 224:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             cur = mbedtls_calloc( 1, sizeof(mbedtls_ssl_cache_entry) );
+ 356              		.loc 1 224 19
+ 357 0106 BEA80000 		movl	$168, %esi
+ 357      00
+ 358 010b BF010000 		movl	$1, %edi
+ 358      00
+ 359 0110 E8000000 		call	mbedtls_calloc@PLT
+ 359      00
+ 360 0115 488945E0 		movq	%rax, -32(%rbp)
+ 225:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             if( cur == NULL )
+ 361              		.loc 1 225 15
+ 362 0119 48837DE0 		cmpq	$0, -32(%rbp)
+ 362      00
+ 363 011e 750C     		jne	.L23
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             {
+ 227:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 ret = 1;
+ 364              		.loc 1 227 21
+ 365 0120 C745D801 		movl	$1, -40(%rbp)
+ 365      000000
+ 228:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 goto exit;
+ 366              		.loc 1 228 17
+ 367 0127 E9200100 		jmp	.L22
+ 367      00
+ 368              	.L23:
+ 229:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             }
+ 230:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 231:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             if( prv == NULL )
+ 369              		.loc 1 231 15
+ 370 012c 48837DE8 		cmpq	$0, -24(%rbp)
+ 370      00
+ 371 0131 750D     		jne	.L24
+ 232:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 cache->chain = cur;
+ 372              		.loc 1 232 30
+ 373 0133 488B45F0 		movq	-16(%rbp), %rax
+ 374 0137 488B55E0 		movq	-32(%rbp), %rdx
+ 375 013b 488910   		movq	%rdx, (%rax)
+ 376 013e EB0F     		jmp	.L19
+ 377              	.L24:
+ 233:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             else
+ 234:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 prv->next = cur;
+ 378              		.loc 1 234 27
+ 379 0140 488B45E8 		movq	-24(%rbp), %rax
+ 380 0144 488B55E0 		movq	-32(%rbp), %rdx
+ 381 0148 488990A0 		movq	%rdx, 160(%rax)
+ 381      000000
+ 382              	.L19:
+ 235:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         }
+ 236:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+GAS LISTING /tmp/cccDqx84.s 			page 13
+
+
+ 237:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+ 238:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         cur->timestamp = t;
+ 239:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 240:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     }
+ 241:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 242:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     memcpy( &cur->session, session, sizeof( mbedtls_ssl_session ) );
+ 383              		.loc 1 242 13
+ 384 014f 488B45E0 		movq	-32(%rbp), %rax
+ 385              		.loc 1 242 5
+ 386 0153 488B4DC0 		movq	-64(%rbp), %rcx
+ 387 0157 BA880000 		movl	$136, %edx
+ 387      00
+ 388 015c 4889CE   		movq	%rcx, %rsi
+ 389 015f 4889C7   		movq	%rax, %rdi
+ 390 0162 E8000000 		call	memcpy@PLT
+ 390      00
+ 243:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 244:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_X509_CRT_PARSE_C)
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     /*
+ 246:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****      * If we're reusing an entry, free its certificate first
+ 247:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****      */
+ 248:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( cur->peer_cert.p != NULL )
+ 391              		.loc 1 248 23
+ 392 0167 488B45E0 		movq	-32(%rbp), %rax
+ 393 016b 488B8098 		movq	152(%rax), %rax
+ 393      000000
+ 394              		.loc 1 248 7
+ 395 0172 4885C0   		testq	%rax, %rax
+ 396 0175 742F     		je	.L25
+ 249:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 250:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         mbedtls_free( cur->peer_cert.p );
+ 397              		.loc 1 250 37
+ 398 0177 488B45E0 		movq	-32(%rbp), %rax
+ 399 017b 488B8098 		movq	152(%rax), %rax
+ 399      000000
+ 400              		.loc 1 250 9
+ 401 0182 4889C7   		movq	%rax, %rdi
+ 402 0185 E8000000 		call	mbedtls_free@PLT
+ 402      00
+ 251:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         memset( &cur->peer_cert, 0, sizeof(mbedtls_x509_buf) );
+ 403              		.loc 1 251 17
+ 404 018a 488B45E0 		movq	-32(%rbp), %rax
+ 405 018e 48058800 		addq	$136, %rax
+ 405      0000
+ 406              		.loc 1 251 9
+ 407 0194 BA180000 		movl	$24, %edx
+ 407      00
+ 408 0199 BE000000 		movl	$0, %esi
+ 408      00
+ 409 019e 4889C7   		movq	%rax, %rdi
+ 410 01a1 E8000000 		call	memset@PLT
+ 410      00
+ 411              	.L25:
+ 252:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     }
+ 253:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 254:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     /*
+ 255:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****      * Store peer certificate
+GAS LISTING /tmp/cccDqx84.s 			page 14
+
+
+ 256:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****      */
+ 257:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( session->peer_cert != NULL )
+ 412              		.loc 1 257 16
+ 413 01a6 488B45C0 		movq	-64(%rbp), %rax
+ 414 01aa 488B4060 		movq	96(%rax), %rax
+ 415              		.loc 1 257 7
+ 416 01ae 4885C0   		testq	%rax, %rax
+ 417 01b1 0F848E00 		je	.L26
+ 417      0000
+ 258:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 259:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         cur->peer_cert.p = mbedtls_calloc( 1, session->peer_cert->raw.len );
+ 418              		.loc 1 259 54
+ 419 01b7 488B45C0 		movq	-64(%rbp), %rax
+ 420 01bb 488B4060 		movq	96(%rax), %rax
+ 421              		.loc 1 259 28
+ 422 01bf 488B4008 		movq	8(%rax), %rax
+ 423 01c3 4889C6   		movq	%rax, %rsi
+ 424 01c6 BF010000 		movl	$1, %edi
+ 424      00
+ 425 01cb E8000000 		call	mbedtls_calloc@PLT
+ 425      00
+ 426              		.loc 1 259 26
+ 427 01d0 488B55E0 		movq	-32(%rbp), %rdx
+ 428 01d4 48898298 		movq	%rax, 152(%rdx)
+ 428      000000
+ 260:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         if( cur->peer_cert.p == NULL )
+ 429              		.loc 1 260 27
+ 430 01db 488B45E0 		movq	-32(%rbp), %rax
+ 431 01df 488B8098 		movq	152(%rax), %rax
+ 431      000000
+ 432              		.loc 1 260 11
+ 433 01e6 4885C0   		testq	%rax, %rax
+ 434 01e9 7509     		jne	.L27
+ 261:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         {
+ 262:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             ret = 1;
+ 435              		.loc 1 262 17
+ 436 01eb C745D801 		movl	$1, -40(%rbp)
+ 436      000000
+ 263:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****             goto exit;
+ 437              		.loc 1 263 13
+ 438 01f2 EB58     		jmp	.L22
+ 439              	.L27:
+ 264:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         }
+ 265:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         memcpy( cur->peer_cert.p, session->peer_cert->raw.p,
+ 267:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 session->peer_cert->raw.len );
+ 440              		.loc 1 267 24
+ 441 01f4 488B45C0 		movq	-64(%rbp), %rax
+ 442 01f8 488B4060 		movq	96(%rax), %rax
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 session->peer_cert->raw.len );
+ 443              		.loc 1 266 9
+ 444 01fc 488B5008 		movq	8(%rax), %rdx
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 session->peer_cert->raw.len );
+ 445              		.loc 1 266 42
+ 446 0200 488B45C0 		movq	-64(%rbp), %rax
+ 447 0204 488B4060 		movq	96(%rax), %rax
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 session->peer_cert->raw.len );
+GAS LISTING /tmp/cccDqx84.s 			page 15
+
+
+ 448              		.loc 1 266 58
+ 449 0208 488B4810 		movq	16(%rax), %rcx
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 session->peer_cert->raw.len );
+ 450              		.loc 1 266 31
+ 451 020c 488B45E0 		movq	-32(%rbp), %rax
+ 452 0210 488B8098 		movq	152(%rax), %rax
+ 452      000000
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****                 session->peer_cert->raw.len );
+ 453              		.loc 1 266 9
+ 454 0217 4889CE   		movq	%rcx, %rsi
+ 455 021a 4889C7   		movq	%rax, %rdi
+ 456 021d E8000000 		call	memcpy@PLT
+ 456      00
+ 268:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         cur->peer_cert.len = session->peer_cert->raw.len;
+ 457              		.loc 1 268 37
+ 458 0222 488B45C0 		movq	-64(%rbp), %rax
+ 459 0226 488B4060 		movq	96(%rax), %rax
+ 460              		.loc 1 268 53
+ 461 022a 488B5008 		movq	8(%rax), %rdx
+ 462              		.loc 1 268 28
+ 463 022e 488B45E0 		movq	-32(%rbp), %rax
+ 464 0232 48899090 		movq	%rdx, 144(%rax)
+ 464      000000
+ 269:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 270:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         cur->session.peer_cert = NULL;
+ 465              		.loc 1 270 32
+ 466 0239 488B45E0 		movq	-32(%rbp), %rax
+ 467 023d 48C74060 		movq	$0, 96(%rax)
+ 467      00000000 
+ 468              	.L26:
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     }
+ 272:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif /* MBEDTLS_X509_CRT_PARSE_C */
+ 273:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 274:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     ret = 0;
+ 469              		.loc 1 274 9
+ 470 0245 C745D800 		movl	$0, -40(%rbp)
+ 470      000000
+ 471              	.L22:
+ 275:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 276:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** exit:
+ 277:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_THREADING_C)
+ 278:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( mbedtls_mutex_unlock( &cache->mutex ) != 0 )
+ 279:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         ret = 1;
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 281:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 282:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     return( ret );
+ 472              		.loc 1 282 11
+ 473 024c 8B45D8   		movl	-40(%rbp), %eax
+ 283:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** }
+ 474              		.loc 1 283 1
+ 475 024f 488B4DF8 		movq	-8(%rbp), %rcx
+ 476 0253 6448330C 		xorq	%fs:40, %rcx
+ 476      25280000 
+ 476      00
+ 477 025c 7405     		je	.L29
+ 478 025e E8000000 		call	__stack_chk_fail@PLT
+ 478      00
+GAS LISTING /tmp/cccDqx84.s 			page 16
+
+
+ 479              	.L29:
+ 480 0263 C9       		leave
+ 481              	.LCFI8:
+ 482              		.cfi_def_cfa 7, 8
+ 483 0264 C3       		ret
+ 484              		.cfi_endproc
+ 485              	.LFE23:
+ 487              		.section	.text.mbedtls_ssl_cache_set_max_entries,"ax",@progbits
+ 488              		.globl	mbedtls_ssl_cache_set_max_entries
+ 490              	mbedtls_ssl_cache_set_max_entries:
+ 491              	.LFB24:
+ 284:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 285:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_HAVE_TIME)
+ 286:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** void mbedtls_ssl_cache_set_timeout( mbedtls_ssl_cache_context *cache, int timeout )
+ 287:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** {
+ 288:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( timeout < 0 ) timeout = 0;
+ 289:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 290:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cache->timeout = timeout;
+ 291:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** }
+ 292:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif /* MBEDTLS_HAVE_TIME */
+ 293:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** void mbedtls_ssl_cache_set_max_entries( mbedtls_ssl_cache_context *cache, int max )
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** {
+ 492              		.loc 1 295 1
+ 493              		.cfi_startproc
+ 494 0000 F30F1EFA 		endbr64
+ 495 0004 55       		pushq	%rbp
+ 496              	.LCFI9:
+ 497              		.cfi_def_cfa_offset 16
+ 498              		.cfi_offset 6, -16
+ 499 0005 4889E5   		movq	%rsp, %rbp
+ 500              	.LCFI10:
+ 501              		.cfi_def_cfa_register 6
+ 502 0008 4883EC20 		subq	$32, %rsp
+ 503 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 504 0010 8975E4   		movl	%esi, -28(%rbp)
+ 505              		.loc 1 295 1
+ 506 0013 64488B04 		movq	%fs:40, %rax
+ 506      25280000 
+ 506      00
+ 507 001c 488945F8 		movq	%rax, -8(%rbp)
+ 508 0020 31C0     		xorl	%eax, %eax
+ 296:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     if( max < 0 ) max = 0;
+ 509              		.loc 1 296 7
+ 510 0022 837DE400 		cmpl	$0, -28(%rbp)
+ 511 0026 7907     		jns	.L32
+ 512              		.loc 1 296 23 discriminator 1
+ 513 0028 C745E400 		movl	$0, -28(%rbp)
+ 513      000000
+ 514              	.L32:
+ 297:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 298:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cache->max_entries = max;
+ 515              		.loc 1 298 24
+ 516 002f 488B45E8 		movq	-24(%rbp), %rax
+ 517 0033 8B55E4   		movl	-28(%rbp), %edx
+ 518 0036 89500C   		movl	%edx, 12(%rax)
+ 299:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** }
+GAS LISTING /tmp/cccDqx84.s 			page 17
+
+
+ 519              		.loc 1 299 1
+ 520 0039 90       		nop
+ 521 003a 488B45F8 		movq	-8(%rbp), %rax
+ 522 003e 64483304 		xorq	%fs:40, %rax
+ 522      25280000 
+ 522      00
+ 523 0047 7405     		je	.L33
+ 524 0049 E8000000 		call	__stack_chk_fail@PLT
+ 524      00
+ 525              	.L33:
+ 526 004e C9       		leave
+ 527              	.LCFI11:
+ 528              		.cfi_def_cfa 7, 8
+ 529 004f C3       		ret
+ 530              		.cfi_endproc
+ 531              	.LFE24:
+ 533              		.section	.text.mbedtls_ssl_cache_free,"ax",@progbits
+ 534              		.globl	mbedtls_ssl_cache_free
+ 536              	mbedtls_ssl_cache_free:
+ 537              	.LFB25:
+ 300:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 301:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** void mbedtls_ssl_cache_free( mbedtls_ssl_cache_context *cache )
+ 302:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** {
+ 538              		.loc 1 302 1
+ 539              		.cfi_startproc
+ 540 0000 F30F1EFA 		endbr64
+ 541 0004 55       		pushq	%rbp
+ 542              	.LCFI12:
+ 543              		.cfi_def_cfa_offset 16
+ 544              		.cfi_offset 6, -16
+ 545 0005 4889E5   		movq	%rsp, %rbp
+ 546              	.LCFI13:
+ 547              		.cfi_def_cfa_register 6
+ 548 0008 4883EC30 		subq	$48, %rsp
+ 549 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 550              		.loc 1 302 1
+ 551 0010 64488B04 		movq	%fs:40, %rax
+ 551      25280000 
+ 551      00
+ 552 0019 488945F8 		movq	%rax, -8(%rbp)
+ 553 001d 31C0     		xorl	%eax, %eax
+ 303:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_ssl_cache_entry *cur, *prv;
+ 304:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 305:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cur = cache->chain;
+ 554              		.loc 1 305 9
+ 555 001f 488B45D8 		movq	-40(%rbp), %rax
+ 556 0023 488B00   		movq	(%rax), %rax
+ 557 0026 488945E8 		movq	%rax, -24(%rbp)
+ 306:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     while( cur != NULL )
+ 558              		.loc 1 307 10
+ 559 002a EB42     		jmp	.L35
+ 560              	.L36:
+ 308:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 309:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         prv = cur;
+ 561              		.loc 1 309 13
+ 562 002c 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/cccDqx84.s 			page 18
+
+
+ 563 0030 488945F0 		movq	%rax, -16(%rbp)
+ 310:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         cur = cur->next;
+ 564              		.loc 1 310 13
+ 565 0034 488B45E8 		movq	-24(%rbp), %rax
+ 566 0038 488B80A0 		movq	160(%rax), %rax
+ 566      000000
+ 567 003f 488945E8 		movq	%rax, -24(%rbp)
+ 311:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 312:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         mbedtls_ssl_session_free( &prv->session );
+ 568              		.loc 1 312 9
+ 569 0043 488B45F0 		movq	-16(%rbp), %rax
+ 570 0047 4889C7   		movq	%rax, %rdi
+ 571 004a E8000000 		call	mbedtls_ssl_session_free@PLT
+ 571      00
+ 313:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 314:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_X509_CRT_PARSE_C)
+ 315:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         mbedtls_free( prv->peer_cert.p );
+ 572              		.loc 1 315 37
+ 573 004f 488B45F0 		movq	-16(%rbp), %rax
+ 574 0053 488B8098 		movq	152(%rax), %rax
+ 574      000000
+ 575              		.loc 1 315 9
+ 576 005a 4889C7   		movq	%rax, %rdi
+ 577 005d E8000000 		call	mbedtls_free@PLT
+ 577      00
+ 316:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif /* MBEDTLS_X509_CRT_PARSE_C */
+ 317:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 318:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****         mbedtls_free( prv );
+ 578              		.loc 1 318 9
+ 579 0062 488B45F0 		movq	-16(%rbp), %rax
+ 580 0066 4889C7   		movq	%rax, %rdi
+ 581 0069 E8000000 		call	mbedtls_free@PLT
+ 581      00
+ 582              	.L35:
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     {
+ 583              		.loc 1 307 10
+ 584 006e 48837DE8 		cmpq	$0, -24(%rbp)
+ 584      00
+ 585 0073 75B7     		jne	.L36
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     }
+ 320:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** 
+ 321:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #if defined(MBEDTLS_THREADING_C)
+ 322:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     mbedtls_mutex_free( &cache->mutex );
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** #endif
+ 324:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c ****     cache->chain = NULL;
+ 586              		.loc 1 324 18
+ 587 0075 488B45D8 		movq	-40(%rbp), %rax
+ 588 0079 48C70000 		movq	$0, (%rax)
+ 588      000000
+ 325:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/ssl_cache.c **** }
+ 589              		.loc 1 325 1
+ 590 0080 90       		nop
+ 591 0081 488B45F8 		movq	-8(%rbp), %rax
+ 592 0085 64483304 		xorq	%fs:40, %rax
+ 592      25280000 
+ 592      00
+ 593 008e 7405     		je	.L37
+GAS LISTING /tmp/cccDqx84.s 			page 19
+
+
+ 594 0090 E8000000 		call	__stack_chk_fail@PLT
+ 594      00
+ 595              	.L37:
+ 596 0095 C9       		leave
+ 597              	.LCFI14:
+ 598              		.cfi_def_cfa 7, 8
+ 599 0096 C3       		ret
+ 600              		.cfi_endproc
+ 601              	.LFE25:
+ 603              		.text
+ 604              	.Letext0:
+ 605              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 606              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 607              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 608              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 609              		.file 6 "/usr/include/stdio.h"
+ 610              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 611              		.file 8 "/usr/include/time.h"
+ 612              		.file 9 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platform.
+ 613              		.file 10 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 614              		.file 11 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/md.h"
+ 615              		.file 12 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/pk.h"
+ 616              		.file 13 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/asn1.h"
+ 617              		.file 14 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/x509.h"
+ 618              		.file 15 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/x509_crt
+ 619              		.file 16 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/ssl.h"
+ 620              		.file 17 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/ssl_cach
+ 3374              		.section	.note.gnu.property,"a"
+ 3375              		.align 8
+ 3376 0000 04000000 		.long	 1f - 0f
+ 3377 0004 10000000 		.long	 4f - 1f
+ 3378 0008 05000000 		.long	 5
+ 3379              	0:
+ 3380 000c 474E5500 		.string	 "GNU"
+ 3381              	1:
+ 3382              		.align 8
+ 3383 0010 020000C0 		.long	 0xc0000002
+ 3384 0014 04000000 		.long	 3f - 2f
+ 3385              	2:
+ 3386 0018 03000000 		.long	 0x3
+ 3387              	3:
+ 3388 001c 00000000 		.align 8
+ 3389              	4:
+GAS LISTING /tmp/cccDqx84.s 			page 20
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ssl_cache.c
+     /tmp/cccDqx84.s:7      .text.mbedtls_ssl_cache_init:0000000000000000 mbedtls_ssl_cache_init
+     /tmp/cccDqx84.s:55     .text.mbedtls_ssl_cache_get:0000000000000000 mbedtls_ssl_cache_get
+     /tmp/cccDqx84.s:248    .text.mbedtls_ssl_cache_set:0000000000000000 mbedtls_ssl_cache_set
+     /tmp/cccDqx84.s:490    .text.mbedtls_ssl_cache_set_max_entries:0000000000000000 mbedtls_ssl_cache_set_max_entries
+     /tmp/cccDqx84.s:536    .text.mbedtls_ssl_cache_free:0000000000000000 mbedtls_ssl_cache_free
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+memset
+__stack_chk_fail
+memcmp
+memcpy
+mbedtls_calloc
+mbedtls_x509_crt_init
+mbedtls_x509_crt_parse
+mbedtls_free
+mbedtls_ssl_session_free

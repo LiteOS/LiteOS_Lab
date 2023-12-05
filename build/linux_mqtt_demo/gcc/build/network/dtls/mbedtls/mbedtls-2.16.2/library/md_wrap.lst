@@ -1,0 +1,1500 @@
+GAS LISTING /tmp/ccVo6cJA.s 			page 1
+
+
+   1              		.file	"md_wrap.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.sha1_starts_wrap,"ax",@progbits
+   6              	sha1_starts_wrap:
+   7              	.LFB6:
+   8              		.file 1 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c"
+   1:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** /**
+   2:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  * \file md_wrap.c
+   3:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *
+   4:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  * \brief Generic message digest wrapper for mbed TLS
+   5:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *
+   6:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  * \author Adriaan de Jong <dejong@fox-it.com>
+   7:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *
+   8:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   9:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  SPDX-License-Identifier: Apache-2.0
+  10:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *
+  11:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+  12:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  not use this file except in compliance with the License.
+  13:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  You may obtain a copy of the License at
+  14:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *
+  15:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  16:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *
+  17:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  Unless required by applicable law or agreed to in writing, software
+  18:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  19:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  20:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  See the License for the specific language governing permissions and
+  21:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  limitations under the License.
+  22:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *
+  23:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  24:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  */
+  25:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  26:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  27:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/config.h"
+  28:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #else
+  29:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include MBEDTLS_CONFIG_FILE
+  30:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  31:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  32:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_MD_C)
+  33:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  34:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/md_internal.h"
+  35:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  36:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_MD2_C)
+  37:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/md2.h"
+  38:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  39:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  40:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_MD4_C)
+  41:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/md4.h"
+  42:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  43:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  44:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_MD5_C)
+  45:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/md5.h"
+  46:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  47:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  48:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_RIPEMD160_C)
+  49:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/ripemd160.h"
+  50:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+GAS LISTING /tmp/ccVo6cJA.s 			page 2
+
+
+  51:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  52:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_SHA1_C)
+  53:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/sha1.h"
+  54:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  55:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  56:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_SHA256_C)
+  57:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/sha256.h"
+  58:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  59:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  60:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_SHA512_C)
+  61:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/sha512.h"
+  62:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  63:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  64:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_PLATFORM_C)
+  65:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include "mbedtls/platform.h"
+  66:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #else
+  67:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #include <stdlib.h>
+  68:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #define mbedtls_calloc    calloc
+  69:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #define mbedtls_free       free
+  70:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif
+  71:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  72:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_MD2_C)
+  73:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  74:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md2_starts_wrap( void *ctx )
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+  76:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md2_starts_ret( (mbedtls_md2_context *) ctx ) );
+  77:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+  78:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  79:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md2_update_wrap( void *ctx, const unsigned char *input,
+  80:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                              size_t ilen )
+  81:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+  82:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md2_update_ret( (mbedtls_md2_context *) ctx, input, ilen ) );
+  83:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+  84:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  85:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md2_finish_wrap( void *ctx, unsigned char *output )
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md2_finish_ret( (mbedtls_md2_context *) ctx, output ) );
+  88:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  90:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void *md2_ctx_alloc( void )
+  91:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+  92:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_md2_context ) );
+  93:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  94:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     if( ctx != NULL )
+  95:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****         mbedtls_md2_init( (mbedtls_md2_context *) ctx );
+  96:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+  97:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( ctx );
+  98:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+  99:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 100:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void md2_ctx_free( void *ctx )
+ 101:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 102:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md2_free( (mbedtls_md2_context *) ctx );
+ 103:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_free( ctx );
+ 104:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 105:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 106:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void md2_clone_wrap( void *dst, const void *src )
+ 107:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+GAS LISTING /tmp/ccVo6cJA.s 			page 3
+
+
+ 108:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md2_clone( (mbedtls_md2_context *) dst,
+ 109:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                  (const mbedtls_md2_context *) src );
+ 110:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 111:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 112:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md2_process_wrap( void *ctx, const unsigned char *data )
+ 113:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 114:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ((void) data);
+ 115:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 116:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_internal_md2_process( (mbedtls_md2_context *) ctx ) );
+ 117:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 118:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 119:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** const mbedtls_md_info_t mbedtls_md2_info = {
+ 120:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     MBEDTLS_MD_MD2,
+ 121:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     "MD2",
+ 122:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     16,
+ 123:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     16,
+ 124:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md2_starts_wrap,
+ 125:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md2_update_wrap,
+ 126:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md2_finish_wrap,
+ 127:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md2_ret,
+ 128:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md2_ctx_alloc,
+ 129:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md2_ctx_free,
+ 130:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md2_clone_wrap,
+ 131:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md2_process_wrap,
+ 132:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** };
+ 133:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 134:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif /* MBEDTLS_MD2_C */
+ 135:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 136:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_MD4_C)
+ 137:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 138:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md4_starts_wrap( void *ctx )
+ 139:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 140:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md4_starts_ret( (mbedtls_md4_context *) ctx ) );
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 142:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 143:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md4_update_wrap( void *ctx, const unsigned char *input,
+ 144:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                              size_t ilen )
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 146:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md4_update_ret( (mbedtls_md4_context *) ctx, input, ilen ) );
+ 147:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 148:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 149:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md4_finish_wrap( void *ctx, unsigned char *output )
+ 150:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md4_finish_ret( (mbedtls_md4_context *) ctx, output ) );
+ 152:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 153:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 154:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void *md4_ctx_alloc( void )
+ 155:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_md4_context ) );
+ 157:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 158:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     if( ctx != NULL )
+ 159:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****         mbedtls_md4_init( (mbedtls_md4_context *) ctx );
+ 160:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 161:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( ctx );
+ 162:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 163:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 164:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void md4_ctx_free( void *ctx )
+GAS LISTING /tmp/ccVo6cJA.s 			page 4
+
+
+ 165:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 166:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md4_free( (mbedtls_md4_context *) ctx );
+ 167:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_free( ctx );
+ 168:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 169:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void md4_clone_wrap( void *dst, const void *src )
+ 171:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 172:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md4_clone( (mbedtls_md4_context *) dst,
+ 173:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                        (const mbedtls_md4_context *) src );
+ 174:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 175:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 176:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md4_process_wrap( void *ctx, const unsigned char *data )
+ 177:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 178:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_internal_md4_process( (mbedtls_md4_context *) ctx, data ) );
+ 179:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 180:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 181:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** const mbedtls_md_info_t mbedtls_md4_info = {
+ 182:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     MBEDTLS_MD_MD4,
+ 183:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     "MD4",
+ 184:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     16,
+ 185:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     64,
+ 186:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md4_starts_wrap,
+ 187:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md4_update_wrap,
+ 188:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md4_finish_wrap,
+ 189:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md4_ret,
+ 190:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md4_ctx_alloc,
+ 191:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md4_ctx_free,
+ 192:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md4_clone_wrap,
+ 193:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md4_process_wrap,
+ 194:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** };
+ 195:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif /* MBEDTLS_MD4_C */
+ 197:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 198:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_MD5_C)
+ 199:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 200:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md5_starts_wrap( void *ctx )
+ 201:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 202:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md5_starts_ret( (mbedtls_md5_context *) ctx ) );
+ 203:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 204:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 205:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md5_update_wrap( void *ctx, const unsigned char *input,
+ 206:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                              size_t ilen )
+ 207:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 208:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md5_update_ret( (mbedtls_md5_context *) ctx, input, ilen ) );
+ 209:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 210:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 211:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md5_finish_wrap( void *ctx, unsigned char *output )
+ 212:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 213:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_md5_finish_ret( (mbedtls_md5_context *) ctx, output ) );
+ 214:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 215:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 216:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void *md5_ctx_alloc( void )
+ 217:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 218:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_md5_context ) );
+ 219:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     if( ctx != NULL )
+ 221:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****         mbedtls_md5_init( (mbedtls_md5_context *) ctx );
+GAS LISTING /tmp/ccVo6cJA.s 			page 5
+
+
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 223:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( ctx );
+ 224:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 225:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void md5_ctx_free( void *ctx )
+ 227:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 228:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md5_free( (mbedtls_md5_context *) ctx );
+ 229:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_free( ctx );
+ 230:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 231:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 232:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void md5_clone_wrap( void *dst, const void *src )
+ 233:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 234:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md5_clone( (mbedtls_md5_context *) dst,
+ 235:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                        (const mbedtls_md5_context *) src );
+ 236:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 237:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 238:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int md5_process_wrap( void *ctx, const unsigned char *data )
+ 239:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 240:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_internal_md5_process( (mbedtls_md5_context *) ctx, data ) );
+ 241:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 242:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 243:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** const mbedtls_md_info_t mbedtls_md5_info = {
+ 244:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     MBEDTLS_MD_MD5,
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     "MD5",
+ 246:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     16,
+ 247:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     64,
+ 248:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md5_starts_wrap,
+ 249:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md5_update_wrap,
+ 250:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md5_finish_wrap,
+ 251:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_md5_ret,
+ 252:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md5_ctx_alloc,
+ 253:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md5_ctx_free,
+ 254:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md5_clone_wrap,
+ 255:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     md5_process_wrap,
+ 256:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** };
+ 257:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 258:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif /* MBEDTLS_MD5_C */
+ 259:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 260:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_RIPEMD160_C)
+ 261:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 262:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int ripemd160_starts_wrap( void *ctx )
+ 263:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 264:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_ripemd160_starts_ret( (mbedtls_ripemd160_context *) ctx ) );
+ 265:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 267:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int ripemd160_update_wrap( void *ctx, const unsigned char *input,
+ 268:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                    size_t ilen )
+ 269:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 270:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_ripemd160_update_ret( (mbedtls_ripemd160_context *) ctx,
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                           input, ilen ) );
+ 272:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 273:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 274:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int ripemd160_finish_wrap( void *ctx, unsigned char *output )
+ 275:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 276:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_ripemd160_finish_ret( (mbedtls_ripemd160_context *) ctx,
+ 277:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                           output ) );
+ 278:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+GAS LISTING /tmp/ccVo6cJA.s 			page 6
+
+
+ 279:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void *ripemd160_ctx_alloc( void )
+ 281:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 282:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_ripemd160_context ) );
+ 283:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 284:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     if( ctx != NULL )
+ 285:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****         mbedtls_ripemd160_init( (mbedtls_ripemd160_context *) ctx );
+ 286:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 287:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( ctx );
+ 288:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 289:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 290:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void ripemd160_ctx_free( void *ctx )
+ 291:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 292:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_ripemd160_free( (mbedtls_ripemd160_context *) ctx );
+ 293:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_free( ctx );
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 296:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void ripemd160_clone_wrap( void *dst, const void *src )
+ 297:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 298:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_ripemd160_clone( (mbedtls_ripemd160_context *) dst,
+ 299:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                        (const mbedtls_ripemd160_context *) src );
+ 300:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 301:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 302:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int ripemd160_process_wrap( void *ctx, const unsigned char *data )
+ 303:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 304:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_internal_ripemd160_process(
+ 305:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                 (mbedtls_ripemd160_context *) ctx, data ) );
+ 306:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 308:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** const mbedtls_md_info_t mbedtls_ripemd160_info = {
+ 309:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     MBEDTLS_MD_RIPEMD160,
+ 310:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     "RIPEMD160",
+ 311:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     20,
+ 312:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     64,
+ 313:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ripemd160_starts_wrap,
+ 314:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ripemd160_update_wrap,
+ 315:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ripemd160_finish_wrap,
+ 316:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_ripemd160_ret,
+ 317:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ripemd160_ctx_alloc,
+ 318:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ripemd160_ctx_free,
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ripemd160_clone_wrap,
+ 320:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     ripemd160_process_wrap,
+ 321:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** };
+ 322:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif /* MBEDTLS_RIPEMD160_C */
+ 324:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 325:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_SHA1_C)
+ 326:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 327:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha1_starts_wrap( void *ctx )
+ 328:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+   9              		.loc 1 328 1
+  10              		.cfi_startproc
+  11 0000 F30F1EFA 		endbr64
+  12 0004 55       		pushq	%rbp
+  13              	.LCFI0:
+  14              		.cfi_def_cfa_offset 16
+  15              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccVo6cJA.s 			page 7
+
+
+  16 0005 4889E5   		movq	%rsp, %rbp
+  17              	.LCFI1:
+  18              		.cfi_def_cfa_register 6
+  19 0008 4883EC20 		subq	$32, %rsp
+  20 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  21              		.loc 1 328 1
+  22 0010 64488B04 		movq	%fs:40, %rax
+  22      25280000 
+  22      00
+  23 0019 488945F8 		movq	%rax, -8(%rbp)
+  24 001d 31C0     		xorl	%eax, %eax
+ 329:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha1_starts_ret( (mbedtls_sha1_context *) ctx ) );
+  25              		.loc 1 329 13
+  26 001f 488B45E8 		movq	-24(%rbp), %rax
+  27 0023 4889C7   		movq	%rax, %rdi
+  28 0026 E8000000 		call	mbedtls_sha1_starts_ret@PLT
+  28      00
+ 330:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+  29              		.loc 1 330 1
+  30 002b 488B55F8 		movq	-8(%rbp), %rdx
+  31 002f 64483314 		xorq	%fs:40, %rdx
+  31      25280000 
+  31      00
+  32 0038 7405     		je	.L3
+  33 003a E8000000 		call	__stack_chk_fail@PLT
+  33      00
+  34              	.L3:
+  35 003f C9       		leave
+  36              	.LCFI2:
+  37              		.cfi_def_cfa 7, 8
+  38 0040 C3       		ret
+  39              		.cfi_endproc
+  40              	.LFE6:
+  42              		.section	.text.sha1_update_wrap,"ax",@progbits
+  44              	sha1_update_wrap:
+  45              	.LFB7:
+ 331:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha1_update_wrap( void *ctx, const unsigned char *input,
+ 333:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                               size_t ilen )
+ 334:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+  46              		.loc 1 334 1
+  47              		.cfi_startproc
+  48 0000 F30F1EFA 		endbr64
+  49 0004 55       		pushq	%rbp
+  50              	.LCFI3:
+  51              		.cfi_def_cfa_offset 16
+  52              		.cfi_offset 6, -16
+  53 0005 4889E5   		movq	%rsp, %rbp
+  54              	.LCFI4:
+  55              		.cfi_def_cfa_register 6
+  56 0008 4883EC30 		subq	$48, %rsp
+  57 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  58 0010 488975E0 		movq	%rsi, -32(%rbp)
+  59 0014 488955D8 		movq	%rdx, -40(%rbp)
+  60              		.loc 1 334 1
+  61 0018 64488B04 		movq	%fs:40, %rax
+  61      25280000 
+GAS LISTING /tmp/ccVo6cJA.s 			page 8
+
+
+  61      00
+  62 0021 488945F8 		movq	%rax, -8(%rbp)
+  63 0025 31C0     		xorl	%eax, %eax
+ 335:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha1_update_ret( (mbedtls_sha1_context *) ctx,
+  64              		.loc 1 335 13
+  65 0027 488B55D8 		movq	-40(%rbp), %rdx
+  66 002b 488B4DE0 		movq	-32(%rbp), %rcx
+  67 002f 488B45E8 		movq	-24(%rbp), %rax
+  68 0033 4889CE   		movq	%rcx, %rsi
+  69 0036 4889C7   		movq	%rax, %rdi
+  70 0039 E8000000 		call	mbedtls_sha1_update_ret@PLT
+  70      00
+ 336:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                      input, ilen ) );
+ 337:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+  71              		.loc 1 337 1
+  72 003e 488B4DF8 		movq	-8(%rbp), %rcx
+  73 0042 6448330C 		xorq	%fs:40, %rcx
+  73      25280000 
+  73      00
+  74 004b 7405     		je	.L6
+  75 004d E8000000 		call	__stack_chk_fail@PLT
+  75      00
+  76              	.L6:
+  77 0052 C9       		leave
+  78              	.LCFI5:
+  79              		.cfi_def_cfa 7, 8
+  80 0053 C3       		ret
+  81              		.cfi_endproc
+  82              	.LFE7:
+  84              		.section	.text.sha1_finish_wrap,"ax",@progbits
+  86              	sha1_finish_wrap:
+  87              	.LFB8:
+ 338:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 339:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha1_finish_wrap( void *ctx, unsigned char *output )
+ 340:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+  88              		.loc 1 340 1
+  89              		.cfi_startproc
+  90 0000 F30F1EFA 		endbr64
+  91 0004 55       		pushq	%rbp
+  92              	.LCFI6:
+  93              		.cfi_def_cfa_offset 16
+  94              		.cfi_offset 6, -16
+  95 0005 4889E5   		movq	%rsp, %rbp
+  96              	.LCFI7:
+  97              		.cfi_def_cfa_register 6
+  98 0008 4883EC20 		subq	$32, %rsp
+  99 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 100 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 101              		.loc 1 340 1
+ 102 0014 64488B04 		movq	%fs:40, %rax
+ 102      25280000 
+ 102      00
+ 103 001d 488945F8 		movq	%rax, -8(%rbp)
+ 104 0021 31C0     		xorl	%eax, %eax
+ 341:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha1_finish_ret( (mbedtls_sha1_context *) ctx, output ) );
+ 105              		.loc 1 341 13
+ 106 0023 488B55E0 		movq	-32(%rbp), %rdx
+GAS LISTING /tmp/ccVo6cJA.s 			page 9
+
+
+ 107 0027 488B45E8 		movq	-24(%rbp), %rax
+ 108 002b 4889D6   		movq	%rdx, %rsi
+ 109 002e 4889C7   		movq	%rax, %rdi
+ 110 0031 E8000000 		call	mbedtls_sha1_finish_ret@PLT
+ 110      00
+ 342:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 111              		.loc 1 342 1
+ 112 0036 488B4DF8 		movq	-8(%rbp), %rcx
+ 113 003a 6448330C 		xorq	%fs:40, %rcx
+ 113      25280000 
+ 113      00
+ 114 0043 7405     		je	.L9
+ 115 0045 E8000000 		call	__stack_chk_fail@PLT
+ 115      00
+ 116              	.L9:
+ 117 004a C9       		leave
+ 118              	.LCFI8:
+ 119              		.cfi_def_cfa 7, 8
+ 120 004b C3       		ret
+ 121              		.cfi_endproc
+ 122              	.LFE8:
+ 124              		.section	.text.sha1_ctx_alloc,"ax",@progbits
+ 126              	sha1_ctx_alloc:
+ 127              	.LFB9:
+ 343:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 344:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void *sha1_ctx_alloc( void )
+ 345:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 128              		.loc 1 345 1
+ 129              		.cfi_startproc
+ 130 0000 F30F1EFA 		endbr64
+ 131 0004 55       		pushq	%rbp
+ 132              	.LCFI9:
+ 133              		.cfi_def_cfa_offset 16
+ 134              		.cfi_offset 6, -16
+ 135 0005 4889E5   		movq	%rsp, %rbp
+ 136              	.LCFI10:
+ 137              		.cfi_def_cfa_register 6
+ 138 0008 4883EC10 		subq	$16, %rsp
+ 139              		.loc 1 345 1
+ 140 000c 64488B04 		movq	%fs:40, %rax
+ 140      25280000 
+ 140      00
+ 141 0015 488945F8 		movq	%rax, -8(%rbp)
+ 142 0019 31C0     		xorl	%eax, %eax
+ 346:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_sha1_context ) );
+ 143              		.loc 1 346 17
+ 144 001b BE5C0000 		movl	$92, %esi
+ 144      00
+ 145 0020 BF010000 		movl	$1, %edi
+ 145      00
+ 146 0025 E8000000 		call	mbedtls_calloc@PLT
+ 146      00
+ 147 002a 488945F0 		movq	%rax, -16(%rbp)
+ 347:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 348:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     if( ctx != NULL )
+ 148              		.loc 1 348 7
+ 149 002e 48837DF0 		cmpq	$0, -16(%rbp)
+GAS LISTING /tmp/ccVo6cJA.s 			page 10
+
+
+ 149      00
+ 150 0033 740C     		je	.L11
+ 349:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****         mbedtls_sha1_init( (mbedtls_sha1_context *) ctx );
+ 151              		.loc 1 349 9
+ 152 0035 488B45F0 		movq	-16(%rbp), %rax
+ 153 0039 4889C7   		movq	%rax, %rdi
+ 154 003c E8000000 		call	mbedtls_sha1_init@PLT
+ 154      00
+ 155              	.L11:
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 351:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( ctx );
+ 156              		.loc 1 351 11
+ 157 0041 488B45F0 		movq	-16(%rbp), %rax
+ 352:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 158              		.loc 1 352 1
+ 159 0045 488B55F8 		movq	-8(%rbp), %rdx
+ 160 0049 64483314 		xorq	%fs:40, %rdx
+ 160      25280000 
+ 160      00
+ 161 0052 7405     		je	.L13
+ 162 0054 E8000000 		call	__stack_chk_fail@PLT
+ 162      00
+ 163              	.L13:
+ 164 0059 C9       		leave
+ 165              	.LCFI11:
+ 166              		.cfi_def_cfa 7, 8
+ 167 005a C3       		ret
+ 168              		.cfi_endproc
+ 169              	.LFE9:
+ 171              		.section	.text.sha1_clone_wrap,"ax",@progbits
+ 173              	sha1_clone_wrap:
+ 174              	.LFB10:
+ 353:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 354:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void sha1_clone_wrap( void *dst, const void *src )
+ 355:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 175              		.loc 1 355 1
+ 176              		.cfi_startproc
+ 177 0000 F30F1EFA 		endbr64
+ 178 0004 55       		pushq	%rbp
+ 179              	.LCFI12:
+ 180              		.cfi_def_cfa_offset 16
+ 181              		.cfi_offset 6, -16
+ 182 0005 4889E5   		movq	%rsp, %rbp
+ 183              	.LCFI13:
+ 184              		.cfi_def_cfa_register 6
+ 185 0008 4883EC20 		subq	$32, %rsp
+ 186 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 187 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 188              		.loc 1 355 1
+ 189 0014 64488B04 		movq	%fs:40, %rax
+ 189      25280000 
+ 189      00
+ 190 001d 488945F8 		movq	%rax, -8(%rbp)
+ 191 0021 31C0     		xorl	%eax, %eax
+ 356:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_sha1_clone( (mbedtls_sha1_context *) dst,
+ 192              		.loc 1 356 5
+ 193 0023 488B55E0 		movq	-32(%rbp), %rdx
+GAS LISTING /tmp/ccVo6cJA.s 			page 11
+
+
+ 194 0027 488B45E8 		movq	-24(%rbp), %rax
+ 195 002b 4889D6   		movq	%rdx, %rsi
+ 196 002e 4889C7   		movq	%rax, %rdi
+ 197 0031 E8000000 		call	mbedtls_sha1_clone@PLT
+ 197      00
+ 357:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                   (const mbedtls_sha1_context *) src );
+ 358:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 198              		.loc 1 358 1
+ 199 0036 90       		nop
+ 200 0037 488B45F8 		movq	-8(%rbp), %rax
+ 201 003b 64483304 		xorq	%fs:40, %rax
+ 201      25280000 
+ 201      00
+ 202 0044 7405     		je	.L15
+ 203 0046 E8000000 		call	__stack_chk_fail@PLT
+ 203      00
+ 204              	.L15:
+ 205 004b C9       		leave
+ 206              	.LCFI14:
+ 207              		.cfi_def_cfa 7, 8
+ 208 004c C3       		ret
+ 209              		.cfi_endproc
+ 210              	.LFE10:
+ 212              		.section	.text.sha1_ctx_free,"ax",@progbits
+ 214              	sha1_ctx_free:
+ 215              	.LFB11:
+ 359:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 360:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void sha1_ctx_free( void *ctx )
+ 361:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 216              		.loc 1 361 1
+ 217              		.cfi_startproc
+ 218 0000 F30F1EFA 		endbr64
+ 219 0004 55       		pushq	%rbp
+ 220              	.LCFI15:
+ 221              		.cfi_def_cfa_offset 16
+ 222              		.cfi_offset 6, -16
+ 223 0005 4889E5   		movq	%rsp, %rbp
+ 224              	.LCFI16:
+ 225              		.cfi_def_cfa_register 6
+ 226 0008 4883EC20 		subq	$32, %rsp
+ 227 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 228              		.loc 1 361 1
+ 229 0010 64488B04 		movq	%fs:40, %rax
+ 229      25280000 
+ 229      00
+ 230 0019 488945F8 		movq	%rax, -8(%rbp)
+ 231 001d 31C0     		xorl	%eax, %eax
+ 362:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_sha1_free( (mbedtls_sha1_context *) ctx );
+ 232              		.loc 1 362 5
+ 233 001f 488B45E8 		movq	-24(%rbp), %rax
+ 234 0023 4889C7   		movq	%rax, %rdi
+ 235 0026 E8000000 		call	mbedtls_sha1_free@PLT
+ 235      00
+ 363:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_free( ctx );
+ 236              		.loc 1 363 5
+ 237 002b 488B45E8 		movq	-24(%rbp), %rax
+ 238 002f 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccVo6cJA.s 			page 12
+
+
+ 239 0032 E8000000 		call	mbedtls_free@PLT
+ 239      00
+ 364:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 240              		.loc 1 364 1
+ 241 0037 90       		nop
+ 242 0038 488B45F8 		movq	-8(%rbp), %rax
+ 243 003c 64483304 		xorq	%fs:40, %rax
+ 243      25280000 
+ 243      00
+ 244 0045 7405     		je	.L17
+ 245 0047 E8000000 		call	__stack_chk_fail@PLT
+ 245      00
+ 246              	.L17:
+ 247 004c C9       		leave
+ 248              	.LCFI17:
+ 249              		.cfi_def_cfa 7, 8
+ 250 004d C3       		ret
+ 251              		.cfi_endproc
+ 252              	.LFE11:
+ 254              		.section	.text.sha1_process_wrap,"ax",@progbits
+ 256              	sha1_process_wrap:
+ 257              	.LFB12:
+ 365:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 366:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha1_process_wrap( void *ctx, const unsigned char *data )
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 258              		.loc 1 367 1
+ 259              		.cfi_startproc
+ 260 0000 F30F1EFA 		endbr64
+ 261 0004 55       		pushq	%rbp
+ 262              	.LCFI18:
+ 263              		.cfi_def_cfa_offset 16
+ 264              		.cfi_offset 6, -16
+ 265 0005 4889E5   		movq	%rsp, %rbp
+ 266              	.LCFI19:
+ 267              		.cfi_def_cfa_register 6
+ 268 0008 4883EC20 		subq	$32, %rsp
+ 269 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 270 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 271              		.loc 1 367 1
+ 272 0014 64488B04 		movq	%fs:40, %rax
+ 272      25280000 
+ 272      00
+ 273 001d 488945F8 		movq	%rax, -8(%rbp)
+ 274 0021 31C0     		xorl	%eax, %eax
+ 368:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_internal_sha1_process( (mbedtls_sha1_context *) ctx,
+ 275              		.loc 1 368 13
+ 276 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 277 0027 488B45E8 		movq	-24(%rbp), %rax
+ 278 002b 4889D6   		movq	%rdx, %rsi
+ 279 002e 4889C7   		movq	%rax, %rdi
+ 280 0031 E8000000 		call	mbedtls_internal_sha1_process@PLT
+ 280      00
+ 369:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                            data ) );
+ 370:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 281              		.loc 1 370 1
+ 282 0036 488B4DF8 		movq	-8(%rbp), %rcx
+ 283 003a 6448330C 		xorq	%fs:40, %rcx
+GAS LISTING /tmp/ccVo6cJA.s 			page 13
+
+
+ 283      25280000 
+ 283      00
+ 284 0043 7405     		je	.L20
+ 285 0045 E8000000 		call	__stack_chk_fail@PLT
+ 285      00
+ 286              	.L20:
+ 287 004a C9       		leave
+ 288              	.LCFI20:
+ 289              		.cfi_def_cfa 7, 8
+ 290 004b C3       		ret
+ 291              		.cfi_endproc
+ 292              	.LFE12:
+ 294              		.globl	mbedtls_sha1_info
+ 295              		.section	.rodata
+ 296              	.LC0:
+ 297 0000 53484131 		.string	"SHA1"
+ 297      00
+ 298              		.section	.data.rel.ro.mbedtls_sha1_info,"aw"
+ 299              		.align 32
+ 302              	mbedtls_sha1_info:
+ 303 0000 04000000 		.long	4
+ 304 0004 00000000 		.zero	4
+ 305 0008 00000000 		.quad	.LC0
+ 305      00000000 
+ 306 0010 14000000 		.long	20
+ 307 0014 40000000 		.long	64
+ 308 0018 00000000 		.quad	sha1_starts_wrap
+ 308      00000000 
+ 309 0020 00000000 		.quad	sha1_update_wrap
+ 309      00000000 
+ 310 0028 00000000 		.quad	sha1_finish_wrap
+ 310      00000000 
+ 311 0030 00000000 		.quad	mbedtls_sha1_ret
+ 311      00000000 
+ 312 0038 00000000 		.quad	sha1_ctx_alloc
+ 312      00000000 
+ 313 0040 00000000 		.quad	sha1_ctx_free
+ 313      00000000 
+ 314 0048 00000000 		.quad	sha1_clone_wrap
+ 314      00000000 
+ 315 0050 00000000 		.quad	sha1_process_wrap
+ 315      00000000 
+ 316              		.section	.text.sha224_starts_wrap,"ax",@progbits
+ 318              	sha224_starts_wrap:
+ 319              	.LFB13:
+ 371:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 372:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** const mbedtls_md_info_t mbedtls_sha1_info = {
+ 373:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     MBEDTLS_MD_SHA1,
+ 374:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     "SHA1",
+ 375:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     20,
+ 376:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     64,
+ 377:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha1_starts_wrap,
+ 378:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha1_update_wrap,
+ 379:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha1_finish_wrap,
+ 380:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_sha1_ret,
+ 381:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha1_ctx_alloc,
+ 382:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha1_ctx_free,
+GAS LISTING /tmp/ccVo6cJA.s 			page 14
+
+
+ 383:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha1_clone_wrap,
+ 384:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha1_process_wrap,
+ 385:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** };
+ 386:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 387:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #endif /* MBEDTLS_SHA1_C */
+ 388:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 389:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** /*
+ 390:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  * Wrappers for generic message digests
+ 391:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****  */
+ 392:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** #if defined(MBEDTLS_SHA256_C)
+ 393:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 394:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha224_starts_wrap( void *ctx )
+ 395:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 320              		.loc 1 395 1
+ 321              		.cfi_startproc
+ 322 0000 F30F1EFA 		endbr64
+ 323 0004 55       		pushq	%rbp
+ 324              	.LCFI21:
+ 325              		.cfi_def_cfa_offset 16
+ 326              		.cfi_offset 6, -16
+ 327 0005 4889E5   		movq	%rsp, %rbp
+ 328              	.LCFI22:
+ 329              		.cfi_def_cfa_register 6
+ 330 0008 4883EC20 		subq	$32, %rsp
+ 331 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 332              		.loc 1 395 1
+ 333 0010 64488B04 		movq	%fs:40, %rax
+ 333      25280000 
+ 333      00
+ 334 0019 488945F8 		movq	%rax, -8(%rbp)
+ 335 001d 31C0     		xorl	%eax, %eax
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha256_starts_ret( (mbedtls_sha256_context *) ctx, 1 ) );
+ 336              		.loc 1 396 13
+ 337 001f 488B45E8 		movq	-24(%rbp), %rax
+ 338 0023 BE010000 		movl	$1, %esi
+ 338      00
+ 339 0028 4889C7   		movq	%rax, %rdi
+ 340 002b E8000000 		call	mbedtls_sha256_starts_ret@PLT
+ 340      00
+ 397:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 341              		.loc 1 397 1
+ 342 0030 488B55F8 		movq	-8(%rbp), %rdx
+ 343 0034 64483314 		xorq	%fs:40, %rdx
+ 343      25280000 
+ 343      00
+ 344 003d 7405     		je	.L23
+ 345 003f E8000000 		call	__stack_chk_fail@PLT
+ 345      00
+ 346              	.L23:
+ 347 0044 C9       		leave
+ 348              	.LCFI23:
+ 349              		.cfi_def_cfa 7, 8
+ 350 0045 C3       		ret
+ 351              		.cfi_endproc
+ 352              	.LFE13:
+ 354              		.section	.text.sha224_update_wrap,"ax",@progbits
+ 356              	sha224_update_wrap:
+GAS LISTING /tmp/ccVo6cJA.s 			page 15
+
+
+ 357              	.LFB14:
+ 398:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 399:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha224_update_wrap( void *ctx, const unsigned char *input,
+ 400:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                 size_t ilen )
+ 401:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 358              		.loc 1 401 1
+ 359              		.cfi_startproc
+ 360 0000 F30F1EFA 		endbr64
+ 361 0004 55       		pushq	%rbp
+ 362              	.LCFI24:
+ 363              		.cfi_def_cfa_offset 16
+ 364              		.cfi_offset 6, -16
+ 365 0005 4889E5   		movq	%rsp, %rbp
+ 366              	.LCFI25:
+ 367              		.cfi_def_cfa_register 6
+ 368 0008 4883EC30 		subq	$48, %rsp
+ 369 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 370 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 371 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 372              		.loc 1 401 1
+ 373 0018 64488B04 		movq	%fs:40, %rax
+ 373      25280000 
+ 373      00
+ 374 0021 488945F8 		movq	%rax, -8(%rbp)
+ 375 0025 31C0     		xorl	%eax, %eax
+ 402:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha256_update_ret( (mbedtls_sha256_context *) ctx,
+ 376              		.loc 1 402 13
+ 377 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 378 002b 488B4DE0 		movq	-32(%rbp), %rcx
+ 379 002f 488B45E8 		movq	-24(%rbp), %rax
+ 380 0033 4889CE   		movq	%rcx, %rsi
+ 381 0036 4889C7   		movq	%rax, %rdi
+ 382 0039 E8000000 		call	mbedtls_sha256_update_ret@PLT
+ 382      00
+ 403:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                        input, ilen ) );
+ 404:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 383              		.loc 1 404 1
+ 384 003e 488B4DF8 		movq	-8(%rbp), %rcx
+ 385 0042 6448330C 		xorq	%fs:40, %rcx
+ 385      25280000 
+ 385      00
+ 386 004b 7405     		je	.L26
+ 387 004d E8000000 		call	__stack_chk_fail@PLT
+ 387      00
+ 388              	.L26:
+ 389 0052 C9       		leave
+ 390              	.LCFI26:
+ 391              		.cfi_def_cfa 7, 8
+ 392 0053 C3       		ret
+ 393              		.cfi_endproc
+ 394              	.LFE14:
+ 396              		.section	.text.sha224_finish_wrap,"ax",@progbits
+ 398              	sha224_finish_wrap:
+ 399              	.LFB15:
+ 405:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha224_finish_wrap( void *ctx, unsigned char *output )
+ 407:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+GAS LISTING /tmp/ccVo6cJA.s 			page 16
+
+
+ 400              		.loc 1 407 1
+ 401              		.cfi_startproc
+ 402 0000 F30F1EFA 		endbr64
+ 403 0004 55       		pushq	%rbp
+ 404              	.LCFI27:
+ 405              		.cfi_def_cfa_offset 16
+ 406              		.cfi_offset 6, -16
+ 407 0005 4889E5   		movq	%rsp, %rbp
+ 408              	.LCFI28:
+ 409              		.cfi_def_cfa_register 6
+ 410 0008 4883EC20 		subq	$32, %rsp
+ 411 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 412 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 413              		.loc 1 407 1
+ 414 0014 64488B04 		movq	%fs:40, %rax
+ 414      25280000 
+ 414      00
+ 415 001d 488945F8 		movq	%rax, -8(%rbp)
+ 416 0021 31C0     		xorl	%eax, %eax
+ 408:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha256_finish_ret( (mbedtls_sha256_context *) ctx,
+ 417              		.loc 1 408 13
+ 418 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 419 0027 488B45E8 		movq	-24(%rbp), %rax
+ 420 002b 4889D6   		movq	%rdx, %rsi
+ 421 002e 4889C7   		movq	%rax, %rdi
+ 422 0031 E8000000 		call	mbedtls_sha256_finish_ret@PLT
+ 422      00
+ 409:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                        output ) );
+ 410:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 423              		.loc 1 410 1
+ 424 0036 488B4DF8 		movq	-8(%rbp), %rcx
+ 425 003a 6448330C 		xorq	%fs:40, %rcx
+ 425      25280000 
+ 425      00
+ 426 0043 7405     		je	.L29
+ 427 0045 E8000000 		call	__stack_chk_fail@PLT
+ 427      00
+ 428              	.L29:
+ 429 004a C9       		leave
+ 430              	.LCFI29:
+ 431              		.cfi_def_cfa 7, 8
+ 432 004b C3       		ret
+ 433              		.cfi_endproc
+ 434              	.LFE15:
+ 436              		.section	.text.sha224_wrap,"ax",@progbits
+ 438              	sha224_wrap:
+ 439              	.LFB16:
+ 411:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 412:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha224_wrap( const unsigned char *input, size_t ilen,
+ 413:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                         unsigned char *output )
+ 414:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 440              		.loc 1 414 1
+ 441              		.cfi_startproc
+ 442 0000 F30F1EFA 		endbr64
+ 443 0004 55       		pushq	%rbp
+ 444              	.LCFI30:
+ 445              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/ccVo6cJA.s 			page 17
+
+
+ 446              		.cfi_offset 6, -16
+ 447 0005 4889E5   		movq	%rsp, %rbp
+ 448              	.LCFI31:
+ 449              		.cfi_def_cfa_register 6
+ 450 0008 4883EC30 		subq	$48, %rsp
+ 451 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 452 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 453 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 454              		.loc 1 414 1
+ 455 0018 64488B04 		movq	%fs:40, %rax
+ 455      25280000 
+ 455      00
+ 456 0021 488945F8 		movq	%rax, -8(%rbp)
+ 457 0025 31C0     		xorl	%eax, %eax
+ 415:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha256_ret( input, ilen, output, 1 ) );
+ 458              		.loc 1 415 13
+ 459 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 460 002b 488B75E0 		movq	-32(%rbp), %rsi
+ 461 002f 488B45E8 		movq	-24(%rbp), %rax
+ 462 0033 B9010000 		movl	$1, %ecx
+ 462      00
+ 463 0038 4889C7   		movq	%rax, %rdi
+ 464 003b E8000000 		call	mbedtls_sha256_ret@PLT
+ 464      00
+ 416:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 465              		.loc 1 416 1
+ 466 0040 488B4DF8 		movq	-8(%rbp), %rcx
+ 467 0044 6448330C 		xorq	%fs:40, %rcx
+ 467      25280000 
+ 467      00
+ 468 004d 7405     		je	.L32
+ 469 004f E8000000 		call	__stack_chk_fail@PLT
+ 469      00
+ 470              	.L32:
+ 471 0054 C9       		leave
+ 472              	.LCFI32:
+ 473              		.cfi_def_cfa 7, 8
+ 474 0055 C3       		ret
+ 475              		.cfi_endproc
+ 476              	.LFE16:
+ 478              		.section	.text.sha224_ctx_alloc,"ax",@progbits
+ 480              	sha224_ctx_alloc:
+ 481              	.LFB17:
+ 417:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 418:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void *sha224_ctx_alloc( void )
+ 419:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 482              		.loc 1 419 1
+ 483              		.cfi_startproc
+ 484 0000 F30F1EFA 		endbr64
+ 485 0004 55       		pushq	%rbp
+ 486              	.LCFI33:
+ 487              		.cfi_def_cfa_offset 16
+ 488              		.cfi_offset 6, -16
+ 489 0005 4889E5   		movq	%rsp, %rbp
+ 490              	.LCFI34:
+ 491              		.cfi_def_cfa_register 6
+ 492 0008 4883EC10 		subq	$16, %rsp
+GAS LISTING /tmp/ccVo6cJA.s 			page 18
+
+
+ 493              		.loc 1 419 1
+ 494 000c 64488B04 		movq	%fs:40, %rax
+ 494      25280000 
+ 494      00
+ 495 0015 488945F8 		movq	%rax, -8(%rbp)
+ 496 0019 31C0     		xorl	%eax, %eax
+ 420:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     void *ctx = mbedtls_calloc( 1, sizeof( mbedtls_sha256_context ) );
+ 497              		.loc 1 420 17
+ 498 001b BE6C0000 		movl	$108, %esi
+ 498      00
+ 499 0020 BF010000 		movl	$1, %edi
+ 499      00
+ 500 0025 E8000000 		call	mbedtls_calloc@PLT
+ 500      00
+ 501 002a 488945F0 		movq	%rax, -16(%rbp)
+ 421:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 422:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     if( ctx != NULL )
+ 502              		.loc 1 422 7
+ 503 002e 48837DF0 		cmpq	$0, -16(%rbp)
+ 503      00
+ 504 0033 740C     		je	.L34
+ 423:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****         mbedtls_sha256_init( (mbedtls_sha256_context *) ctx );
+ 505              		.loc 1 423 9
+ 506 0035 488B45F0 		movq	-16(%rbp), %rax
+ 507 0039 4889C7   		movq	%rax, %rdi
+ 508 003c E8000000 		call	mbedtls_sha256_init@PLT
+ 508      00
+ 509              	.L34:
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 425:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( ctx );
+ 510              		.loc 1 425 11
+ 511 0041 488B45F0 		movq	-16(%rbp), %rax
+ 426:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 512              		.loc 1 426 1
+ 513 0045 488B55F8 		movq	-8(%rbp), %rdx
+ 514 0049 64483314 		xorq	%fs:40, %rdx
+ 514      25280000 
+ 514      00
+ 515 0052 7405     		je	.L36
+ 516 0054 E8000000 		call	__stack_chk_fail@PLT
+ 516      00
+ 517              	.L36:
+ 518 0059 C9       		leave
+ 519              	.LCFI35:
+ 520              		.cfi_def_cfa 7, 8
+ 521 005a C3       		ret
+ 522              		.cfi_endproc
+ 523              	.LFE17:
+ 525              		.section	.text.sha224_ctx_free,"ax",@progbits
+ 527              	sha224_ctx_free:
+ 528              	.LFB18:
+ 427:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 428:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void sha224_ctx_free( void *ctx )
+ 429:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 529              		.loc 1 429 1
+ 530              		.cfi_startproc
+ 531 0000 F30F1EFA 		endbr64
+GAS LISTING /tmp/ccVo6cJA.s 			page 19
+
+
+ 532 0004 55       		pushq	%rbp
+ 533              	.LCFI36:
+ 534              		.cfi_def_cfa_offset 16
+ 535              		.cfi_offset 6, -16
+ 536 0005 4889E5   		movq	%rsp, %rbp
+ 537              	.LCFI37:
+ 538              		.cfi_def_cfa_register 6
+ 539 0008 4883EC20 		subq	$32, %rsp
+ 540 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 541              		.loc 1 429 1
+ 542 0010 64488B04 		movq	%fs:40, %rax
+ 542      25280000 
+ 542      00
+ 543 0019 488945F8 		movq	%rax, -8(%rbp)
+ 544 001d 31C0     		xorl	%eax, %eax
+ 430:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_sha256_free( (mbedtls_sha256_context *) ctx );
+ 545              		.loc 1 430 5
+ 546 001f 488B45E8 		movq	-24(%rbp), %rax
+ 547 0023 4889C7   		movq	%rax, %rdi
+ 548 0026 E8000000 		call	mbedtls_sha256_free@PLT
+ 548      00
+ 431:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_free( ctx );
+ 549              		.loc 1 431 5
+ 550 002b 488B45E8 		movq	-24(%rbp), %rax
+ 551 002f 4889C7   		movq	%rax, %rdi
+ 552 0032 E8000000 		call	mbedtls_free@PLT
+ 552      00
+ 432:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 553              		.loc 1 432 1
+ 554 0037 90       		nop
+ 555 0038 488B45F8 		movq	-8(%rbp), %rax
+ 556 003c 64483304 		xorq	%fs:40, %rax
+ 556      25280000 
+ 556      00
+ 557 0045 7405     		je	.L38
+ 558 0047 E8000000 		call	__stack_chk_fail@PLT
+ 558      00
+ 559              	.L38:
+ 560 004c C9       		leave
+ 561              	.LCFI38:
+ 562              		.cfi_def_cfa 7, 8
+ 563 004d C3       		ret
+ 564              		.cfi_endproc
+ 565              	.LFE18:
+ 567              		.section	.text.sha224_clone_wrap,"ax",@progbits
+ 569              	sha224_clone_wrap:
+ 570              	.LFB19:
+ 433:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 434:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static void sha224_clone_wrap( void *dst, const void *src )
+ 435:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 571              		.loc 1 435 1
+ 572              		.cfi_startproc
+ 573 0000 F30F1EFA 		endbr64
+ 574 0004 55       		pushq	%rbp
+ 575              	.LCFI39:
+ 576              		.cfi_def_cfa_offset 16
+ 577              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccVo6cJA.s 			page 20
+
+
+ 578 0005 4889E5   		movq	%rsp, %rbp
+ 579              	.LCFI40:
+ 580              		.cfi_def_cfa_register 6
+ 581 0008 4883EC20 		subq	$32, %rsp
+ 582 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 583 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 584              		.loc 1 435 1
+ 585 0014 64488B04 		movq	%fs:40, %rax
+ 585      25280000 
+ 585      00
+ 586 001d 488945F8 		movq	%rax, -8(%rbp)
+ 587 0021 31C0     		xorl	%eax, %eax
+ 436:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     mbedtls_sha256_clone( (mbedtls_sha256_context *) dst,
+ 588              		.loc 1 436 5
+ 589 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 590 0027 488B45E8 		movq	-24(%rbp), %rax
+ 591 002b 4889D6   		movq	%rdx, %rsi
+ 592 002e 4889C7   		movq	%rax, %rdi
+ 593 0031 E8000000 		call	mbedtls_sha256_clone@PLT
+ 593      00
+ 437:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                     (const mbedtls_sha256_context *) src );
+ 438:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 594              		.loc 1 438 1
+ 595 0036 90       		nop
+ 596 0037 488B45F8 		movq	-8(%rbp), %rax
+ 597 003b 64483304 		xorq	%fs:40, %rax
+ 597      25280000 
+ 597      00
+ 598 0044 7405     		je	.L40
+ 599 0046 E8000000 		call	__stack_chk_fail@PLT
+ 599      00
+ 600              	.L40:
+ 601 004b C9       		leave
+ 602              	.LCFI41:
+ 603              		.cfi_def_cfa 7, 8
+ 604 004c C3       		ret
+ 605              		.cfi_endproc
+ 606              	.LFE19:
+ 608              		.section	.text.sha224_process_wrap,"ax",@progbits
+ 610              	sha224_process_wrap:
+ 611              	.LFB20:
+ 439:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 440:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha224_process_wrap( void *ctx, const unsigned char *data )
+ 441:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 612              		.loc 1 441 1
+ 613              		.cfi_startproc
+ 614 0000 F30F1EFA 		endbr64
+ 615 0004 55       		pushq	%rbp
+ 616              	.LCFI42:
+ 617              		.cfi_def_cfa_offset 16
+ 618              		.cfi_offset 6, -16
+ 619 0005 4889E5   		movq	%rsp, %rbp
+ 620              	.LCFI43:
+ 621              		.cfi_def_cfa_register 6
+ 622 0008 4883EC20 		subq	$32, %rsp
+ 623 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 624 0010 488975E0 		movq	%rsi, -32(%rbp)
+GAS LISTING /tmp/ccVo6cJA.s 			page 21
+
+
+ 625              		.loc 1 441 1
+ 626 0014 64488B04 		movq	%fs:40, %rax
+ 626      25280000 
+ 626      00
+ 627 001d 488945F8 		movq	%rax, -8(%rbp)
+ 628 0021 31C0     		xorl	%eax, %eax
+ 442:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_internal_sha256_process( (mbedtls_sha256_context *) ctx,
+ 629              		.loc 1 442 13
+ 630 0023 488B55E0 		movq	-32(%rbp), %rdx
+ 631 0027 488B45E8 		movq	-24(%rbp), %rax
+ 632 002b 4889D6   		movq	%rdx, %rsi
+ 633 002e 4889C7   		movq	%rax, %rdi
+ 634 0031 E8000000 		call	mbedtls_internal_sha256_process@PLT
+ 634      00
+ 443:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                                              data ) );
+ 444:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 635              		.loc 1 444 1
+ 636 0036 488B4DF8 		movq	-8(%rbp), %rcx
+ 637 003a 6448330C 		xorq	%fs:40, %rcx
+ 637      25280000 
+ 637      00
+ 638 0043 7405     		je	.L43
+ 639 0045 E8000000 		call	__stack_chk_fail@PLT
+ 639      00
+ 640              	.L43:
+ 641 004a C9       		leave
+ 642              	.LCFI44:
+ 643              		.cfi_def_cfa 7, 8
+ 644 004b C3       		ret
+ 645              		.cfi_endproc
+ 646              	.LFE20:
+ 648              		.globl	mbedtls_sha224_info
+ 649              		.section	.rodata
+ 650              	.LC1:
+ 651 0005 53484132 		.string	"SHA224"
+ 651      323400
+ 652              		.section	.data.rel.ro.local.mbedtls_sha224_info,"aw"
+ 653              		.align 32
+ 656              	mbedtls_sha224_info:
+ 657 0000 05000000 		.long	5
+ 658 0004 00000000 		.zero	4
+ 659 0008 00000000 		.quad	.LC1
+ 659      00000000 
+ 660 0010 1C000000 		.long	28
+ 661 0014 40000000 		.long	64
+ 662 0018 00000000 		.quad	sha224_starts_wrap
+ 662      00000000 
+ 663 0020 00000000 		.quad	sha224_update_wrap
+ 663      00000000 
+ 664 0028 00000000 		.quad	sha224_finish_wrap
+ 664      00000000 
+ 665 0030 00000000 		.quad	sha224_wrap
+ 665      00000000 
+ 666 0038 00000000 		.quad	sha224_ctx_alloc
+ 666      00000000 
+ 667 0040 00000000 		.quad	sha224_ctx_free
+ 667      00000000 
+GAS LISTING /tmp/ccVo6cJA.s 			page 22
+
+
+ 668 0048 00000000 		.quad	sha224_clone_wrap
+ 668      00000000 
+ 669 0050 00000000 		.quad	sha224_process_wrap
+ 669      00000000 
+ 670              		.section	.text.sha256_starts_wrap,"ax",@progbits
+ 672              	sha256_starts_wrap:
+ 673              	.LFB21:
+ 445:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 446:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** const mbedtls_md_info_t mbedtls_sha224_info = {
+ 447:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     MBEDTLS_MD_SHA224,
+ 448:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     "SHA224",
+ 449:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     28,
+ 450:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     64,
+ 451:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_starts_wrap,
+ 452:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_update_wrap,
+ 453:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_finish_wrap,
+ 454:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_wrap,
+ 455:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_ctx_alloc,
+ 456:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_ctx_free,
+ 457:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_clone_wrap,
+ 458:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     sha224_process_wrap,
+ 459:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** };
+ 460:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 461:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha256_starts_wrap( void *ctx )
+ 462:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 674              		.loc 1 462 1
+ 675              		.cfi_startproc
+ 676 0000 F30F1EFA 		endbr64
+ 677 0004 55       		pushq	%rbp
+ 678              	.LCFI45:
+ 679              		.cfi_def_cfa_offset 16
+ 680              		.cfi_offset 6, -16
+ 681 0005 4889E5   		movq	%rsp, %rbp
+ 682              	.LCFI46:
+ 683              		.cfi_def_cfa_register 6
+ 684 0008 4883EC20 		subq	$32, %rsp
+ 685 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 686              		.loc 1 462 1
+ 687 0010 64488B04 		movq	%fs:40, %rax
+ 687      25280000 
+ 687      00
+ 688 0019 488945F8 		movq	%rax, -8(%rbp)
+ 689 001d 31C0     		xorl	%eax, %eax
+ 463:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha256_starts_ret( (mbedtls_sha256_context *) ctx, 0 ) );
+ 690              		.loc 1 463 13
+ 691 001f 488B45E8 		movq	-24(%rbp), %rax
+ 692 0023 BE000000 		movl	$0, %esi
+ 692      00
+ 693 0028 4889C7   		movq	%rax, %rdi
+ 694 002b E8000000 		call	mbedtls_sha256_starts_ret@PLT
+ 694      00
+ 464:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 695              		.loc 1 464 1
+ 696 0030 488B55F8 		movq	-8(%rbp), %rdx
+ 697 0034 64483314 		xorq	%fs:40, %rdx
+ 697      25280000 
+ 697      00
+GAS LISTING /tmp/ccVo6cJA.s 			page 23
+
+
+ 698 003d 7405     		je	.L46
+ 699 003f E8000000 		call	__stack_chk_fail@PLT
+ 699      00
+ 700              	.L46:
+ 701 0044 C9       		leave
+ 702              	.LCFI47:
+ 703              		.cfi_def_cfa 7, 8
+ 704 0045 C3       		ret
+ 705              		.cfi_endproc
+ 706              	.LFE21:
+ 708              		.section	.text.sha256_wrap,"ax",@progbits
+ 710              	sha256_wrap:
+ 711              	.LFB22:
+ 465:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** 
+ 466:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** static int sha256_wrap( const unsigned char *input, size_t ilen,
+ 467:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****                         unsigned char *output )
+ 468:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** {
+ 712              		.loc 1 468 1
+ 713              		.cfi_startproc
+ 714 0000 F30F1EFA 		endbr64
+ 715 0004 55       		pushq	%rbp
+ 716              	.LCFI48:
+ 717              		.cfi_def_cfa_offset 16
+ 718              		.cfi_offset 6, -16
+ 719 0005 4889E5   		movq	%rsp, %rbp
+ 720              	.LCFI49:
+ 721              		.cfi_def_cfa_register 6
+ 722 0008 4883EC30 		subq	$48, %rsp
+ 723 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 724 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 725 0014 488955D8 		movq	%rdx, -40(%rbp)
+ 726              		.loc 1 468 1
+ 727 0018 64488B04 		movq	%fs:40, %rax
+ 727      25280000 
+ 727      00
+ 728 0021 488945F8 		movq	%rax, -8(%rbp)
+ 729 0025 31C0     		xorl	%eax, %eax
+ 469:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c ****     return( mbedtls_sha256_ret( input, ilen, output, 0 ) );
+ 730              		.loc 1 469 13
+ 731 0027 488B55D8 		movq	-40(%rbp), %rdx
+ 732 002b 488B75E0 		movq	-32(%rbp), %rsi
+ 733 002f 488B45E8 		movq	-24(%rbp), %rax
+ 734 0033 B9000000 		movl	$0, %ecx
+ 734      00
+ 735 0038 4889C7   		movq	%rax, %rdi
+ 736 003b E8000000 		call	mbedtls_sha256_ret@PLT
+ 736      00
+ 470:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/md_wrap.c **** }
+ 737              		.loc 1 470 1
+ 738 0040 488B4DF8 		movq	-8(%rbp), %rcx
+ 739 0044 6448330C 		xorq	%fs:40, %rcx
+ 739      25280000 
+ 739      00
+ 740 004d 7405     		je	.L49
+ 741 004f E8000000 		call	__stack_chk_fail@PLT
+ 741      00
+ 742              	.L49:
+GAS LISTING /tmp/ccVo6cJA.s 			page 24
+
+
+ 743 0054 C9       		leave
+ 744              	.LCFI50:
+ 745              		.cfi_def_cfa 7, 8
+ 746 0055 C3       		ret
+ 747              		.cfi_endproc
+ 748              	.LFE22:
+ 750              		.globl	mbedtls_sha256_info
+ 751              		.section	.rodata
+ 752              	.LC2:
+ 753 000c 53484132 		.string	"SHA256"
+ 753      353600
+ 754              		.section	.data.rel.ro.local.mbedtls_sha256_info,"aw"
+ 755              		.align 32
+ 758              	mbedtls_sha256_info:
+ 759 0000 06000000 		.long	6
+ 760 0004 00000000 		.zero	4
+ 761 0008 00000000 		.quad	.LC2
+ 761      00000000 
+ 762 0010 20000000 		.long	32
+ 763 0014 40000000 		.long	64
+ 764 0018 00000000 		.quad	sha256_starts_wrap
+ 764      00000000 
+ 765 0020 00000000 		.quad	sha224_update_wrap
+ 765      00000000 
+ 766 0028 00000000 		.quad	sha224_finish_wrap
+ 766      00000000 
+ 767 0030 00000000 		.quad	sha256_wrap
+ 767      00000000 
+ 768 0038 00000000 		.quad	sha224_ctx_alloc
+ 768      00000000 
+ 769 0040 00000000 		.quad	sha224_ctx_free
+ 769      00000000 
+ 770 0048 00000000 		.quad	sha224_clone_wrap
+ 770      00000000 
+ 771 0050 00000000 		.quad	sha224_process_wrap
+ 771      00000000 
+ 772              		.text
+ 773              	.Letext0:
+ 774              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 775              		.file 3 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/md.h"
+ 776              		.file 4 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/md_intern
+ 777              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 778              		.file 6 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 779              		.file 7 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/sha1.h"
+ 780              		.file 8 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/sha256.h"
+ 781              		.file 9 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 782              		.file 10 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 783              		.file 11 "/usr/include/stdio.h"
+ 784              		.file 12 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 785              		.file 13 "/usr/include/time.h"
+ 786              		.file 14 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/platform
+ 3410              		.section	.note.gnu.property,"a"
+ 3411              		.align 8
+ 3412 0000 04000000 		.long	 1f - 0f
+ 3413 0004 10000000 		.long	 4f - 1f
+ 3414 0008 05000000 		.long	 5
+ 3415              	0:
+GAS LISTING /tmp/ccVo6cJA.s 			page 25
+
+
+ 3416 000c 474E5500 		.string	 "GNU"
+ 3417              	1:
+ 3418              		.align 8
+ 3419 0010 020000C0 		.long	 0xc0000002
+ 3420 0014 04000000 		.long	 3f - 2f
+ 3421              	2:
+ 3422 0018 03000000 		.long	 0x3
+ 3423              	3:
+ 3424 001c 00000000 		.align 8
+ 3425              	4:
+GAS LISTING /tmp/ccVo6cJA.s 			page 26
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 md_wrap.c
+     /tmp/ccVo6cJA.s:6      .text.sha1_starts_wrap:0000000000000000 sha1_starts_wrap
+     /tmp/ccVo6cJA.s:44     .text.sha1_update_wrap:0000000000000000 sha1_update_wrap
+     /tmp/ccVo6cJA.s:86     .text.sha1_finish_wrap:0000000000000000 sha1_finish_wrap
+     /tmp/ccVo6cJA.s:126    .text.sha1_ctx_alloc:0000000000000000 sha1_ctx_alloc
+     /tmp/ccVo6cJA.s:173    .text.sha1_clone_wrap:0000000000000000 sha1_clone_wrap
+     /tmp/ccVo6cJA.s:214    .text.sha1_ctx_free:0000000000000000 sha1_ctx_free
+     /tmp/ccVo6cJA.s:256    .text.sha1_process_wrap:0000000000000000 sha1_process_wrap
+     /tmp/ccVo6cJA.s:302    .data.rel.ro.mbedtls_sha1_info:0000000000000000 mbedtls_sha1_info
+     /tmp/ccVo6cJA.s:318    .text.sha224_starts_wrap:0000000000000000 sha224_starts_wrap
+     /tmp/ccVo6cJA.s:356    .text.sha224_update_wrap:0000000000000000 sha224_update_wrap
+     /tmp/ccVo6cJA.s:398    .text.sha224_finish_wrap:0000000000000000 sha224_finish_wrap
+     /tmp/ccVo6cJA.s:438    .text.sha224_wrap:0000000000000000 sha224_wrap
+     /tmp/ccVo6cJA.s:480    .text.sha224_ctx_alloc:0000000000000000 sha224_ctx_alloc
+     /tmp/ccVo6cJA.s:527    .text.sha224_ctx_free:0000000000000000 sha224_ctx_free
+     /tmp/ccVo6cJA.s:569    .text.sha224_clone_wrap:0000000000000000 sha224_clone_wrap
+     /tmp/ccVo6cJA.s:610    .text.sha224_process_wrap:0000000000000000 sha224_process_wrap
+     /tmp/ccVo6cJA.s:656    .data.rel.ro.local.mbedtls_sha224_info:0000000000000000 mbedtls_sha224_info
+     /tmp/ccVo6cJA.s:672    .text.sha256_starts_wrap:0000000000000000 sha256_starts_wrap
+     /tmp/ccVo6cJA.s:710    .text.sha256_wrap:0000000000000000 sha256_wrap
+     /tmp/ccVo6cJA.s:758    .data.rel.ro.local.mbedtls_sha256_info:0000000000000000 mbedtls_sha256_info
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+mbedtls_sha1_starts_ret
+__stack_chk_fail
+mbedtls_sha1_update_ret
+mbedtls_sha1_finish_ret
+mbedtls_calloc
+mbedtls_sha1_init
+mbedtls_sha1_clone
+mbedtls_sha1_free
+mbedtls_free
+mbedtls_internal_sha1_process
+mbedtls_sha1_ret
+mbedtls_sha256_starts_ret
+mbedtls_sha256_update_ret
+mbedtls_sha256_finish_ret
+mbedtls_sha256_ret
+mbedtls_sha256_init
+mbedtls_sha256_free
+mbedtls_sha256_clone
+mbedtls_internal_sha256_process

@@ -1,0 +1,2840 @@
+GAS LISTING /tmp/ccw355Cf.s 			page 1
+
+
+   1              		.file	"gcm.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.mbedtls_gcm_init,"ax",@progbits
+   5              		.globl	mbedtls_gcm_init
+   7              	mbedtls_gcm_init:
+   8              	.LFB7:
+   9              		.file 1 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c"
+   1:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /*
+   2:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  NIST SP800-38D compliant GCM implementation
+   3:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *
+   4:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+   5:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  SPDX-License-Identifier: Apache-2.0
+   6:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *
+   7:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
+   8:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  not use this file except in compliance with the License.
+   9:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  You may obtain a copy of the License at
+  10:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *
+  11:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  http://www.apache.org/licenses/LICENSE-2.0
+  12:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *
+  13:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  Unless required by applicable law or agreed to in writing, software
+  14:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  15:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  16:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  See the License for the specific language governing permissions and
+  17:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  limitations under the License.
+  18:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *
+  19:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *  This file is part of mbed TLS (https://tls.mbed.org)
+  20:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  */
+  21:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  22:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /*
+  23:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * http://csrc.nist.gov/publications/nistpubs/800-38D/SP-800-38D.pdf
+  24:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *
+  25:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * See also:
+  26:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * [MGV] http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/gcm/gcm-revised-spec.pd
+  27:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *
+  28:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * We use the algorithm described as Shoup's method with 4-bit tables in
+  29:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * [MGV] 4.1, pp. 12-13, to enhance speed without using too much memory.
+  30:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  */
+  31:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  32:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if !defined(MBEDTLS_CONFIG_FILE)
+  33:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include "mbedtls/config.h"
+  34:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #else
+  35:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include MBEDTLS_CONFIG_FILE
+  36:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif
+  37:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  38:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if defined(MBEDTLS_GCM_C)
+  39:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  40:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include "mbedtls/gcm.h"
+  41:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include "mbedtls/platform_util.h"
+  42:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  43:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include <string.h>
+  44:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  45:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if defined(MBEDTLS_AESNI_C)
+  46:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include "mbedtls/aesni.h"
+  47:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif
+  48:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  49:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if defined(MBEDTLS_SELF_TEST) && defined(MBEDTLS_AES_C)
+GAS LISTING /tmp/ccw355Cf.s 			page 2
+
+
+  50:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include "mbedtls/aes.h"
+  51:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include "mbedtls/platform.h"
+  52:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if !defined(MBEDTLS_PLATFORM_C)
+  53:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #include <stdio.h>
+  54:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #define mbedtls_printf printf
+  55:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif /* MBEDTLS_PLATFORM_C */
+  56:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif /* MBEDTLS_SELF_TEST && MBEDTLS_AES_C */
+  57:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  58:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if !defined(MBEDTLS_GCM_ALT)
+  59:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  60:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /* Parameter validation macros */
+  61:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #define GCM_VALIDATE_RET( cond ) \
+  62:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     MBEDTLS_INTERNAL_VALIDATE_RET( cond, MBEDTLS_ERR_GCM_BAD_INPUT )
+  63:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #define GCM_VALIDATE( cond ) \
+  64:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     MBEDTLS_INTERNAL_VALIDATE( cond )
+  65:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  66:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /*
+  67:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * 32-bit integer manipulation macros (big endian)
+  68:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  */
+  69:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #ifndef GET_UINT32_BE
+  70:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #define GET_UINT32_BE(n,b,i)                            \
+  71:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {                                                       \
+  72:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     (n) = ( (uint32_t) (b)[(i)    ] << 24 )             \
+  73:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         | ( (uint32_t) (b)[(i) + 1] << 16 )             \
+  74:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         | ( (uint32_t) (b)[(i) + 2] <<  8 )             \
+  75:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         | ( (uint32_t) (b)[(i) + 3]       );            \
+  76:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+  77:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif
+  78:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  79:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #ifndef PUT_UINT32_BE
+  80:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #define PUT_UINT32_BE(n,b,i)                            \
+  81:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {                                                       \
+  82:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     (b)[(i)    ] = (unsigned char) ( (n) >> 24 );       \
+  83:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     (b)[(i) + 1] = (unsigned char) ( (n) >> 16 );       \
+  84:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     (b)[(i) + 2] = (unsigned char) ( (n) >>  8 );       \
+  85:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     (b)[(i) + 3] = (unsigned char) ( (n)       );       \
+  86:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+  87:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif
+  88:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  89:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /*
+  90:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * Initialize a context
+  91:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  */
+  92:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** void mbedtls_gcm_init( mbedtls_gcm_context *ctx )
+  93:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+  10              		.loc 1 93 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22              		.loc 1 93 1
+GAS LISTING /tmp/ccw355Cf.s 			page 3
+
+
+  23 0010 64488B04 		movq	%fs:40, %rax
+  23      25280000 
+  23      00
+  24 0019 488945F8 		movq	%rax, -8(%rbp)
+  25 001d 31C0     		xorl	%eax, %eax
+  94:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE( ctx != NULL );
+  95:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     memset( ctx, 0, sizeof( mbedtls_gcm_context ) );
+  26              		.loc 1 95 5
+  27 001f 488B45E8 		movq	-24(%rbp), %rax
+  28 0023 BAA00100 		movl	$416, %edx
+  28      00
+  29 0028 BE000000 		movl	$0, %esi
+  29      00
+  30 002d 4889C7   		movq	%rax, %rdi
+  31 0030 E8000000 		call	memset@PLT
+  31      00
+  96:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+  32              		.loc 1 96 1
+  33 0035 90       		nop
+  34 0036 488B45F8 		movq	-8(%rbp), %rax
+  35 003a 64483304 		xorq	%fs:40, %rax
+  35      25280000 
+  35      00
+  36 0043 7405     		je	.L2
+  37 0045 E8000000 		call	__stack_chk_fail@PLT
+  37      00
+  38              	.L2:
+  39 004a C9       		leave
+  40              	.LCFI2:
+  41              		.cfi_def_cfa 7, 8
+  42 004b C3       		ret
+  43              		.cfi_endproc
+  44              	.LFE7:
+  46              		.section	.text.gcm_gen_table,"ax",@progbits
+  48              	gcm_gen_table:
+  49              	.LFB8:
+  97:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+  98:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /*
+  99:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * Precompute small multiples of H, that is set
+ 100:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *      HH[i] || HL[i] = H times i,
+ 101:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * where i is seen as a field element as in [MGV], ie high-order bits
+ 102:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * correspond to low powers of P. The result is stored in the same way, that
+ 103:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * is the high-order bit of HH corresponds to P^0 and the low-order bit of HL
+ 104:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * corresponds to P^127.
+ 105:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  */
+ 106:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** static int gcm_gen_table( mbedtls_gcm_context *ctx )
+ 107:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+  50              		.loc 1 107 1
+  51              		.cfi_startproc
+  52 0000 F30F1EFA 		endbr64
+  53 0004 55       		pushq	%rbp
+  54              	.LCFI3:
+  55              		.cfi_def_cfa_offset 16
+  56              		.cfi_offset 6, -16
+  57 0005 4889E5   		movq	%rsp, %rbp
+  58              	.LCFI4:
+  59              		.cfi_def_cfa_register 6
+GAS LISTING /tmp/ccw355Cf.s 			page 4
+
+
+  60 0008 4883C480 		addq	$-128, %rsp
+  61 000c 48897D88 		movq	%rdi, -120(%rbp)
+  62              		.loc 1 107 1
+  63 0010 64488B04 		movq	%fs:40, %rax
+  63      25280000 
+  63      00
+  64 0019 488945F8 		movq	%rax, -8(%rbp)
+  65 001d 31C0     		xorl	%eax, %eax
+ 108:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int ret, i, j;
+ 109:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     uint64_t hi, lo;
+ 110:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     uint64_t vl, vh;
+ 111:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     unsigned char h[16];
+ 112:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     size_t olen = 0;
+  66              		.loc 1 112 12
+  67 001f 48C745A8 		movq	$0, -88(%rbp)
+  67      00000000 
+ 113:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 114:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     memset( h, 0, 16 );
+  68              		.loc 1 114 5
+  69 0027 488D45E0 		leaq	-32(%rbp), %rax
+  70 002b BA100000 		movl	$16, %edx
+  70      00
+  71 0030 BE000000 		movl	$0, %esi
+  71      00
+  72 0035 4889C7   		movq	%rax, %rdi
+  73 0038 E8000000 		call	memset@PLT
+  73      00
+ 115:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_cipher_update( &ctx->cipher_ctx, h, 16, h, &olen ) ) != 0 )
+  74              		.loc 1 115 17
+  75 003d 488B4588 		movq	-120(%rbp), %rax
+  76 0041 488D4DA8 		leaq	-88(%rbp), %rcx
+  77 0045 488D55E0 		leaq	-32(%rbp), %rdx
+  78 0049 488D75E0 		leaq	-32(%rbp), %rsi
+  79 004d 4989C8   		movq	%rcx, %r8
+  80 0050 4889D1   		movq	%rdx, %rcx
+  81 0053 BA100000 		movl	$16, %edx
+  81      00
+  82 0058 4889C7   		movq	%rax, %rdi
+  83 005b E8000000 		call	mbedtls_cipher_update@PLT
+  83      00
+  84 0060 8945A0   		movl	%eax, -96(%rbp)
+  85              		.loc 1 115 7
+  86 0063 837DA000 		cmpl	$0, -96(%rbp)
+  87 0067 7408     		je	.L4
+ 116:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+  88              		.loc 1 116 15
+  89 0069 8B45A0   		movl	-96(%rbp), %eax
+  90 006c E9860200 		jmp	.L12
+  90      00
+  91              	.L4:
+ 117:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 118:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* pack h as two 64-bits ints, big-endian */
+ 119:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GET_UINT32_BE( hi, h,  0  );
+  92              		.loc 1 119 5
+  93 0071 0FB645E0 		movzbl	-32(%rbp), %eax
+  94 0075 0FB6C0   		movzbl	%al, %eax
+  95 0078 C1E018   		sall	$24, %eax
+GAS LISTING /tmp/ccw355Cf.s 			page 5
+
+
+  96 007b 89C2     		movl	%eax, %edx
+  97 007d 0FB645E1 		movzbl	-31(%rbp), %eax
+  98 0081 0FB6C0   		movzbl	%al, %eax
+  99 0084 C1E010   		sall	$16, %eax
+ 100 0087 09C2     		orl	%eax, %edx
+ 101 0089 0FB645E2 		movzbl	-30(%rbp), %eax
+ 102 008d 0FB6C0   		movzbl	%al, %eax
+ 103 0090 C1E008   		sall	$8, %eax
+ 104 0093 09C2     		orl	%eax, %edx
+ 105 0095 0FB645E3 		movzbl	-29(%rbp), %eax
+ 106 0099 0FB6C0   		movzbl	%al, %eax
+ 107 009c 09D0     		orl	%edx, %eax
+ 108 009e 89C0     		movl	%eax, %eax
+ 109 00a0 488945C0 		movq	%rax, -64(%rbp)
+ 120:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GET_UINT32_BE( lo, h,  4  );
+ 110              		.loc 1 120 5
+ 111 00a4 0FB645E4 		movzbl	-28(%rbp), %eax
+ 112 00a8 0FB6C0   		movzbl	%al, %eax
+ 113 00ab C1E018   		sall	$24, %eax
+ 114 00ae 89C2     		movl	%eax, %edx
+ 115 00b0 0FB645E5 		movzbl	-27(%rbp), %eax
+ 116 00b4 0FB6C0   		movzbl	%al, %eax
+ 117 00b7 C1E010   		sall	$16, %eax
+ 118 00ba 09C2     		orl	%eax, %edx
+ 119 00bc 0FB645E6 		movzbl	-26(%rbp), %eax
+ 120 00c0 0FB6C0   		movzbl	%al, %eax
+ 121 00c3 C1E008   		sall	$8, %eax
+ 122 00c6 09C2     		orl	%eax, %edx
+ 123 00c8 0FB645E7 		movzbl	-25(%rbp), %eax
+ 124 00cc 0FB6C0   		movzbl	%al, %eax
+ 125 00cf 09D0     		orl	%edx, %eax
+ 126 00d1 89C0     		movl	%eax, %eax
+ 127 00d3 488945C8 		movq	%rax, -56(%rbp)
+ 121:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     vh = (uint64_t) hi << 32 | lo;
+ 128              		.loc 1 121 24
+ 129 00d7 488B45C0 		movq	-64(%rbp), %rax
+ 130 00db 48C1E020 		salq	$32, %rax
+ 131              		.loc 1 121 8
+ 132 00df 480B45C8 		orq	-56(%rbp), %rax
+ 133 00e3 488945B8 		movq	%rax, -72(%rbp)
+ 122:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 123:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GET_UINT32_BE( hi, h,  8  );
+ 134              		.loc 1 123 5
+ 135 00e7 0FB645E8 		movzbl	-24(%rbp), %eax
+ 136 00eb 0FB6C0   		movzbl	%al, %eax
+ 137 00ee C1E018   		sall	$24, %eax
+ 138 00f1 89C2     		movl	%eax, %edx
+ 139 00f3 0FB645E9 		movzbl	-23(%rbp), %eax
+ 140 00f7 0FB6C0   		movzbl	%al, %eax
+ 141 00fa C1E010   		sall	$16, %eax
+ 142 00fd 09C2     		orl	%eax, %edx
+ 143 00ff 0FB645EA 		movzbl	-22(%rbp), %eax
+ 144 0103 0FB6C0   		movzbl	%al, %eax
+ 145 0106 C1E008   		sall	$8, %eax
+ 146 0109 09C2     		orl	%eax, %edx
+ 147 010b 0FB645EB 		movzbl	-21(%rbp), %eax
+ 148 010f 0FB6C0   		movzbl	%al, %eax
+GAS LISTING /tmp/ccw355Cf.s 			page 6
+
+
+ 149 0112 09D0     		orl	%edx, %eax
+ 150 0114 89C0     		movl	%eax, %eax
+ 151 0116 488945C0 		movq	%rax, -64(%rbp)
+ 124:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GET_UINT32_BE( lo, h,  12 );
+ 152              		.loc 1 124 5
+ 153 011a 0FB645EC 		movzbl	-20(%rbp), %eax
+ 154 011e 0FB6C0   		movzbl	%al, %eax
+ 155 0121 C1E018   		sall	$24, %eax
+ 156 0124 89C2     		movl	%eax, %edx
+ 157 0126 0FB645ED 		movzbl	-19(%rbp), %eax
+ 158 012a 0FB6C0   		movzbl	%al, %eax
+ 159 012d C1E010   		sall	$16, %eax
+ 160 0130 09C2     		orl	%eax, %edx
+ 161 0132 0FB645EE 		movzbl	-18(%rbp), %eax
+ 162 0136 0FB6C0   		movzbl	%al, %eax
+ 163 0139 C1E008   		sall	$8, %eax
+ 164 013c 09C2     		orl	%eax, %edx
+ 165 013e 0FB645EF 		movzbl	-17(%rbp), %eax
+ 166 0142 0FB6C0   		movzbl	%al, %eax
+ 167 0145 09D0     		orl	%edx, %eax
+ 168 0147 89C0     		movl	%eax, %eax
+ 169 0149 488945C8 		movq	%rax, -56(%rbp)
+ 125:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     vl = (uint64_t) hi << 32 | lo;
+ 170              		.loc 1 125 24
+ 171 014d 488B45C0 		movq	-64(%rbp), %rax
+ 172 0151 48C1E020 		salq	$32, %rax
+ 173              		.loc 1 125 8
+ 174 0155 480B45C8 		orq	-56(%rbp), %rax
+ 175 0159 488945B0 		movq	%rax, -80(%rbp)
+ 126:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 127:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* 8 = 1000 corresponds to 1 in GF(2^128) */
+ 128:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->HL[8] = vl;
+ 176              		.loc 1 128 16
+ 177 015d 488B4588 		movq	-120(%rbp), %rax
+ 178 0161 488B55B0 		movq	-80(%rbp), %rdx
+ 179 0165 48899098 		movq	%rdx, 152(%rax)
+ 179      000000
+ 129:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->HH[8] = vh;
+ 180              		.loc 1 129 16
+ 181 016c 488B4588 		movq	-120(%rbp), %rax
+ 182 0170 488B55B8 		movq	-72(%rbp), %rdx
+ 183 0174 48899018 		movq	%rdx, 280(%rax)
+ 183      010000
+ 130:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 131:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if defined(MBEDTLS_AESNI_C) && defined(MBEDTLS_HAVE_X86_64)
+ 132:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* With CLMUL support, we need only h, not the rest of the table */
+ 133:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( mbedtls_aesni_has_support( MBEDTLS_AESNI_CLMUL ) )
+ 134:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( 0 );
+ 135:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif
+ 136:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 137:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* 0 corresponds to 0 in GF(2^128) */
+ 138:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->HH[0] = 0;
+ 184              		.loc 1 138 16
+ 185 017b 488B4588 		movq	-120(%rbp), %rax
+ 186 017f 48C780D8 		movq	$0, 216(%rax)
+ 186      00000000 
+ 186      000000
+GAS LISTING /tmp/ccw355Cf.s 			page 7
+
+
+ 139:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->HL[0] = 0;
+ 187              		.loc 1 139 16
+ 188 018a 488B4588 		movq	-120(%rbp), %rax
+ 189 018e 48C74058 		movq	$0, 88(%rax)
+ 189      00000000 
+ 140:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     for( i = 4; i > 0; i >>= 1 )
+ 190              		.loc 1 141 12
+ 191 0196 C7459804 		movl	$4, -104(%rbp)
+ 191      000000
+ 192              		.loc 1 141 5
+ 193 019d EB78     		jmp	.L6
+ 194              	.L7:
+ 195              	.LBB2:
+ 142:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 143:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         uint32_t T = ( vl & 1 ) * 0xe1000000U;
+ 196              		.loc 1 143 18 discriminator 3
+ 197 019f 488B45B0 		movq	-80(%rbp), %rax
+ 198 01a3 83E001   		andl	$1, %eax
+ 199 01a6 89C2     		movl	%eax, %edx
+ 200 01a8 89D0     		movl	%edx, %eax
+ 201 01aa C1E205   		sall	$5, %edx
+ 202 01ad 29D0     		subl	%edx, %eax
+ 203 01af C1E018   		sall	$24, %eax
+ 204 01b2 8945A4   		movl	%eax, -92(%rbp)
+ 144:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         vl  = ( vh << 63 ) | ( vl >> 1 );
+ 205              		.loc 1 144 20 discriminator 3
+ 206 01b5 488B45B8 		movq	-72(%rbp), %rax
+ 207 01b9 48C1E03F 		salq	$63, %rax
+ 208 01bd 4889C2   		movq	%rax, %rdx
+ 209              		.loc 1 144 35 discriminator 3
+ 210 01c0 488B45B0 		movq	-80(%rbp), %rax
+ 211 01c4 48D1E8   		shrq	%rax
+ 212              		.loc 1 144 13 discriminator 3
+ 213 01c7 4809D0   		orq	%rdx, %rax
+ 214 01ca 488945B0 		movq	%rax, -80(%rbp)
+ 145:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         vh  = ( vh >> 1 ) ^ ( (uint64_t) T << 32);
+ 215              		.loc 1 145 20 discriminator 3
+ 216 01ce 488B45B8 		movq	-72(%rbp), %rax
+ 217 01d2 48D1E8   		shrq	%rax
+ 218 01d5 4889C2   		movq	%rax, %rdx
+ 219              		.loc 1 145 31 discriminator 3
+ 220 01d8 8B45A4   		movl	-92(%rbp), %eax
+ 221              		.loc 1 145 44 discriminator 3
+ 222 01db 48C1E020 		salq	$32, %rax
+ 223              		.loc 1 145 13 discriminator 3
+ 224 01df 4831D0   		xorq	%rdx, %rax
+ 225 01e2 488945B8 		movq	%rax, -72(%rbp)
+ 146:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 147:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         ctx->HL[i] = vl;
+ 226              		.loc 1 147 20 discriminator 3
+ 227 01e6 488B4588 		movq	-120(%rbp), %rax
+ 228 01ea 8B5598   		movl	-104(%rbp), %edx
+ 229 01ed 4863D2   		movslq	%edx, %rdx
+ 230 01f0 488D4A0A 		leaq	10(%rdx), %rcx
+ 231 01f4 488B55B0 		movq	-80(%rbp), %rdx
+ 232 01f8 488954C8 		movq	%rdx, 8(%rax,%rcx,8)
+GAS LISTING /tmp/ccw355Cf.s 			page 8
+
+
+ 232      08
+ 148:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         ctx->HH[i] = vh;
+ 233              		.loc 1 148 20 discriminator 3
+ 234 01fd 488B4588 		movq	-120(%rbp), %rax
+ 235 0201 8B5598   		movl	-104(%rbp), %edx
+ 236 0204 4863D2   		movslq	%edx, %rdx
+ 237 0207 488D4A1A 		leaq	26(%rdx), %rcx
+ 238 020b 488B55B8 		movq	-72(%rbp), %rdx
+ 239 020f 488954C8 		movq	%rdx, 8(%rax,%rcx,8)
+ 239      08
+ 240              	.LBE2:
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 241              		.loc 1 141 26 discriminator 3
+ 242 0214 D17D98   		sarl	-104(%rbp)
+ 243              	.L6:
+ 141:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 244              		.loc 1 141 5 discriminator 1
+ 245 0217 837D9800 		cmpl	$0, -104(%rbp)
+ 246 021b 7F82     		jg	.L7
+ 149:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 150:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     for( i = 2; i <= 8; i *= 2 )
+ 247              		.loc 1 151 12
+ 248 021d C7459802 		movl	$2, -104(%rbp)
+ 248      000000
+ 249              		.loc 1 151 5
+ 250 0224 E9BF0000 		jmp	.L8
+ 250      00
+ 251              	.L11:
+ 252              	.LBB3:
+ 152:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 153:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         uint64_t *HiL = ctx->HL + i, *HiH = ctx->HH + i;
+ 253              		.loc 1 153 25
+ 254 0229 488B4588 		movq	-120(%rbp), %rax
+ 255 022d 488D5058 		leaq	88(%rax), %rdx
+ 256              		.loc 1 153 33
+ 257 0231 8B4598   		movl	-104(%rbp), %eax
+ 258 0234 4898     		cltq
+ 259 0236 48C1E003 		salq	$3, %rax
+ 260              		.loc 1 153 19
+ 261 023a 4801D0   		addq	%rdx, %rax
+ 262 023d 488945D0 		movq	%rax, -48(%rbp)
+ 263              		.loc 1 153 45
+ 264 0241 488B4588 		movq	-120(%rbp), %rax
+ 265 0245 488D90D8 		leaq	216(%rax), %rdx
+ 265      000000
+ 266              		.loc 1 153 53
+ 267 024c 8B4598   		movl	-104(%rbp), %eax
+ 268 024f 4898     		cltq
+ 269 0251 48C1E003 		salq	$3, %rax
+ 270              		.loc 1 153 39
+ 271 0255 4801D0   		addq	%rdx, %rax
+ 272 0258 488945D8 		movq	%rax, -40(%rbp)
+ 154:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         vh = *HiH;
+ 273              		.loc 1 154 12
+ 274 025c 488B45D8 		movq	-40(%rbp), %rax
+ 275 0260 488B00   		movq	(%rax), %rax
+GAS LISTING /tmp/ccw355Cf.s 			page 9
+
+
+ 276 0263 488945B8 		movq	%rax, -72(%rbp)
+ 155:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         vl = *HiL;
+ 277              		.loc 1 155 12
+ 278 0267 488B45D0 		movq	-48(%rbp), %rax
+ 279 026b 488B00   		movq	(%rax), %rax
+ 280 026e 488945B0 		movq	%rax, -80(%rbp)
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( j = 1; j < i; j++ )
+ 281              		.loc 1 156 16
+ 282 0272 C7459C01 		movl	$1, -100(%rbp)
+ 282      000000
+ 283              		.loc 1 156 9
+ 284 0279 EB62     		jmp	.L9
+ 285              	.L10:
+ 157:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 158:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             HiH[j] = vh ^ ctx->HH[j];
+ 286              		.loc 1 158 34 discriminator 3
+ 287 027b 488B4588 		movq	-120(%rbp), %rax
+ 288 027f 8B559C   		movl	-100(%rbp), %edx
+ 289 0282 4863D2   		movslq	%edx, %rdx
+ 290 0285 4883C21A 		addq	$26, %rdx
+ 291 0289 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 291      08
+ 292              		.loc 1 158 16 discriminator 3
+ 293 028e 8B559C   		movl	-100(%rbp), %edx
+ 294 0291 4863D2   		movslq	%edx, %rdx
+ 295 0294 488D0CD5 		leaq	0(,%rdx,8), %rcx
+ 295      00000000 
+ 296 029c 488B55D8 		movq	-40(%rbp), %rdx
+ 297 02a0 4801CA   		addq	%rcx, %rdx
+ 298              		.loc 1 158 25 discriminator 3
+ 299 02a3 483345B8 		xorq	-72(%rbp), %rax
+ 300              		.loc 1 158 20 discriminator 3
+ 301 02a7 488902   		movq	%rax, (%rdx)
+ 159:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             HiL[j] = vl ^ ctx->HL[j];
+ 302              		.loc 1 159 34 discriminator 3
+ 303 02aa 488B4588 		movq	-120(%rbp), %rax
+ 304 02ae 8B559C   		movl	-100(%rbp), %edx
+ 305 02b1 4863D2   		movslq	%edx, %rdx
+ 306 02b4 4883C20A 		addq	$10, %rdx
+ 307 02b8 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 307      08
+ 308              		.loc 1 159 16 discriminator 3
+ 309 02bd 8B559C   		movl	-100(%rbp), %edx
+ 310 02c0 4863D2   		movslq	%edx, %rdx
+ 311 02c3 488D0CD5 		leaq	0(,%rdx,8), %rcx
+ 311      00000000 
+ 312 02cb 488B55D0 		movq	-48(%rbp), %rdx
+ 313 02cf 4801CA   		addq	%rcx, %rdx
+ 314              		.loc 1 159 25 discriminator 3
+ 315 02d2 483345B0 		xorq	-80(%rbp), %rax
+ 316              		.loc 1 159 20 discriminator 3
+ 317 02d6 488902   		movq	%rax, (%rdx)
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( j = 1; j < i; j++ )
+ 318              		.loc 1 156 29 discriminator 3
+ 319 02d9 83459C01 		addl	$1, -100(%rbp)
+ 320              	.L9:
+ 156:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( j = 1; j < i; j++ )
+GAS LISTING /tmp/ccw355Cf.s 			page 10
+
+
+ 321              		.loc 1 156 9 discriminator 1
+ 322 02dd 8B459C   		movl	-100(%rbp), %eax
+ 323 02e0 3B4598   		cmpl	-104(%rbp), %eax
+ 324 02e3 7C96     		jl	.L10
+ 325              	.LBE3:
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 326              		.loc 1 151 27 discriminator 2
+ 327 02e5 D16598   		sall	-104(%rbp)
+ 328              	.L8:
+ 151:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 329              		.loc 1 151 5 discriminator 1
+ 330 02e8 837D9808 		cmpl	$8, -104(%rbp)
+ 331 02ec 0F8E37FF 		jle	.L11
+ 331      FFFF
+ 160:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         }
+ 161:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 162:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 163:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     return( 0 );
+ 332              		.loc 1 163 11
+ 333 02f2 B8000000 		movl	$0, %eax
+ 333      00
+ 334              	.L12:
+ 164:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 335              		.loc 1 164 1 discriminator 1
+ 336 02f7 488B7DF8 		movq	-8(%rbp), %rdi
+ 337 02fb 6448333C 		xorq	%fs:40, %rdi
+ 337      25280000 
+ 337      00
+ 338 0304 7405     		je	.L13
+ 339              		.loc 1 164 1 is_stmt 0
+ 340 0306 E8000000 		call	__stack_chk_fail@PLT
+ 340      00
+ 341              	.L13:
+ 342 030b C9       		leave
+ 343              	.LCFI5:
+ 344              		.cfi_def_cfa 7, 8
+ 345 030c C3       		ret
+ 346              		.cfi_endproc
+ 347              	.LFE8:
+ 349              		.section	.text.mbedtls_gcm_setkey,"ax",@progbits
+ 350              		.globl	mbedtls_gcm_setkey
+ 352              	mbedtls_gcm_setkey:
+ 353              	.LFB9:
+ 165:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 166:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** int mbedtls_gcm_setkey( mbedtls_gcm_context *ctx,
+ 167:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                         mbedtls_cipher_id_t cipher,
+ 168:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                         const unsigned char *key,
+ 169:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                         unsigned int keybits )
+ 170:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 354              		.loc 1 170 1 is_stmt 1
+ 355              		.cfi_startproc
+ 356 0000 F30F1EFA 		endbr64
+ 357 0004 55       		pushq	%rbp
+ 358              	.LCFI6:
+ 359              		.cfi_def_cfa_offset 16
+ 360              		.cfi_offset 6, -16
+ 361 0005 4889E5   		movq	%rsp, %rbp
+GAS LISTING /tmp/ccw355Cf.s 			page 11
+
+
+ 362              	.LCFI7:
+ 363              		.cfi_def_cfa_register 6
+ 364 0008 4883EC40 		subq	$64, %rsp
+ 365 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 366 0010 8975D4   		movl	%esi, -44(%rbp)
+ 367 0013 488955C8 		movq	%rdx, -56(%rbp)
+ 368 0017 894DD0   		movl	%ecx, -48(%rbp)
+ 369              		.loc 1 170 1
+ 370 001a 64488B04 		movq	%fs:40, %rax
+ 370      25280000 
+ 370      00
+ 371 0023 488945F8 		movq	%rax, -8(%rbp)
+ 372 0027 31C0     		xorl	%eax, %eax
+ 171:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int ret;
+ 172:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     const mbedtls_cipher_info_t *cipher_info;
+ 173:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 174:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( ctx != NULL );
+ 175:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( key != NULL );
+ 176:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( keybits == 128 || keybits == 192 || keybits == 256 );
+ 177:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 178:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     cipher_info = mbedtls_cipher_info_from_values( cipher, keybits, MBEDTLS_MODE_ECB );
+ 373              		.loc 1 178 19
+ 374 0029 8B4DD0   		movl	-48(%rbp), %ecx
+ 375 002c 8B45D4   		movl	-44(%rbp), %eax
+ 376 002f BA010000 		movl	$1, %edx
+ 376      00
+ 377 0034 89CE     		movl	%ecx, %esi
+ 378 0036 89C7     		movl	%eax, %edi
+ 379 0038 E8000000 		call	mbedtls_cipher_info_from_values@PLT
+ 379      00
+ 380 003d 488945F0 		movq	%rax, -16(%rbp)
+ 179:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( cipher_info == NULL )
+ 381              		.loc 1 179 7
+ 382 0041 48837DF0 		cmpq	$0, -16(%rbp)
+ 382      00
+ 383 0046 750A     		jne	.L15
+ 180:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( MBEDTLS_ERR_GCM_BAD_INPUT );
+ 384              		.loc 1 180 15
+ 385 0048 B8ECFFFF 		movl	$-20, %eax
+ 385      FF
+ 386 004d E9850000 		jmp	.L16
+ 386      00
+ 387              	.L15:
+ 181:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 182:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( cipher_info->block_size != 16 )
+ 388              		.loc 1 182 20
+ 389 0052 488B45F0 		movq	-16(%rbp), %rax
+ 390 0056 8B4020   		movl	32(%rax), %eax
+ 391              		.loc 1 182 7
+ 392 0059 83F810   		cmpl	$16, %eax
+ 393 005c 7407     		je	.L17
+ 183:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( MBEDTLS_ERR_GCM_BAD_INPUT );
+ 394              		.loc 1 183 15
+ 395 005e B8ECFFFF 		movl	$-20, %eax
+ 395      FF
+ 396 0063 EB72     		jmp	.L16
+ 397              	.L17:
+GAS LISTING /tmp/ccw355Cf.s 			page 12
+
+
+ 184:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 185:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     mbedtls_cipher_free( &ctx->cipher_ctx );
+ 398              		.loc 1 185 5
+ 399 0065 488B45D8 		movq	-40(%rbp), %rax
+ 400 0069 4889C7   		movq	%rax, %rdi
+ 401 006c E8000000 		call	mbedtls_cipher_free@PLT
+ 401      00
+ 186:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 187:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_cipher_setup( &ctx->cipher_ctx, cipher_info ) ) != 0 )
+ 402              		.loc 1 187 17
+ 403 0071 488B45D8 		movq	-40(%rbp), %rax
+ 404 0075 488B55F0 		movq	-16(%rbp), %rdx
+ 405 0079 4889D6   		movq	%rdx, %rsi
+ 406 007c 4889C7   		movq	%rax, %rdi
+ 407 007f E8000000 		call	mbedtls_cipher_setup@PLT
+ 407      00
+ 408 0084 8945EC   		movl	%eax, -20(%rbp)
+ 409              		.loc 1 187 7
+ 410 0087 837DEC00 		cmpl	$0, -20(%rbp)
+ 411 008b 7405     		je	.L18
+ 188:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 412              		.loc 1 188 15
+ 413 008d 8B45EC   		movl	-20(%rbp), %eax
+ 414 0090 EB45     		jmp	.L16
+ 415              	.L18:
+ 189:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 190:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_cipher_setkey( &ctx->cipher_ctx, key, keybits,
+ 416              		.loc 1 190 17
+ 417 0092 8B55D0   		movl	-48(%rbp), %edx
+ 418 0095 488B45D8 		movq	-40(%rbp), %rax
+ 419 0099 488B75C8 		movq	-56(%rbp), %rsi
+ 420 009d B9010000 		movl	$1, %ecx
+ 420      00
+ 421 00a2 4889C7   		movq	%rax, %rdi
+ 422 00a5 E8000000 		call	mbedtls_cipher_setkey@PLT
+ 422      00
+ 423 00aa 8945EC   		movl	%eax, -20(%rbp)
+ 424              		.loc 1 190 7
+ 425 00ad 837DEC00 		cmpl	$0, -20(%rbp)
+ 426 00b1 7405     		je	.L19
+ 191:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                                MBEDTLS_ENCRYPT ) ) != 0 )
+ 192:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 193:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 427              		.loc 1 193 15
+ 428 00b3 8B45EC   		movl	-20(%rbp), %eax
+ 429 00b6 EB1F     		jmp	.L16
+ 430              	.L19:
+ 194:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 195:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 196:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = gcm_gen_table( ctx ) ) != 0 )
+ 431              		.loc 1 196 17
+ 432 00b8 488B45D8 		movq	-40(%rbp), %rax
+ 433 00bc 4889C7   		movq	%rax, %rdi
+ 434 00bf E8000000 		call	gcm_gen_table
+ 434      00
+ 435 00c4 8945EC   		movl	%eax, -20(%rbp)
+ 436              		.loc 1 196 7
+GAS LISTING /tmp/ccw355Cf.s 			page 13
+
+
+ 437 00c7 837DEC00 		cmpl	$0, -20(%rbp)
+ 438 00cb 7405     		je	.L20
+ 197:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 439              		.loc 1 197 15
+ 440 00cd 8B45EC   		movl	-20(%rbp), %eax
+ 441 00d0 EB05     		jmp	.L16
+ 442              	.L20:
+ 198:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 199:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     return( 0 );
+ 443              		.loc 1 199 11
+ 444 00d2 B8000000 		movl	$0, %eax
+ 444      00
+ 445              	.L16:
+ 200:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 446              		.loc 1 200 1
+ 447 00d7 488B4DF8 		movq	-8(%rbp), %rcx
+ 448 00db 6448330C 		xorq	%fs:40, %rcx
+ 448      25280000 
+ 448      00
+ 449 00e4 7405     		je	.L21
+ 450 00e6 E8000000 		call	__stack_chk_fail@PLT
+ 450      00
+ 451              	.L21:
+ 452 00eb C9       		leave
+ 453              	.LCFI8:
+ 454              		.cfi_def_cfa 7, 8
+ 455 00ec C3       		ret
+ 456              		.cfi_endproc
+ 457              	.LFE9:
+ 459              		.section	.rodata.last4,"a"
+ 460              		.align 32
+ 463              	last4:
+ 464 0000 00000000 		.quad	0
+ 464      00000000 
+ 465 0008 201C0000 		.quad	7200
+ 465      00000000 
+ 466 0010 40380000 		.quad	14400
+ 466      00000000 
+ 467 0018 60240000 		.quad	9312
+ 467      00000000 
+ 468 0020 80700000 		.quad	28800
+ 468      00000000 
+ 469 0028 A06C0000 		.quad	27808
+ 469      00000000 
+ 470 0030 C0480000 		.quad	18624
+ 470      00000000 
+ 471 0038 E0540000 		.quad	21728
+ 471      00000000 
+ 472 0040 00E10000 		.quad	57600
+ 472      00000000 
+ 473 0048 20FD0000 		.quad	64800
+ 473      00000000 
+ 474 0050 40D90000 		.quad	55616
+ 474      00000000 
+ 475 0058 60C50000 		.quad	50528
+ 475      00000000 
+ 476 0060 80910000 		.quad	37248
+GAS LISTING /tmp/ccw355Cf.s 			page 14
+
+
+ 476      00000000 
+ 477 0068 A08D0000 		.quad	36256
+ 477      00000000 
+ 478 0070 C0A90000 		.quad	43456
+ 478      00000000 
+ 479 0078 E0B50000 		.quad	46560
+ 479      00000000 
+ 480              		.section	.text.gcm_mult,"ax",@progbits
+ 482              	gcm_mult:
+ 483              	.LFB10:
+ 201:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 202:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /*
+ 203:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * Shoup's method for multiplication use this table with
+ 204:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  *      last4[x] = x times P^128
+ 205:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * where x and last4[x] are seen as elements of GF(2^128) as in [MGV]
+ 206:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  */
+ 207:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** static const uint64_t last4[16] =
+ 208:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 209:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     0x0000, 0x1c20, 0x3840, 0x2460,
+ 210:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     0x7080, 0x6ca0, 0x48c0, 0x54e0,
+ 211:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     0xe100, 0xfd20, 0xd940, 0xc560,
+ 212:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     0x9180, 0x8da0, 0xa9c0, 0xb5e0
+ 213:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** };
+ 214:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 215:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** /*
+ 216:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * Sets output to x times H using the precomputed tables.
+ 217:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  * x and output are seen as elements of GF(2^128) as in [MGV].
+ 218:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****  */
+ 219:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** static void gcm_mult( mbedtls_gcm_context *ctx, const unsigned char x[16],
+ 220:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       unsigned char output[16] )
+ 221:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 484              		.loc 1 221 1
+ 485              		.cfi_startproc
+ 486 0000 F30F1EFA 		endbr64
+ 487 0004 55       		pushq	%rbp
+ 488              	.LCFI9:
+ 489              		.cfi_def_cfa_offset 16
+ 490              		.cfi_offset 6, -16
+ 491 0005 4889E5   		movq	%rsp, %rbp
+ 492              	.LCFI10:
+ 493              		.cfi_def_cfa_register 6
+ 494 0008 4883EC40 		subq	$64, %rsp
+ 495 000c 48897DD8 		movq	%rdi, -40(%rbp)
+ 496 0010 488975D0 		movq	%rsi, -48(%rbp)
+ 497 0014 488955C8 		movq	%rdx, -56(%rbp)
+ 498              		.loc 1 221 1
+ 499 0018 64488B04 		movq	%fs:40, %rax
+ 499      25280000 
+ 499      00
+ 500 0021 488945F8 		movq	%rax, -8(%rbp)
+ 501 0025 31C0     		xorl	%eax, %eax
+ 222:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int i = 0;
+ 502              		.loc 1 222 9
+ 503 0027 C745E400 		movl	$0, -28(%rbp)
+ 503      000000
+ 223:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     unsigned char lo, hi, rem;
+ 224:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     uint64_t zh, zl;
+GAS LISTING /tmp/ccw355Cf.s 			page 15
+
+
+ 225:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 226:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #if defined(MBEDTLS_AESNI_C) && defined(MBEDTLS_HAVE_X86_64)
+ 227:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( mbedtls_aesni_has_support( MBEDTLS_AESNI_CLMUL ) ) {
+ 228:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         unsigned char h[16];
+ 229:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 230:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ctx->HH[8] >> 32, h,  0 );
+ 231:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ctx->HH[8],       h,  4 );
+ 232:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ctx->HL[8] >> 32, h,  8 );
+ 233:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ctx->HL[8],       h, 12 );
+ 234:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 235:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         mbedtls_aesni_gcm_mult( output, x, h );
+ 236:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return;
+ 237:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 238:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** #endif /* MBEDTLS_AESNI_C && MBEDTLS_HAVE_X86_64 */
+ 239:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 240:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     lo = x[15] & 0xf;
+ 504              		.loc 1 240 11
+ 505 002e 488B45D0 		movq	-48(%rbp), %rax
+ 506 0032 4883C00F 		addq	$15, %rax
+ 507              		.loc 1 240 16
+ 508 0036 0FB600   		movzbl	(%rax), %eax
+ 509              		.loc 1 240 8
+ 510 0039 83E00F   		andl	$15, %eax
+ 511 003c 8845E1   		movb	%al, -31(%rbp)
+ 241:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 242:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     zh = ctx->HH[lo];
+ 512              		.loc 1 242 17
+ 513 003f 0FB655E1 		movzbl	-31(%rbp), %edx
+ 514              		.loc 1 242 8
+ 515 0043 488B45D8 		movq	-40(%rbp), %rax
+ 516 0047 4863D2   		movslq	%edx, %rdx
+ 517 004a 4883C21A 		addq	$26, %rdx
+ 518 004e 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 518      08
+ 519 0053 488945E8 		movq	%rax, -24(%rbp)
+ 243:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     zl = ctx->HL[lo];
+ 520              		.loc 1 243 17
+ 521 0057 0FB655E1 		movzbl	-31(%rbp), %edx
+ 522              		.loc 1 243 8
+ 523 005b 488B45D8 		movq	-40(%rbp), %rax
+ 524 005f 4863D2   		movslq	%edx, %rdx
+ 525 0062 4883C20A 		addq	$10, %rdx
+ 526 0066 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 526      08
+ 527 006b 488945F0 		movq	%rax, -16(%rbp)
+ 244:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     for( i = 15; i >= 0; i-- )
+ 528              		.loc 1 245 12
+ 529 006f C745E40F 		movl	$15, -28(%rbp)
+ 529      000000
+ 530              		.loc 1 245 5
+ 531 0076 E92A0100 		jmp	.L23
+ 531      00
+ 532              	.L25:
+ 246:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 247:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         lo = x[i] & 0xf;
+ 533              		.loc 1 247 15
+GAS LISTING /tmp/ccw355Cf.s 			page 16
+
+
+ 534 007b 8B45E4   		movl	-28(%rbp), %eax
+ 535 007e 4863D0   		movslq	%eax, %rdx
+ 536 0081 488B45D0 		movq	-48(%rbp), %rax
+ 537 0085 4801D0   		addq	%rdx, %rax
+ 538              		.loc 1 247 19
+ 539 0088 0FB600   		movzbl	(%rax), %eax
+ 540              		.loc 1 247 12
+ 541 008b 83E00F   		andl	$15, %eax
+ 542 008e 8845E1   		movb	%al, -31(%rbp)
+ 248:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         hi = x[i] >> 4;
+ 543              		.loc 1 248 15
+ 544 0091 8B45E4   		movl	-28(%rbp), %eax
+ 545 0094 4863D0   		movslq	%eax, %rdx
+ 546 0097 488B45D0 		movq	-48(%rbp), %rax
+ 547 009b 4801D0   		addq	%rdx, %rax
+ 548 009e 0FB600   		movzbl	(%rax), %eax
+ 549              		.loc 1 248 12
+ 550 00a1 C0E804   		shrb	$4, %al
+ 551 00a4 8845E2   		movb	%al, -30(%rbp)
+ 249:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 250:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         if( i != 15 )
+ 552              		.loc 1 250 11
+ 553 00a7 837DE40F 		cmpl	$15, -28(%rbp)
+ 554 00ab 747A     		je	.L24
+ 251:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 252:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             rem = (unsigned char) zl & 0xf;
+ 555              		.loc 1 252 38
+ 556 00ad 488B45F0 		movq	-16(%rbp), %rax
+ 557              		.loc 1 252 17
+ 558 00b1 83E00F   		andl	$15, %eax
+ 559 00b4 8845E3   		movb	%al, -29(%rbp)
+ 253:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             zl = ( zh << 60 ) | ( zl >> 4 );
+ 560              		.loc 1 253 23
+ 561 00b7 488B45E8 		movq	-24(%rbp), %rax
+ 562 00bb 48C1E03C 		salq	$60, %rax
+ 563 00bf 4889C2   		movq	%rax, %rdx
+ 564              		.loc 1 253 38
+ 565 00c2 488B45F0 		movq	-16(%rbp), %rax
+ 566 00c6 48C1E804 		shrq	$4, %rax
+ 567              		.loc 1 253 16
+ 568 00ca 4809D0   		orq	%rdx, %rax
+ 569 00cd 488945F0 		movq	%rax, -16(%rbp)
+ 254:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             zh = ( zh >> 4 );
+ 570              		.loc 1 254 16
+ 571 00d1 48C16DE8 		shrq	$4, -24(%rbp)
+ 571      04
+ 255:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             zh ^= (uint64_t) last4[rem] << 48;
+ 572              		.loc 1 255 19
+ 573 00d6 0FB645E3 		movzbl	-29(%rbp), %eax
+ 574              		.loc 1 255 35
+ 575 00da 4898     		cltq
+ 576 00dc 488D14C5 		leaq	0(,%rax,8), %rdx
+ 576      00000000 
+ 577 00e4 488D0500 		leaq	last4(%rip), %rax
+ 577      000000
+ 578 00eb 488B0402 		movq	(%rdx,%rax), %rax
+ 579              		.loc 1 255 41
+GAS LISTING /tmp/ccw355Cf.s 			page 17
+
+
+ 580 00ef 48C1E030 		salq	$48, %rax
+ 581              		.loc 1 255 16
+ 582 00f3 483145E8 		xorq	%rax, -24(%rbp)
+ 256:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             zh ^= ctx->HH[lo];
+ 583              		.loc 1 256 26
+ 584 00f7 0FB655E1 		movzbl	-31(%rbp), %edx
+ 585 00fb 488B45D8 		movq	-40(%rbp), %rax
+ 586 00ff 4863D2   		movslq	%edx, %rdx
+ 587 0102 4883C21A 		addq	$26, %rdx
+ 588 0106 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 588      08
+ 589              		.loc 1 256 16
+ 590 010b 483145E8 		xorq	%rax, -24(%rbp)
+ 257:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             zl ^= ctx->HL[lo];
+ 591              		.loc 1 257 26
+ 592 010f 0FB655E1 		movzbl	-31(%rbp), %edx
+ 593 0113 488B45D8 		movq	-40(%rbp), %rax
+ 594 0117 4863D2   		movslq	%edx, %rdx
+ 595 011a 4883C20A 		addq	$10, %rdx
+ 596 011e 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 596      08
+ 597              		.loc 1 257 16
+ 598 0123 483145F0 		xorq	%rax, -16(%rbp)
+ 599              	.L24:
+ 258:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 259:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         }
+ 260:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 261:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         rem = (unsigned char) zl & 0xf;
+ 600              		.loc 1 261 34 discriminator 2
+ 601 0127 488B45F0 		movq	-16(%rbp), %rax
+ 602              		.loc 1 261 13 discriminator 2
+ 603 012b 83E00F   		andl	$15, %eax
+ 604 012e 8845E3   		movb	%al, -29(%rbp)
+ 262:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         zl = ( zh << 60 ) | ( zl >> 4 );
+ 605              		.loc 1 262 19 discriminator 2
+ 606 0131 488B45E8 		movq	-24(%rbp), %rax
+ 607 0135 48C1E03C 		salq	$60, %rax
+ 608 0139 4889C2   		movq	%rax, %rdx
+ 609              		.loc 1 262 34 discriminator 2
+ 610 013c 488B45F0 		movq	-16(%rbp), %rax
+ 611 0140 48C1E804 		shrq	$4, %rax
+ 612              		.loc 1 262 12 discriminator 2
+ 613 0144 4809D0   		orq	%rdx, %rax
+ 614 0147 488945F0 		movq	%rax, -16(%rbp)
+ 263:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         zh = ( zh >> 4 );
+ 615              		.loc 1 263 12 discriminator 2
+ 616 014b 48C16DE8 		shrq	$4, -24(%rbp)
+ 616      04
+ 264:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         zh ^= (uint64_t) last4[rem] << 48;
+ 617              		.loc 1 264 15 discriminator 2
+ 618 0150 0FB645E3 		movzbl	-29(%rbp), %eax
+ 619              		.loc 1 264 31 discriminator 2
+ 620 0154 4898     		cltq
+ 621 0156 488D14C5 		leaq	0(,%rax,8), %rdx
+ 621      00000000 
+ 622 015e 488D0500 		leaq	last4(%rip), %rax
+ 622      000000
+GAS LISTING /tmp/ccw355Cf.s 			page 18
+
+
+ 623 0165 488B0402 		movq	(%rdx,%rax), %rax
+ 624              		.loc 1 264 37 discriminator 2
+ 625 0169 48C1E030 		salq	$48, %rax
+ 626              		.loc 1 264 12 discriminator 2
+ 627 016d 483145E8 		xorq	%rax, -24(%rbp)
+ 265:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         zh ^= ctx->HH[hi];
+ 628              		.loc 1 265 22 discriminator 2
+ 629 0171 0FB655E2 		movzbl	-30(%rbp), %edx
+ 630 0175 488B45D8 		movq	-40(%rbp), %rax
+ 631 0179 4863D2   		movslq	%edx, %rdx
+ 632 017c 4883C21A 		addq	$26, %rdx
+ 633 0180 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 633      08
+ 634              		.loc 1 265 12 discriminator 2
+ 635 0185 483145E8 		xorq	%rax, -24(%rbp)
+ 266:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         zl ^= ctx->HL[hi];
+ 636              		.loc 1 266 22 discriminator 2
+ 637 0189 0FB655E2 		movzbl	-30(%rbp), %edx
+ 638 018d 488B45D8 		movq	-40(%rbp), %rax
+ 639 0191 4863D2   		movslq	%edx, %rdx
+ 640 0194 4883C20A 		addq	$10, %rdx
+ 641 0198 488B44D0 		movq	8(%rax,%rdx,8), %rax
+ 641      08
+ 642              		.loc 1 266 12 discriminator 2
+ 643 019d 483145F0 		xorq	%rax, -16(%rbp)
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 644              		.loc 1 245 27 discriminator 2
+ 645 01a1 836DE401 		subl	$1, -28(%rbp)
+ 646              	.L23:
+ 245:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 647              		.loc 1 245 5 discriminator 1
+ 648 01a5 837DE400 		cmpl	$0, -28(%rbp)
+ 649 01a9 0F89CCFE 		jns	.L25
+ 649      FFFF
+ 267:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 268:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 269:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     PUT_UINT32_BE( zh >> 32, output, 0 );
+ 650              		.loc 1 269 5
+ 651 01af 488B45E8 		movq	-24(%rbp), %rax
+ 652 01b3 48C1E838 		shrq	$56, %rax
+ 653 01b7 89C2     		movl	%eax, %edx
+ 654 01b9 488B45C8 		movq	-56(%rbp), %rax
+ 655 01bd 8810     		movb	%dl, (%rax)
+ 656 01bf 488B45E8 		movq	-24(%rbp), %rax
+ 657 01c3 48C1E830 		shrq	$48, %rax
+ 658 01c7 4889C2   		movq	%rax, %rdx
+ 659 01ca 488B45C8 		movq	-56(%rbp), %rax
+ 660 01ce 4883C001 		addq	$1, %rax
+ 661 01d2 8810     		movb	%dl, (%rax)
+ 662 01d4 488B45E8 		movq	-24(%rbp), %rax
+ 663 01d8 48C1E828 		shrq	$40, %rax
+ 664 01dc 4889C2   		movq	%rax, %rdx
+ 665 01df 488B45C8 		movq	-56(%rbp), %rax
+ 666 01e3 4883C002 		addq	$2, %rax
+ 667 01e7 8810     		movb	%dl, (%rax)
+ 668 01e9 488B45E8 		movq	-24(%rbp), %rax
+ 669 01ed 48C1E820 		shrq	$32, %rax
+GAS LISTING /tmp/ccw355Cf.s 			page 19
+
+
+ 670 01f1 4889C2   		movq	%rax, %rdx
+ 671 01f4 488B45C8 		movq	-56(%rbp), %rax
+ 672 01f8 4883C003 		addq	$3, %rax
+ 673 01fc 8810     		movb	%dl, (%rax)
+ 270:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     PUT_UINT32_BE( zh, output, 4 );
+ 674              		.loc 1 270 5
+ 675 01fe 488B45E8 		movq	-24(%rbp), %rax
+ 676 0202 48C1E818 		shrq	$24, %rax
+ 677 0206 4889C2   		movq	%rax, %rdx
+ 678 0209 488B45C8 		movq	-56(%rbp), %rax
+ 679 020d 4883C004 		addq	$4, %rax
+ 680 0211 8810     		movb	%dl, (%rax)
+ 681 0213 488B45E8 		movq	-24(%rbp), %rax
+ 682 0217 48C1E810 		shrq	$16, %rax
+ 683 021b 4889C2   		movq	%rax, %rdx
+ 684 021e 488B45C8 		movq	-56(%rbp), %rax
+ 685 0222 4883C005 		addq	$5, %rax
+ 686 0226 8810     		movb	%dl, (%rax)
+ 687 0228 488B45E8 		movq	-24(%rbp), %rax
+ 688 022c 48C1E808 		shrq	$8, %rax
+ 689 0230 4889C2   		movq	%rax, %rdx
+ 690 0233 488B45C8 		movq	-56(%rbp), %rax
+ 691 0237 4883C006 		addq	$6, %rax
+ 692 023b 8810     		movb	%dl, (%rax)
+ 693 023d 488B45C8 		movq	-56(%rbp), %rax
+ 694 0241 4883C007 		addq	$7, %rax
+ 695 0245 488B55E8 		movq	-24(%rbp), %rdx
+ 696 0249 8810     		movb	%dl, (%rax)
+ 271:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     PUT_UINT32_BE( zl >> 32, output, 8 );
+ 697              		.loc 1 271 5
+ 698 024b 488B45F0 		movq	-16(%rbp), %rax
+ 699 024f 48C1E838 		shrq	$56, %rax
+ 700 0253 4889C2   		movq	%rax, %rdx
+ 701 0256 488B45C8 		movq	-56(%rbp), %rax
+ 702 025a 4883C008 		addq	$8, %rax
+ 703 025e 8810     		movb	%dl, (%rax)
+ 704 0260 488B45F0 		movq	-16(%rbp), %rax
+ 705 0264 48C1E830 		shrq	$48, %rax
+ 706 0268 4889C2   		movq	%rax, %rdx
+ 707 026b 488B45C8 		movq	-56(%rbp), %rax
+ 708 026f 4883C009 		addq	$9, %rax
+ 709 0273 8810     		movb	%dl, (%rax)
+ 710 0275 488B45F0 		movq	-16(%rbp), %rax
+ 711 0279 48C1E828 		shrq	$40, %rax
+ 712 027d 4889C2   		movq	%rax, %rdx
+ 713 0280 488B45C8 		movq	-56(%rbp), %rax
+ 714 0284 4883C00A 		addq	$10, %rax
+ 715 0288 8810     		movb	%dl, (%rax)
+ 716 028a 488B45F0 		movq	-16(%rbp), %rax
+ 717 028e 48C1E820 		shrq	$32, %rax
+ 718 0292 4889C2   		movq	%rax, %rdx
+ 719 0295 488B45C8 		movq	-56(%rbp), %rax
+ 720 0299 4883C00B 		addq	$11, %rax
+ 721 029d 8810     		movb	%dl, (%rax)
+ 272:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     PUT_UINT32_BE( zl, output, 12 );
+ 722              		.loc 1 272 5
+ 723 029f 488B45F0 		movq	-16(%rbp), %rax
+GAS LISTING /tmp/ccw355Cf.s 			page 20
+
+
+ 724 02a3 48C1E818 		shrq	$24, %rax
+ 725 02a7 4889C2   		movq	%rax, %rdx
+ 726 02aa 488B45C8 		movq	-56(%rbp), %rax
+ 727 02ae 4883C00C 		addq	$12, %rax
+ 728 02b2 8810     		movb	%dl, (%rax)
+ 729 02b4 488B45F0 		movq	-16(%rbp), %rax
+ 730 02b8 48C1E810 		shrq	$16, %rax
+ 731 02bc 4889C2   		movq	%rax, %rdx
+ 732 02bf 488B45C8 		movq	-56(%rbp), %rax
+ 733 02c3 4883C00D 		addq	$13, %rax
+ 734 02c7 8810     		movb	%dl, (%rax)
+ 735 02c9 488B45F0 		movq	-16(%rbp), %rax
+ 736 02cd 48C1E808 		shrq	$8, %rax
+ 737 02d1 4889C2   		movq	%rax, %rdx
+ 738 02d4 488B45C8 		movq	-56(%rbp), %rax
+ 739 02d8 4883C00E 		addq	$14, %rax
+ 740 02dc 8810     		movb	%dl, (%rax)
+ 741 02de 488B45C8 		movq	-56(%rbp), %rax
+ 742 02e2 4883C00F 		addq	$15, %rax
+ 743 02e6 488B55F0 		movq	-16(%rbp), %rdx
+ 744 02ea 8810     		movb	%dl, (%rax)
+ 273:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 745              		.loc 1 273 1
+ 746 02ec 90       		nop
+ 747 02ed 488B45F8 		movq	-8(%rbp), %rax
+ 748 02f1 64483304 		xorq	%fs:40, %rax
+ 748      25280000 
+ 748      00
+ 749 02fa 7405     		je	.L26
+ 750 02fc E8000000 		call	__stack_chk_fail@PLT
+ 750      00
+ 751              	.L26:
+ 752 0301 C9       		leave
+ 753              	.LCFI11:
+ 754              		.cfi_def_cfa 7, 8
+ 755 0302 C3       		ret
+ 756              		.cfi_endproc
+ 757              	.LFE10:
+ 759              		.section	.text.mbedtls_gcm_starts,"ax",@progbits
+ 760              		.globl	mbedtls_gcm_starts
+ 762              	mbedtls_gcm_starts:
+ 763              	.LFB11:
+ 274:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 275:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** int mbedtls_gcm_starts( mbedtls_gcm_context *ctx,
+ 276:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 int mode,
+ 277:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 const unsigned char *iv,
+ 278:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 size_t iv_len,
+ 279:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 const unsigned char *add,
+ 280:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 size_t add_len )
+ 281:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 764              		.loc 1 281 1
+ 765              		.cfi_startproc
+ 766 0000 F30F1EFA 		endbr64
+ 767 0004 55       		pushq	%rbp
+ 768              	.LCFI12:
+ 769              		.cfi_def_cfa_offset 16
+ 770              		.cfi_offset 6, -16
+GAS LISTING /tmp/ccw355Cf.s 			page 21
+
+
+ 771 0005 4889E5   		movq	%rsp, %rbp
+ 772              	.LCFI13:
+ 773              		.cfi_def_cfa_register 6
+ 774 0008 4883C480 		addq	$-128, %rsp
+ 775 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 776 0010 8975A4   		movl	%esi, -92(%rbp)
+ 777 0013 48895598 		movq	%rdx, -104(%rbp)
+ 778 0017 48894D90 		movq	%rcx, -112(%rbp)
+ 779 001b 4C894588 		movq	%r8, -120(%rbp)
+ 780 001f 4C894D80 		movq	%r9, -128(%rbp)
+ 781              		.loc 1 281 1
+ 782 0023 64488B04 		movq	%fs:40, %rax
+ 782      25280000 
+ 782      00
+ 783 002c 488945F8 		movq	%rax, -8(%rbp)
+ 784 0030 31C0     		xorl	%eax, %eax
+ 282:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int ret;
+ 283:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     unsigned char work_buf[16];
+ 284:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     size_t i;
+ 285:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     const unsigned char *p;
+ 286:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     size_t use_len, olen = 0;
+ 785              		.loc 1 286 21
+ 786 0032 48C745C0 		movq	$0, -64(%rbp)
+ 786      00000000 
+ 287:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 288:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( ctx != NULL );
+ 289:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( iv != NULL );
+ 290:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( add_len == 0 || add != NULL );
+ 291:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 292:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* IV and AD are limited to 2^64 bits, so 2^61 bytes */
+ 293:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* IV is not allowed to be zero length */
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( iv_len == 0 ||
+ 787              		.loc 1 294 7
+ 788 003a 48837D90 		cmpq	$0, -112(%rbp)
+ 788      00
+ 789 003f 741A     		je	.L28
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****       ( (uint64_t) iv_len  ) >> 61 != 0 ||
+ 790              		.loc 1 295 30 discriminator 1
+ 791 0041 488B4590 		movq	-112(%rbp), %rax
+ 792 0045 48C1E83D 		shrq	$61, %rax
+ 294:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****       ( (uint64_t) iv_len  ) >> 61 != 0 ||
+ 793              		.loc 1 294 21 discriminator 1
+ 794 0049 4885C0   		testq	%rax, %rax
+ 795 004c 750D     		jne	.L28
+ 296:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****       ( (uint64_t) add_len ) >> 61 != 0 )
+ 796              		.loc 1 296 30
+ 797 004e 488B4580 		movq	-128(%rbp), %rax
+ 798 0052 48C1E83D 		shrq	$61, %rax
+ 295:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****       ( (uint64_t) iv_len  ) >> 61 != 0 ||
+ 799              		.loc 1 295 41
+ 800 0056 4885C0   		testq	%rax, %rax
+ 801 0059 740A     		je	.L29
+ 802              	.L28:
+ 297:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 298:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( MBEDTLS_ERR_GCM_BAD_INPUT );
+ 803              		.loc 1 298 15
+ 804 005b B8ECFFFF 		movl	$-20, %eax
+GAS LISTING /tmp/ccw355Cf.s 			page 22
+
+
+ 804      FF
+ 805 0060 E90D0300 		jmp	.L44
+ 805      00
+ 806              	.L29:
+ 299:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 300:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 301:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     memset( ctx->y, 0x00, sizeof(ctx->y) );
+ 807              		.loc 1 301 16
+ 808 0065 488B45A8 		movq	-88(%rbp), %rax
+ 809 0069 48057801 		addq	$376, %rax
+ 809      0000
+ 810              		.loc 1 301 5
+ 811 006f BA100000 		movl	$16, %edx
+ 811      00
+ 812 0074 BE000000 		movl	$0, %esi
+ 812      00
+ 813 0079 4889C7   		movq	%rax, %rdi
+ 814 007c E8000000 		call	memset@PLT
+ 814      00
+ 302:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     memset( ctx->buf, 0x00, sizeof(ctx->buf) );
+ 815              		.loc 1 302 16
+ 816 0081 488B45A8 		movq	-88(%rbp), %rax
+ 817 0085 48058801 		addq	$392, %rax
+ 817      0000
+ 818              		.loc 1 302 5
+ 819 008b BA100000 		movl	$16, %edx
+ 819      00
+ 820 0090 BE000000 		movl	$0, %esi
+ 820      00
+ 821 0095 4889C7   		movq	%rax, %rdi
+ 822 0098 E8000000 		call	memset@PLT
+ 822      00
+ 303:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 304:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->mode = mode;
+ 823              		.loc 1 304 15
+ 824 009d 488B45A8 		movq	-88(%rbp), %rax
+ 825 00a1 8B55A4   		movl	-92(%rbp), %edx
+ 826 00a4 89909801 		movl	%edx, 408(%rax)
+ 826      0000
+ 305:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->len = 0;
+ 827              		.loc 1 305 14
+ 828 00aa 488B45A8 		movq	-88(%rbp), %rax
+ 829 00ae 48C78058 		movq	$0, 344(%rax)
+ 829      01000000 
+ 829      000000
+ 306:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->add_len = 0;
+ 830              		.loc 1 306 18
+ 831 00b9 488B45A8 		movq	-88(%rbp), %rax
+ 832 00bd 48C78060 		movq	$0, 352(%rax)
+ 832      01000000 
+ 832      000000
+ 307:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 308:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( iv_len == 12 )
+ 833              		.loc 1 308 7
+ 834 00c8 48837D90 		cmpq	$12, -112(%rbp)
+ 834      0C
+ 835 00cd 752E     		jne	.L31
+GAS LISTING /tmp/ccw355Cf.s 			page 23
+
+
+ 309:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 310:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         memcpy( ctx->y, iv, iv_len );
+ 836              		.loc 1 310 20
+ 837 00cf 488B45A8 		movq	-88(%rbp), %rax
+ 838 00d3 488D8878 		leaq	376(%rax), %rcx
+ 838      010000
+ 839              		.loc 1 310 9
+ 840 00da 488B5590 		movq	-112(%rbp), %rdx
+ 841 00de 488B4598 		movq	-104(%rbp), %rax
+ 842 00e2 4889C6   		movq	%rax, %rsi
+ 843 00e5 4889CF   		movq	%rcx, %rdi
+ 844 00e8 E8000000 		call	memcpy@PLT
+ 844      00
+ 311:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         ctx->y[15] = 1;
+ 845              		.loc 1 311 20
+ 846 00ed 488B45A8 		movq	-88(%rbp), %rax
+ 847 00f1 C6808701 		movb	$1, 391(%rax)
+ 847      000001
+ 848 00f8 E96F0100 		jmp	.L32
+ 848      00
+ 849              	.L31:
+ 312:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 313:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     else
+ 314:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 315:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         memset( work_buf, 0x00, 16 );
+ 850              		.loc 1 315 9
+ 851 00fd 488D45E0 		leaq	-32(%rbp), %rax
+ 852 0101 BA100000 		movl	$16, %edx
+ 852      00
+ 853 0106 BE000000 		movl	$0, %esi
+ 853      00
+ 854 010b 4889C7   		movq	%rax, %rdi
+ 855 010e E8000000 		call	memset@PLT
+ 855      00
+ 316:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( iv_len * 8, work_buf, 12 );
+ 856              		.loc 1 316 9
+ 857 0113 488B4590 		movq	-112(%rbp), %rax
+ 858 0117 48C1E003 		salq	$3, %rax
+ 859 011b 48C1E818 		shrq	$24, %rax
+ 860 011f 8845EC   		movb	%al, -20(%rbp)
+ 861 0122 488B4590 		movq	-112(%rbp), %rax
+ 862 0126 48C1E003 		salq	$3, %rax
+ 863 012a 48C1E810 		shrq	$16, %rax
+ 864 012e 8845ED   		movb	%al, -19(%rbp)
+ 865 0131 488B4590 		movq	-112(%rbp), %rax
+ 866 0135 48C1E003 		salq	$3, %rax
+ 867 0139 48C1E808 		shrq	$8, %rax
+ 868 013d 8845EE   		movb	%al, -18(%rbp)
+ 869 0140 488B4590 		movq	-112(%rbp), %rax
+ 870 0144 C1E003   		sall	$3, %eax
+ 871 0147 8845EF   		movb	%al, -17(%rbp)
+ 317:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 318:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         p = iv;
+ 872              		.loc 1 318 11
+ 873 014a 488B4598 		movq	-104(%rbp), %rax
+ 874 014e 488945D0 		movq	%rax, -48(%rbp)
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         while( iv_len > 0 )
+GAS LISTING /tmp/ccw355Cf.s 			page 24
+
+
+ 875              		.loc 1 319 14
+ 876 0152 E9980000 		jmp	.L33
+ 876      00
+ 877              	.L36:
+ 320:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 321:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             use_len = ( iv_len < 16 ) ? iv_len : 16;
+ 878              		.loc 1 321 21
+ 879 0157 B8100000 		movl	$16, %eax
+ 879      00
+ 880 015c 48837D90 		cmpq	$16, -112(%rbp)
+ 880      10
+ 881 0161 480F4645 		cmovbe	-112(%rbp), %rax
+ 881      90
+ 882 0166 488945D8 		movq	%rax, -40(%rbp)
+ 322:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             for( i = 0; i < use_len; i++ )
+ 883              		.loc 1 323 20
+ 884 016a 48C745C8 		movq	$0, -56(%rbp)
+ 884      00000000 
+ 885              		.loc 1 323 13
+ 886 0172 EB3C     		jmp	.L34
+ 887              	.L35:
+ 324:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 ctx->y[i] ^= p[i];
+ 888              		.loc 1 324 27 discriminator 3
+ 889 0174 488B55A8 		movq	-88(%rbp), %rdx
+ 890 0178 488B45C8 		movq	-56(%rbp), %rax
+ 891 017c 4801D0   		addq	%rdx, %rax
+ 892 017f 48057801 		addq	$376, %rax
+ 892      0000
+ 893 0185 0FB608   		movzbl	(%rax), %ecx
+ 894              		.loc 1 324 31 discriminator 3
+ 895 0188 488B55D0 		movq	-48(%rbp), %rdx
+ 896 018c 488B45C8 		movq	-56(%rbp), %rax
+ 897 0190 4801D0   		addq	%rdx, %rax
+ 898 0193 0FB600   		movzbl	(%rax), %eax
+ 899              		.loc 1 324 27 discriminator 3
+ 900 0196 31C1     		xorl	%eax, %ecx
+ 901 0198 488B55A8 		movq	-88(%rbp), %rdx
+ 902 019c 488B45C8 		movq	-56(%rbp), %rax
+ 903 01a0 4801D0   		addq	%rdx, %rax
+ 904 01a3 48057801 		addq	$376, %rax
+ 904      0000
+ 905 01a9 8808     		movb	%cl, (%rax)
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 ctx->y[i] ^= p[i];
+ 906              		.loc 1 323 39 discriminator 3
+ 907 01ab 488345C8 		addq	$1, -56(%rbp)
+ 907      01
+ 908              	.L34:
+ 323:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 ctx->y[i] ^= p[i];
+ 909              		.loc 1 323 13 discriminator 1
+ 910 01b0 488B45C8 		movq	-56(%rbp), %rax
+ 911 01b4 483B45D8 		cmpq	-40(%rbp), %rax
+ 912 01b8 72BA     		jb	.L35
+ 325:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 326:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             gcm_mult( ctx, ctx->y, ctx->y );
+ 913              		.loc 1 326 39
+ 914 01ba 488B45A8 		movq	-88(%rbp), %rax
+GAS LISTING /tmp/ccw355Cf.s 			page 25
+
+
+ 915 01be 488D9078 		leaq	376(%rax), %rdx
+ 915      010000
+ 916              		.loc 1 326 31
+ 917 01c5 488B45A8 		movq	-88(%rbp), %rax
+ 918 01c9 488D8878 		leaq	376(%rax), %rcx
+ 918      010000
+ 919              		.loc 1 326 13
+ 920 01d0 488B45A8 		movq	-88(%rbp), %rax
+ 921 01d4 4889CE   		movq	%rcx, %rsi
+ 922 01d7 4889C7   		movq	%rax, %rdi
+ 923 01da E8000000 		call	gcm_mult
+ 923      00
+ 327:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 328:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             iv_len -= use_len;
+ 924              		.loc 1 328 20
+ 925 01df 488B45D8 		movq	-40(%rbp), %rax
+ 926 01e3 48294590 		subq	%rax, -112(%rbp)
+ 329:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             p += use_len;
+ 927              		.loc 1 329 15
+ 928 01e7 488B45D8 		movq	-40(%rbp), %rax
+ 929 01eb 480145D0 		addq	%rax, -48(%rbp)
+ 930              	.L33:
+ 319:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 931              		.loc 1 319 14
+ 932 01ef 48837D90 		cmpq	$0, -112(%rbp)
+ 932      00
+ 933 01f4 0F855DFF 		jne	.L36
+ 933      FFFF
+ 330:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         }
+ 331:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( i = 0; i < 16; i++ )
+ 934              		.loc 1 332 16
+ 935 01fa 48C745C8 		movq	$0, -56(%rbp)
+ 935      00000000 
+ 936              		.loc 1 332 9
+ 937 0202 EB3C     		jmp	.L37
+ 938              	.L38:
+ 333:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->y[i] ^= work_buf[i];
+ 939              		.loc 1 333 23 discriminator 3
+ 940 0204 488B55A8 		movq	-88(%rbp), %rdx
+ 941 0208 488B45C8 		movq	-56(%rbp), %rax
+ 942 020c 4801D0   		addq	%rdx, %rax
+ 943 020f 48057801 		addq	$376, %rax
+ 943      0000
+ 944 0215 0FB608   		movzbl	(%rax), %ecx
+ 945              		.loc 1 333 34 discriminator 3
+ 946 0218 488D55E0 		leaq	-32(%rbp), %rdx
+ 947 021c 488B45C8 		movq	-56(%rbp), %rax
+ 948 0220 4801D0   		addq	%rdx, %rax
+ 949 0223 0FB600   		movzbl	(%rax), %eax
+ 950              		.loc 1 333 23 discriminator 3
+ 951 0226 31C1     		xorl	%eax, %ecx
+ 952 0228 488B55A8 		movq	-88(%rbp), %rdx
+ 953 022c 488B45C8 		movq	-56(%rbp), %rax
+ 954 0230 4801D0   		addq	%rdx, %rax
+ 955 0233 48057801 		addq	$376, %rax
+ 955      0000
+GAS LISTING /tmp/ccw355Cf.s 			page 26
+
+
+ 956 0239 8808     		movb	%cl, (%rax)
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->y[i] ^= work_buf[i];
+ 957              		.loc 1 332 30 discriminator 3
+ 958 023b 488345C8 		addq	$1, -56(%rbp)
+ 958      01
+ 959              	.L37:
+ 332:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->y[i] ^= work_buf[i];
+ 960              		.loc 1 332 9 discriminator 1
+ 961 0240 48837DC8 		cmpq	$15, -56(%rbp)
+ 961      0F
+ 962 0245 76BD     		jbe	.L38
+ 334:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 335:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         gcm_mult( ctx, ctx->y, ctx->y );
+ 963              		.loc 1 335 35
+ 964 0247 488B45A8 		movq	-88(%rbp), %rax
+ 965 024b 488D9078 		leaq	376(%rax), %rdx
+ 965      010000
+ 966              		.loc 1 335 27
+ 967 0252 488B45A8 		movq	-88(%rbp), %rax
+ 968 0256 488D8878 		leaq	376(%rax), %rcx
+ 968      010000
+ 969              		.loc 1 335 9
+ 970 025d 488B45A8 		movq	-88(%rbp), %rax
+ 971 0261 4889CE   		movq	%rcx, %rsi
+ 972 0264 4889C7   		movq	%rax, %rdi
+ 973 0267 E8000000 		call	gcm_mult
+ 973      00
+ 974              	.L32:
+ 336:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 337:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 338:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_cipher_update( &ctx->cipher_ctx, ctx->y, 16, ctx->base_ectr,
+ 975              		.loc 1 338 73
+ 976 026c 488B45A8 		movq	-88(%rbp), %rax
+ 977 0270 488D9068 		leaq	360(%rax), %rdx
+ 977      010000
+ 978              		.loc 1 338 61
+ 979 0277 488B45A8 		movq	-88(%rbp), %rax
+ 980 027b 488DB078 		leaq	376(%rax), %rsi
+ 980      010000
+ 981              		.loc 1 338 17
+ 982 0282 488B45A8 		movq	-88(%rbp), %rax
+ 983 0286 488D4DC0 		leaq	-64(%rbp), %rcx
+ 984 028a 4989C8   		movq	%rcx, %r8
+ 985 028d 4889D1   		movq	%rdx, %rcx
+ 986 0290 BA100000 		movl	$16, %edx
+ 986      00
+ 987 0295 4889C7   		movq	%rax, %rdi
+ 988 0298 E8000000 		call	mbedtls_cipher_update@PLT
+ 988      00
+ 989 029d 8945BC   		movl	%eax, -68(%rbp)
+ 990              		.loc 1 338 7
+ 991 02a0 837DBC00 		cmpl	$0, -68(%rbp)
+ 992 02a4 7408     		je	.L39
+ 339:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                              &olen ) ) != 0 )
+ 340:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 341:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 993              		.loc 1 341 15
+GAS LISTING /tmp/ccw355Cf.s 			page 27
+
+
+ 994 02a6 8B45BC   		movl	-68(%rbp), %eax
+ 995 02a9 E9C40000 		jmp	.L44
+ 995      00
+ 996              	.L39:
+ 342:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 343:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 344:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->add_len = add_len;
+ 997              		.loc 1 344 18
+ 998 02ae 488B45A8 		movq	-88(%rbp), %rax
+ 999 02b2 488B5580 		movq	-128(%rbp), %rdx
+ 1000 02b6 48899060 		movq	%rdx, 352(%rax)
+ 1000      010000
+ 345:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     p = add;
+ 1001              		.loc 1 345 7
+ 1002 02bd 488B4588 		movq	-120(%rbp), %rax
+ 1003 02c1 488945D0 		movq	%rax, -48(%rbp)
+ 346:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     while( add_len > 0 )
+ 1004              		.loc 1 346 10
+ 1005 02c5 E9980000 		jmp	.L40
+ 1005      00
+ 1006              	.L43:
+ 347:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 348:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         use_len = ( add_len < 16 ) ? add_len : 16;
+ 1007              		.loc 1 348 17
+ 1008 02ca B8100000 		movl	$16, %eax
+ 1008      00
+ 1009 02cf 48837D80 		cmpq	$16, -128(%rbp)
+ 1009      10
+ 1010 02d4 480F4645 		cmovbe	-128(%rbp), %rax
+ 1010      80
+ 1011 02d9 488945D8 		movq	%rax, -40(%rbp)
+ 349:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( i = 0; i < use_len; i++ )
+ 1012              		.loc 1 350 16
+ 1013 02dd 48C745C8 		movq	$0, -56(%rbp)
+ 1013      00000000 
+ 1014              		.loc 1 350 9
+ 1015 02e5 EB3C     		jmp	.L41
+ 1016              	.L42:
+ 351:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->buf[i] ^= p[i];
+ 1017              		.loc 1 351 25 discriminator 3
+ 1018 02e7 488B55A8 		movq	-88(%rbp), %rdx
+ 1019 02eb 488B45C8 		movq	-56(%rbp), %rax
+ 1020 02ef 4801D0   		addq	%rdx, %rax
+ 1021 02f2 48058801 		addq	$392, %rax
+ 1021      0000
+ 1022 02f8 0FB608   		movzbl	(%rax), %ecx
+ 1023              		.loc 1 351 29 discriminator 3
+ 1024 02fb 488B55D0 		movq	-48(%rbp), %rdx
+ 1025 02ff 488B45C8 		movq	-56(%rbp), %rax
+ 1026 0303 4801D0   		addq	%rdx, %rax
+ 1027 0306 0FB600   		movzbl	(%rax), %eax
+ 1028              		.loc 1 351 25 discriminator 3
+ 1029 0309 31C1     		xorl	%eax, %ecx
+ 1030 030b 488B55A8 		movq	-88(%rbp), %rdx
+ 1031 030f 488B45C8 		movq	-56(%rbp), %rax
+ 1032 0313 4801D0   		addq	%rdx, %rax
+GAS LISTING /tmp/ccw355Cf.s 			page 28
+
+
+ 1033 0316 48058801 		addq	$392, %rax
+ 1033      0000
+ 1034 031c 8808     		movb	%cl, (%rax)
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->buf[i] ^= p[i];
+ 1035              		.loc 1 350 35 discriminator 3
+ 1036 031e 488345C8 		addq	$1, -56(%rbp)
+ 1036      01
+ 1037              	.L41:
+ 350:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->buf[i] ^= p[i];
+ 1038              		.loc 1 350 9 discriminator 1
+ 1039 0323 488B45C8 		movq	-56(%rbp), %rax
+ 1040 0327 483B45D8 		cmpq	-40(%rbp), %rax
+ 1041 032b 72BA     		jb	.L42
+ 352:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 353:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         gcm_mult( ctx, ctx->buf, ctx->buf );
+ 1042              		.loc 1 353 37
+ 1043 032d 488B45A8 		movq	-88(%rbp), %rax
+ 1044 0331 488D9088 		leaq	392(%rax), %rdx
+ 1044      010000
+ 1045              		.loc 1 353 27
+ 1046 0338 488B45A8 		movq	-88(%rbp), %rax
+ 1047 033c 488D8888 		leaq	392(%rax), %rcx
+ 1047      010000
+ 1048              		.loc 1 353 9
+ 1049 0343 488B45A8 		movq	-88(%rbp), %rax
+ 1050 0347 4889CE   		movq	%rcx, %rsi
+ 1051 034a 4889C7   		movq	%rax, %rdi
+ 1052 034d E8000000 		call	gcm_mult
+ 1052      00
+ 354:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 355:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         add_len -= use_len;
+ 1053              		.loc 1 355 17
+ 1054 0352 488B45D8 		movq	-40(%rbp), %rax
+ 1055 0356 48294580 		subq	%rax, -128(%rbp)
+ 356:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         p += use_len;
+ 1056              		.loc 1 356 11
+ 1057 035a 488B45D8 		movq	-40(%rbp), %rax
+ 1058 035e 480145D0 		addq	%rax, -48(%rbp)
+ 1059              	.L40:
+ 346:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 1060              		.loc 1 346 10
+ 1061 0362 48837D80 		cmpq	$0, -128(%rbp)
+ 1061      00
+ 1062 0367 0F855DFF 		jne	.L43
+ 1062      FFFF
+ 357:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 358:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 359:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     return( 0 );
+ 1063              		.loc 1 359 11
+ 1064 036d B8000000 		movl	$0, %eax
+ 1064      00
+ 1065              	.L44:
+ 360:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 1066              		.loc 1 360 1 discriminator 1
+ 1067 0372 488B7DF8 		movq	-8(%rbp), %rdi
+ 1068 0376 6448333C 		xorq	%fs:40, %rdi
+ 1068      25280000 
+GAS LISTING /tmp/ccw355Cf.s 			page 29
+
+
+ 1068      00
+ 1069 037f 7405     		je	.L45
+ 1070              		.loc 1 360 1 is_stmt 0
+ 1071 0381 E8000000 		call	__stack_chk_fail@PLT
+ 1071      00
+ 1072              	.L45:
+ 1073 0386 C9       		leave
+ 1074              	.LCFI14:
+ 1075              		.cfi_def_cfa 7, 8
+ 1076 0387 C3       		ret
+ 1077              		.cfi_endproc
+ 1078              	.LFE11:
+ 1080              		.section	.text.mbedtls_gcm_update,"ax",@progbits
+ 1081              		.globl	mbedtls_gcm_update
+ 1083              	mbedtls_gcm_update:
+ 1084              	.LFB12:
+ 361:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 362:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** int mbedtls_gcm_update( mbedtls_gcm_context *ctx,
+ 363:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 size_t length,
+ 364:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 const unsigned char *input,
+ 365:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 unsigned char *output )
+ 366:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 1085              		.loc 1 366 1 is_stmt 1
+ 1086              		.cfi_startproc
+ 1087 0000 F30F1EFA 		endbr64
+ 1088 0004 55       		pushq	%rbp
+ 1089              	.LCFI15:
+ 1090              		.cfi_def_cfa_offset 16
+ 1091              		.cfi_offset 6, -16
+ 1092 0005 4889E5   		movq	%rsp, %rbp
+ 1093              	.LCFI16:
+ 1094              		.cfi_def_cfa_register 6
+ 1095 0008 4883EC70 		subq	$112, %rsp
+ 1096 000c 48897DA8 		movq	%rdi, -88(%rbp)
+ 1097 0010 488975A0 		movq	%rsi, -96(%rbp)
+ 1098 0014 48895598 		movq	%rdx, -104(%rbp)
+ 1099 0018 48894D90 		movq	%rcx, -112(%rbp)
+ 1100              		.loc 1 366 1
+ 1101 001c 64488B04 		movq	%fs:40, %rax
+ 1101      25280000 
+ 1101      00
+ 1102 0025 488945F8 		movq	%rax, -8(%rbp)
+ 1103 0029 31C0     		xorl	%eax, %eax
+ 367:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int ret;
+ 368:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     unsigned char ectr[16];
+ 369:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     size_t i;
+ 370:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     const unsigned char *p;
+ 371:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     unsigned char *out_p = output;
+ 1104              		.loc 1 371 20
+ 1105 002b 488B4590 		movq	-112(%rbp), %rax
+ 1106 002f 488945D0 		movq	%rax, -48(%rbp)
+ 372:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     size_t use_len, olen = 0;
+ 1107              		.loc 1 372 21
+ 1108 0033 48C745B8 		movq	$0, -72(%rbp)
+ 1108      00000000 
+ 373:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 374:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( ctx != NULL );
+GAS LISTING /tmp/ccw355Cf.s 			page 30
+
+
+ 375:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( length == 0 || input != NULL );
+ 376:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( length == 0 || output != NULL );
+ 377:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 378:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( output > input && (size_t) ( output - input ) < length )
+ 1109              		.loc 1 378 7
+ 1110 003b 488B4590 		movq	-112(%rbp), %rax
+ 1111 003f 483B4598 		cmpq	-104(%rbp), %rax
+ 1112 0043 7618     		jbe	.L47
+ 1113              		.loc 1 378 45 discriminator 1
+ 1114 0045 488B4590 		movq	-112(%rbp), %rax
+ 1115 0049 482B4598 		subq	-104(%rbp), %rax
+ 1116              		.loc 1 378 24 discriminator 1
+ 1117 004d 483945A0 		cmpq	%rax, -96(%rbp)
+ 1118 0051 760A     		jbe	.L47
+ 379:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( MBEDTLS_ERR_GCM_BAD_INPUT );
+ 1119              		.loc 1 379 15
+ 1120 0053 B8ECFFFF 		movl	$-20, %eax
+ 1120      FF
+ 1121 0058 E9350200 		jmp	.L62
+ 1121      00
+ 1122              	.L47:
+ 380:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 381:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* Total length is restricted to 2^39 - 256 bits, ie 2^36 - 2^5 bytes
+ 382:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****      * Also check for possible overflow */
+ 383:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ctx->len + length < ctx->len ||
+ 1123              		.loc 1 383 12
+ 1124 005d 488B45A8 		movq	-88(%rbp), %rax
+ 1125 0061 488B9058 		movq	344(%rax), %rdx
+ 1125      010000
+ 1126              		.loc 1 383 18
+ 1127 0068 488B45A0 		movq	-96(%rbp), %rax
+ 1128 006c 4801C2   		addq	%rax, %rdx
+ 1129              		.loc 1 383 32
+ 1130 006f 488B45A8 		movq	-88(%rbp), %rax
+ 1131 0073 488B8058 		movq	344(%rax), %rax
+ 1131      010000
+ 1132              		.loc 1 383 7
+ 1133 007a 4839C2   		cmpq	%rax, %rdx
+ 1134 007d 7221     		jb	.L49
+ 384:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         (uint64_t) ctx->len + length > 0xFFFFFFFE0ull )
+ 1135              		.loc 1 384 23 discriminator 1
+ 1136 007f 488B45A8 		movq	-88(%rbp), %rax
+ 1137 0083 488B9058 		movq	344(%rax), %rdx
+ 1137      010000
+ 1138              		.loc 1 384 29 discriminator 1
+ 1139 008a 488B45A0 		movq	-96(%rbp), %rax
+ 1140 008e 4801C2   		addq	%rax, %rdx
+ 383:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         (uint64_t) ctx->len + length > 0xFFFFFFFE0ull )
+ 1141              		.loc 1 383 38 discriminator 1
+ 1142 0091 48B8E0FF 		movabsq	$68719476704, %rax
+ 1142      FFFF0F00 
+ 1142      0000
+ 1143 009b 4839C2   		cmpq	%rax, %rdx
+ 1144 009e 760A     		jbe	.L50
+ 1145              	.L49:
+ 385:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 386:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( MBEDTLS_ERR_GCM_BAD_INPUT );
+GAS LISTING /tmp/ccw355Cf.s 			page 31
+
+
+ 1146              		.loc 1 386 15
+ 1147 00a0 B8ECFFFF 		movl	$-20, %eax
+ 1147      FF
+ 1148 00a5 E9E80100 		jmp	.L62
+ 1148      00
+ 1149              	.L50:
+ 387:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 388:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 389:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     ctx->len += length;
+ 1150              		.loc 1 389 14
+ 1151 00aa 488B45A8 		movq	-88(%rbp), %rax
+ 1152 00ae 488B9058 		movq	344(%rax), %rdx
+ 1152      010000
+ 1153 00b5 488B45A0 		movq	-96(%rbp), %rax
+ 1154 00b9 4801C2   		addq	%rax, %rdx
+ 1155 00bc 488B45A8 		movq	-88(%rbp), %rax
+ 1156 00c0 48899058 		movq	%rdx, 344(%rax)
+ 1156      010000
+ 390:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 391:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     p = input;
+ 1157              		.loc 1 391 7
+ 1158 00c7 488B4598 		movq	-104(%rbp), %rax
+ 1159 00cb 488945C8 		movq	%rax, -56(%rbp)
+ 392:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     while( length > 0 )
+ 1160              		.loc 1 392 10
+ 1161 00cf E9AE0100 		jmp	.L51
+ 1161      00
+ 1162              	.L61:
+ 393:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 394:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         use_len = ( length < 16 ) ? length : 16;
+ 1163              		.loc 1 394 17
+ 1164 00d4 B8100000 		movl	$16, %eax
+ 1164      00
+ 1165 00d9 48837DA0 		cmpq	$16, -96(%rbp)
+ 1165      10
+ 1166 00de 480F4645 		cmovbe	-96(%rbp), %rax
+ 1166      A0
+ 1167 00e3 488945D8 		movq	%rax, -40(%rbp)
+ 395:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( i = 16; i > 12; i-- )
+ 1168              		.loc 1 396 16
+ 1169 00e7 48C745C0 		movq	$16, -64(%rbp)
+ 1169      10000000 
+ 1170              		.loc 1 396 9
+ 1171 00ef EB37     		jmp	.L52
+ 1172              	.L55:
+ 397:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             if( ++ctx->y[i - 1] != 0 )
+ 1173              		.loc 1 397 28
+ 1174 00f1 488B45C0 		movq	-64(%rbp), %rax
+ 1175 00f5 4883E801 		subq	$1, %rax
+ 1176              		.loc 1 397 25
+ 1177 00f9 488B55A8 		movq	-88(%rbp), %rdx
+ 1178 00fd 0FB69402 		movzbl	376(%rdx,%rax), %edx
+ 1178      78010000 
+ 1179              		.loc 1 397 17
+ 1180 0105 8D4A01   		leal	1(%rdx), %ecx
+ 1181              		.loc 1 397 15
+GAS LISTING /tmp/ccw355Cf.s 			page 32
+
+
+ 1182 0108 488B55A8 		movq	-88(%rbp), %rdx
+ 1183 010c 888C0278 		movb	%cl, 376(%rdx,%rax)
+ 1183      010000
+ 1184              		.loc 1 397 25
+ 1185 0113 488B55A8 		movq	-88(%rbp), %rdx
+ 1186 0117 0FB68402 		movzbl	376(%rdx,%rax), %eax
+ 1186      78010000 
+ 1187              		.loc 1 397 15
+ 1188 011f 84C0     		testb	%al, %al
+ 1189 0121 750E     		jne	.L64
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             if( ++ctx->y[i - 1] != 0 )
+ 1190              		.loc 1 396 31 discriminator 2
+ 1191 0123 48836DC0 		subq	$1, -64(%rbp)
+ 1191      01
+ 1192              	.L52:
+ 396:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             if( ++ctx->y[i - 1] != 0 )
+ 1193              		.loc 1 396 9 discriminator 1
+ 1194 0128 48837DC0 		cmpq	$12, -64(%rbp)
+ 1194      0C
+ 1195 012d 77C2     		ja	.L55
+ 1196 012f EB01     		jmp	.L54
+ 1197              	.L64:
+ 398:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 break;
+ 1198              		.loc 1 398 17
+ 1199 0131 90       		nop
+ 1200              	.L54:
+ 399:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 400:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         if( ( ret = mbedtls_cipher_update( &ctx->cipher_ctx, ctx->y, 16, ectr,
+ 1201              		.loc 1 400 65
+ 1202 0132 488B45A8 		movq	-88(%rbp), %rax
+ 1203 0136 488DB078 		leaq	376(%rax), %rsi
+ 1203      010000
+ 1204              		.loc 1 400 21
+ 1205 013d 488B45A8 		movq	-88(%rbp), %rax
+ 1206 0141 488D4DB8 		leaq	-72(%rbp), %rcx
+ 1207 0145 488D55E0 		leaq	-32(%rbp), %rdx
+ 1208 0149 4989C8   		movq	%rcx, %r8
+ 1209 014c 4889D1   		movq	%rdx, %rcx
+ 1210 014f BA100000 		movl	$16, %edx
+ 1210      00
+ 1211 0154 4889C7   		movq	%rax, %rdi
+ 1212 0157 E8000000 		call	mbedtls_cipher_update@PLT
+ 1212      00
+ 1213 015c 8945B4   		movl	%eax, -76(%rbp)
+ 1214              		.loc 1 400 11
+ 1215 015f 837DB400 		cmpl	$0, -76(%rbp)
+ 1216 0163 7408     		je	.L56
+ 401:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                                    &olen ) ) != 0 )
+ 402:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 403:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             return( ret );
+ 1217              		.loc 1 403 19
+ 1218 0165 8B45B4   		movl	-76(%rbp), %eax
+ 1219 0168 E9250100 		jmp	.L62
+ 1219      00
+ 1220              	.L56:
+ 404:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         }
+ 405:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+GAS LISTING /tmp/ccw355Cf.s 			page 33
+
+
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( i = 0; i < use_len; i++ )
+ 1221              		.loc 1 406 16
+ 1222 016d 48C745C0 		movq	$0, -64(%rbp)
+ 1222      00000000 
+ 1223              		.loc 1 406 9
+ 1224 0175 E9BD0000 		jmp	.L57
+ 1224      00
+ 1225              	.L60:
+ 407:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 408:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             if( ctx->mode == MBEDTLS_GCM_DECRYPT )
+ 1226              		.loc 1 408 20
+ 1227 017a 488B45A8 		movq	-88(%rbp), %rax
+ 1228 017e 8B809801 		movl	408(%rax), %eax
+ 1228      0000
+ 1229              		.loc 1 408 15
+ 1230 0184 85C0     		testl	%eax, %eax
+ 1231 0186 7537     		jne	.L58
+ 409:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 ctx->buf[i] ^= p[i];
+ 1232              		.loc 1 409 29
+ 1233 0188 488B55A8 		movq	-88(%rbp), %rdx
+ 1234 018c 488B45C0 		movq	-64(%rbp), %rax
+ 1235 0190 4801D0   		addq	%rdx, %rax
+ 1236 0193 48058801 		addq	$392, %rax
+ 1236      0000
+ 1237 0199 0FB608   		movzbl	(%rax), %ecx
+ 1238              		.loc 1 409 33
+ 1239 019c 488B55C8 		movq	-56(%rbp), %rdx
+ 1240 01a0 488B45C0 		movq	-64(%rbp), %rax
+ 1241 01a4 4801D0   		addq	%rdx, %rax
+ 1242 01a7 0FB600   		movzbl	(%rax), %eax
+ 1243              		.loc 1 409 29
+ 1244 01aa 31C1     		xorl	%eax, %ecx
+ 1245 01ac 488B55A8 		movq	-88(%rbp), %rdx
+ 1246 01b0 488B45C0 		movq	-64(%rbp), %rax
+ 1247 01b4 4801D0   		addq	%rdx, %rax
+ 1248 01b7 48058801 		addq	$392, %rax
+ 1248      0000
+ 1249 01bd 8808     		movb	%cl, (%rax)
+ 1250              	.L58:
+ 410:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             out_p[i] = ectr[i] ^ p[i];
+ 1251              		.loc 1 410 28
+ 1252 01bf 488D55E0 		leaq	-32(%rbp), %rdx
+ 1253 01c3 488B45C0 		movq	-64(%rbp), %rax
+ 1254 01c7 4801D0   		addq	%rdx, %rax
+ 1255 01ca 0FB630   		movzbl	(%rax), %esi
+ 1256              		.loc 1 410 35
+ 1257 01cd 488B55C8 		movq	-56(%rbp), %rdx
+ 1258 01d1 488B45C0 		movq	-64(%rbp), %rax
+ 1259 01d5 4801D0   		addq	%rdx, %rax
+ 1260 01d8 0FB608   		movzbl	(%rax), %ecx
+ 1261              		.loc 1 410 18
+ 1262 01db 488B55D0 		movq	-48(%rbp), %rdx
+ 1263 01df 488B45C0 		movq	-64(%rbp), %rax
+ 1264 01e3 4801D0   		addq	%rdx, %rax
+ 1265              		.loc 1 410 22
+ 1266 01e6 31CE     		xorl	%ecx, %esi
+ 1267 01e8 89F2     		movl	%esi, %edx
+GAS LISTING /tmp/ccw355Cf.s 			page 34
+
+
+ 1268 01ea 8810     		movb	%dl, (%rax)
+ 411:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             if( ctx->mode == MBEDTLS_GCM_ENCRYPT )
+ 1269              		.loc 1 411 20
+ 1270 01ec 488B45A8 		movq	-88(%rbp), %rax
+ 1271 01f0 8B809801 		movl	408(%rax), %eax
+ 1271      0000
+ 1272              		.loc 1 411 15
+ 1273 01f6 83F801   		cmpl	$1, %eax
+ 1274 01f9 7537     		jne	.L59
+ 412:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 ctx->buf[i] ^= out_p[i];
+ 1275              		.loc 1 412 29
+ 1276 01fb 488B55A8 		movq	-88(%rbp), %rdx
+ 1277 01ff 488B45C0 		movq	-64(%rbp), %rax
+ 1278 0203 4801D0   		addq	%rdx, %rax
+ 1279 0206 48058801 		addq	$392, %rax
+ 1279      0000
+ 1280 020c 0FB608   		movzbl	(%rax), %ecx
+ 1281              		.loc 1 412 37
+ 1282 020f 488B55D0 		movq	-48(%rbp), %rdx
+ 1283 0213 488B45C0 		movq	-64(%rbp), %rax
+ 1284 0217 4801D0   		addq	%rdx, %rax
+ 1285 021a 0FB600   		movzbl	(%rax), %eax
+ 1286              		.loc 1 412 29
+ 1287 021d 31C1     		xorl	%eax, %ecx
+ 1288 021f 488B55A8 		movq	-88(%rbp), %rdx
+ 1289 0223 488B45C0 		movq	-64(%rbp), %rax
+ 1290 0227 4801D0   		addq	%rdx, %rax
+ 1291 022a 48058801 		addq	$392, %rax
+ 1291      0000
+ 1292 0230 8808     		movb	%cl, (%rax)
+ 1293              	.L59:
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 1294              		.loc 1 406 35 discriminator 2
+ 1295 0232 488345C0 		addq	$1, -64(%rbp)
+ 1295      01
+ 1296              	.L57:
+ 406:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         {
+ 1297              		.loc 1 406 9 discriminator 1
+ 1298 0237 488B45C0 		movq	-64(%rbp), %rax
+ 1299 023b 483B45D8 		cmpq	-40(%rbp), %rax
+ 1300 023f 0F8235FF 		jb	.L60
+ 1300      FFFF
+ 413:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         }
+ 414:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 415:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         gcm_mult( ctx, ctx->buf, ctx->buf );
+ 1301              		.loc 1 415 37
+ 1302 0245 488B45A8 		movq	-88(%rbp), %rax
+ 1303 0249 488D9088 		leaq	392(%rax), %rdx
+ 1303      010000
+ 1304              		.loc 1 415 27
+ 1305 0250 488B45A8 		movq	-88(%rbp), %rax
+ 1306 0254 488D8888 		leaq	392(%rax), %rcx
+ 1306      010000
+ 1307              		.loc 1 415 9
+ 1308 025b 488B45A8 		movq	-88(%rbp), %rax
+ 1309 025f 4889CE   		movq	%rcx, %rsi
+ 1310 0262 4889C7   		movq	%rax, %rdi
+GAS LISTING /tmp/ccw355Cf.s 			page 35
+
+
+ 1311 0265 E8000000 		call	gcm_mult
+ 1311      00
+ 416:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 417:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         length -= use_len;
+ 1312              		.loc 1 417 16
+ 1313 026a 488B45D8 		movq	-40(%rbp), %rax
+ 1314 026e 482945A0 		subq	%rax, -96(%rbp)
+ 418:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         p += use_len;
+ 1315              		.loc 1 418 11
+ 1316 0272 488B45D8 		movq	-40(%rbp), %rax
+ 1317 0276 480145C8 		addq	%rax, -56(%rbp)
+ 419:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         out_p += use_len;
+ 1318              		.loc 1 419 15
+ 1319 027a 488B45D8 		movq	-40(%rbp), %rax
+ 1320 027e 480145D0 		addq	%rax, -48(%rbp)
+ 1321              	.L51:
+ 392:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 1322              		.loc 1 392 10
+ 1323 0282 48837DA0 		cmpq	$0, -96(%rbp)
+ 1323      00
+ 1324 0287 0F8547FE 		jne	.L61
+ 1324      FFFF
+ 420:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 421:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 422:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     return( 0 );
+ 1325              		.loc 1 422 11
+ 1326 028d B8000000 		movl	$0, %eax
+ 1326      00
+ 1327              	.L62:
+ 423:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 1328              		.loc 1 423 1 discriminator 1
+ 1329 0292 488B7DF8 		movq	-8(%rbp), %rdi
+ 1330 0296 6448333C 		xorq	%fs:40, %rdi
+ 1330      25280000 
+ 1330      00
+ 1331 029f 7405     		je	.L63
+ 1332              		.loc 1 423 1 is_stmt 0
+ 1333 02a1 E8000000 		call	__stack_chk_fail@PLT
+ 1333      00
+ 1334              	.L63:
+ 1335 02a6 C9       		leave
+ 1336              	.LCFI17:
+ 1337              		.cfi_def_cfa 7, 8
+ 1338 02a7 C3       		ret
+ 1339              		.cfi_endproc
+ 1340              	.LFE12:
+ 1342              		.section	.text.mbedtls_gcm_finish,"ax",@progbits
+ 1343              		.globl	mbedtls_gcm_finish
+ 1345              	mbedtls_gcm_finish:
+ 1346              	.LFB13:
+ 424:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 425:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** int mbedtls_gcm_finish( mbedtls_gcm_context *ctx,
+ 426:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 unsigned char *tag,
+ 427:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                 size_t tag_len )
+ 428:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 1347              		.loc 1 428 1 is_stmt 1
+ 1348              		.cfi_startproc
+GAS LISTING /tmp/ccw355Cf.s 			page 36
+
+
+ 1349 0000 F30F1EFA 		endbr64
+ 1350 0004 55       		pushq	%rbp
+ 1351              	.LCFI18:
+ 1352              		.cfi_def_cfa_offset 16
+ 1353              		.cfi_offset 6, -16
+ 1354 0005 4889E5   		movq	%rsp, %rbp
+ 1355              	.LCFI19:
+ 1356              		.cfi_def_cfa_register 6
+ 1357 0008 4883EC60 		subq	$96, %rsp
+ 1358 000c 48897DB8 		movq	%rdi, -72(%rbp)
+ 1359 0010 488975B0 		movq	%rsi, -80(%rbp)
+ 1360 0014 488955A8 		movq	%rdx, -88(%rbp)
+ 1361              		.loc 1 428 1
+ 1362 0018 64488B04 		movq	%fs:40, %rax
+ 1362      25280000 
+ 1362      00
+ 1363 0021 488945F8 		movq	%rax, -8(%rbp)
+ 1364 0025 31C0     		xorl	%eax, %eax
+ 429:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     unsigned char work_buf[16];
+ 430:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     size_t i;
+ 431:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     uint64_t orig_len;
+ 432:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     uint64_t orig_add_len;
+ 433:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 434:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( ctx != NULL );
+ 435:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( tag != NULL );
+ 436:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 437:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     orig_len = ctx->len * 8;
+ 1365              		.loc 1 437 19
+ 1366 0027 488B45B8 		movq	-72(%rbp), %rax
+ 1367 002b 488B8058 		movq	344(%rax), %rax
+ 1367      010000
+ 1368              		.loc 1 437 14
+ 1369 0032 48C1E003 		salq	$3, %rax
+ 1370 0036 488945D0 		movq	%rax, -48(%rbp)
+ 438:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     orig_add_len = ctx->add_len * 8;
+ 1371              		.loc 1 438 23
+ 1372 003a 488B45B8 		movq	-72(%rbp), %rax
+ 1373 003e 488B8060 		movq	352(%rax), %rax
+ 1373      010000
+ 1374              		.loc 1 438 18
+ 1375 0045 48C1E003 		salq	$3, %rax
+ 1376 0049 488945D8 		movq	%rax, -40(%rbp)
+ 439:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 440:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( tag_len > 16 || tag_len < 4 )
+ 1377              		.loc 1 440 7
+ 1378 004d 48837DA8 		cmpq	$16, -88(%rbp)
+ 1378      10
+ 1379 0052 7707     		ja	.L66
+ 1380              		.loc 1 440 22 discriminator 1
+ 1381 0054 48837DA8 		cmpq	$3, -88(%rbp)
+ 1381      03
+ 1382 0059 770A     		ja	.L67
+ 1383              	.L66:
+ 441:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( MBEDTLS_ERR_GCM_BAD_INPUT );
+ 1384              		.loc 1 441 15
+ 1385 005b B8ECFFFF 		movl	$-20, %eax
+ 1385      FF
+GAS LISTING /tmp/ccw355Cf.s 			page 37
+
+
+ 1386 0060 E9B10100 		jmp	.L75
+ 1386      00
+ 1387              	.L67:
+ 442:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 443:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     memcpy( tag, ctx->base_ectr, tag_len );
+ 1388              		.loc 1 443 21
+ 1389 0065 488B45B8 		movq	-72(%rbp), %rax
+ 1390 0069 488D8868 		leaq	360(%rax), %rcx
+ 1390      010000
+ 1391              		.loc 1 443 5
+ 1392 0070 488B55A8 		movq	-88(%rbp), %rdx
+ 1393 0074 488B45B0 		movq	-80(%rbp), %rax
+ 1394 0078 4889CE   		movq	%rcx, %rsi
+ 1395 007b 4889C7   		movq	%rax, %rdi
+ 1396 007e E8000000 		call	memcpy@PLT
+ 1396      00
+ 444:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 445:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( orig_len || orig_add_len )
+ 1397              		.loc 1 445 7
+ 1398 0083 48837DD0 		cmpq	$0, -48(%rbp)
+ 1398      00
+ 1399 0088 750B     		jne	.L69
+ 1400              		.loc 1 445 18 discriminator 1
+ 1401 008a 48837DD8 		cmpq	$0, -40(%rbp)
+ 1401      00
+ 1402 008f 0F847C01 		je	.L70
+ 1402      0000
+ 1403              	.L69:
+ 446:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 447:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         memset( work_buf, 0x00, 16 );
+ 1404              		.loc 1 447 9
+ 1405 0095 488D45E0 		leaq	-32(%rbp), %rax
+ 1406 0099 BA100000 		movl	$16, %edx
+ 1406      00
+ 1407 009e BE000000 		movl	$0, %esi
+ 1407      00
+ 1408 00a3 4889C7   		movq	%rax, %rdi
+ 1409 00a6 E8000000 		call	memset@PLT
+ 1409      00
+ 448:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 449:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ( orig_add_len >> 32 ), work_buf, 0  );
+ 1410              		.loc 1 449 9
+ 1411 00ab 488B45D8 		movq	-40(%rbp), %rax
+ 1412 00af 48C1E838 		shrq	$56, %rax
+ 1413 00b3 8845E0   		movb	%al, -32(%rbp)
+ 1414 00b6 488B45D8 		movq	-40(%rbp), %rax
+ 1415 00ba 48C1E830 		shrq	$48, %rax
+ 1416 00be 8845E1   		movb	%al, -31(%rbp)
+ 1417 00c1 488B45D8 		movq	-40(%rbp), %rax
+ 1418 00c5 48C1E828 		shrq	$40, %rax
+ 1419 00c9 8845E2   		movb	%al, -30(%rbp)
+ 1420 00cc 488B45D8 		movq	-40(%rbp), %rax
+ 1421 00d0 48C1E820 		shrq	$32, %rax
+ 1422 00d4 8845E3   		movb	%al, -29(%rbp)
+ 450:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ( orig_add_len       ), work_buf, 4  );
+ 1423              		.loc 1 450 9
+ 1424 00d7 488B45D8 		movq	-40(%rbp), %rax
+GAS LISTING /tmp/ccw355Cf.s 			page 38
+
+
+ 1425 00db 48C1E818 		shrq	$24, %rax
+ 1426 00df 8845E4   		movb	%al, -28(%rbp)
+ 1427 00e2 488B45D8 		movq	-40(%rbp), %rax
+ 1428 00e6 48C1E810 		shrq	$16, %rax
+ 1429 00ea 8845E5   		movb	%al, -27(%rbp)
+ 1430 00ed 488B45D8 		movq	-40(%rbp), %rax
+ 1431 00f1 48C1E808 		shrq	$8, %rax
+ 1432 00f5 8845E6   		movb	%al, -26(%rbp)
+ 1433 00f8 488B45D8 		movq	-40(%rbp), %rax
+ 1434 00fc 8845E7   		movb	%al, -25(%rbp)
+ 451:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ( orig_len     >> 32 ), work_buf, 8  );
+ 1435              		.loc 1 451 9
+ 1436 00ff 488B45D0 		movq	-48(%rbp), %rax
+ 1437 0103 48C1E838 		shrq	$56, %rax
+ 1438 0107 8845E8   		movb	%al, -24(%rbp)
+ 1439 010a 488B45D0 		movq	-48(%rbp), %rax
+ 1440 010e 48C1E830 		shrq	$48, %rax
+ 1441 0112 8845E9   		movb	%al, -23(%rbp)
+ 1442 0115 488B45D0 		movq	-48(%rbp), %rax
+ 1443 0119 48C1E828 		shrq	$40, %rax
+ 1444 011d 8845EA   		movb	%al, -22(%rbp)
+ 1445 0120 488B45D0 		movq	-48(%rbp), %rax
+ 1446 0124 48C1E820 		shrq	$32, %rax
+ 1447 0128 8845EB   		movb	%al, -21(%rbp)
+ 452:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         PUT_UINT32_BE( ( orig_len           ), work_buf, 12 );
+ 1448              		.loc 1 452 9
+ 1449 012b 488B45D0 		movq	-48(%rbp), %rax
+ 1450 012f 48C1E818 		shrq	$24, %rax
+ 1451 0133 8845EC   		movb	%al, -20(%rbp)
+ 1452 0136 488B45D0 		movq	-48(%rbp), %rax
+ 1453 013a 48C1E810 		shrq	$16, %rax
+ 1454 013e 8845ED   		movb	%al, -19(%rbp)
+ 1455 0141 488B45D0 		movq	-48(%rbp), %rax
+ 1456 0145 48C1E808 		shrq	$8, %rax
+ 1457 0149 8845EE   		movb	%al, -18(%rbp)
+ 1458 014c 488B45D0 		movq	-48(%rbp), %rax
+ 1459 0150 8845EF   		movb	%al, -17(%rbp)
+ 453:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 454:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( i = 0; i < 16; i++ )
+ 1460              		.loc 1 454 16
+ 1461 0153 48C745C8 		movq	$0, -56(%rbp)
+ 1461      00000000 
+ 1462              		.loc 1 454 9
+ 1463 015b EB3C     		jmp	.L71
+ 1464              	.L72:
+ 455:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->buf[i] ^= work_buf[i];
+ 1465              		.loc 1 455 25 discriminator 3
+ 1466 015d 488B55B8 		movq	-72(%rbp), %rdx
+ 1467 0161 488B45C8 		movq	-56(%rbp), %rax
+ 1468 0165 4801D0   		addq	%rdx, %rax
+ 1469 0168 48058801 		addq	$392, %rax
+ 1469      0000
+ 1470 016e 0FB608   		movzbl	(%rax), %ecx
+ 1471              		.loc 1 455 36 discriminator 3
+ 1472 0171 488D55E0 		leaq	-32(%rbp), %rdx
+ 1473 0175 488B45C8 		movq	-56(%rbp), %rax
+ 1474 0179 4801D0   		addq	%rdx, %rax
+GAS LISTING /tmp/ccw355Cf.s 			page 39
+
+
+ 1475 017c 0FB600   		movzbl	(%rax), %eax
+ 1476              		.loc 1 455 25 discriminator 3
+ 1477 017f 31C1     		xorl	%eax, %ecx
+ 1478 0181 488B55B8 		movq	-72(%rbp), %rdx
+ 1479 0185 488B45C8 		movq	-56(%rbp), %rax
+ 1480 0189 4801D0   		addq	%rdx, %rax
+ 1481 018c 48058801 		addq	$392, %rax
+ 1481      0000
+ 1482 0192 8808     		movb	%cl, (%rax)
+ 454:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->buf[i] ^= work_buf[i];
+ 1483              		.loc 1 454 30 discriminator 3
+ 1484 0194 488345C8 		addq	$1, -56(%rbp)
+ 1484      01
+ 1485              	.L71:
+ 454:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             ctx->buf[i] ^= work_buf[i];
+ 1486              		.loc 1 454 9 discriminator 1
+ 1487 0199 48837DC8 		cmpq	$15, -56(%rbp)
+ 1487      0F
+ 1488 019e 76BD     		jbe	.L72
+ 456:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 457:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         gcm_mult( ctx, ctx->buf, ctx->buf );
+ 1489              		.loc 1 457 37
+ 1490 01a0 488B45B8 		movq	-72(%rbp), %rax
+ 1491 01a4 488D9088 		leaq	392(%rax), %rdx
+ 1491      010000
+ 1492              		.loc 1 457 27
+ 1493 01ab 488B45B8 		movq	-72(%rbp), %rax
+ 1494 01af 488D8888 		leaq	392(%rax), %rcx
+ 1494      010000
+ 1495              		.loc 1 457 9
+ 1496 01b6 488B45B8 		movq	-72(%rbp), %rax
+ 1497 01ba 4889CE   		movq	%rcx, %rsi
+ 1498 01bd 4889C7   		movq	%rax, %rdi
+ 1499 01c0 E8000000 		call	gcm_mult
+ 1499      00
+ 458:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 459:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         for( i = 0; i < tag_len; i++ )
+ 1500              		.loc 1 459 16
+ 1501 01c5 48C745C8 		movq	$0, -56(%rbp)
+ 1501      00000000 
+ 1502              		.loc 1 459 9
+ 1503 01cd EB38     		jmp	.L73
+ 1504              	.L74:
+ 460:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             tag[i] ^= ctx->buf[i];
+ 1505              		.loc 1 460 20 discriminator 3
+ 1506 01cf 488B55B0 		movq	-80(%rbp), %rdx
+ 1507 01d3 488B45C8 		movq	-56(%rbp), %rax
+ 1508 01d7 4801D0   		addq	%rdx, %rax
+ 1509 01da 0FB630   		movzbl	(%rax), %esi
+ 1510              		.loc 1 460 31 discriminator 3
+ 1511 01dd 488B55B8 		movq	-72(%rbp), %rdx
+ 1512 01e1 488B45C8 		movq	-56(%rbp), %rax
+ 1513 01e5 4801D0   		addq	%rdx, %rax
+ 1514 01e8 48058801 		addq	$392, %rax
+ 1514      0000
+ 1515 01ee 0FB608   		movzbl	(%rax), %ecx
+ 1516              		.loc 1 460 20 discriminator 3
+GAS LISTING /tmp/ccw355Cf.s 			page 40
+
+
+ 1517 01f1 488B55B0 		movq	-80(%rbp), %rdx
+ 1518 01f5 488B45C8 		movq	-56(%rbp), %rax
+ 1519 01f9 4801D0   		addq	%rdx, %rax
+ 1520 01fc 31CE     		xorl	%ecx, %esi
+ 1521 01fe 89F2     		movl	%esi, %edx
+ 1522 0200 8810     		movb	%dl, (%rax)
+ 459:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             tag[i] ^= ctx->buf[i];
+ 1523              		.loc 1 459 35 discriminator 3
+ 1524 0202 488345C8 		addq	$1, -56(%rbp)
+ 1524      01
+ 1525              	.L73:
+ 459:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****             tag[i] ^= ctx->buf[i];
+ 1526              		.loc 1 459 9 discriminator 1
+ 1527 0207 488B45C8 		movq	-56(%rbp), %rax
+ 1528 020b 483B45A8 		cmpq	-88(%rbp), %rax
+ 1529 020f 72BE     		jb	.L74
+ 1530              	.L70:
+ 461:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 462:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 463:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     return( 0 );
+ 1531              		.loc 1 463 11
+ 1532 0211 B8000000 		movl	$0, %eax
+ 1532      00
+ 1533              	.L75:
+ 464:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 1534              		.loc 1 464 1 discriminator 1
+ 1535 0216 488B7DF8 		movq	-8(%rbp), %rdi
+ 1536 021a 6448333C 		xorq	%fs:40, %rdi
+ 1536      25280000 
+ 1536      00
+ 1537 0223 7405     		je	.L76
+ 1538              		.loc 1 464 1 is_stmt 0
+ 1539 0225 E8000000 		call	__stack_chk_fail@PLT
+ 1539      00
+ 1540              	.L76:
+ 1541 022a C9       		leave
+ 1542              	.LCFI20:
+ 1543              		.cfi_def_cfa 7, 8
+ 1544 022b C3       		ret
+ 1545              		.cfi_endproc
+ 1546              	.LFE13:
+ 1548              		.section	.text.mbedtls_gcm_crypt_and_tag,"ax",@progbits
+ 1549              		.globl	mbedtls_gcm_crypt_and_tag
+ 1551              	mbedtls_gcm_crypt_and_tag:
+ 1552              	.LFB14:
+ 465:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 466:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** int mbedtls_gcm_crypt_and_tag( mbedtls_gcm_context *ctx,
+ 467:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        int mode,
+ 468:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        size_t length,
+ 469:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        const unsigned char *iv,
+ 470:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        size_t iv_len,
+ 471:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        const unsigned char *add,
+ 472:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        size_t add_len,
+ 473:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        const unsigned char *input,
+ 474:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        unsigned char *output,
+ 475:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        size_t tag_len,
+ 476:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                        unsigned char *tag )
+GAS LISTING /tmp/ccw355Cf.s 			page 41
+
+
+ 477:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 1553              		.loc 1 477 1 is_stmt 1
+ 1554              		.cfi_startproc
+ 1555 0000 F30F1EFA 		endbr64
+ 1556 0004 55       		pushq	%rbp
+ 1557              	.LCFI21:
+ 1558              		.cfi_def_cfa_offset 16
+ 1559              		.cfi_offset 6, -16
+ 1560 0005 4889E5   		movq	%rsp, %rbp
+ 1561              	.LCFI22:
+ 1562              		.cfi_def_cfa_register 6
+ 1563 0008 4883EC70 		subq	$112, %rsp
+ 1564 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1565 0010 8975E4   		movl	%esi, -28(%rbp)
+ 1566 0013 488955D8 		movq	%rdx, -40(%rbp)
+ 1567 0017 48894DD0 		movq	%rcx, -48(%rbp)
+ 1568 001b 4C8945C8 		movq	%r8, -56(%rbp)
+ 1569 001f 4C894DC0 		movq	%r9, -64(%rbp)
+ 1570 0023 488B4510 		movq	16(%rbp), %rax
+ 1571 0027 488945B8 		movq	%rax, -72(%rbp)
+ 1572 002b 488B4518 		movq	24(%rbp), %rax
+ 1573 002f 488945B0 		movq	%rax, -80(%rbp)
+ 1574 0033 488B4520 		movq	32(%rbp), %rax
+ 1575 0037 488945A8 		movq	%rax, -88(%rbp)
+ 1576 003b 488B4528 		movq	40(%rbp), %rax
+ 1577 003f 488945A0 		movq	%rax, -96(%rbp)
+ 1578 0043 488B4530 		movq	48(%rbp), %rax
+ 1579 0047 48894598 		movq	%rax, -104(%rbp)
+ 1580              		.loc 1 477 1
+ 1581 004b 64488B04 		movq	%fs:40, %rax
+ 1581      25280000 
+ 1581      00
+ 1582 0054 488945F8 		movq	%rax, -8(%rbp)
+ 1583 0058 31C0     		xorl	%eax, %eax
+ 478:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int ret;
+ 479:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 480:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( ctx != NULL );
+ 481:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( iv != NULL );
+ 482:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( add_len == 0 || add != NULL );
+ 483:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( length == 0 || input != NULL );
+ 484:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( length == 0 || output != NULL );
+ 485:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( tag != NULL );
+ 486:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 487:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_gcm_starts( ctx, mode, iv, iv_len, add, add_len ) ) != 0 )
+ 1584              		.loc 1 487 17
+ 1585 005a 4C8B45B8 		movq	-72(%rbp), %r8
+ 1586 005e 488B7DC0 		movq	-64(%rbp), %rdi
+ 1587 0062 488B4DC8 		movq	-56(%rbp), %rcx
+ 1588 0066 488B55D0 		movq	-48(%rbp), %rdx
+ 1589 006a 8B75E4   		movl	-28(%rbp), %esi
+ 1590 006d 488B45E8 		movq	-24(%rbp), %rax
+ 1591 0071 4D89C1   		movq	%r8, %r9
+ 1592 0074 4989F8   		movq	%rdi, %r8
+ 1593 0077 4889C7   		movq	%rax, %rdi
+ 1594 007a E8000000 		call	mbedtls_gcm_starts
+ 1594      00
+ 1595 007f 8945F4   		movl	%eax, -12(%rbp)
+GAS LISTING /tmp/ccw355Cf.s 			page 42
+
+
+ 1596              		.loc 1 487 7
+ 1597 0082 837DF400 		cmpl	$0, -12(%rbp)
+ 1598 0086 7405     		je	.L78
+ 488:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 1599              		.loc 1 488 15
+ 1600 0088 8B45F4   		movl	-12(%rbp), %eax
+ 1601 008b EB50     		jmp	.L79
+ 1602              	.L78:
+ 489:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 490:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_gcm_update( ctx, length, input, output ) ) != 0 )
+ 1603              		.loc 1 490 17
+ 1604 008d 488B4DA8 		movq	-88(%rbp), %rcx
+ 1605 0091 488B55B0 		movq	-80(%rbp), %rdx
+ 1606 0095 488B75D8 		movq	-40(%rbp), %rsi
+ 1607 0099 488B45E8 		movq	-24(%rbp), %rax
+ 1608 009d 4889C7   		movq	%rax, %rdi
+ 1609 00a0 E8000000 		call	mbedtls_gcm_update
+ 1609      00
+ 1610 00a5 8945F4   		movl	%eax, -12(%rbp)
+ 1611              		.loc 1 490 7
+ 1612 00a8 837DF400 		cmpl	$0, -12(%rbp)
+ 1613 00ac 7405     		je	.L80
+ 491:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 1614              		.loc 1 491 15
+ 1615 00ae 8B45F4   		movl	-12(%rbp), %eax
+ 1616 00b1 EB2A     		jmp	.L79
+ 1617              	.L80:
+ 492:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 493:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_gcm_finish( ctx, tag, tag_len ) ) != 0 )
+ 1618              		.loc 1 493 17
+ 1619 00b3 488B55A0 		movq	-96(%rbp), %rdx
+ 1620 00b7 488B4D98 		movq	-104(%rbp), %rcx
+ 1621 00bb 488B45E8 		movq	-24(%rbp), %rax
+ 1622 00bf 4889CE   		movq	%rcx, %rsi
+ 1623 00c2 4889C7   		movq	%rax, %rdi
+ 1624 00c5 E8000000 		call	mbedtls_gcm_finish
+ 1624      00
+ 1625 00ca 8945F4   		movl	%eax, -12(%rbp)
+ 1626              		.loc 1 493 7
+ 1627 00cd 837DF400 		cmpl	$0, -12(%rbp)
+ 1628 00d1 7405     		je	.L81
+ 494:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 1629              		.loc 1 494 15
+ 1630 00d3 8B45F4   		movl	-12(%rbp), %eax
+ 1631 00d6 EB05     		jmp	.L79
+ 1632              	.L81:
+ 495:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 496:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     return( 0 );
+ 1633              		.loc 1 496 11
+ 1634 00d8 B8000000 		movl	$0, %eax
+ 1634      00
+ 1635              	.L79:
+ 497:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 1636              		.loc 1 497 1
+ 1637 00dd 488B7DF8 		movq	-8(%rbp), %rdi
+ 1638 00e1 6448333C 		xorq	%fs:40, %rdi
+ 1638      25280000 
+GAS LISTING /tmp/ccw355Cf.s 			page 43
+
+
+ 1638      00
+ 1639 00ea 7405     		je	.L82
+ 1640 00ec E8000000 		call	__stack_chk_fail@PLT
+ 1640      00
+ 1641              	.L82:
+ 1642 00f1 C9       		leave
+ 1643              	.LCFI23:
+ 1644              		.cfi_def_cfa 7, 8
+ 1645 00f2 C3       		ret
+ 1646              		.cfi_endproc
+ 1647              	.LFE14:
+ 1649              		.section	.text.mbedtls_gcm_auth_decrypt,"ax",@progbits
+ 1650              		.globl	mbedtls_gcm_auth_decrypt
+ 1652              	mbedtls_gcm_auth_decrypt:
+ 1653              	.LFB15:
+ 498:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 499:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** int mbedtls_gcm_auth_decrypt( mbedtls_gcm_context *ctx,
+ 500:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       size_t length,
+ 501:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       const unsigned char *iv,
+ 502:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       size_t iv_len,
+ 503:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       const unsigned char *add,
+ 504:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       size_t add_len,
+ 505:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       const unsigned char *tag,
+ 506:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       size_t tag_len,
+ 507:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       const unsigned char *input,
+ 508:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                       unsigned char *output )
+ 509:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 1654              		.loc 1 509 1
+ 1655              		.cfi_startproc
+ 1656 0000 F30F1EFA 		endbr64
+ 1657 0004 55       		pushq	%rbp
+ 1658              	.LCFI24:
+ 1659              		.cfi_def_cfa_offset 16
+ 1660              		.cfi_offset 6, -16
+ 1661 0005 4889E5   		movq	%rsp, %rbp
+ 1662              	.LCFI25:
+ 1663              		.cfi_def_cfa_register 6
+ 1664 0008 4883C480 		addq	$-128, %rsp
+ 1665 000c 48897DC8 		movq	%rdi, -56(%rbp)
+ 1666 0010 488975C0 		movq	%rsi, -64(%rbp)
+ 1667 0014 488955B8 		movq	%rdx, -72(%rbp)
+ 1668 0018 48894DB0 		movq	%rcx, -80(%rbp)
+ 1669 001c 4C8945A8 		movq	%r8, -88(%rbp)
+ 1670 0020 4C894DA0 		movq	%r9, -96(%rbp)
+ 1671 0024 488B4510 		movq	16(%rbp), %rax
+ 1672 0028 48894598 		movq	%rax, -104(%rbp)
+ 1673 002c 488B4518 		movq	24(%rbp), %rax
+ 1674 0030 48894590 		movq	%rax, -112(%rbp)
+ 1675 0034 488B4520 		movq	32(%rbp), %rax
+ 1676 0038 48894588 		movq	%rax, -120(%rbp)
+ 1677 003c 488B4528 		movq	40(%rbp), %rax
+ 1678 0040 48894580 		movq	%rax, -128(%rbp)
+ 1679              		.loc 1 509 1
+ 1680 0044 64488B04 		movq	%fs:40, %rax
+ 1680      25280000 
+ 1680      00
+ 1681 004d 488945F8 		movq	%rax, -8(%rbp)
+GAS LISTING /tmp/ccw355Cf.s 			page 44
+
+
+ 1682 0051 31C0     		xorl	%eax, %eax
+ 510:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int ret;
+ 511:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     unsigned char check_tag[16];
+ 512:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     size_t i;
+ 513:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     int diff;
+ 514:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 515:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( ctx != NULL );
+ 516:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( iv != NULL );
+ 517:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( add_len == 0 || add != NULL );
+ 518:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( tag != NULL );
+ 519:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( length == 0 || input != NULL );
+ 520:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     GCM_VALIDATE_RET( length == 0 || output != NULL );
+ 521:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 522:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ( ret = mbedtls_gcm_crypt_and_tag( ctx, MBEDTLS_GCM_DECRYPT, length,
+ 1683              		.loc 1 522 17
+ 1684 0053 4C8B45A8 		movq	-88(%rbp), %r8
+ 1685 0057 488B7DB0 		movq	-80(%rbp), %rdi
+ 1686 005b 488B4DB8 		movq	-72(%rbp), %rcx
+ 1687 005f 488B55C0 		movq	-64(%rbp), %rdx
+ 1688 0063 488B45C8 		movq	-56(%rbp), %rax
+ 1689 0067 4883EC08 		subq	$8, %rsp
+ 1690 006b 488D75E0 		leaq	-32(%rbp), %rsi
+ 1691 006f 56       		pushq	%rsi
+ 1692 0070 FF7590   		pushq	-112(%rbp)
+ 1693 0073 FF7580   		pushq	-128(%rbp)
+ 1694 0076 FF7588   		pushq	-120(%rbp)
+ 1695 0079 FF75A0   		pushq	-96(%rbp)
+ 1696 007c 4D89C1   		movq	%r8, %r9
+ 1697 007f 4989F8   		movq	%rdi, %r8
+ 1698 0082 BE000000 		movl	$0, %esi
+ 1698      00
+ 1699 0087 4889C7   		movq	%rax, %rdi
+ 1700 008a E8000000 		call	mbedtls_gcm_crypt_and_tag
+ 1700      00
+ 1701 008f 4883C430 		addq	$48, %rsp
+ 1702 0093 8945D4   		movl	%eax, -44(%rbp)
+ 1703              		.loc 1 522 7
+ 1704 0096 837DD400 		cmpl	$0, -44(%rbp)
+ 1705 009a 7405     		je	.L84
+ 523:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                                    iv, iv_len, add, add_len,
+ 524:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****                                    input, output, tag_len, check_tag ) ) != 0 )
+ 525:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 526:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( ret );
+ 1706              		.loc 1 526 15
+ 1707 009c 8B45D4   		movl	-44(%rbp), %eax
+ 1708 009f EB69     		jmp	.L89
+ 1709              	.L84:
+ 527:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 528:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 529:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     /* Check tag in "constant-time" */
+ 530:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     for( diff = 0, i = 0; i < tag_len; i++ )
+ 1710              		.loc 1 530 15
+ 1711 00a1 C745D000 		movl	$0, -48(%rbp)
+ 1711      000000
+ 1712              		.loc 1 530 22
+ 1713 00a8 48C745D8 		movq	$0, -40(%rbp)
+ 1713      00000000 
+GAS LISTING /tmp/ccw355Cf.s 			page 45
+
+
+ 1714              		.loc 1 530 5
+ 1715 00b0 EB29     		jmp	.L86
+ 1716              	.L87:
+ 531:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         diff |= tag[i] ^ check_tag[i];
+ 1717              		.loc 1 531 20 discriminator 3
+ 1718 00b2 488B5598 		movq	-104(%rbp), %rdx
+ 1719 00b6 488B45D8 		movq	-40(%rbp), %rax
+ 1720 00ba 4801D0   		addq	%rdx, %rax
+ 1721 00bd 0FB608   		movzbl	(%rax), %ecx
+ 1722              		.loc 1 531 35 discriminator 3
+ 1723 00c0 488D55E0 		leaq	-32(%rbp), %rdx
+ 1724 00c4 488B45D8 		movq	-40(%rbp), %rax
+ 1725 00c8 4801D0   		addq	%rdx, %rax
+ 1726 00cb 0FB600   		movzbl	(%rax), %eax
+ 1727              		.loc 1 531 24 discriminator 3
+ 1728 00ce 31C8     		xorl	%ecx, %eax
+ 1729 00d0 0FB6C0   		movzbl	%al, %eax
+ 1730              		.loc 1 531 14 discriminator 3
+ 1731 00d3 0945D0   		orl	%eax, -48(%rbp)
+ 530:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         diff |= tag[i] ^ check_tag[i];
+ 1732              		.loc 1 530 41 discriminator 3
+ 1733 00d6 488345D8 		addq	$1, -40(%rbp)
+ 1733      01
+ 1734              	.L86:
+ 530:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         diff |= tag[i] ^ check_tag[i];
+ 1735              		.loc 1 530 5 discriminator 1
+ 1736 00db 488B45D8 		movq	-40(%rbp), %rax
+ 1737 00df 483B4590 		cmpq	-112(%rbp), %rax
+ 1738 00e3 72CD     		jb	.L87
+ 532:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 533:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( diff != 0 )
+ 1739              		.loc 1 533 7
+ 1740 00e5 837DD000 		cmpl	$0, -48(%rbp)
+ 1741 00e9 741A     		je	.L88
+ 534:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     {
+ 535:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         mbedtls_platform_zeroize( output, length );
+ 1742              		.loc 1 535 9
+ 1743 00eb 488B55C0 		movq	-64(%rbp), %rdx
+ 1744 00ef 488B4580 		movq	-128(%rbp), %rax
+ 1745 00f3 4889D6   		movq	%rdx, %rsi
+ 1746 00f6 4889C7   		movq	%rax, %rdi
+ 1747 00f9 E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1747      00
+ 536:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return( MBEDTLS_ERR_GCM_AUTH_FAILED );
+ 1748              		.loc 1 536 15
+ 1749 00fe B8EEFFFF 		movl	$-18, %eax
+ 1749      FF
+ 1750 0103 EB05     		jmp	.L89
+ 1751              	.L88:
+ 537:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     }
+ 538:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 539:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     return( 0 );
+ 1752              		.loc 1 539 11
+ 1753 0105 B8000000 		movl	$0, %eax
+ 1753      00
+ 1754              	.L89:
+ 540:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+GAS LISTING /tmp/ccw355Cf.s 			page 46
+
+
+ 1755              		.loc 1 540 1 discriminator 1
+ 1756 010a 488B75F8 		movq	-8(%rbp), %rsi
+ 1757 010e 64483334 		xorq	%fs:40, %rsi
+ 1757      25280000 
+ 1757      00
+ 1758 0117 7405     		je	.L90
+ 1759              		.loc 1 540 1 is_stmt 0
+ 1760 0119 E8000000 		call	__stack_chk_fail@PLT
+ 1760      00
+ 1761              	.L90:
+ 1762 011e C9       		leave
+ 1763              	.LCFI26:
+ 1764              		.cfi_def_cfa 7, 8
+ 1765 011f C3       		ret
+ 1766              		.cfi_endproc
+ 1767              	.LFE15:
+ 1769              		.section	.text.mbedtls_gcm_free,"ax",@progbits
+ 1770              		.globl	mbedtls_gcm_free
+ 1772              	mbedtls_gcm_free:
+ 1773              	.LFB16:
+ 541:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** 
+ 542:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** void mbedtls_gcm_free( mbedtls_gcm_context *ctx )
+ 543:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** {
+ 1774              		.loc 1 543 1 is_stmt 1
+ 1775              		.cfi_startproc
+ 1776 0000 F30F1EFA 		endbr64
+ 1777 0004 55       		pushq	%rbp
+ 1778              	.LCFI27:
+ 1779              		.cfi_def_cfa_offset 16
+ 1780              		.cfi_offset 6, -16
+ 1781 0005 4889E5   		movq	%rsp, %rbp
+ 1782              	.LCFI28:
+ 1783              		.cfi_def_cfa_register 6
+ 1784 0008 4883EC20 		subq	$32, %rsp
+ 1785 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 1786              		.loc 1 543 1
+ 1787 0010 64488B04 		movq	%fs:40, %rax
+ 1787      25280000 
+ 1787      00
+ 1788 0019 488945F8 		movq	%rax, -8(%rbp)
+ 1789 001d 31C0     		xorl	%eax, %eax
+ 544:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     if( ctx == NULL )
+ 1790              		.loc 1 544 7
+ 1791 001f 48837DE8 		cmpq	$0, -24(%rbp)
+ 1791      00
+ 1792 0024 741F     		je	.L95
+ 545:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return;
+ 546:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     mbedtls_cipher_free( &ctx->cipher_ctx );
+ 1793              		.loc 1 546 5
+ 1794 0026 488B45E8 		movq	-24(%rbp), %rax
+ 1795 002a 4889C7   		movq	%rax, %rdi
+ 1796 002d E8000000 		call	mbedtls_cipher_free@PLT
+ 1796      00
+ 547:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****     mbedtls_platform_zeroize( ctx, sizeof( mbedtls_gcm_context ) );
+ 1797              		.loc 1 547 5
+ 1798 0032 488B45E8 		movq	-24(%rbp), %rax
+ 1799 0036 BEA00100 		movl	$416, %esi
+GAS LISTING /tmp/ccw355Cf.s 			page 47
+
+
+ 1799      00
+ 1800 003b 4889C7   		movq	%rax, %rdi
+ 1801 003e E8000000 		call	mbedtls_platform_zeroize@PLT
+ 1801      00
+ 1802 0043 EB01     		jmp	.L91
+ 1803              	.L95:
+ 545:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c ****         return;
+ 1804              		.loc 1 545 9
+ 1805 0045 90       		nop
+ 1806              	.L91:
+ 548:/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/library/gcm.c **** }
+ 1807              		.loc 1 548 1
+ 1808 0046 488B45F8 		movq	-8(%rbp), %rax
+ 1809 004a 64483304 		xorq	%fs:40, %rax
+ 1809      25280000 
+ 1809      00
+ 1810 0053 7405     		je	.L94
+ 1811 0055 E8000000 		call	__stack_chk_fail@PLT
+ 1811      00
+ 1812              	.L94:
+ 1813 005a C9       		leave
+ 1814              	.LCFI29:
+ 1815              		.cfi_def_cfa 7, 8
+ 1816 005b C3       		ret
+ 1817              		.cfi_endproc
+ 1818              	.LFE16:
+ 1820              		.text
+ 1821              	.Letext0:
+ 1822              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 1823              		.file 3 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/cipher.h"
+ 1824              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 1825              		.file 5 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 1826              		.file 6 "/home/xingli/share/1205tiny/network/dtls/mbedtls/mbedtls-2.16.2/include/mbedtls/gcm.h"
+ 4831              		.section	.note.gnu.property,"a"
+ 4832              		.align 8
+ 4833 0000 04000000 		.long	 1f - 0f
+ 4834 0004 10000000 		.long	 4f - 1f
+ 4835 0008 05000000 		.long	 5
+ 4836              	0:
+ 4837 000c 474E5500 		.string	 "GNU"
+ 4838              	1:
+ 4839              		.align 8
+ 4840 0010 020000C0 		.long	 0xc0000002
+ 4841 0014 04000000 		.long	 3f - 2f
+ 4842              	2:
+ 4843 0018 03000000 		.long	 0x3
+ 4844              	3:
+ 4845 001c 00000000 		.align 8
+ 4846              	4:
+GAS LISTING /tmp/ccw355Cf.s 			page 48
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 gcm.c
+     /tmp/ccw355Cf.s:7      .text.mbedtls_gcm_init:0000000000000000 mbedtls_gcm_init
+     /tmp/ccw355Cf.s:48     .text.gcm_gen_table:0000000000000000 gcm_gen_table
+     /tmp/ccw355Cf.s:352    .text.mbedtls_gcm_setkey:0000000000000000 mbedtls_gcm_setkey
+     /tmp/ccw355Cf.s:463    .rodata.last4:0000000000000000 last4
+     /tmp/ccw355Cf.s:482    .text.gcm_mult:0000000000000000 gcm_mult
+     /tmp/ccw355Cf.s:762    .text.mbedtls_gcm_starts:0000000000000000 mbedtls_gcm_starts
+     /tmp/ccw355Cf.s:1083   .text.mbedtls_gcm_update:0000000000000000 mbedtls_gcm_update
+     /tmp/ccw355Cf.s:1345   .text.mbedtls_gcm_finish:0000000000000000 mbedtls_gcm_finish
+     /tmp/ccw355Cf.s:1551   .text.mbedtls_gcm_crypt_and_tag:0000000000000000 mbedtls_gcm_crypt_and_tag
+     /tmp/ccw355Cf.s:1652   .text.mbedtls_gcm_auth_decrypt:0000000000000000 mbedtls_gcm_auth_decrypt
+     /tmp/ccw355Cf.s:1772   .text.mbedtls_gcm_free:0000000000000000 mbedtls_gcm_free
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+memset
+__stack_chk_fail
+mbedtls_cipher_update
+mbedtls_cipher_info_from_values
+mbedtls_cipher_free
+mbedtls_cipher_setup
+mbedtls_cipher_setkey
+memcpy
+mbedtls_platform_zeroize

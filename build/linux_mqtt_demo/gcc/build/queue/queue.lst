@@ -1,0 +1,998 @@
+GAS LISTING /tmp/ccYvauIM.s 			page 1
+
+
+   1              		.file	"queue.c"
+   2              		.text
+   3              	.Ltext0:
+   4              		.section	.text.queue_create,"ax",@progbits
+   5              		.globl	queue_create
+   7              	queue_create:
+   8              	.LFB6:
+   9              		.file 1 "/home/xingli/share/1205tiny/queue/queue.c"
+   1:/home/xingli/share/1205tiny/queue/queue.c **** /*----------------------------------------------------------------------------
+   2:/home/xingli/share/1205tiny/queue/queue.c ****  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
+   3:/home/xingli/share/1205tiny/queue/queue.c ****  * All rights reserved.
+   4:/home/xingli/share/1205tiny/queue/queue.c ****  * Redistribution and use in source and binary forms, with or without modification,
+   5:/home/xingli/share/1205tiny/queue/queue.c ****  * are permitted provided that the following conditions are met:
+   6:/home/xingli/share/1205tiny/queue/queue.c ****  * 1. Redistributions of source code must retain the above copyright notice, this list of
+   7:/home/xingli/share/1205tiny/queue/queue.c ****  * conditions and the following disclaimer.
+   8:/home/xingli/share/1205tiny/queue/queue.c ****  * 2. Redistributions in binary form must reproduce the above copyright notice, this list
+   9:/home/xingli/share/1205tiny/queue/queue.c ****  * of conditions and the following disclaimer in the documentation and/or other materials
+  10:/home/xingli/share/1205tiny/queue/queue.c ****  * provided with the distribution.
+  11:/home/xingli/share/1205tiny/queue/queue.c ****  * 3. Neither the name of the copyright holder nor the names of its contributors may be used
+  12:/home/xingli/share/1205tiny/queue/queue.c ****  * to endorse or promote products derived from this software without specific prior written
+  13:/home/xingli/share/1205tiny/queue/queue.c ****  * permission.
+  14:/home/xingli/share/1205tiny/queue/queue.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  15:/home/xingli/share/1205tiny/queue/queue.c ****  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+  16:/home/xingli/share/1205tiny/queue/queue.c ****  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+  17:/home/xingli/share/1205tiny/queue/queue.c ****  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+  18:/home/xingli/share/1205tiny/queue/queue.c ****  * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  19:/home/xingli/share/1205tiny/queue/queue.c ****  * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+  20:/home/xingli/share/1205tiny/queue/queue.c ****  * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+  21:/home/xingli/share/1205tiny/queue/queue.c ****  * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  22:/home/xingli/share/1205tiny/queue/queue.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+  23:/home/xingli/share/1205tiny/queue/queue.c ****  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+  24:/home/xingli/share/1205tiny/queue/queue.c ****  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  25:/home/xingli/share/1205tiny/queue/queue.c ****  *---------------------------------------------------------------------------*/
+  26:/home/xingli/share/1205tiny/queue/queue.c **** /*----------------------------------------------------------------------------
+  27:/home/xingli/share/1205tiny/queue/queue.c ****  * Notice of Export Control Law
+  28:/home/xingli/share/1205tiny/queue/queue.c ****  * ===============================================
+  29:/home/xingli/share/1205tiny/queue/queue.c ****  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+  30:/home/xingli/share/1205tiny/queue/queue.c ****  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+  31:/home/xingli/share/1205tiny/queue/queue.c ****  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+  32:/home/xingli/share/1205tiny/queue/queue.c ****  * applicable export control laws and regulations.
+  33:/home/xingli/share/1205tiny/queue/queue.c ****  *---------------------------------------------------------------------------*/
+  34:/home/xingli/share/1205tiny/queue/queue.c **** 
+  35:/home/xingli/share/1205tiny/queue/queue.c **** #include <stdlib.h>
+  36:/home/xingli/share/1205tiny/queue/queue.c **** #include <stdio.h>
+  37:/home/xingli/share/1205tiny/queue/queue.c **** #include <string.h>
+  38:/home/xingli/share/1205tiny/queue/queue.c **** 
+  39:/home/xingli/share/1205tiny/queue/queue.c **** #include "osal.h"
+  40:/home/xingli/share/1205tiny/queue/queue.c **** #include "queue.h"
+  41:/home/xingli/share/1205tiny/queue/queue.c **** 
+  42:/home/xingli/share/1205tiny/queue/queue.c **** queue_t* queue_create(const char *name,int len,int syncmode)
+  43:/home/xingli/share/1205tiny/queue/queue.c **** {
+  10              		.loc 1 43 1
+  11              		.cfi_startproc
+  12 0000 F30F1EFA 		endbr64
+  13 0004 55       		pushq	%rbp
+  14              	.LCFI0:
+  15              		.cfi_def_cfa_offset 16
+GAS LISTING /tmp/ccYvauIM.s 			page 2
+
+
+  16              		.cfi_offset 6, -16
+  17 0005 4889E5   		movq	%rsp, %rbp
+  18              	.LCFI1:
+  19              		.cfi_def_cfa_register 6
+  20 0008 4883EC20 		subq	$32, %rsp
+  21 000c 48897DE8 		movq	%rdi, -24(%rbp)
+  22 0010 8975E4   		movl	%esi, -28(%rbp)
+  23 0013 8955E0   		movl	%edx, -32(%rbp)
+  24              		.loc 1 43 1
+  25 0016 64488B04 		movq	%fs:40, %rax
+  25      25280000 
+  25      00
+  26 001f 488945F8 		movq	%rax, -8(%rbp)
+  27 0023 31C0     		xorl	%eax, %eax
+  44:/home/xingli/share/1205tiny/queue/queue.c ****     queue_t *ret;
+  45:/home/xingli/share/1205tiny/queue/queue.c **** 
+  46:/home/xingli/share/1205tiny/queue/queue.c ****     ret = osal_malloc(sizeof(queue_t) + len*sizeof(void *));
+  28              		.loc 1 46 39
+  29 0025 8B45E4   		movl	-28(%rbp), %eax
+  30 0028 4898     		cltq
+  31 002a 4883C008 		addq	$8, %rax
+  32              		.loc 1 46 11
+  33 002e 48C1E003 		salq	$3, %rax
+  34 0032 4889C7   		movq	%rax, %rdi
+  35 0035 E8000000 		call	osal_malloc@PLT
+  35      00
+  36 003a 488945F0 		movq	%rax, -16(%rbp)
+  47:/home/xingli/share/1205tiny/queue/queue.c **** 
+  48:/home/xingli/share/1205tiny/queue/queue.c ****     if(NULL == ret)
+  37              		.loc 1 48 7
+  38 003e 48837DF0 		cmpq	$0, -16(%rbp)
+  38      00
+  39 0043 0F84E300 		je	.L14
+  39      0000
+  49:/home/xingli/share/1205tiny/queue/queue.c ****     {
+  50:/home/xingli/share/1205tiny/queue/queue.c ****         goto EXIT_MEM;
+  51:/home/xingli/share/1205tiny/queue/queue.c ****     }
+  52:/home/xingli/share/1205tiny/queue/queue.c **** 
+  53:/home/xingli/share/1205tiny/queue/queue.c ****     (void) memset(ret,0,sizeof(queue_t));
+  40              		.loc 1 53 12
+  41 0049 488B45F0 		movq	-16(%rbp), %rax
+  42 004d BA400000 		movl	$64, %edx
+  42      00
+  43 0052 BE000000 		movl	$0, %esi
+  43      00
+  44 0057 4889C7   		movq	%rax, %rdi
+  45 005a E8000000 		call	memset@PLT
+  45      00
+  54:/home/xingli/share/1205tiny/queue/queue.c ****     ret->name = name;
+  46              		.loc 1 54 15
+  47 005f 488B45F0 		movq	-16(%rbp), %rax
+  48 0063 488B55E8 		movq	-24(%rbp), %rdx
+  49 0067 488910   		movq	%rdx, (%rax)
+  55:/home/xingli/share/1205tiny/queue/queue.c ****     ret->msg_buflen = len;
+  50              		.loc 1 55 21
+  51 006a 488B45F0 		movq	-16(%rbp), %rax
+  52 006e 8B55E4   		movl	-28(%rbp), %edx
+GAS LISTING /tmp/ccYvauIM.s 			page 3
+
+
+  53 0071 895008   		movl	%edx, 8(%rax)
+  56:/home/xingli/share/1205tiny/queue/queue.c ****     ret->msg_buf = (void **)(uintptr_t)((uint8_t *)ret + sizeof(queue_t));
+  54              		.loc 1 56 20
+  55 0074 488B45F0 		movq	-16(%rbp), %rax
+  56 0078 488D5040 		leaq	64(%rax), %rdx
+  57              		.loc 1 56 18
+  58 007c 488B45F0 		movq	-16(%rbp), %rax
+  59 0080 48895010 		movq	%rdx, 16(%rax)
+  57:/home/xingli/share/1205tiny/queue/queue.c ****     ret->sync_mode = syncmode;
+  60              		.loc 1 57 20
+  61 0084 488B45F0 		movq	-16(%rbp), %rax
+  62 0088 8B55E0   		movl	-32(%rbp), %edx
+  63 008b 895024   		movl	%edx, 36(%rax)
+  58:/home/xingli/share/1205tiny/queue/queue.c **** 
+  59:/home/xingli/share/1205tiny/queue/queue.c ****     if(0 == syncmode)
+  64              		.loc 1 59 7
+  65 008e 837DE000 		cmpl	$0, -32(%rbp)
+  66 0092 7450     		je	.L15
+  60:/home/xingli/share/1205tiny/queue/queue.c ****     {
+  61:/home/xingli/share/1205tiny/queue/queue.c ****         goto EXIT_OK;
+  62:/home/xingli/share/1205tiny/queue/queue.c ****     }
+  63:/home/xingli/share/1205tiny/queue/queue.c **** 
+  64:/home/xingli/share/1205tiny/queue/queue.c ****     if(false == osal_semp_create(&ret->sync_read,len,0))
+  67              		.loc 1 64 17
+  68 0094 488B45F0 		movq	-16(%rbp), %rax
+  69 0098 488D4828 		leaq	40(%rax), %rcx
+  70 009c 8B45E4   		movl	-28(%rbp), %eax
+  71 009f BA000000 		movl	$0, %edx
+  71      00
+  72 00a4 89C6     		movl	%eax, %esi
+  73 00a6 4889CF   		movq	%rcx, %rdi
+  74 00a9 E8000000 		call	osal_semp_create@PLT
+  74      00
+  75              		.loc 1 64 7
+  76 00ae 85C0     		testl	%eax, %eax
+  77 00b0 7463     		je	.L16
+  65:/home/xingli/share/1205tiny/queue/queue.c ****     {
+  66:/home/xingli/share/1205tiny/queue/queue.c ****         goto EXIT_SYNCREAD;
+  67:/home/xingli/share/1205tiny/queue/queue.c ****     }
+  68:/home/xingli/share/1205tiny/queue/queue.c **** 
+  69:/home/xingli/share/1205tiny/queue/queue.c ****     if(false == osal_semp_create(&ret->sync_write,len,len))
+  78              		.loc 1 69 17
+  79 00b2 488B45F0 		movq	-16(%rbp), %rax
+  80 00b6 488D4830 		leaq	48(%rax), %rcx
+  81 00ba 8B55E4   		movl	-28(%rbp), %edx
+  82 00bd 8B45E4   		movl	-28(%rbp), %eax
+  83 00c0 89C6     		movl	%eax, %esi
+  84 00c2 4889CF   		movq	%rcx, %rdi
+  85 00c5 E8000000 		call	osal_semp_create@PLT
+  85      00
+  86              		.loc 1 69 7
+  87 00ca 85C0     		testl	%eax, %eax
+  88 00cc 7434     		je	.L17
+  70:/home/xingli/share/1205tiny/queue/queue.c ****     {
+  71:/home/xingli/share/1205tiny/queue/queue.c ****         goto EXIT_SYNCWRITE;
+  72:/home/xingli/share/1205tiny/queue/queue.c ****     }
+  73:/home/xingli/share/1205tiny/queue/queue.c **** 
+GAS LISTING /tmp/ccYvauIM.s 			page 4
+
+
+  74:/home/xingli/share/1205tiny/queue/queue.c ****     if(false == osal_mutex_create(&ret->lock))
+  89              		.loc 1 74 17
+  90 00ce 488B45F0 		movq	-16(%rbp), %rax
+  91 00d2 4883C038 		addq	$56, %rax
+  92 00d6 4889C7   		movq	%rax, %rdi
+  93 00d9 E8000000 		call	osal_mutex_create@PLT
+  93      00
+  94              		.loc 1 74 7
+  95 00de 85C0     		testl	%eax, %eax
+  96 00e0 7409     		je	.L18
+  75:/home/xingli/share/1205tiny/queue/queue.c ****     {
+  76:/home/xingli/share/1205tiny/queue/queue.c ****         goto EXIT_LOCK;
+  77:/home/xingli/share/1205tiny/queue/queue.c ****     }
+  78:/home/xingli/share/1205tiny/queue/queue.c **** 
+  79:/home/xingli/share/1205tiny/queue/queue.c **** 
+  80:/home/xingli/share/1205tiny/queue/queue.c **** EXIT_OK:
+  97              		.loc 1 80 1
+  98 00e2 EB01     		jmp	.L5
+  99              	.L15:
+  61:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 100              		.loc 1 61 9
+ 101 00e4 90       		nop
+ 102              	.L5:
+  81:/home/xingli/share/1205tiny/queue/queue.c ****     return ret;
+ 103              		.loc 1 81 12
+ 104 00e5 488B45F0 		movq	-16(%rbp), %rax
+ 105 00e9 EB4E     		jmp	.L11
+ 106              	.L18:
+  76:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 107              		.loc 1 76 9
+ 108 00eb 90       		nop
+ 109              	.L10:
+ 110 00ec F30F1EFA 		endbr64
+  82:/home/xingli/share/1205tiny/queue/queue.c **** 
+  83:/home/xingli/share/1205tiny/queue/queue.c **** EXIT_LOCK:
+  84:/home/xingli/share/1205tiny/queue/queue.c ****     (void) osal_semp_del(ret->sync_write);
+ 111              		.loc 1 84 12
+ 112 00f0 488B45F0 		movq	-16(%rbp), %rax
+ 113 00f4 488B4030 		movq	48(%rax), %rax
+ 114 00f8 4889C7   		movq	%rax, %rdi
+ 115 00fb E8000000 		call	osal_semp_del@PLT
+ 115      00
+ 116 0100 EB01     		jmp	.L9
+ 117              	.L17:
+  71:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 118              		.loc 1 71 9
+ 119 0102 90       		nop
+ 120              	.L9:
+  85:/home/xingli/share/1205tiny/queue/queue.c **** EXIT_SYNCWRITE:
+  86:/home/xingli/share/1205tiny/queue/queue.c ****     (void) osal_semp_del(ret->sync_read);
+ 121              		.loc 1 86 12
+ 122 0103 488B45F0 		movq	-16(%rbp), %rax
+ 123 0107 488B4028 		movq	40(%rax), %rax
+ 124 010b 4889C7   		movq	%rax, %rdi
+ 125 010e E8000000 		call	osal_semp_del@PLT
+ 125      00
+ 126 0113 EB01     		jmp	.L7
+GAS LISTING /tmp/ccYvauIM.s 			page 5
+
+
+ 127              	.L16:
+  66:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 128              		.loc 1 66 9
+ 129 0115 90       		nop
+ 130              	.L7:
+  87:/home/xingli/share/1205tiny/queue/queue.c **** EXIT_SYNCREAD:
+  88:/home/xingli/share/1205tiny/queue/queue.c ****     osal_free(ret);
+ 131              		.loc 1 88 5
+ 132 0116 488B45F0 		movq	-16(%rbp), %rax
+ 133 011a 4889C7   		movq	%rax, %rdi
+ 134 011d E8000000 		call	osal_free@PLT
+ 134      00
+  89:/home/xingli/share/1205tiny/queue/queue.c ****     ret = NULL;
+ 135              		.loc 1 89 9
+ 136 0122 48C745F0 		movq	$0, -16(%rbp)
+ 136      00000000 
+ 137 012a EB01     		jmp	.L3
+ 138              	.L14:
+  50:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 139              		.loc 1 50 9
+ 140 012c 90       		nop
+ 141              	.L3:
+  90:/home/xingli/share/1205tiny/queue/queue.c **** EXIT_MEM:
+  91:/home/xingli/share/1205tiny/queue/queue.c ****     ret = NULL;
+ 142              		.loc 1 91 9
+ 143 012d 48C745F0 		movq	$0, -16(%rbp)
+ 143      00000000 
+  92:/home/xingli/share/1205tiny/queue/queue.c ****     return ret;
+ 144              		.loc 1 92 12
+ 145 0135 488B45F0 		movq	-16(%rbp), %rax
+ 146              	.L11:
+  93:/home/xingli/share/1205tiny/queue/queue.c **** 
+  94:/home/xingli/share/1205tiny/queue/queue.c **** }
+ 147              		.loc 1 94 1
+ 148 0139 488B4DF8 		movq	-8(%rbp), %rcx
+ 149 013d 6448330C 		xorq	%fs:40, %rcx
+ 149      25280000 
+ 149      00
+ 150 0146 7405     		je	.L12
+ 151 0148 E8000000 		call	__stack_chk_fail@PLT
+ 151      00
+ 152              	.L12:
+ 153 014d C9       		leave
+ 154              	.LCFI2:
+ 155              		.cfi_def_cfa 7, 8
+ 156 014e C3       		ret
+ 157              		.cfi_endproc
+ 158              	.LFE6:
+ 160              		.section	.text.raw_queue_pushdata,"ax",@progbits
+ 162              	raw_queue_pushdata:
+ 163              	.LFB7:
+  95:/home/xingli/share/1205tiny/queue/queue.c **** 
+  96:/home/xingli/share/1205tiny/queue/queue.c **** 
+  97:/home/xingli/share/1205tiny/queue/queue.c **** static int raw_queue_pushdata(queue_t *queue,void *data)
+  98:/home/xingli/share/1205tiny/queue/queue.c **** {
+ 164              		.loc 1 98 1
+ 165              		.cfi_startproc
+GAS LISTING /tmp/ccYvauIM.s 			page 6
+
+
+ 166 0000 F30F1EFA 		endbr64
+ 167 0004 55       		pushq	%rbp
+ 168              	.LCFI3:
+ 169              		.cfi_def_cfa_offset 16
+ 170              		.cfi_offset 6, -16
+ 171 0005 4889E5   		movq	%rsp, %rbp
+ 172              	.LCFI4:
+ 173              		.cfi_def_cfa_register 6
+ 174 0008 4883EC20 		subq	$32, %rsp
+ 175 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 176 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 177              		.loc 1 98 1
+ 178 0014 64488B04 		movq	%fs:40, %rax
+ 178      25280000 
+ 178      00
+ 179 001d 488945F8 		movq	%rax, -8(%rbp)
+ 180 0021 31C0     		xorl	%eax, %eax
+  99:/home/xingli/share/1205tiny/queue/queue.c ****     int ret = -1;
+ 181              		.loc 1 99 9
+ 182 0023 C745F4FF 		movl	$-1, -12(%rbp)
+ 182      FFFFFF
+ 100:/home/xingli/share/1205tiny/queue/queue.c ****     if(queue->msg_num < queue->msg_buflen)
+ 183              		.loc 1 100 13
+ 184 002a 488B45E8 		movq	-24(%rbp), %rax
+ 185 002e 8B5020   		movl	32(%rax), %edx
+ 186              		.loc 1 100 30
+ 187 0031 488B45E8 		movq	-24(%rbp), %rax
+ 188 0035 8B4008   		movl	8(%rax), %eax
+ 189              		.loc 1 100 7
+ 190 0038 39C2     		cmpl	%eax, %edx
+ 191 003a 7D54     		jge	.L20
+ 101:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 102:/home/xingli/share/1205tiny/queue/queue.c ****         queue->msg_buf[queue->cur_write] = data;
+ 192              		.loc 1 102 14
+ 193 003c 488B45E8 		movq	-24(%rbp), %rax
+ 194 0040 488B5010 		movq	16(%rax), %rdx
+ 195              		.loc 1 102 29
+ 196 0044 488B45E8 		movq	-24(%rbp), %rax
+ 197 0048 8B4018   		movl	24(%rax), %eax
+ 198 004b 4898     		cltq
+ 199              		.loc 1 102 23
+ 200 004d 48C1E003 		salq	$3, %rax
+ 201 0051 4801C2   		addq	%rax, %rdx
+ 202              		.loc 1 102 42
+ 203 0054 488B45E0 		movq	-32(%rbp), %rax
+ 204 0058 488902   		movq	%rax, (%rdx)
+ 103:/home/xingli/share/1205tiny/queue/queue.c ****         queue->cur_write = (queue->cur_write + 1)%queue->msg_buflen;
+ 205              		.loc 1 103 34
+ 206 005b 488B45E8 		movq	-24(%rbp), %rax
+ 207 005f 8B4018   		movl	24(%rax), %eax
+ 208              		.loc 1 103 46
+ 209 0062 8D5001   		leal	1(%rax), %edx
+ 210              		.loc 1 103 56
+ 211 0065 488B45E8 		movq	-24(%rbp), %rax
+ 212 0069 8B4808   		movl	8(%rax), %ecx
+ 213              		.loc 1 103 50
+ 214 006c 89D0     		movl	%edx, %eax
+GAS LISTING /tmp/ccYvauIM.s 			page 7
+
+
+ 215 006e 99       		cltd
+ 216 006f F7F9     		idivl	%ecx
+ 217              		.loc 1 103 26
+ 218 0071 488B45E8 		movq	-24(%rbp), %rax
+ 219 0075 895018   		movl	%edx, 24(%rax)
+ 104:/home/xingli/share/1205tiny/queue/queue.c ****         queue->msg_num ++;
+ 220              		.loc 1 104 14
+ 221 0078 488B45E8 		movq	-24(%rbp), %rax
+ 222 007c 8B4020   		movl	32(%rax), %eax
+ 223              		.loc 1 104 24
+ 224 007f 8D5001   		leal	1(%rax), %edx
+ 225 0082 488B45E8 		movq	-24(%rbp), %rax
+ 226 0086 895020   		movl	%edx, 32(%rax)
+ 105:/home/xingli/share/1205tiny/queue/queue.c ****         ret = 0;
+ 227              		.loc 1 105 13
+ 228 0089 C745F400 		movl	$0, -12(%rbp)
+ 228      000000
+ 229              	.L20:
+ 106:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 107:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 108:/home/xingli/share/1205tiny/queue/queue.c ****     return ret;
+ 230              		.loc 1 108 12
+ 231 0090 8B45F4   		movl	-12(%rbp), %eax
+ 109:/home/xingli/share/1205tiny/queue/queue.c **** }
+ 232              		.loc 1 109 1
+ 233 0093 488B75F8 		movq	-8(%rbp), %rsi
+ 234 0097 64483334 		xorq	%fs:40, %rsi
+ 234      25280000 
+ 234      00
+ 235 00a0 7405     		je	.L22
+ 236 00a2 E8000000 		call	__stack_chk_fail@PLT
+ 236      00
+ 237              	.L22:
+ 238 00a7 C9       		leave
+ 239              	.LCFI5:
+ 240              		.cfi_def_cfa 7, 8
+ 241 00a8 C3       		ret
+ 242              		.cfi_endproc
+ 243              	.LFE7:
+ 245              		.section	.text.queue_push,"ax",@progbits
+ 246              		.globl	queue_push
+ 248              	queue_push:
+ 249              	.LFB8:
+ 110:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 111:/home/xingli/share/1205tiny/queue/queue.c **** ///< push a data to the queue, 0 success while -1 failed
+ 112:/home/xingli/share/1205tiny/queue/queue.c **** int queue_push(queue_t *queue,void *data,int timeout)
+ 113:/home/xingli/share/1205tiny/queue/queue.c **** {
+ 250              		.loc 1 113 1
+ 251              		.cfi_startproc
+ 252 0000 F30F1EFA 		endbr64
+ 253 0004 55       		pushq	%rbp
+ 254              	.LCFI6:
+ 255              		.cfi_def_cfa_offset 16
+ 256              		.cfi_offset 6, -16
+ 257 0005 4889E5   		movq	%rsp, %rbp
+ 258              	.LCFI7:
+ 259              		.cfi_def_cfa_register 6
+GAS LISTING /tmp/ccYvauIM.s 			page 8
+
+
+ 260 0008 4883EC30 		subq	$48, %rsp
+ 261 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 262 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 263 0014 8955DC   		movl	%edx, -36(%rbp)
+ 264              		.loc 1 113 1
+ 265 0017 64488B04 		movq	%fs:40, %rax
+ 265      25280000 
+ 265      00
+ 266 0020 488945F8 		movq	%rax, -8(%rbp)
+ 267 0024 31C0     		xorl	%eax, %eax
+ 114:/home/xingli/share/1205tiny/queue/queue.c ****     int ret = -1;
+ 268              		.loc 1 114 9
+ 269 0026 C745F4FF 		movl	$-1, -12(%rbp)
+ 269      FFFFFF
+ 115:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 116:/home/xingli/share/1205tiny/queue/queue.c ****     if((NULL == queue) || (NULL == data))
+ 270              		.loc 1 116 7
+ 271 002d 48837DE8 		cmpq	$0, -24(%rbp)
+ 271      00
+ 272 0032 7407     		je	.L24
+ 273              		.loc 1 116 24 discriminator 1
+ 274 0034 48837DE0 		cmpq	$0, -32(%rbp)
+ 274      00
+ 275 0039 7508     		jne	.L25
+ 276              	.L24:
+ 117:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 118:/home/xingli/share/1205tiny/queue/queue.c ****         return ret;
+ 277              		.loc 1 118 16
+ 278 003b 8B45F4   		movl	-12(%rbp), %eax
+ 279 003e E98F0000 		jmp	.L26
+ 279      00
+ 280              	.L25:
+ 119:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 120:/home/xingli/share/1205tiny/queue/queue.c ****     if(queue->sync_mode)
+ 281              		.loc 1 120 13
+ 282 0043 488B45E8 		movq	-24(%rbp), %rax
+ 283 0047 8B4024   		movl	36(%rax), %eax
+ 284              		.loc 1 120 7
+ 285 004a 85C0     		testl	%eax, %eax
+ 286 004c 746B     		je	.L27
+ 121:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 122:/home/xingli/share/1205tiny/queue/queue.c ****         if(osal_semp_pend(queue->sync_write,timeout))
+ 287              		.loc 1 122 12
+ 288 004e 8B55DC   		movl	-36(%rbp), %edx
+ 289 0051 488B45E8 		movq	-24(%rbp), %rax
+ 290 0055 488B4030 		movq	48(%rax), %rax
+ 291 0059 89D6     		movl	%edx, %esi
+ 292 005b 4889C7   		movq	%rax, %rdi
+ 293 005e E8000000 		call	osal_semp_pend@PLT
+ 293      00
+ 294              		.loc 1 122 11
+ 295 0063 85C0     		testl	%eax, %eax
+ 296 0065 7468     		je	.L28
+ 123:/home/xingli/share/1205tiny/queue/queue.c ****         {
+ 124:/home/xingli/share/1205tiny/queue/queue.c ****             if(osal_mutex_lock(queue->lock))
+ 297              		.loc 1 124 16
+ 298 0067 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/ccYvauIM.s 			page 9
+
+
+ 299 006b 488B4038 		movq	56(%rax), %rax
+ 300 006f 4889C7   		movq	%rax, %rdi
+ 301 0072 E8000000 		call	osal_mutex_lock@PLT
+ 301      00
+ 302              		.loc 1 124 15
+ 303 0077 85C0     		testl	%eax, %eax
+ 304 0079 7426     		je	.L29
+ 125:/home/xingli/share/1205tiny/queue/queue.c ****             {
+ 126:/home/xingli/share/1205tiny/queue/queue.c ****                 ret = raw_queue_pushdata(queue,data);
+ 305              		.loc 1 126 23
+ 306 007b 488B55E0 		movq	-32(%rbp), %rdx
+ 307 007f 488B45E8 		movq	-24(%rbp), %rax
+ 308 0083 4889D6   		movq	%rdx, %rsi
+ 309 0086 4889C7   		movq	%rax, %rdi
+ 310 0089 E8000000 		call	raw_queue_pushdata
+ 310      00
+ 311 008e 8945F4   		movl	%eax, -12(%rbp)
+ 127:/home/xingli/share/1205tiny/queue/queue.c ****                 (void) osal_mutex_unlock(queue->lock);
+ 312              		.loc 1 127 24
+ 313 0091 488B45E8 		movq	-24(%rbp), %rax
+ 314 0095 488B4038 		movq	56(%rax), %rax
+ 315 0099 4889C7   		movq	%rax, %rdi
+ 316 009c E8000000 		call	osal_mutex_unlock@PLT
+ 316      00
+ 317              	.L29:
+ 128:/home/xingli/share/1205tiny/queue/queue.c ****             }
+ 129:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 130:/home/xingli/share/1205tiny/queue/queue.c ****             if(0 == ret)
+ 318              		.loc 1 130 15
+ 319 00a1 837DF400 		cmpl	$0, -12(%rbp)
+ 320 00a5 7528     		jne	.L28
+ 131:/home/xingli/share/1205tiny/queue/queue.c ****             {
+ 132:/home/xingli/share/1205tiny/queue/queue.c ****                 (void) osal_semp_post(queue->sync_read);
+ 321              		.loc 1 132 24
+ 322 00a7 488B45E8 		movq	-24(%rbp), %rax
+ 323 00ab 488B4028 		movq	40(%rax), %rax
+ 324 00af 4889C7   		movq	%rax, %rdi
+ 325 00b2 E8000000 		call	osal_semp_post@PLT
+ 325      00
+ 326 00b7 EB16     		jmp	.L28
+ 327              	.L27:
+ 133:/home/xingli/share/1205tiny/queue/queue.c ****             }
+ 134:/home/xingli/share/1205tiny/queue/queue.c ****         }
+ 135:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 136:/home/xingli/share/1205tiny/queue/queue.c ****     else
+ 137:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 138:/home/xingli/share/1205tiny/queue/queue.c ****         ret = raw_queue_pushdata(queue,data);
+ 328              		.loc 1 138 15
+ 329 00b9 488B55E0 		movq	-32(%rbp), %rdx
+ 330 00bd 488B45E8 		movq	-24(%rbp), %rax
+ 331 00c1 4889D6   		movq	%rdx, %rsi
+ 332 00c4 4889C7   		movq	%rax, %rdi
+ 333 00c7 E8000000 		call	raw_queue_pushdata
+ 333      00
+ 334 00cc 8945F4   		movl	%eax, -12(%rbp)
+ 335              	.L28:
+ 139:/home/xingli/share/1205tiny/queue/queue.c ****     }
+GAS LISTING /tmp/ccYvauIM.s 			page 10
+
+
+ 140:/home/xingli/share/1205tiny/queue/queue.c ****     return ret;
+ 336              		.loc 1 140 12
+ 337 00cf 8B45F4   		movl	-12(%rbp), %eax
+ 338              	.L26:
+ 141:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 142:/home/xingli/share/1205tiny/queue/queue.c **** }
+ 339              		.loc 1 142 1
+ 340 00d2 488B4DF8 		movq	-8(%rbp), %rcx
+ 341 00d6 6448330C 		xorq	%fs:40, %rcx
+ 341      25280000 
+ 341      00
+ 342 00df 7405     		je	.L30
+ 343 00e1 E8000000 		call	__stack_chk_fail@PLT
+ 343      00
+ 344              	.L30:
+ 345 00e6 C9       		leave
+ 346              	.LCFI8:
+ 347              		.cfi_def_cfa 7, 8
+ 348 00e7 C3       		ret
+ 349              		.cfi_endproc
+ 350              	.LFE8:
+ 352              		.section	.text.raw_queue_pop,"ax",@progbits
+ 354              	raw_queue_pop:
+ 355              	.LFB9:
+ 143:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 144:/home/xingli/share/1205tiny/queue/queue.c **** ///< pop a data from the queue
+ 145:/home/xingli/share/1205tiny/queue/queue.c **** static int raw_queue_pop(queue_t *queue,void **buf)
+ 146:/home/xingli/share/1205tiny/queue/queue.c **** {
+ 356              		.loc 1 146 1
+ 357              		.cfi_startproc
+ 358 0000 F30F1EFA 		endbr64
+ 359 0004 55       		pushq	%rbp
+ 360              	.LCFI9:
+ 361              		.cfi_def_cfa_offset 16
+ 362              		.cfi_offset 6, -16
+ 363 0005 4889E5   		movq	%rsp, %rbp
+ 364              	.LCFI10:
+ 365              		.cfi_def_cfa_register 6
+ 366 0008 4883EC20 		subq	$32, %rsp
+ 367 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 368 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 369              		.loc 1 146 1
+ 370 0014 64488B04 		movq	%fs:40, %rax
+ 370      25280000 
+ 370      00
+ 371 001d 488945F8 		movq	%rax, -8(%rbp)
+ 372 0021 31C0     		xorl	%eax, %eax
+ 147:/home/xingli/share/1205tiny/queue/queue.c ****     int ret = -1;
+ 373              		.loc 1 147 9
+ 374 0023 C745F4FF 		movl	$-1, -12(%rbp)
+ 374      FFFFFF
+ 148:/home/xingli/share/1205tiny/queue/queue.c ****     if(queue->msg_num > 0)
+ 375              		.loc 1 148 13
+ 376 002a 488B45E8 		movq	-24(%rbp), %rax
+ 377 002e 8B4020   		movl	32(%rax), %eax
+ 378              		.loc 1 148 7
+ 379 0031 85C0     		testl	%eax, %eax
+GAS LISTING /tmp/ccYvauIM.s 			page 11
+
+
+ 380 0033 7E57     		jle	.L32
+ 149:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 150:/home/xingli/share/1205tiny/queue/queue.c ****         *buf = queue->msg_buf[queue->cur_read];
+ 381              		.loc 1 150 21
+ 382 0035 488B45E8 		movq	-24(%rbp), %rax
+ 383 0039 488B5010 		movq	16(%rax), %rdx
+ 384              		.loc 1 150 36
+ 385 003d 488B45E8 		movq	-24(%rbp), %rax
+ 386 0041 8B401C   		movl	28(%rax), %eax
+ 387 0044 4898     		cltq
+ 388              		.loc 1 150 30
+ 389 0046 48C1E003 		salq	$3, %rax
+ 390 004a 4801D0   		addq	%rdx, %rax
+ 391 004d 488B10   		movq	(%rax), %rdx
+ 392              		.loc 1 150 14
+ 393 0050 488B45E0 		movq	-32(%rbp), %rax
+ 394 0054 488910   		movq	%rdx, (%rax)
+ 151:/home/xingli/share/1205tiny/queue/queue.c ****         queue->cur_read = (queue->cur_read +1)%queue->msg_buflen;
+ 395              		.loc 1 151 33
+ 396 0057 488B45E8 		movq	-24(%rbp), %rax
+ 397 005b 8B401C   		movl	28(%rax), %eax
+ 398              		.loc 1 151 44
+ 399 005e 8D5001   		leal	1(%rax), %edx
+ 400              		.loc 1 151 53
+ 401 0061 488B45E8 		movq	-24(%rbp), %rax
+ 402 0065 8B4808   		movl	8(%rax), %ecx
+ 403              		.loc 1 151 47
+ 404 0068 89D0     		movl	%edx, %eax
+ 405 006a 99       		cltd
+ 406 006b F7F9     		idivl	%ecx
+ 407              		.loc 1 151 25
+ 408 006d 488B45E8 		movq	-24(%rbp), %rax
+ 409 0071 89501C   		movl	%edx, 28(%rax)
+ 152:/home/xingli/share/1205tiny/queue/queue.c ****         queue->msg_num--;
+ 410              		.loc 1 152 14
+ 411 0074 488B45E8 		movq	-24(%rbp), %rax
+ 412 0078 8B4020   		movl	32(%rax), %eax
+ 413              		.loc 1 152 23
+ 414 007b 8D50FF   		leal	-1(%rax), %edx
+ 415 007e 488B45E8 		movq	-24(%rbp), %rax
+ 416 0082 895020   		movl	%edx, 32(%rax)
+ 153:/home/xingli/share/1205tiny/queue/queue.c ****         ret = 0;
+ 417              		.loc 1 153 13
+ 418 0085 C745F400 		movl	$0, -12(%rbp)
+ 418      000000
+ 419              	.L32:
+ 154:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 155:/home/xingli/share/1205tiny/queue/queue.c ****     return ret;
+ 420              		.loc 1 155 12
+ 421 008c 8B45F4   		movl	-12(%rbp), %eax
+ 156:/home/xingli/share/1205tiny/queue/queue.c **** }
+ 422              		.loc 1 156 1
+ 423 008f 488B75F8 		movq	-8(%rbp), %rsi
+ 424 0093 64483334 		xorq	%fs:40, %rsi
+ 424      25280000 
+ 424      00
+ 425 009c 7405     		je	.L34
+GAS LISTING /tmp/ccYvauIM.s 			page 12
+
+
+ 426 009e E8000000 		call	__stack_chk_fail@PLT
+ 426      00
+ 427              	.L34:
+ 428 00a3 C9       		leave
+ 429              	.LCFI11:
+ 430              		.cfi_def_cfa 7, 8
+ 431 00a4 C3       		ret
+ 432              		.cfi_endproc
+ 433              	.LFE9:
+ 435              		.section	.text.queue_pop,"ax",@progbits
+ 436              		.globl	queue_pop
+ 438              	queue_pop:
+ 439              	.LFB10:
+ 157:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 158:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 159:/home/xingli/share/1205tiny/queue/queue.c **** int queue_pop(queue_t *queue,void **buf, int timeout)
+ 160:/home/xingli/share/1205tiny/queue/queue.c **** {
+ 440              		.loc 1 160 1
+ 441              		.cfi_startproc
+ 442 0000 F30F1EFA 		endbr64
+ 443 0004 55       		pushq	%rbp
+ 444              	.LCFI12:
+ 445              		.cfi_def_cfa_offset 16
+ 446              		.cfi_offset 6, -16
+ 447 0005 4889E5   		movq	%rsp, %rbp
+ 448              	.LCFI13:
+ 449              		.cfi_def_cfa_register 6
+ 450 0008 4883EC30 		subq	$48, %rsp
+ 451 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 452 0010 488975E0 		movq	%rsi, -32(%rbp)
+ 453 0014 8955DC   		movl	%edx, -36(%rbp)
+ 454              		.loc 1 160 1
+ 455 0017 64488B04 		movq	%fs:40, %rax
+ 455      25280000 
+ 455      00
+ 456 0020 488945F8 		movq	%rax, -8(%rbp)
+ 457 0024 31C0     		xorl	%eax, %eax
+ 161:/home/xingli/share/1205tiny/queue/queue.c ****     int ret = -1;
+ 458              		.loc 1 161 9
+ 459 0026 C745F4FF 		movl	$-1, -12(%rbp)
+ 459      FFFFFF
+ 162:/home/xingli/share/1205tiny/queue/queue.c ****     if((NULL == queue) || (NULL == buf))
+ 460              		.loc 1 162 7
+ 461 002d 48837DE8 		cmpq	$0, -24(%rbp)
+ 461      00
+ 462 0032 7407     		je	.L36
+ 463              		.loc 1 162 24 discriminator 1
+ 464 0034 48837DE0 		cmpq	$0, -32(%rbp)
+ 464      00
+ 465 0039 7508     		jne	.L37
+ 466              	.L36:
+ 163:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 164:/home/xingli/share/1205tiny/queue/queue.c ****         return ret;
+ 467              		.loc 1 164 16
+ 468 003b 8B45F4   		movl	-12(%rbp), %eax
+ 469 003e E98F0000 		jmp	.L38
+ 469      00
+GAS LISTING /tmp/ccYvauIM.s 			page 13
+
+
+ 470              	.L37:
+ 165:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 166:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 167:/home/xingli/share/1205tiny/queue/queue.c ****     if(queue->sync_mode)
+ 471              		.loc 1 167 13
+ 472 0043 488B45E8 		movq	-24(%rbp), %rax
+ 473 0047 8B4024   		movl	36(%rax), %eax
+ 474              		.loc 1 167 7
+ 475 004a 85C0     		testl	%eax, %eax
+ 476 004c 746B     		je	.L39
+ 168:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 169:/home/xingli/share/1205tiny/queue/queue.c ****         if(osal_semp_pend(queue->sync_read,timeout))
+ 477              		.loc 1 169 12
+ 478 004e 8B55DC   		movl	-36(%rbp), %edx
+ 479 0051 488B45E8 		movq	-24(%rbp), %rax
+ 480 0055 488B4028 		movq	40(%rax), %rax
+ 481 0059 89D6     		movl	%edx, %esi
+ 482 005b 4889C7   		movq	%rax, %rdi
+ 483 005e E8000000 		call	osal_semp_pend@PLT
+ 483      00
+ 484              		.loc 1 169 11
+ 485 0063 85C0     		testl	%eax, %eax
+ 486 0065 7468     		je	.L40
+ 170:/home/xingli/share/1205tiny/queue/queue.c ****         {
+ 171:/home/xingli/share/1205tiny/queue/queue.c ****             if(osal_mutex_lock(queue->lock))
+ 487              		.loc 1 171 16
+ 488 0067 488B45E8 		movq	-24(%rbp), %rax
+ 489 006b 488B4038 		movq	56(%rax), %rax
+ 490 006f 4889C7   		movq	%rax, %rdi
+ 491 0072 E8000000 		call	osal_mutex_lock@PLT
+ 491      00
+ 492              		.loc 1 171 15
+ 493 0077 85C0     		testl	%eax, %eax
+ 494 0079 7426     		je	.L41
+ 172:/home/xingli/share/1205tiny/queue/queue.c ****             {
+ 173:/home/xingli/share/1205tiny/queue/queue.c ****                 ret = raw_queue_pop(queue,buf);
+ 495              		.loc 1 173 23
+ 496 007b 488B55E0 		movq	-32(%rbp), %rdx
+ 497 007f 488B45E8 		movq	-24(%rbp), %rax
+ 498 0083 4889D6   		movq	%rdx, %rsi
+ 499 0086 4889C7   		movq	%rax, %rdi
+ 500 0089 E8000000 		call	raw_queue_pop
+ 500      00
+ 501 008e 8945F4   		movl	%eax, -12(%rbp)
+ 174:/home/xingli/share/1205tiny/queue/queue.c ****                 (void) osal_mutex_unlock(queue->lock);
+ 502              		.loc 1 174 24
+ 503 0091 488B45E8 		movq	-24(%rbp), %rax
+ 504 0095 488B4038 		movq	56(%rax), %rax
+ 505 0099 4889C7   		movq	%rax, %rdi
+ 506 009c E8000000 		call	osal_mutex_unlock@PLT
+ 506      00
+ 507              	.L41:
+ 175:/home/xingli/share/1205tiny/queue/queue.c ****             }
+ 176:/home/xingli/share/1205tiny/queue/queue.c ****             if(0 == ret)
+ 508              		.loc 1 176 15
+ 509 00a1 837DF400 		cmpl	$0, -12(%rbp)
+ 510 00a5 7528     		jne	.L40
+GAS LISTING /tmp/ccYvauIM.s 			page 14
+
+
+ 177:/home/xingli/share/1205tiny/queue/queue.c ****             {
+ 178:/home/xingli/share/1205tiny/queue/queue.c ****                 (void) osal_semp_post(queue->sync_write);
+ 511              		.loc 1 178 24
+ 512 00a7 488B45E8 		movq	-24(%rbp), %rax
+ 513 00ab 488B4030 		movq	48(%rax), %rax
+ 514 00af 4889C7   		movq	%rax, %rdi
+ 515 00b2 E8000000 		call	osal_semp_post@PLT
+ 515      00
+ 516 00b7 EB16     		jmp	.L40
+ 517              	.L39:
+ 179:/home/xingli/share/1205tiny/queue/queue.c ****             }
+ 180:/home/xingli/share/1205tiny/queue/queue.c ****         }
+ 181:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 182:/home/xingli/share/1205tiny/queue/queue.c ****     else
+ 183:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 184:/home/xingli/share/1205tiny/queue/queue.c ****         ret = raw_queue_pop(queue,buf);
+ 518              		.loc 1 184 15
+ 519 00b9 488B55E0 		movq	-32(%rbp), %rdx
+ 520 00bd 488B45E8 		movq	-24(%rbp), %rax
+ 521 00c1 4889D6   		movq	%rdx, %rsi
+ 522 00c4 4889C7   		movq	%rax, %rdi
+ 523 00c7 E8000000 		call	raw_queue_pop
+ 523      00
+ 524 00cc 8945F4   		movl	%eax, -12(%rbp)
+ 525              	.L40:
+ 185:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 186:/home/xingli/share/1205tiny/queue/queue.c ****     return ret;
+ 526              		.loc 1 186 12
+ 527 00cf 8B45F4   		movl	-12(%rbp), %eax
+ 528              	.L38:
+ 187:/home/xingli/share/1205tiny/queue/queue.c **** }
+ 529              		.loc 1 187 1
+ 530 00d2 488B4DF8 		movq	-8(%rbp), %rcx
+ 531 00d6 6448330C 		xorq	%fs:40, %rcx
+ 531      25280000 
+ 531      00
+ 532 00df 7405     		je	.L42
+ 533 00e1 E8000000 		call	__stack_chk_fail@PLT
+ 533      00
+ 534              	.L42:
+ 535 00e6 C9       		leave
+ 536              	.LCFI14:
+ 537              		.cfi_def_cfa 7, 8
+ 538 00e7 C3       		ret
+ 539              		.cfi_endproc
+ 540              	.LFE10:
+ 542              		.section	.text.queue_delete,"ax",@progbits
+ 543              		.globl	queue_delete
+ 545              	queue_delete:
+ 546              	.LFB11:
+ 188:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 189:/home/xingli/share/1205tiny/queue/queue.c **** ///< delete the queue,if any data in the queue, which means could not kill it
+ 190:/home/xingli/share/1205tiny/queue/queue.c **** int queue_delete(queue_t *queue)
+ 191:/home/xingli/share/1205tiny/queue/queue.c **** {
+ 547              		.loc 1 191 1
+ 548              		.cfi_startproc
+ 549 0000 F30F1EFA 		endbr64
+GAS LISTING /tmp/ccYvauIM.s 			page 15
+
+
+ 550 0004 55       		pushq	%rbp
+ 551              	.LCFI15:
+ 552              		.cfi_def_cfa_offset 16
+ 553              		.cfi_offset 6, -16
+ 554 0005 4889E5   		movq	%rsp, %rbp
+ 555              	.LCFI16:
+ 556              		.cfi_def_cfa_register 6
+ 557 0008 4883EC20 		subq	$32, %rsp
+ 558 000c 48897DE8 		movq	%rdi, -24(%rbp)
+ 559              		.loc 1 191 1
+ 560 0010 64488B04 		movq	%fs:40, %rax
+ 560      25280000 
+ 560      00
+ 561 0019 488945F8 		movq	%rax, -8(%rbp)
+ 562 001d 31C0     		xorl	%eax, %eax
+ 192:/home/xingli/share/1205tiny/queue/queue.c ****     int ret = -1;
+ 563              		.loc 1 192 9
+ 564 001f C745F4FF 		movl	$-1, -12(%rbp)
+ 564      FFFFFF
+ 193:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 194:/home/xingli/share/1205tiny/queue/queue.c ****     if((NULL == queue))
+ 565              		.loc 1 194 7
+ 566 0026 48837DE8 		cmpq	$0, -24(%rbp)
+ 566      00
+ 567 002b 7505     		jne	.L44
+ 195:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 196:/home/xingli/share/1205tiny/queue/queue.c ****         return ret;
+ 568              		.loc 1 196 16
+ 569 002d 8B45F4   		movl	-12(%rbp), %eax
+ 570 0030 EB51     		jmp	.L45
+ 571              	.L44:
+ 197:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 198:/home/xingli/share/1205tiny/queue/queue.c ****     if(queue->sync_mode)
+ 572              		.loc 1 198 13
+ 573 0032 488B45E8 		movq	-24(%rbp), %rax
+ 574 0036 8B4024   		movl	36(%rax), %eax
+ 575              		.loc 1 198 7
+ 576 0039 85C0     		testl	%eax, %eax
+ 577 003b 7430     		je	.L46
+ 199:/home/xingli/share/1205tiny/queue/queue.c ****     {
+ 200:/home/xingli/share/1205tiny/queue/queue.c ****         (void) osal_semp_del(queue->sync_read);
+ 578              		.loc 1 200 16
+ 579 003d 488B45E8 		movq	-24(%rbp), %rax
+ 580 0041 488B4028 		movq	40(%rax), %rax
+ 581 0045 4889C7   		movq	%rax, %rdi
+ 582 0048 E8000000 		call	osal_semp_del@PLT
+ 582      00
+ 201:/home/xingli/share/1205tiny/queue/queue.c ****         (void) osal_semp_del(queue->sync_write);
+ 583              		.loc 1 201 16
+ 584 004d 488B45E8 		movq	-24(%rbp), %rax
+ 585 0051 488B4030 		movq	48(%rax), %rax
+ 586 0055 4889C7   		movq	%rax, %rdi
+ 587 0058 E8000000 		call	osal_semp_del@PLT
+ 587      00
+ 202:/home/xingli/share/1205tiny/queue/queue.c ****         (void) osal_mutex_del(queue->lock);
+ 588              		.loc 1 202 16
+ 589 005d 488B45E8 		movq	-24(%rbp), %rax
+GAS LISTING /tmp/ccYvauIM.s 			page 16
+
+
+ 590 0061 488B4038 		movq	56(%rax), %rax
+ 591 0065 4889C7   		movq	%rax, %rdi
+ 592 0068 E8000000 		call	osal_mutex_del@PLT
+ 592      00
+ 593              	.L46:
+ 203:/home/xingli/share/1205tiny/queue/queue.c ****     }
+ 204:/home/xingli/share/1205tiny/queue/queue.c ****     osal_free(queue);
+ 594              		.loc 1 204 5
+ 595 006d 488B45E8 		movq	-24(%rbp), %rax
+ 596 0071 4889C7   		movq	%rax, %rdi
+ 597 0074 E8000000 		call	osal_free@PLT
+ 597      00
+ 205:/home/xingli/share/1205tiny/queue/queue.c ****     ret = 0;
+ 598              		.loc 1 205 9
+ 599 0079 C745F400 		movl	$0, -12(%rbp)
+ 599      000000
+ 206:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 207:/home/xingli/share/1205tiny/queue/queue.c ****     return ret;
+ 600              		.loc 1 207 12
+ 601 0080 8B45F4   		movl	-12(%rbp), %eax
+ 602              	.L45:
+ 208:/home/xingli/share/1205tiny/queue/queue.c **** 
+ 209:/home/xingli/share/1205tiny/queue/queue.c **** }
+ 603              		.loc 1 209 1
+ 604 0083 488B55F8 		movq	-8(%rbp), %rdx
+ 605 0087 64483314 		xorq	%fs:40, %rdx
+ 605      25280000 
+ 605      00
+ 606 0090 7405     		je	.L47
+ 607 0092 E8000000 		call	__stack_chk_fail@PLT
+ 607      00
+ 608              	.L47:
+ 609 0097 C9       		leave
+ 610              	.LCFI17:
+ 611              		.cfi_def_cfa 7, 8
+ 612 0098 C3       		ret
+ 613              		.cfi_endproc
+ 614              	.LFE11:
+ 616              		.text
+ 617              	.Letext0:
+ 618              		.file 2 "/usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h"
+ 619              		.file 3 "/usr/include/x86_64-linux-gnu/bits/types.h"
+ 620              		.file 4 "/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h"
+ 621              		.file 5 "/usr/include/x86_64-linux-gnu/bits/types/FILE.h"
+ 622              		.file 6 "/usr/include/stdio.h"
+ 623              		.file 7 "/usr/include/x86_64-linux-gnu/bits/sys_errlist.h"
+ 624              		.file 8 "/usr/include/x86_64-linux-gnu/bits/stdint-uintn.h"
+ 625              		.file 9 "/usr/include/stdint.h"
+ 626              		.file 10 "/home/xingli/share/1205tiny/os/osal/osal_types.h"
+ 627              		.file 11 "/home/xingli/share/1205tiny/queue/queue.h"
+ 2225              		.section	.note.gnu.property,"a"
+ 2226              		.align 8
+ 2227 0000 04000000 		.long	 1f - 0f
+ 2228 0004 10000000 		.long	 4f - 1f
+ 2229 0008 05000000 		.long	 5
+ 2230              	0:
+ 2231 000c 474E5500 		.string	 "GNU"
+GAS LISTING /tmp/ccYvauIM.s 			page 17
+
+
+ 2232              	1:
+ 2233              		.align 8
+ 2234 0010 020000C0 		.long	 0xc0000002
+ 2235 0014 04000000 		.long	 3f - 2f
+ 2236              	2:
+ 2237 0018 03000000 		.long	 0x3
+ 2238              	3:
+ 2239 001c 00000000 		.align 8
+ 2240              	4:
+GAS LISTING /tmp/ccYvauIM.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 queue.c
+     /tmp/ccYvauIM.s:7      .text.queue_create:0000000000000000 queue_create
+     /tmp/ccYvauIM.s:162    .text.raw_queue_pushdata:0000000000000000 raw_queue_pushdata
+     /tmp/ccYvauIM.s:248    .text.queue_push:0000000000000000 queue_push
+     /tmp/ccYvauIM.s:354    .text.raw_queue_pop:0000000000000000 raw_queue_pop
+     /tmp/ccYvauIM.s:438    .text.queue_pop:0000000000000000 queue_pop
+     /tmp/ccYvauIM.s:545    .text.queue_delete:0000000000000000 queue_delete
+
+UNDEFINED SYMBOLS
+_GLOBAL_OFFSET_TABLE_
+osal_malloc
+memset
+osal_semp_create
+osal_mutex_create
+osal_semp_del
+osal_free
+__stack_chk_fail
+osal_semp_pend
+osal_mutex_lock
+osal_mutex_unlock
+osal_semp_post
+osal_mutex_del
