@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,33 +22,31 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-#ifndef __AT_H
-#define __AT_H
+#ifndef AT_H
+#define AT_H
 
 #include <stdint.h>
 #include <stddef.h>
 #include <stdio.h>
 #include "osal.h"
 
-
-typedef int (*fn_at_oob)(void *args,void *data,size_t datalen);
-
+typedef int (*fn_at_oob)(void *args, void *data, size_t datalen);
 
 /**
  * @brief: use this function to do the at client framwork initialized
  *
  * @return:0 success while -1 failed
- * */
+ *  */
 int at_init(void);
 
 /**
@@ -60,8 +58,8 @@ int at_init(void);
  * @paarm[in]:args, supply for the registered function
  *
  * @return:0 success while -1 failed
- * */
-int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,void *args);
+ *  */
+int at_oobregister(const char *name, const void *index, size_t len, fn_at_oob func, void *args);
 
 /**
  * @brief:use this function to register a function that monitor the URC message
@@ -73,15 +71,13 @@ int at_oobregister(const char *name,const void *index,size_t len,fn_at_oob func,
  * @param[in]:timeout, the time you may wait for the response;and the unit is ms
  *
  * @return:>=0 success (return the received data length) while -1 failed
- * */
+ *  */
 
-int at_command(const void *cmd, size_t cmdlen,const char *index,\
-                void *respbuf,size_t respbuflen,uint32_t timeout);
+int at_command(const void *cmd, size_t cmdlen, const char *index, void *respbuf, size_t respbuflen, uint32_t timeout);
 
 int at_streammode_set(int mode);
 
 int at_debugclose(void);
-
 
 
 #endif

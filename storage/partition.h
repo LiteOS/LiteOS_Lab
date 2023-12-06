@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,27 +22,26 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
-#include "storage.h"
+ * --------------------------------------------------------------------------- */
 
 #ifndef STORAGE_PARTITION_H
 #define STORAGE_PARTITION_H
+#include "storage.h"
 
 typedef struct _partition {
-  uint8_t dev_id;
-  char *name;
-  uint32_t start_addr;
-  uint32_t size;
-}storage_partition;
+    uint8_t dev_id;
+    char *name;
+    uint32_t start_addr;
+    uint32_t size;
+} storage_partition;
 
 int storage_partition_init(storage_partition *part, int32_t max_num);
 

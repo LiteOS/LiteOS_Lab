@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,24 +22,23 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 /**
- *  DATE                      INSTRUCTION
- *  2020-07-21 18:43   The first version
+ * DATE                      INSTRUCTION
+ * 2020-07-21 18:43   The first version
  *
  */
 
-#include "oc_mqtt_event.h"
 #include "oc_mqtt_profile.h"
-
+#include "oc_mqtt_event.h"
 /**
 Topic: $oc/devices/{device_id}/sys/events/up
 数据格式：
@@ -56,47 +55,42 @@ Topic: $oc/devices/{device_id}/sys/events/up
     }]
 }
 */
-///< you could use this function to report the software or firmware version
-int oc_mqtt_report_version(const char *deviceID,const char *objectDeviceID, const char *softVersion, const char *firmVersion)
+
+//  you could use this function to report the software or firmware version
+int oc_mqtt_report_version(const char *deviceID, const char *objectDeviceID, const char *softVersion,
+    const char *firmVersion)
 {
     int ret = -1;
-    oc_mqtt_profile_kv_t    firmVer;
-    oc_mqtt_profile_kv_t    softVer;
+    oc_mqtt_profile_kv_t firmVer;
+    oc_mqtt_profile_kv_t softVer;
     oc_mqtt_profile_kv_t *cur = NULL;
     oc_mqtt_profile_event_t event;
-
-    if(softVersion != NULL){
+    if (softVersion != NULL) {
         softVer.key = CN_OC_JSON_KEY_SWVERSION;
         softVer.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
         softVer.value = (void *)softVersion;
         softVer.nxt = cur;
         cur = &softVer;
     }
-
-    if(firmVersion != NULL){
-        firmVer.key =  CN_OC_JSON_KEY_FWVERSION;
+    if (firmVersion != NULL) {
+        firmVer.key = CN_OC_JSON_KEY_FWVERSION;
         firmVer.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
         firmVer.value = (void *)firmVersion;
         firmVer.nxt = cur;
         cur = &firmVer;
     }
-
     event.object_device_id = (char *)objectDeviceID;
     event.event_time = NULL;
     event.event_type = CN_OC_MQTT_EVENTTYPE_VERSIONREPORT;
     event.service_id = "$ota";
     event.paras = cur;
-
     ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
-
     return ret;
 }
 
-
-
-///< data format
-//Topic: $oc/devices/{device_id}/sys/events/up
-//{
+//  data format
+// Topic: $oc/devices/{device_id}/sys/events/up
+// {
 //    "object_device_id": "{object_device_id}",
 //    "services": [{
 //        "service_id": "$ota",
@@ -109,46 +103,40 @@ int oc_mqtt_report_version(const char *deviceID,const char *objectDeviceID, cons
 //            "description": "upgrade processing"
 //        }
 //    }]
-//}
-int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDeviceID, int upgraderet, const char *version, int progress)
+// }
+int oc_mqtt_report_upgradeprogress(const char *deviceID, const char *objectDeviceID, int upgraderet,
+    const char *version, int progress)
 {
     int ret = -1;
-    oc_mqtt_profile_kv_t    prog;
-    oc_mqtt_profile_kv_t    resultCode;
-    oc_mqtt_profile_kv_t    ver;
-    oc_mqtt_profile_kv_t   *cur = NULL;
+    oc_mqtt_profile_kv_t prog;
+    oc_mqtt_profile_kv_t resultCode;
+    oc_mqtt_profile_kv_t ver;
+    oc_mqtt_profile_kv_t *cur = NULL;
     oc_mqtt_profile_event_t event;
-
     resultCode.key = CN_OC_JSON_KEY_RESULTCODE;
     resultCode.type = EN_OC_MQTT_PROFILE_VALUE_INT;
     resultCode.value = &upgraderet;
     resultCode.nxt = cur;
     cur = &resultCode;
-
-    if(version != NULL){
-        ver.key =  CN_OC_JSON_KEY_VERSION;
+    if (version != NULL) {
+        ver.key = CN_OC_JSON_KEY_VERSION;
         ver.type = EN_OC_MQTT_PROFILE_VALUE_STRING;
-        ver.value =(void *) version;
+        ver.value = (void *)version;
         ver.nxt = cur;
         cur = &ver;
     }
-
-    if((progress >= 0)&& (progress <= 100)){
-        prog.key =  CN_OC_JSON_KEY_PROGRESS;
+    if ((progress >= 0) && (progress <= 100)) {
+        prog.key = CN_OC_JSON_KEY_PROGRESS;
         prog.type = EN_OC_MQTT_PROFILE_VALUE_INT;
         prog.value = &progress;
         prog.nxt = cur;
         cur = &prog;
     }
-
     event.object_device_id = (char *)objectDeviceID;
     event.event_time = NULL;
     event.event_type = CN_OC_MQTT_EVENTTYPE_UPGRADEPROGRESSREPORT;
     event.service_id = "$ota";
     event.paras = cur;
-
     ret = oc_mqtt_profile_reportevent((char *)deviceID, &event);
-
     return ret;
 }
-

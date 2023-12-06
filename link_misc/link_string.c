@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,26 +22,23 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
-
+ * --------------------------------------------------------------------------- */
 #include <stdint.h>
 #include <stddef.h>
 #include <string.h>
-
 #include "osal.h"
-//this function is used to format the char string to the argc mode
-//this function will changed the original string, used it carefully
-//return how many arguments has been
-int string_to_arg(int *argc, const char *argv[],char *string)
+// this function is used to format the char string to the argc mode
+// this function will changed the original string, used it carefully
+// return how many arguments has been
+int string_to_arg(int *argc, const char *argv[], char *string)
 {
     int argvlen = 0;
     int paramnum = 0;
@@ -51,30 +48,24 @@ int string_to_arg(int *argc, const char *argv[],char *string)
 
     argvlen = *argc;
     *argc = paramnum;
-    if(NULL == string)
-    {
+    if (NULL == string) {
         return paramnum;
     }
 
-    //use the '\0' to replace the ' '
+    // use the '\0' to replace the ' '
     len = strlen(string);
     tmp = string;
-    while(tmp < (string + len))
-    {
-        if(*tmp == ' ')
-        {
+    while (tmp < (string + len)) {
+        if (*tmp == ' ') {
             *tmp = '\0';
         }
         tmp++;
     }
     bak = '\0';
     tmp = string;
-    while(tmp < (string + len))
-    {
-        if((*tmp != '\0')&&(bak =='\0'))
-        {
-            if(paramnum < argvlen)
-            {
+    while (tmp < (string + len)) {
+        if ((*tmp != '\0') && (bak == '\0')) {
+            if (paramnum < argvlen) {
                 argv[paramnum] = tmp;
                 paramnum++;
             }
@@ -83,24 +74,22 @@ int string_to_arg(int *argc, const char *argv[],char *string)
         tmp++;
     }
     *argc = paramnum;
-
     return paramnum;
 }
-
 
 char *osal_strdup(const char *ch)
 {
     char *copy;
     size_t length;
 
-    if(NULL == ch)
+    if (NULL == ch)
         return NULL;
 
     length = strlen(ch);
     copy = (char *)osal_malloc(length + 1);
-    if(NULL == copy)
+    if (NULL == copy)
         return NULL;
-    (void) strncpy(copy, ch, length);
+    (void)strncpy(copy, ch, length);
     copy[length] = '\0';
 
     return copy;
@@ -114,25 +103,20 @@ char *osal_strcat(char *str[])
     int str_off = 0;
     int i = 0;
 
-    if(NULL == str)
-    {
+    if (NULL == str) {
         return ret;
     }
 
-    while(NULL != str[i])
-    {
+    while (NULL != str[i]) {
         str_tlen += strlen(str[i]);
         str_tnum++;
         i++;
     }
 
     ret = osal_malloc(str_tlen);
-    if(NULL != ret)
-    {
-        for(i =0;i< str_tnum;i++)
-        {
-
-            (void) memcpy(ret + str_off,str[i],strlen(str[i]));
+    if (NULL != ret) {
+        for (i = 0; i < str_tnum; i++) {
+            (void)memcpy(ret + str_off, str[i], strlen(str[i]));
             str_off += strlen(str[i]);
         }
         ret[str_off] = '\0';
@@ -174,75 +158,55 @@ int hexstr2byte(const char *buf, int len, char *bufout)
     uint8_t low;
     uint8_t high;
 
-    if (NULL == buf || len <= 0 || NULL == bufout)
-    {
+    if (NULL == buf || len <= 0 || NULL == bufout) {
         return ret;
     }
 
     ret = 0;
-    for(i = 0; i < len; i = i+2)
-    {
-        if(((buf[i]) >= '0') && (buf[i] <= '9'))
-        {
-            high = (uint8_t)( buf[i] - '0');
-        }
-        else if((buf[i] >= 'A') && (buf[i] <= 'F'))
-        {
-            high = (uint8_t)( buf[i] - 'A') + 10;
-        }
-        else if((buf[i] >= 'a') && (buf[i] <= 'f'))
-        {
-            high = (uint8_t)( buf[i] - 'a') + 10;
-        }
-        else
-        {
+    for (i = 0; i < len; i = i + 2) {
+        if (((buf[i]) >= '0') && (buf[i] <= '9')) {
+            high = (uint8_t)(buf[i] - '0');
+        } else if ((buf[i] >= 'A') && (buf[i] <= 'F')) {
+            high = (uint8_t)(buf[i] - 'A') + 10;
+        } else if ((buf[i] >= 'a') && (buf[i] <= 'f')) {
+            high = (uint8_t)(buf[i] - 'a') + 10;
+        } else {
             ret = -1;
             break;
         }
 
-        if(((buf[i+1]) >= '0') && (buf[i+1] <= '9'))
-        {
-            low = (uint8_t)( buf[i+1] - '0');
-        }
-        else if((buf[i+1] >= 'A') && (buf[i+1] <= 'F'))
-        {
-            low = (uint8_t)( buf[i+1] - 'A') + 10;
-        }
-        else if((buf[i+1] >= 'a') && (buf[i+1] <= 'f'))
-        {
-            low = (uint8_t)( buf[i+1] - 'a') + 10;
-        }
-        else
-        {
+        if (((buf[i + 1]) >= '0') && (buf[i + 1] <= '9')) {
+            low = (uint8_t)(buf[i + 1] - '0');
+        } else if ((buf[i + 1] >= 'A') && (buf[i + 1] <= 'F')) {
+            low = (uint8_t)(buf[i + 1] - 'A') + 10;
+        } else if ((buf[i + 1] >= 'a') && (buf[i + 1] <= 'f')) {
+            low = (uint8_t)(buf[i + 1] - 'a') + 10;
+        } else {
             ret = -1;
             break;
         }
 
-        bufout[i/2] = (char)((high<<4)|(low&0x0F));
+        bufout[i / 2] = (char)((high << 4) | (low & 0x0F));
     }
     return ret;
 }
 
-
-
-//make a byte to 2 ascii hex
+// make a byte to 2 ascii hex
 int byte2hexstr(uint8_t *bufin, int len, char *bufout)
 {
     int i = 0;
     uint8_t tmp_l = 0x0;
     uint8_t tmp_h = 0;
-    if ((NULL == bufin )|| (len <= 0 )||( NULL == bufout))
-    {
+    if ((NULL == bufin) || (len <= 0) || (NULL == bufout)) {
         return -1;
     }
-    for(i = 0; i < len; i++)
-    {
-        tmp_h = (bufin[i]>>4)&0X0F;
-        tmp_l = bufin[i] &0x0F;
-        bufout[2*i] = (tmp_h > 9)? (tmp_h - 10 + 'a'):(tmp_h +'0');
-        bufout[2*i + 1] = (tmp_l > 9)? (tmp_l - 10 + 'a'):(tmp_l +'0');
+    for (i = 0; i < len; i++) {
+        tmp_h = (bufin[i] >> 4) & 0X0F;
+        tmp_l = bufin[i] & 0x0F;
+        bufout[2 * i] = (tmp_h > 9) ? (tmp_h - 10 + 'a') : (tmp_h + '0');
+        bufout[2 * i + 1] = (tmp_l > 9) ? (tmp_l - 10 + 'a') : (tmp_l + '0');
     }
-    bufout[2*len] = '\0';
+    bufout[2 * len] = '\0';
 
     return 0;
 }

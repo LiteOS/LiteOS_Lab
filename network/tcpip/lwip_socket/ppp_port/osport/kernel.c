@@ -40,6 +40,7 @@ void task_sleepms(s32_t ms)
     LOS_TaskDelay(ms);//which tick is ms
     return;
 }
+
 s32_t task_create(const char *name, fnTaskEntry fnTask, s32_t stackisize, void *stack, void *args, s32_t prior)
 {
     int ret = -1;
@@ -53,8 +54,7 @@ s32_t task_create(const char *name, fnTaskEntry fnTask, s32_t stackisize, void *
     task_init_param.pfnTaskEntry = fnTask;
     task_init_param.uwStackSize = stackisize;
     uwRet = LOS_TaskCreate(&handle, &task_init_param);
-    if(LOS_OK != uwRet)
-    {
+    if(LOS_OK != uwRet) {
         return ret;
     }
     ret = handle;

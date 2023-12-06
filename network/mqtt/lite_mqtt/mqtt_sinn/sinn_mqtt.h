@@ -1,11 +1,9 @@
-#ifndef __SINN_MQTT_H__
-#define __SINN_MQTT_H__
+#ifndef SINN_MQTT_H
+#define SINN_MQTT_H
 #include "mqtt_packet.h"
 #include "sinn_config.h"
 
-
-typedef enum MQTT_CONNACK_RETCODE
-{
+typedef enum MQTT_CONNACK_RETCODE {
     MQTT_CONNACK_ACCEPTED = 0x0,
     MQTT_CONNACK_UNACCEPTABLE_VERSION = 0x1,
     MQTT_CONNACK_CLIENTID_REJECTED = 0x2,
@@ -14,33 +12,27 @@ typedef enum MQTT_CONNACK_RETCODE
     MQTT_CONNACK_NOT_AUTHORIZED = 0x5,
 } MQTT_CONNACK_RETCODE_e;
 
-
-
-#define EV_MQTT_BASE             0x100
-#define EV_MQTT_CONNECT          (EV_MQTT_BASE + MQTT_PACKET_TYPE_CONNECT)
-#define EV_MQTT_CONNACK          (EV_MQTT_BASE + MQTT_PACKET_TYPE_CONNACK)
-#define EV_MQTT_PUBLISH          (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBLISH)
-#define EV_MQTT_PUBACK           (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBACK)
-#define EV_MQTT_PUBREC           (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBREC)
-#define EV_MQTT_PUBREL           (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBREL)
-#define EV_MQTT_PUBCOMP          (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBCOMP)
-#define EV_MQTT_SUBSCRIBE        (EV_MQTT_BASE + MQTT_PACKET_TYPE_SUBSCRIBE)
-#define EV_MQTT_SUBACK           (EV_MQTT_BASE + MQTT_PACKET_TYPE_SUBACK)
-#define EV_MQTT_UNSUBSCRIBE      (EV_MQTT_BASE + MQTT_PACKET_TYPE_UNSUBSCRIBE)
-#define EV_MQTT_UNSUBACK         (EV_MQTT_BASE + MQTT_PACKET_TYPE_UNSUBACK)
-#define EV_MQTT_PINGREQ          (EV_MQTT_BASE + MQTT_PACKET_TYPE_PINGREQ)
-#define EV_MQTT_PINGRESP         (EV_MQTT_BASE + MQTT_PACKET_TYPE_PINGRESP)
-#define EV_MQTT_DISCONNECT       (EV_MQTT_BASE + MQTT_PACKET_TYPE_DISCONNECT)
-
-
+#define EV_MQTT_BASE 0x100
+#define EV_MQTT_CONNECT (EV_MQTT_BASE + MQTT_PACKET_TYPE_CONNECT)
+#define EV_MQTT_CONNACK (EV_MQTT_BASE + MQTT_PACKET_TYPE_CONNACK)
+#define EV_MQTT_PUBLISH (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBLISH)
+#define EV_MQTT_PUBACK (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBACK)
+#define EV_MQTT_PUBREC (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBREC)
+#define EV_MQTT_PUBREL (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBREL)
+#define EV_MQTT_PUBCOMP (EV_MQTT_BASE + MQTT_PACKET_TYPE_PUBCOMP)
+#define EV_MQTT_SUBSCRIBE (EV_MQTT_BASE + MQTT_PACKET_TYPE_SUBSCRIBE)
+#define EV_MQTT_SUBACK (EV_MQTT_BASE + MQTT_PACKET_TYPE_SUBACK)
+#define EV_MQTT_UNSUBSCRIBE (EV_MQTT_BASE + MQTT_PACKET_TYPE_UNSUBSCRIBE)
+#define EV_MQTT_UNSUBACK (EV_MQTT_BASE + MQTT_PACKET_TYPE_UNSUBACK)
+#define EV_MQTT_PINGREQ (EV_MQTT_BASE + MQTT_PACKET_TYPE_PINGREQ)
+#define EV_MQTT_PINGRESP (EV_MQTT_BASE + MQTT_PACKET_TYPE_PINGRESP)
+#define EV_MQTT_DISCONNECT (EV_MQTT_BASE + MQTT_PACKET_TYPE_DISCONNECT)
 
 #define MAX_PACKET_ID 0xFFFF
 
+typedef struct sinn_mqtt_proto_data sinn_mqtt_proto_data_t;
 
-typedef struct sinn_mqtt_proto_data  sinn_mqtt_proto_data_t;
-
-typedef struct sinn_mqtt_msg
-{
+typedef struct sinn_mqtt_msg {
     unsigned char type;
     EN_QOS qos;
     unsigned int len;
@@ -53,28 +45,22 @@ typedef struct sinn_mqtt_msg
     size_t topiclen;
     sinn_mqtt_proto_data_t *mqtt_data;
     void *arg;
-
-    char *ret;    // used for conret and subret
+    char *ret; // used for conret and subret
 } sinn_mqtt_msg_t;
-
-
 
 typedef void (*sinn_mqtt_msg_handler)(sinn_mqtt_msg_t *);
 
-typedef struct sinn_mqtt_proto_data
-{
+typedef struct sinn_mqtt_proto_data {
     unsigned short keep_alive;
     sinn_time_t last_time;
     unsigned int next_packetid;
-    struct MessageHandlers
-    {
+    struct MessageHandlers {
         unsigned char efficient;
-        const char* topicFilter;
+        const char *topicFilter;
         sinn_mqtt_msg_handler cb;
         void *arg;
-    } messageHandlers[SINN_MQTT_BUILTIN_NUM];      /* Message handlers are indexed by subscription topic */
+    } messageHandlers[SINN_MQTT_BUILTIN_NUM]; /* Message handlers are indexed by subscription topic */
 } sinn_mqtt_proto_data_t;
-
 
 int sinn_mqtt_packetid(sinn_connection_t *nc);
 int sinn_mqtt_connect(sinn_connection_t *nc, mqtt_connect_opt_t *options);

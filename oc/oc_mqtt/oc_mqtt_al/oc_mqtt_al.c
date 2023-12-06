@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,132 +22,107 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-#include "oc_mqtt_al.h"
+ * --------------------------------------------------------------------------- */
 #include "link_log.h"
 #include "oc_mqtt_tiny.h"
+#include "oc_mqtt_al.h"
+
 static oc_mqtt_t *s_oc_mqtt = NULL;
-///////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////
+// /////////////////////OC AGENT INSTALL INTERFACE///////////////////////////////
 int oc_mqtt_register(const oc_mqtt_t *opt)
 {
-    int ret =(int)en_oc_mqtt_err_system;
-
-    if(NULL != opt)
-    {
-        s_oc_mqtt = (oc_mqtt_t *) opt;
-        ret =(int)en_oc_mqtt_err_ok;
+    int ret = (int)en_oc_mqtt_err_system;
+    if (NULL != opt) {
+        s_oc_mqtt = (oc_mqtt_t *)opt;
+        ret = (int)en_oc_mqtt_err_ok;
     }
-
     return ret;
 }
 
-//////////////////////////APPLICATION INTERFACE/////////////////////////////////
+// ////////////////////////APPLICATION INTERFACE/////////////////////////////////
 int oc_mqtt_config(oc_mqtt_config_t *param)
 {
-    int ret =(int)en_oc_mqtt_err_system ;
-    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.config))
-    {
-       ret = s_oc_mqtt->op.config(param);
+    int ret = (int)en_oc_mqtt_err_system;
+    if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.config)) {
+        ret = s_oc_mqtt->op.config(param);
     }
-
     return ret;
 }
 
 int oc_mqtt_deconfig(void)
 {
-    int ret =(int)en_oc_mqtt_err_system;
-
-    if((NULL != s_oc_mqtt) \
-       &&(NULL != s_oc_mqtt->op.config))
-    {
-       ret = s_oc_mqtt->op.deconfig();
+    int ret = (int)en_oc_mqtt_err_system;
+    if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.config)) {
+        ret = s_oc_mqtt->op.deconfig();
     }
-
     return ret;
 }
 
-int oc_mqtt_publish(char  *topic,uint8_t *msg,int msg_len,int qos)
+int oc_mqtt_publish(char *topic, uint8_t *msg, int msg_len, int qos)
 {
-    int ret =(int)en_oc_mqtt_err_system;
-
-    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.publish))
-    {
-       ret = s_oc_mqtt->op.publish(topic,msg,msg_len,qos);
+    int ret = (int)en_oc_mqtt_err_system;
+    if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.publish)) {
+        ret = s_oc_mqtt->op.publish(topic, msg, msg_len, qos);
     }
-
     return ret;
 }
 
 int oc_mqtt_report(uint8_t *msg, int len, int qos)
 {
-    int ret =(int)en_oc_mqtt_err_system;
-
-    ret = oc_mqtt_publish(NULL,msg,len,qos);
-
+    int ret = (int)en_oc_mqtt_err_system;
+    ret = oc_mqtt_publish(NULL, msg, len, qos);
     return ret;
 }
 
-int oc_mqtt_subscribe(char *topic,int qos)
+int oc_mqtt_subscribe(char *topic, int qos)
 {
-    int ret =(int)en_oc_mqtt_err_system;
-
-    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.subscribe))
-    {
-       ret = s_oc_mqtt->op.subscribe(topic,qos);
+    int ret = (int)en_oc_mqtt_err_system;
+    if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.subscribe)) {
+        ret = s_oc_mqtt->op.subscribe(topic, qos);
     }
-
     return ret;
 }
-
 
 int oc_mqtt_unsubscribe(char *topic)
 {
-    int ret =(int)en_oc_mqtt_err_system;
-
-    if((NULL != s_oc_mqtt) &&(NULL != s_oc_mqtt->op.unsubscribe))
-    {
-       ret = s_oc_mqtt->op.unsubscribe(topic);
+    int ret = (int)en_oc_mqtt_err_system;
+    if ((NULL != s_oc_mqtt) && (NULL != s_oc_mqtt->op.unsubscribe)) {
+        ret = s_oc_mqtt->op.unsubscribe(topic);
     }
-
     return ret;
 }
 
-///////////////////////OC MQTT TINY AGENT INITIALIZE////////////////////////////
-
-__attribute__ ((weak)) int oc_mqtt_imp_init(void)
+// /////////////////////OC MQTT TINY AGENT INITIALIZE////////////////////////////
+__attribute__((weak)) int oc_mqtt_imp_init(void)
 {
-    LINK_LOG_DEBUG("%s:###please implement oc mqtt by yourself####",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement oc mqtt by yourself####", __FUNCTION__);
     return 0;
 }
 
-__attribute__ ((weak)) int oc_mqtt_demo_main(void)
+__attribute__((weak)) int oc_mqtt_demo_main(void)
 {
     LINK_LOG_WARN("Please implement the oc mqtt v5 demo yourself");
     return -1;
 }
 
-
 int oc_mqtt_init(void)
 {
     int ret;
-
     ret = oc_mqtt_imp_init();
-    LINK_LOG_DEBUG("IOT_LINK:DO OC MQTT LOAD-IMPLEMENT RET:%d",ret);
+    LINK_LOG_DEBUG("IOT_LINK:DO OC MQTT LOAD-IMPLEMENT RET:%d", ret);
 #ifdef CONFIG_OCMQTT_DEMOENABLE
-    (void) oc_mqtt_demo_main();
+    (void)oc_mqtt_demo_main();
 #endif
-
     return ret;
 }
-
 
 static const char *s_oc_mqtt_err_tab[] =
 {
@@ -169,23 +144,14 @@ static const char *s_oc_mqtt_err_tab[] =
     "system_err",
 };
 
-
-#define CN_ERR_TABITEM     (sizeof(s_oc_mqtt_err_tab)/sizeof(const char *))
-
+#define CN_ERR_TABITEM (sizeof(s_oc_mqtt_err_tab) / sizeof(const char *))
 const char *oc_mqtt_err(en_oc_mqtt_err_code_t code)
 {
     const char *ret = NULL;
-    if((unsigned int)code < CN_ERR_TABITEM)
-    {
+    if ((unsigned int)code < CN_ERR_TABITEM) {
         ret = s_oc_mqtt_err_tab[(int)code];
-    }
-    else
-    {
+    } else {
         ret = "UNKNOWN";
     }
     return ret;
 }
-
-
-
-

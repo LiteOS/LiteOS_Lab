@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #if CONFIG_SHELL_ENABLE
 
@@ -53,16 +53,17 @@ OSSHELL_EXPORT_CMD(shell_test_func,"shell_test_func","shell test func"); //expor
 static u32_t gs_shell_test_var =123;
 OSSHELL_EXPORT_VAR(gs_shell_test_var,"shell_test_var","shell test var");  //export a var demo here
 */
-//show all the task status here
+// show all the task status here
 extern UINT32 osGetAllTskInfo(VOID);
-static int shell_taskinfo(int argc,const char *argv[]){
+static int shell_taskinfo(int argc, const char *argv[])
+{
     osGetAllTskInfo();
     return 0;
 }
-OSSHELL_EXPORT_CMD(shell_taskinfo,"taskinfo","taskinfo");
+OSSHELL_EXPORT_CMD(shell_taskinfo, "taskinfo", "taskinfo");
 
-//show the memstatus here
-static int shell_heapinfo(int argc,const char *argv[])
+// show the memstatus here
+static int shell_heapinfo(int argc, const char *argv[])
 {
 #if (LOSCFG_HEAP_IMPROVED == YES)
     LOS_MemInfo(NULL, 1);
@@ -71,10 +72,9 @@ static int shell_heapinfo(int argc,const char *argv[])
 #endif
     return 0;
 }
-OSSHELL_EXPORT_CMD(shell_heapinfo,"heapinfo","heapinfo");
+OSSHELL_EXPORT_CMD(shell_heapinfo, "heapinfo", "heapinfo");
 
-
-static int shell_reboot(int argc,const char *argv[])
+static int shell_reboot(int argc, const char *argv[])
 {
     osal_reboot();
 
@@ -83,8 +83,7 @@ static int shell_reboot(int argc,const char *argv[])
     return -1;
 }
 
-OSSHELL_EXPORT_CMD(shell_reboot,"reboot","reboot");
+OSSHELL_EXPORT_CMD(shell_reboot, "reboot", "reboot");
 
 
 #endif
-

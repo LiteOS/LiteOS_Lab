@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,35 +22,35 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 /*
- *  Minimal configuration for TLS 1.2 with PSK and AES-CCM ciphersuites
+ * Minimal configuration for TLS 1.2 with PSK and AES-CCM ciphersuites
  *
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
- *  SPDX-License-Identifier: Apache-2.0
+ * Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
+ * SPDX-License-Identifier: Apache-2.0
  *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may
- *  not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
- *  This file is part of mbed TLS (https://tls.mbed.org)
+ * This file is part of mbed TLS (https://tls.mbed.org)
  */
 /*
  * Minimal configuration for TLS 1.2 with PSK and AES-CCM ciphersuites
@@ -66,7 +66,7 @@
 #define MBEDTLS_CONFIG_H
 
 /* System support */
-//#define MBEDTLS_HAVE_TIME /* Optionally used in Hello messages */
+// #define MBEDTLS_HAVE_TIME /* Optionally used in Hello messages */
 /* Other MBEDTLS_HAVE_XXX flags irrelevant for this configuration */
 
 /* mbed TLS feature support */
@@ -82,12 +82,12 @@
 #define MBEDTLS_CTR_DRBG_C
 #define MBEDTLS_ENTROPY_C
 #define MBEDTLS_MD_C
-//#define MBEDTLS_NET_C
+// #define MBEDTLS_NET_C
 #define MBEDTLS_SHA256_C
 #define MBEDTLS_SSL_CLI_C
 #define MBEDTLS_SSL_SRV_C
 #define MBEDTLS_SSL_TLS_C
-#if !defined ( __GNUC__ )  /* GCC*/
+#if !defined(__GNUC__) /* GCC */
 #define MBEDTLS_DEBUG_C
 #endif
 
@@ -104,16 +104,16 @@
 #define MBEDTLS_PLATFORM_SNPRINTF_ALT
 
 #define MBEDTLS_PLATFORM_MEMORY
-//#define MBEDTLS_PLATFORM_CALLOC_MACRO        calloc /**< Default allocator macro to use, can be undefined */
-//#define MBEDTLS_PLATFORM_FREE_MACRO            free /**< Default free macro to use, can be undefined */
+// #define MBEDTLS_PLATFORM_CALLOC_MACRO        calloc /**< Default allocator macro to use, can be undefined */
+// #define MBEDTLS_PLATFORM_FREE_MACRO            free /**< Default free macro to use, can be undefined */
 
 /* Save RAM at the expense of ROM */
-#if !defined ( __GNUC__ )  /* GCC*/
+#if !defined(__GNUC__) /* GCC */
 #define MBEDTLS_AES_ROM_TABLES
 #endif
 
 /* Save some RAM by adjusting to your exact needs */
-#define MBEDTLS_PSK_MAX_LEN    32 /* 128-bits keys are generally enough */
+#define MBEDTLS_PSK_MAX_LEN 32 /* 128-bits keys are generally enough */
 
 /*
  * You should adjust this to the exact number of sources you're using: default
@@ -127,7 +127,7 @@
  * both ends of the connection!  (See comments in "mbedtls/ssl.h".)
  * The optimal size here depends on the typical size of records.
  */
-#define MBEDTLS_SSL_MAX_CONTENT_LEN             5000
+#define MBEDTLS_SSL_MAX_CONTENT_LEN 5000
 #define MBEDTLS_SSL_MAX_FRAGMENT_LENGTH
 #define MBEDTLS_SSL_DTLS_ANTI_REPLAY
 #define MBEDTLS_SSL_ALL_ALERT_MESSAGES
@@ -136,17 +136,15 @@
 #define MBEDTLS_CIPHER_PADDING_ZEROS_AND_LEN
 #if 0 // We should support two encryption algorithm
 #define MBEDTLS_CCM_C
-#define MBEDTLS_SSL_CIPHERSUITES                        \
-        MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8
+#define MBEDTLS_SSL_CIPHERSUITES MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8
 #define MBEDTLS_WITH_ONLY_AEAD_CHIPERS
 #define MBEDTLS_ONLY_CCM_8_CHIPERS
 #else
 #define MBEDTLS_CIPHER_MODE_CBC
-#define MBEDTLS_SSL_CIPHERSUITES                        \
-        MBEDTLS_TLS_PSK_WITH_AES_128_CBC_SHA256
+#define MBEDTLS_SSL_CIPHERSUITES MBEDTLS_TLS_PSK_WITH_AES_128_CBC_SHA256
 #endif
 
-#if defined(CONFIG_FEATURE_FOTA) ||  defined(WITH_SOTA)
+#if defined(CONFIG_FEATURE_FOTA) || defined(WITH_SOTA)
 #define MBEDTLS_RSA_C
 #define MBEDTLS_BIGNUM_C
 #define MBEDTLS_OID_C
