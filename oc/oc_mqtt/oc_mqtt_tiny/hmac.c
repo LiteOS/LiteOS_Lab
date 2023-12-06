@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,19 +22,18 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 #include "hmac.h"
 
 #ifdef WITH_DTLS
-
 
 #include <string.h>
 #include "link_log.h"
@@ -47,8 +46,7 @@
 #include "mbedtls/md_internal.h"
 #include "dtls_interface.h"
 
-typedef struct _mbedtls_hmac_t
-{
+typedef struct _mbedtls_hmac_t {
     const unsigned char *secret;
     const unsigned char *input;
     unsigned char *digest;
@@ -56,7 +54,7 @@ typedef struct _mbedtls_hmac_t
     size_t input_len;
     size_t digest_len;
     mbedtls_md_type_t hmac_type;
-}mbedtls_hmac_t;
+} mbedtls_hmac_t;
 
 int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
 {
@@ -65,24 +63,21 @@ int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
     mbedtls_md_context_t mbedtls_md_ctx;
     const mbedtls_md_info_t *md_info;
 
-    if (hmac_info == NULL || hmac_info->secret == NULL || hmac_info->input == NULL
-        || hmac_info->secret_len == 0 || hmac_info->input_len == 0 || hmac_info->digest_len == 0)
-    {
+    if (hmac_info == NULL || hmac_info->secret == NULL || hmac_info->input == NULL || hmac_info->secret_len == 0 ||
+        hmac_info->input_len == 0 || hmac_info->digest_len == 0) {
         return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
     }
 
     md_info = mbedtls_md_info_from_type(hmac_info->hmac_type);
-    if (md_info == NULL || (size_t)md_info->size > hmac_info->digest_len)
-    {
+    if (md_info == NULL || (size_t)md_info->size > hmac_info->digest_len) {
         return MBEDTLS_ERR_MD_BAD_INPUT_DATA;
     }
 
     mbedtls_md_init(&mbedtls_md_ctx);
-    (void) memset(hmac_info->digest, 0x00, hmac_info->digest_len);
+    (void)memset(hmac_info->digest, 0x00, hmac_info->digest_len);
 
     ret = mbedtls_md_setup(&mbedtls_md_ctx, md_info, 1);
-    if (ret != 0)
-    {
+    if (ret != 0) {
         LINK_LOG_DEBUG("mbedtls_md_setup() returned -0x%04x\n", -ret);
         goto exit;
     }
@@ -91,13 +86,13 @@ int mbedtls_hmac_calc(mbedtls_hmac_t *hmac_info)
     (void)mbedtls_md_hmac_update(&mbedtls_md_ctx, hmac_info->input, hmac_info->input_len);
     (void)mbedtls_md_hmac_finish(&mbedtls_md_ctx, hmac_info->digest);
 
-    exit:
+exit:
     mbedtls_md_free(&mbedtls_md_ctx);
 
     return ret;
 }
 
-int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, unsigned char *buf,int buflen)
+int hmac_generate_passwd(char *content, int contentlen, char *key, int keylen, unsigned char *buf, int buflen)
 {
     int ret = -1;
     mbedtls_hmac_t hmac;
@@ -105,7 +100,7 @@ int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, uns
     hmac.secret_len = keylen;
     hmac.input = (unsigned char *)content;
     hmac.input_len = contentlen;
-    hmac.digest =(unsigned char *) buf;
+    hmac.digest = (unsigned char *)buf;
     hmac.digest_len = buflen;
     hmac.hmac_type = MBEDTLS_MD_SHA256;
 
@@ -116,5 +111,3 @@ int hmac_generate_passwd(char *content, int contentlen,char *key,int keylen, uns
 
 
 #endif
-
-

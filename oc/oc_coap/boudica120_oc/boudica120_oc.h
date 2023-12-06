@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,39 +22,36 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-
-#ifndef __BOUDICA120_OC_H
-#define __BOUDICA120_OC_H
-
+#ifndef BOUDICA120_OC_H
+#define BOUDICA120_OC_H
 
 /**
- *@brief this function should be called after oc_coap_init()
+ * @brief this function should be called after oc_coap_init()
  *
  */
 int oc_coap_imp_init(void);
 
 /**
- *@brief this function to get the csq of the MODULES
+ * @brief this function to get the csq of the MODULES
  *
- *@param[in]  value, storage the csq
- *@param[out] value, the csq get
+ * @param[in]  value, storage the csq
+ * @param[out] value, the csq get
  *
- *return 0 success while <0 failed
+ * return 0 success while <0 failed
  */
 int boudica120_get_csq(int *value);
 
 int *boudica120_check_nuestats(void);
 
 
-
-#endif /* __BOUDICA120_OC_H */
+#endif /* BOUDICA120_OC_H */

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,17 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
-#include  "osal_imp.h"
+ * --------------------------------------------------------------------------- */
 
 #include <string.h>
 #include <stdio.h>
@@ -44,21 +42,22 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <signal.h>
+#include "osal_imp.h"
 
-typedef void *(*pthread_entry) (void *);
+typedef void *(*pthread_entry)(void *);
 
 static void __task_sleep(int ms)
 {
-    usleep(ms*1000);
+    usleep(ms * 1000);
 }
 
-static void *__task_create(const char *name,int (*task_entry)(void *args),\
-        void *args,int stack_size,void *stack,int prior)
+static void *__task_create(const char *name, int (*task_entry)(void *args), void *args, int stack_size, void *stack,
+    int prior)
 {
     void *ret = NULL;
     pthread_t pid;
 
-    if(pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
+    if (pthread_create(&pid, NULL, (pthread_entry)task_entry, args))
         return ret;
 
     ret = (void *)pid;
@@ -71,7 +70,7 @@ static int __task_kill(void *task)
     pthread_t pid;
 
     pid = (pthread_t)task;
-    (void)pthread_cancel(pid);  //MAYBE NOT EXIT YET, MAKE SURE YOU ARE THE THREAD OWNER
+    (void)pthread_cancel(pid); // MAYBE NOT EXIT YET, MAKE SURE YOU ARE THE THREAD OWNER
 
     ret = pthread_join(pid, NULL);
     return ret;
@@ -82,48 +81,36 @@ static void __task_exit()
     pthread_exit(NULL);
 }
 
-///< this is implement for the mutex
-//creat a mutex for the os
-static bool_t  __mutex_create(osal_mutex_t *mutex)
+//  this is implement for the mutex
+// creat a mutex for the os
+static bool_t __mutex_create(osal_mutex_t *mutex)
 {
     pthread_mutex_t *m;
     m = malloc(sizeof(pthread_mutex_t));
     *mutex = m;
-    if(!pthread_mutex_init((pthread_mutex_t *)m,NULL))
-    {
+    return (!pthread_mutex_init((pthread_mutex_t *)m, NULL));
+}
+
+// lock the mutex
+static bool_t __mutex_lock(osal_mutex_t mutex)
+{
+    return (!pthread_mutex_lock((pthread_mutex_t *)mutex));
+}
+
+// unlock the mutex
+static bool_t __mutex_unlock(osal_mutex_t mutex)
+{
+    if (!pthread_mutex_unlock((pthread_mutex_t *)mutex)) {
+        usleep(1000); //  make sure that other thread could get the mutex
         return true;
     }
 
     return false;
 }
-
-//lock the mutex
-static bool_t  __mutex_lock(osal_mutex_t mutex)
+// delete the mutex
+static bool_t __mutex_del(osal_mutex_t mutex)
 {
-    if(!pthread_mutex_lock((pthread_mutex_t *)mutex))
-    {
-        return true;
-    }
-
-    return false;
-}
-
-//unlock the mutex
-static bool_t  __mutex_unlock(osal_mutex_t mutex)
-{
-    if(!pthread_mutex_unlock((pthread_mutex_t *)mutex))
-    {
-        usleep(1000);   ///< make sure that other thread could get the mutex
-        return true;
-    }
-
-    return false;
-}
-//delete the mutex
-static bool_t  __mutex_del(osal_mutex_t mutex)
-{
-    if(!pthread_mutex_destroy((pthread_mutex_t *)mutex))
-    {
+    if (!pthread_mutex_destroy((pthread_mutex_t *)mutex)) {
         free(mutex);
         return true;
     }
@@ -131,117 +118,87 @@ static bool_t  __mutex_del(osal_mutex_t mutex)
     return false;
 }
 
-///< this is implement for the semp
-//semp of the os
-static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
+//  this is implement for the semp
+// semp of the os
+static bool_t __semp_create(osal_semp_t *semp, int limit, int initvalue)
 {
     sem_t *s;
 
     s = malloc(sizeof(sem_t));
-    if(NULL == s)
-    {
+    if (NULL == s) {
         return false;
     }
-    
 
-    if(sem_init(s, 0, initvalue))
-    {
+    if (sem_init(s, 0, initvalue)) {
         free(s);
         return false;
-    }
-    else
-    {
+    } else {
         *semp = s;
         return true;
     }
 }
 
-static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
+static bool_t __semp_pend(osal_semp_t semp, unsigned int timeout)
 {
     struct timespec ts;
 
-    if(timeout == cn_osal_timeout_forever)
-    {
-        ///< wait until we get the semaphore
-        if(0 == sem_wait((sem_t *)semp))
-        {
+    if (timeout == cn_osal_timeout_forever) {
+        //  wait until we get the semaphore
+        if (0 == sem_wait((sem_t *)semp)) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
-    }
-    else if(timeout > 0)
-    {
+    } else if (timeout > 0) {
         clock_gettime(CLOCK_REALTIME, &ts);
 
         ts.tv_sec += (timeout / 1000);
         ts.tv_nsec += ((timeout % 1000) * 1000);
-        if(sem_timedwait((sem_t *)semp, &ts))
-        {
+        if (sem_timedwait((sem_t *)semp, &ts)) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
-    }
-    else if(timeout == 0)
-    {
-        ///< try to wait the semaphore
-        if(0 == sem_trywait((sem_t *)semp))
-        {
+    } else if (timeout == 0) {
+        //  try to wait the semaphore
+        if (0 == sem_trywait((sem_t *)semp)) {
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
-    }
-    else
-    {
-        ///< this is a overflow time, i think
+    } else {
+        //  this is a overflow time, i think
         return false;
     }
 }
 
-static bool_t  __semp_post(osal_semp_t semp)
+static bool_t __semp_post(osal_semp_t semp)
 {
-    if(sem_post((sem_t *)semp))
-    {
-        return false;
-    }
-    else
-    {
-        return true;
-    }
+    return (sem_post((sem_t *)semp));
 }
 
-static bool_t  __semp_del(osal_semp_t semp)
+static bool_t __semp_del(osal_semp_t semp)
 {
-    if(sem_destroy((sem_t *)semp))
+    if (sem_destroy((sem_t *)semp))
         return false;
-    else
-    {
+    else {
         free(semp);
         return true;
     }
 }
 
-///< sys time
+//  sys time
 #include <sys/time.h>
 static unsigned long long __get_sys_time()
 {
-    struct    timeval    tv;
+    struct timeval tv;
 
     gettimeofday(&tv, NULL);
 
     return ((unsigned long long)tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
-static const tag_os_ops s_linux_ops =
-{
+static const tag_os_ops s_linux_ops = {
     .task_sleep = __task_sleep,
     .task_create = __task_create,
     .task_kill = __task_kill,
@@ -264,8 +221,7 @@ static const tag_os_ops s_linux_ops =
     .get_sys_time = __get_sys_time,
 };
 
-static const tag_os s_link_linux =
-{
+static const tag_os s_link_linux = {
     .name = "Linux",
     .ops = &s_linux_ops,
 };
@@ -275,7 +231,7 @@ int os_imp_init(void)
     int ret = -1;
 
     ret = osal_install(&s_link_linux);
-    sigaction(SIGPIPE, &(struct sigaction){{SIG_IGN}}, NULL);
+    sigaction(SIGPIPE, &(struct sigaction) { { SIG_IGN } }, NULL);
 
     return ret;
 }

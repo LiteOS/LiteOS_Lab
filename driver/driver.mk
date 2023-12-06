@@ -15,5 +15,3 @@ ifeq ($(CONFIG_DRIVER_ENABLE),y)
     C_DEFS += $(DRIVER_MODULE_DEF)
     
 endif
-
-

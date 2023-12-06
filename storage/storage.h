@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,34 +22,32 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-
-#ifndef SOTRAGE_SOTRAGE_H
-#define SOTRAGE_SOTRAGE_H
+#ifndef SOTRAGE_H
+#define SOTRAGE_H
 
 #include <stdint.h>
 #include <stddef.h>
 
 typedef struct {
-  int id;
-  char *name;
-  uint32_t size;
-
-  void (*init)(void);
-  int (*read)(void *buf, int32_t len, uint32_t offset);
-  int (*write)(const uint8_t *buf, int32_t len, uint32_t offset);
-  int (*erase)(uint32_t offset, int32_t len);
-  int (*erase_write)(const void *buf, int32_t len, uint32_t offset);
-}storage_device;
+    int id;
+    char *name;
+    uint32_t size;
+    void (*init)(void);
+    int (*read)(void *buf, int32_t len, uint32_t offset);
+    int (*write)(const uint8_t *buf, int32_t len, uint32_t offset);
+    int (*erase)(uint32_t offset, int32_t len);
+    int (*erase_write)(const void *buf, int32_t len, uint32_t offset);
+} storage_device;
 
 int storage_dev_install(storage_device *dev, uint32_t max_num);
 int storage_dev_uninstall();
@@ -57,4 +55,4 @@ int storage_device_erase(uint32_t dev_id, uint32_t addr, uint32_t len);
 int storage_device_erase_write(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
 int storage_device_write(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
 int storage_device_read(uint32_t dev_id, uint8_t *buf, uint32_t len, uint32_t addr);
-#endif /* SOTRAGE_SOTRAGE_H */
+#endif /* SOTRAGE_H */

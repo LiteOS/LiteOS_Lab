@@ -8,7 +8,6 @@ sinn_time_t sinn_gettime_ms(void)
     return osal_sys_time();
 }
 
-
 static void sinn_buf_malloc(sinn_buf_t *abuf, size_t size)
 {
     abuf->size = size;
@@ -33,20 +32,19 @@ void sinn_init(sinn_manager_t *m, sinn_device_info_t *param)
 {
     LINK_LOG_DEBUG("sinn init\r\n");
 
-    m->interface = (sinn_if_t *)osal_malloc(sizeof(sinn_if_t));   //TODO  check malloc and osal_malloc
+    m->interface = (sinn_if_t *)osal_malloc(sizeof(sinn_if_t)); // TODO  check malloc and osal_malloc
     m->interface->mgr = m;
 
     m->interface->ifuncs = param->ifuncs;
     m->interface->ifuncs->if_init(m->interface);
 }
 
-sinn_connection_t* sinn_connect(sinn_manager_t *m, sinn_event_handler cb, sinn_connect_param_t *param)
+sinn_connection_t *sinn_connect(sinn_manager_t *m, sinn_event_handler cb, sinn_connect_param_t *param)
 {
     int ret = 0;
     sinn_connection_t *nc = NULL;
     LINK_LOG_DEBUG("sinn connect\r\n");
-    if ((nc = (sinn_connection_t *)osal_malloc(sizeof(sinn_connection_t))) != NULL)
-    {
+    if ((nc = (sinn_connection_t *)osal_malloc(sizeof(sinn_connection_t))) != NULL) {
         nc->mgr = m;
         m->nc = nc;
         nc->flags |= (param->proto_type == SOCK_STREAM) ? 0 : SINN_FG_UDP;
@@ -60,13 +58,11 @@ sinn_connection_t* sinn_connect(sinn_manager_t *m, sinn_event_handler cb, sinn_c
         sinn_buf_malloc(&(nc->recv_buf), SINN_RECV_BUF_SIZE);
         nc->server_ip = param->server_ip;
         nc->server_port = param->server_port;
-    }
-    else
+    } else
         return nc;
 
     ret = m->interface->ifuncs->if_connect(nc);
-    if (ret)
-    {
+    if (ret) {
         sinn_destory(nc);
         return NULL;
     }
@@ -79,7 +75,7 @@ void sinn_poll(sinn_manager_t *m, int timeout_ms)
     m->interface->ifuncs->if_poll(m->nc, timeout_ms);
 }
 
-void sinn_destory(sinn_connection_t* nc)
+void sinn_destory(sinn_connection_t *nc)
 {
     if (nc && nc->mgr && nc->mgr->interface)
         osal_free(nc->mgr->interface);

@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,56 +22,54 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-#ifndef LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
-#define LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_
+#ifndef LINK_ENDIAN_H
+#define LINK_ENDIAN_H
 
+// define the normal addres function
+#define swaps(value) ((((value) & ((uint16_t)0xff00)) >> 8) | (((value) & ((uint16_t)0x00ff)) << 8))
 
-//define the normal addres function
-#define swaps(value) ((((value)&((uint16_t)0xff00))>>8)|(((value)&((uint16_t)0x00ff))<<8))
-
-#define swapl(value)  ((((value)&((uint32_t)0xff000000))>>24)|(((value)&((uint32_t)0xff0000))>>8)|\
-                      (((value)&((uint32_t)0xff00))<<8)|(((value)&((uint32_t)0xff))<<24))
+#define swapl(value)                                                                        \
+    ((((value) & ((uint32_t)0xff000000)) >> 24) | (((value) & ((uint32_t)0xff0000)) >> 8) | \
+        (((value) & ((uint32_t)0xff00)) << 8) | (((value) & ((uint32_t)0xff)) << 24))
 
 #if cfg_endian_big
 
-#define htoles(value)  swaps(value)
-#define htolel(value)  swapl(value)
-#define htobes(value)  (value)
-#define htobel(value)  (value)
+#define htoles(value) swaps(value)
+#define htolel(value) swapl(value)
+#define htobes(value) (value)
+#define htobel(value) (value)
 
 #else
-#define htoles(value)  (value)
-#define htolel(value)  (value)
-#define htobes(value)  swaps(value)
-#define htobel(value)  swapl(value)
+#define htoles(value) (value)
+#define htolel(value) (value)
+#define htobes(value) swaps(value)
+#define htobel(value) swapl(value)
 #endif
 
 #ifndef htons
-#define htons      htobes      //translate the host endian to network endian (2 Bytes)
+#define htons htobes // translate the host endian to network endian (2 Bytes)
 #endif
 
 #ifndef htonl
-#define htonl      htobel      //translate the host endian to network endian (4 Bytes)
+#define htonl htobel // translate the host endian to network endian (4 Bytes)
 #endif
 
 #ifndef ntohs
-#define ntohs      htobes      //translate the network endian to host endian (2 Bytes)
+#define ntohs htobes // translate the network endian to host endian (2 Bytes)
 #endif
 
 #ifndef ntohl
-#define ntohl      htobel      //translate the network endian to host endian (4 Bytes)
+#define ntohl htobel // translate the network endian to host endian (4 Bytes)
 #endif
 
-
-
-#endif /* LITEOS_LAB_IOT_LINK_INC_LINK_ENDIAN_H_ */
+#endif /* LINK_ENDIAN_H */

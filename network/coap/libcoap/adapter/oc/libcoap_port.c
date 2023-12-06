@@ -818,7 +818,6 @@ static int __recv(coap_al_rcvpara_t *rcvparam)
         sockets[i]->flags |= COAP_SOCKET_CAN_CONNECT;
     }
 
-
     coap_ticks((coap_tick_t *)&rcvparam->now);
     coap_read(ctx, rcvparam->now);
 

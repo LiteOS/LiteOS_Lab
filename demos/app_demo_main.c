@@ -32,12 +32,10 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#include <link_log.h>
+#include "link_log.h"
 
 __attribute__ ((weak)) int standard_app_demo_main(void)
 {
-    LINK_LOG_DEBUG("%s:###please implement app demo by yourself####\n\r",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement app demo by yourself####\n\r", __FUNCTION__);
     return -1;
 }
-
-

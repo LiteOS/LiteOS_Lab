@@ -32,8 +32,8 @@
  * applicable export control laws and regulations.
  *---------------------------------------------------------------------------*/
 
-#ifndef LITEOS_LAB_TARGETS_MACBOOK_IOT_LINK_CONFIG_H_
-#define LITEOS_LAB_TARGETS_MACBOOK_IOT_LINK_CONFIG_H_
+#ifndef IOT_LINK_CONFIG_H
+#define IOT_LINK_CONFIG_H
 
 #ifdef CONFIG_IOT_LINK_CONFIGFILE
 #include CONFIG_IOT_LINK_CONFIGFILE
@@ -41,4 +41,4 @@
 #include "iot_config.h"
 #endif
 
-#endif /* LITEOS_LAB_TARGETS_MACBOOK_IOT_LINK_CONFIG_H_ */
+#endif /* IOT_LINK_CONFIG_H */

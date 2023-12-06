@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,22 +22,21 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 
 #include <stdint.h>
 #include <stddef.h>
 
-static const uint32_t crc_table[256] =
-{
+static const uint32_t crc_table[256] = {
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419,
     0x706af48f, 0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4,
     0xe0d5e91e, 0x97d2d988, 0x09b64c2b, 0x7eb17cbd, 0xe7b82d07,
@@ -98,16 +97,14 @@ uint32_t calc_crc32(uint32_t origin, const void *buf, int32_t len)
     uint32_t crc;
     const uint8_t *pbuf;
 
-    if (NULL == buf || len < 0)
-    {
+    if (NULL == buf || len < 0) {
         return 0;
     }
 
     pbuf = (const uint8_t *)buf;
     crc = ~origin;
 
-    for (i = 0; i < len; ++i)
-    {
+    for (i = 0; i < len; ++i) {
         crc = (crc >> 8) ^ crc_table[((crc & 0xff) ^ pbuf[i]) & 0xff];
     }
 

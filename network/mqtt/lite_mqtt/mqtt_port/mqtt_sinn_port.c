@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 #include <string.h>
 
 #include "sinn_client.h"
@@ -47,13 +47,10 @@
 extern sinn_if_funcs_t sinn_nosec_if;
 extern sinn_if_funcs_t sinn_sec_if;
 
-
-typedef struct
-{
+typedef struct {
     sinn_manager_t *mgr;
-    void           *task;    //create a task for this client
+    void *task; // create a task for this client
 } sinn_mqtt_cb_t;
-
 
 static sinn_device_info_t default_dev_info;
 static osal_queue_t link_queue;
@@ -62,9 +59,8 @@ static osal_semp_t link_sem;
 static int __loop_entry(void *arg)
 {
     sinn_manager_t *mgr;
-    mgr= arg;
-    for(;;)
-    {
+    mgr = arg;
+    for (;;) {
         sinn_poll(mgr, SINN_EVENTS_HANDLE_PERIOD_MS);
     }
     return 0;
@@ -73,96 +69,72 @@ static int __loop_entry(void *arg)
 static void ev_handler(sinn_connection_t *nc, int event, void *event_data)
 {
     sinn_mqtt_msg_t *amm = (sinn_mqtt_msg_t *)event_data;
-    switch(event)
-    {
-        case SINN_EV_CONNECTED:
-            {
-                LINK_LOG_DEBUG("now mqtt connect\r\n");
-                sinn_connect_param_t * sinn_conn_param;
-                mqtt_connect_opt_t *options;
-                sinn_conn_param = (sinn_connect_param_t *)(nc->user_data);
+    switch (event) {
+        case SINN_EV_CONNECTED: {
+            LINK_LOG_DEBUG("now mqtt connect\r\n");
+            sinn_connect_param_t *sinn_conn_param;
+            mqtt_connect_opt_t *options;
+            sinn_conn_param = (sinn_connect_param_t *)(nc->user_data);
 
-                sinn_register_proto(nc, sinn_mqtt_event_handler);
-                options = (mqtt_connect_opt_t *)sinn_conn_param->protocol_con_param;
-                nc->proto_data = (void *)osal_malloc((size_t)sizeof(sinn_mqtt_proto_data_t));
-                sinn_mqtt_connect(nc, options);
-                osal_free(options);
+            sinn_register_proto(nc, sinn_mqtt_event_handler);
+            options = (mqtt_connect_opt_t *)sinn_conn_param->protocol_con_param;
+            nc->proto_data = (void *)osal_malloc((size_t)sizeof(sinn_mqtt_proto_data_t));
+            sinn_mqtt_connect(nc, options);
+            osal_free(options);
+        } break;
+        case SINN_EV_RECONN: {
+            (void)osal_semp_post(link_sem);
+        } break;
+        case EV_MQTT_CONNACK: {
+            if (amm->ret[0] == MQTT_CONNACK_ACCEPTED) {
+                osal_queue_send(link_queue, &amm->ret[0], sizeof(amm->ret[0]), 0);
+                (void)osal_semp_post(link_sem);
+            } else {
+                LINK_LOG_DEBUG("MQTT Connect Err:%d", amm->ret[0]);
             }
-            break;
-        case SINN_EV_RECONN:
-            {
-                (void) osal_semp_post(link_sem);
-            }
-            break;
-        case EV_MQTT_CONNACK:
-            {
-                if (amm->ret[0] == MQTT_CONNACK_ACCEPTED)
-                {
-                    osal_queue_send(link_queue, &amm->ret[0], sizeof(amm->ret[0]), 0);
-                    (void) osal_semp_post(link_sem);
-                }
-                else
-                {
-                    LINK_LOG_DEBUG("MQTT Connect Err:%d", amm->ret[0]);
-                }
-                free(amm->ret);
-            }
-            break;
-        case EV_MQTT_SUBACK:
-            {
-                osal_queue_send(link_queue, amm->ret, 8, 0);
-                (void) osal_semp_post(link_sem);
-                free(amm->ret);
-            }
-            break;
-        case EV_MQTT_PUBLISH:
-            {
-                LINK_LOG_DEBUG("recv pushlish %s\r\n", (char *)amm->payload);
-                mqtt_puback_opt_t options;
-                options.puback_head.packet_id = amm->id;
+            free(amm->ret);
+        } break;
+        case EV_MQTT_SUBACK: {
+            osal_queue_send(link_queue, amm->ret, 8, 0);
+            (void)osal_semp_post(link_sem);
+            free(amm->ret);
+        } break;
+        case EV_MQTT_PUBLISH: {
+            LINK_LOG_DEBUG("recv pushlish %s\r\n", (char *)amm->payload);
+            mqtt_puback_opt_t options;
+            options.puback_head.packet_id = amm->id;
 
-                if (amm->qos != QOS0)
-                {
-                    if (amm->qos == QOS1)
-                    {
-                        options.type = MQTT_PACKET_TYPE_PUBACK;
-                        (void)sinn_mqtt_puback(nc, &options);
-                    }
-                    else if (amm->qos == QOS2)
-                    {
-                        options.type = MQTT_PACKET_TYPE_PUBREC;
-                        (void)sinn_mqtt_puback(nc, &options);
-                    }
+            if (amm->qos != QOS0) {
+                if (amm->qos == QOS1) {
+                    options.type = MQTT_PACKET_TYPE_PUBACK;
+                    (void)sinn_mqtt_puback(nc, &options);
+                } else if (amm->qos == QOS2) {
+                    options.type = MQTT_PACKET_TYPE_PUBREC;
+                    (void)sinn_mqtt_puback(nc, &options);
                 }
             }
-            break;
-        case EV_MQTT_PUBREC:
-            {
-                mqtt_puback_opt_t options;
-                options.puback_head.packet_id = amm->id;
-                options.type = MQTT_PACKET_TYPE_PUBREL;
-                (void)sinn_mqtt_puback(nc, &options);
-            }
-            break;
+        } break;
+        case EV_MQTT_PUBREC: {
+            mqtt_puback_opt_t options;
+            options.puback_head.packet_id = amm->id;
+            options.type = MQTT_PACKET_TYPE_PUBREL;
+            (void)sinn_mqtt_puback(nc, &options);
+        } break;
         case EV_MQTT_PUBACK:
-        case EV_MQTT_PUBCOMP:
-            {
-                (void) osal_semp_post(link_sem);
-            }
-            break;
-        case EV_MQTT_PUBREL:
-            {
-                mqtt_puback_opt_t options;
-                options.type = MQTT_PACKET_TYPE_PUBCOMP;
-                (void)sinn_mqtt_puback(nc, &options);
-            }
-            break;
+        case EV_MQTT_PUBCOMP: {
+            (void)osal_semp_post(link_sem);
+        } break;
+        case EV_MQTT_PUBREL: {
+            mqtt_puback_opt_t options;
+            options.type = MQTT_PACKET_TYPE_PUBCOMP;
+            (void)sinn_mqtt_puback(nc, &options);
+        } break;
         default:
             break;
     }
 }
 
-static void * __connect(mqtt_al_conpara_t *conparam)
+static void *__connect(mqtt_al_conpara_t *conparam)
 {
     void *ret = NULL;
     sinn_mqtt_cb_t *cb = NULL;
@@ -189,37 +161,29 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     mqtt_con_param->connect_head.mqtt_connect_flag_u.bits.user_name_flag = 1;
     mqtt_con_param->connect_payload.password = conparam->passwd.data;
 
-    if (NULL != conparam->willmsg)
-    {
+    if (NULL != conparam->willmsg) {
         mqtt_con_param->connect_head.mqtt_connect_flag_u.bits.will_flag = 1;
         mqtt_con_param->connect_head.mqtt_connect_flag_u.bits.will_qos = conparam->willmsg->qos;
         mqtt_con_param->connect_head.mqtt_connect_flag_u.bits.will_retain = conparam->willmsg->retain;
 
         mqtt_con_param->connect_payload.will_topic = conparam->willmsg->topic.data;
 
-        mqtt_con_param->connect_payload.will_msg =conparam->willmsg->msg.data;
-
-    }
-    else
-    {
+        mqtt_con_param->connect_payload.will_msg = conparam->willmsg->msg.data;
+    } else {
         mqtt_con_param->connect_head.mqtt_connect_flag_u.bits.will_flag = 0;
     }
 
-    if (NULL == conparam->security || conparam->security->type == en_mqtt_al_security_none)
-    {
+    if (NULL == conparam->security || conparam->security->type == en_mqtt_al_security_none) {
         param->ssl_param.type = en_mqtt_al_security_none;
-        #ifndef WITH_DTLS
+#ifndef WITH_DTLS
         default_dev_info.ifuncs = &sinn_nosec_if;
-        #endif
-    }
-    else
-    {
+#endif
+    } else {
         param->ssl_param.type = conparam->security->type;
-        #ifdef WITH_DTLS
-            default_dev_info.ifuncs = &sinn_sec_if;
-        #endif
-        switch(param->ssl_param.type)
-        {
+#ifdef WITH_DTLS
+        default_dev_info.ifuncs = &sinn_sec_if;
+#endif
+        switch (param->ssl_param.type) {
             case en_mqtt_al_security_psk:
                 param->ssl_param.u.psk.psk_id = (const unsigned char *)conparam->security->u.psk.psk_id.data;
                 param->ssl_param.u.psk.psk_id_len = (size_t)conparam->security->u.psk.psk_id.len;
@@ -249,17 +213,14 @@ static void * __connect(mqtt_al_conpara_t *conparam)
     osal_semp_create(&link_sem, 1, 0);
 
     mgr->nc = sinn_connect(mgr, ev_handler, param);
-    if(mgr->nc)
-    {
-        cb->task =osal_task_create("sinn",__loop_entry,mgr,0x800,NULL,4);
-        osal_semp_pend(link_sem, 5*1000);
+    if (mgr->nc) {
+        cb->task = osal_task_create("sinn", __loop_entry, mgr, 0x800, NULL, 4);
+        osal_semp_pend(link_sem, 5 * 1000);
         osal_queue_recv(link_queue, &conparam->conret, sizeof(conparam->conret), 0);
 
         ret = cb;
         return ret;
-    }
-    else
-    {
+    } else {
         conparam->conret = cn_mqtt_al_con_code_err_network;
         return NULL;
     }
@@ -271,26 +232,24 @@ static int __disconnect(void *handle)
     LINK_LOG_DEBUG("sinn mqtt disconnect\r\n");
     sinn_mqtt_cb_t *cb;
 
-    if (NULL == handle)
-    {
+    if (NULL == handle) {
         return ret;
     }
 
     cb = handle;
 
-    //mqtt disconnect
+    // mqtt disconnect
     sinn_mqtt_disconnect(cb->mgr->nc);
-    //kill the thread
+    // kill the thread
     osal_task_kill(cb->task);
-    //net disconnect
+    // net disconnect
     cb->mgr->interface->ifuncs->if_discon(cb->mgr->nc);
-    //deinit the mqtt
-    //free the memory
+    // deinit the mqtt
+    // free the memory
     sinn_destory(cb->mgr->nc);
     osal_queue_del(link_queue);
-    (void) osal_semp_del(link_sem);
-    if(cb)
-    {
+    (void)osal_semp_del(link_sem);
+    if (cb) {
         osal_free(cb);
         cb = NULL;
     }
@@ -300,8 +259,8 @@ static int __disconnect(void *handle)
 
 static void general_dealer(sinn_mqtt_msg_t *data)
 {
-    mqtt_al_msgrcv_t           msg;
-    fn_mqtt_al_msg_dealer      dealer;
+    mqtt_al_msgrcv_t msg;
+    fn_mqtt_al_msg_dealer dealer;
     msg.dup = data->dup;
     msg.qos = data->qos;
     msg.retain = data->retained;
@@ -310,15 +269,13 @@ static void general_dealer(sinn_mqtt_msg_t *data)
     msg.topic.data = data->topic;
     msg.topic.len = data->topiclen;
 
-    if (NULL != data->arg)
-    {
+    if (NULL != data->arg) {
         dealer = data->arg;
-        dealer(NULL,&msg);  ///<   the args not implement yet
+        dealer(NULL, &msg); // /<   the args not implement yet
     }
 }
 
-
-static int __subscribe(void *handle,mqtt_al_subpara_t *para)
+static int __subscribe(void *handle, mqtt_al_subpara_t *para)
 {
     int ret = -1;
     mqtt_subscribe_opt_t opt;
@@ -334,21 +291,15 @@ static int __subscribe(void *handle,mqtt_al_subpara_t *para)
     opt.subscribe_payload.topic[0] = para->topic.data;
 
     ret = sinn_mqtt_subscribe(nc, &opt, general_dealer, para->dealer);
-    if (ret > 0)
-    {
-        ret = osal_semp_pend(link_sem, 5*1000);
-        if (ret == false)
-        {
+    if (ret > 0) {
+        ret = osal_semp_pend(link_sem, 5 * 1000);
+        if (ret == false) {
             ret = -1;
             goto exit;
-        }
-        else
-        {
+        } else {
             ret = 0;
         }
-    }
-    else
-    {
+    } else {
         ret = -1;
         goto exit;
     }
@@ -363,7 +314,7 @@ exit:
     return ret;
 }
 
-static int __unsubscribe(void *handle,mqtt_al_unsubpara_t *para)
+static int __unsubscribe(void *handle, mqtt_al_unsubpara_t *para)
 {
     int ret = -1;
     mqtt_unsubscribe_opt_t opt;
@@ -378,17 +329,13 @@ static int __unsubscribe(void *handle,mqtt_al_unsubpara_t *para)
     opt.unsubscribe_payload.topic[0] = para->topic.data;
 
     ret = sinn_mqtt_unsubscribe(nc, &opt);
-    if (ret > 0)
-    {
-        ret = osal_semp_pend(link_sem, 5*1000);
-        if (ret == false)
-        {
+    if (ret > 0) {
+        ret = osal_semp_pend(link_sem, 5 * 1000);
+        if (ret == false) {
             ret = -1;
             goto exit;
         }
-    }
-    else
-    {
+    } else {
         ret = -1;
         goto exit;
     }
@@ -420,16 +367,13 @@ static int __publish(void *handle, mqtt_al_pubpara_t *para)
     opt.publish_payload.msg = para->msg.data;
     opt.publish_payload.msg_len = para->msg.len;
     ret = sinn_mqtt_publish(nc, &opt);
-    if (ret > 0)
-    {
-        ret = osal_semp_pend(link_sem, 5*1000);
+    if (ret > 0) {
+        ret = osal_semp_pend(link_sem, 5 * 1000);
         if (ret == true)
             return 0;
         else
             return -1;
-    }
-    else
-    {
+    } else {
         return -1;
     }
 }
@@ -443,12 +387,9 @@ static en_mqtt_al_connect_state __check_status(void *handle)
     cb = (sinn_mqtt_cb_t *)handle;
     nc = cb->mgr->nc;
 
-    if (!(nc->flags & SINN_FG_RECONNECT))
-    {
+    if (!(nc->flags & SINN_FG_RECONNECT)) {
         ret = en_mqtt_al_connect_ok;
-    }
-    else
-    {
+    } else {
         nc->flags &= ~SINN_FG_RECONNECT;
     }
 
@@ -459,8 +400,7 @@ int mqtt_install_sinnmqtt(void)
 {
     int ret = -1;
 
-    mqtt_al_op_t sinn_mqtt_op =
-    {
+    mqtt_al_op_t sinn_mqtt_op = {
         .connect = __connect,
         .disconnect = __disconnect,
         .subscribe = __subscribe,

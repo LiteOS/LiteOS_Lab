@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,29 +22,25 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
-
+ * --------------------------------------------------------------------------- */
 
 #include <stdint.h>
 #include <stddef.h>
 #include "oc_mqtt_assistant.h"
 
-
-///< format the report data to json string mode
-static cJSON  *json_fmt_value(tag_key_value  *disc)
+//  format the report data to json string mode
+static cJSON *json_fmt_value(tag_key_value *disc)
 {
-    cJSON  *ret = NULL;
-    switch (disc->type)
-    {
+    cJSON *ret = NULL;
+    switch (disc->type) {
         case en_key_value_type_int:
             ret = cJSON_CreateNumber((double)(*(int *)disc->buf));
             break;
@@ -54,190 +50,148 @@ static cJSON  *json_fmt_value(tag_key_value  *disc)
         default:
             break;
     }
-
     return ret;
 }
 
-cJSON *oc_mqtt_json_fmt_report(tag_oc_mqtt_report  *report)
+cJSON *oc_mqtt_json_fmt_report(tag_oc_mqtt_report *report)
 {
-    cJSON  *ret = NULL;
-    cJSON  *service_data =  NULL;
-    cJSON  *data_array = NULL;
-    cJSON  *service = NULL;
-    cJSON  *root;
-    cJSON  *tmp;
-
-    tag_key_value_list  *kvlst;
-
-    ///< create the root object
+    cJSON *ret = NULL;
+    cJSON *service_data = NULL;
+    cJSON *data_array = NULL;
+    cJSON *service = NULL;
+    cJSON *root;
+    cJSON *tmp;
+    tag_key_value_list *kvlst;
+    //  create the root object
     root = cJSON_CreateObject();
-    if(NULL == root)
-    {
+    if (NULL == root) {
         goto EXIT_CJSON_ERR;
     }
-    ///< create the msg type object and add it to the root
+    //  create the msg type object and add it to the root
     tmp = cJSON_CreateString(cn_msg_type_device_req);
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_msg_type_name,tmp);
-    ///< create the has more item and add it to the root
+    cJSON_AddItemToObject(root, cn_msg_type_name, tmp);
+    //  create the has more item and add it to the root
     tmp = cJSON_CreateNumber((double)report->hasmore);
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_has_more_name,tmp);
-    ///< create the data array and add it to the root
+    cJSON_AddItemToObject(root, cn_has_more_name, tmp);
+    //  create the data array and add it to the root
     data_array = cJSON_CreateArray();
-    if(NULL == data_array)
-    {
+    if (NULL == data_array) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_data_name,data_array);
-
-    ///< create the service and add it to the data_array
+    cJSON_AddItemToObject(root, cn_data_name, data_array);
+    //  create the service and add it to the data_array
     service = cJSON_CreateObject();
-    if(NULL == service)
-    {
+    if (NULL == service) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToArray(data_array,service);
-
-    ///< create the service id and add to the service
+    cJSON_AddItemToArray(data_array, service);
+    //  create the service id and add to the service
     tmp = cJSON_CreateString(report->serviceid);
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(service,cn_service_id_name,tmp);
-
-    ///< create the service_data object and add it  to the service
+    cJSON_AddItemToObject(service, cn_service_id_name, tmp);
+    //  create the service_data object and add it  to the service
     service_data = cJSON_CreateObject();
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(service,cn_service_data_name,service_data);
-
-    ///< loop the report data and make the corresponding k-v object,then add it to the service_data
+    cJSON_AddItemToObject(service, cn_service_data_name, service_data);
+    //  loop the report data and make the corresponding k-v object,then add it to the service_data
     kvlst = report->paralst;
-    while(NULL != kvlst)
-    {
-        ///< fmt the value to a json object
+    while (NULL != kvlst) {
+        //  fmt the value to a json object
         tmp = json_fmt_value(&kvlst->item);
-        if(NULL == tmp)
-        {
+        if (NULL == tmp) {
             goto EXIT_CJSON_ERR;
         }
-        ///< add the object to the serice data
-        cJSON_AddItemToObject(service_data,kvlst->item.name,tmp);
-
-        kvlst= kvlst->next;
+        //  add the object to the serice data
+        cJSON_AddItemToObject(service_data, kvlst->item.name, tmp);
+        kvlst = kvlst->next;
     }
-
-    ///< create the time service_data object and add it to the service
-    if(NULL != report->eventtime)
-    {
+    //  create the time service_data object and add it to the service
+    if (NULL != report->eventtime) {
         tmp = cJSON_CreateString(report->eventtime);
-        if(NULL == tmp)
-        {
+        if (NULL == tmp) {
             goto EXIT_CJSON_ERR;
         }
-        cJSON_AddItemToObject(service,cn_service_time_name,tmp);
+        cJSON_AddItemToObject(service, cn_service_time_name, tmp);
     }
-
     ret = root;
     return ret;
 
-
 EXIT_CJSON_ERR:
-    if(root)
-    {
+    if (root) {
         cJSON_Delete(root);
     }
-
     return ret;
 }
 
-cJSON *oc_mqtt_json_fmt_response(tag_oc_mqtt_response  *response)
+cJSON *oc_mqtt_json_fmt_response(tag_oc_mqtt_response *response)
 {
-    cJSON  *ret = NULL;
-    cJSON  *body =  NULL;
-    cJSON  *root;
-    cJSON  *tmp;
-
-    tag_key_value_list  *kvlst;
-
-    ///< create the root object
+    cJSON *ret = NULL;
+    cJSON *body = NULL;
+    cJSON *root;
+    cJSON *tmp;
+    tag_key_value_list *kvlst;
+    //  create the root object
     root = cJSON_CreateObject();
-    if(NULL == root)
-    {
+    if (NULL == root) {
         goto EXIT_CJSON_ERR;
     }
-    ///< create the msg type object and add it to the root
+    //  create the msg type object and add it to the root
     tmp = cJSON_CreateString(cn_msg_type_device_resp);
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_msg_type_name,tmp);
-    ///< create the mid item and add it to the root
+    cJSON_AddItemToObject(root, cn_msg_type_name, tmp);
+    //  create the mid item and add it to the root
     tmp = cJSON_CreateNumber((double)response->mid);
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_mid_name,tmp);
-    ///< create the err code item and add it to the root
+    cJSON_AddItemToObject(root, cn_mid_name, tmp);
+    //  create the err code item and add it to the root
     tmp = cJSON_CreateNumber((double)response->errcode);
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_err_code_name,tmp);
-    ///< create the has more item and add it to the root
+    cJSON_AddItemToObject(root, cn_err_code_name, tmp);
+    //  create the has more item and add it to the root
     tmp = cJSON_CreateNumber((double)response->hasmore);
-    if(NULL == tmp)
-    {
+    if (NULL == tmp) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_has_more_name,tmp);
-
-    ///< create the body object and add it to root
+    cJSON_AddItemToObject(root, cn_has_more_name, tmp);
+    //  create the body object and add it to root
     body = cJSON_CreateObject();
-    if(NULL == body)
-    {
+    if (NULL == body) {
         goto EXIT_CJSON_ERR;
     }
-    cJSON_AddItemToObject(root,cn_body_name,body);
-
-    ///< create the body paras object and add it to body
+    cJSON_AddItemToObject(root, cn_body_name, body);
+    //  create the body paras object and add it to body
     kvlst = response->bodylst;
-
-    while(NULL != kvlst)
-    {
-        ///< fmt the value to a json object
+    while (NULL != kvlst) {
+        //  fmt the value to a json object
         tmp = json_fmt_value(&kvlst->item);
-        if(NULL == tmp)
-        {
+        if (NULL == tmp) {
             goto EXIT_CJSON_ERR;
         }
-        ///< add the object to the serice data
-        cJSON_AddItemToObject(body,kvlst->item.name,tmp);
-
-        kvlst= kvlst->next;
+        //  add the object to the serice data
+        cJSON_AddItemToObject(body, kvlst->item.name, tmp);
+        kvlst = kvlst->next;
     }
-
     ret = root;
     return ret;
-
 EXIT_CJSON_ERR:
-    if(root)
-    {
+    if (root) {
         cJSON_Delete(root);
     }
-
     return ret;
 }

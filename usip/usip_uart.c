@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2019>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 #include "usart.h"
 #include "stm32f4xx.h"
 #include "los_hwi.h"
@@ -38,8 +38,8 @@
 #include "usip.h"
 #include "usip_uart.h"
 
-static USART_TypeDef*     s_pUSART = USART1;
-static uint32_t           s_uwIRQn = USART1_IRQn;
+static USART_TypeDef *s_pUSART = USART1;
+static uint32_t s_uwIRQn = USART1_IRQn;
 
 UART_HandleTypeDef usip_uart_handle;
 
@@ -48,8 +48,7 @@ static UINT32 g_send_timeout = 0;
 void usip_uart_irq(void)
 {
     uint8_t data;
-    if(__HAL_UART_GET_FLAG(&usip_uart_handle, UART_FLAG_RXNE) != RESET)   //receive Data register not empty interrupt.
-    {
+    if (__HAL_UART_GET_FLAG(&usip_uart_handle, UART_FLAG_RXNE) != RESET) { // receive Data register not empty interrupt.
         data = (uint8_t)(usip_uart_handle.Instance->DR & 0x00FF);
         receive_one_byte(data);
     }
@@ -57,7 +56,7 @@ void usip_uart_irq(void)
 
 void usip_uart_init(void)
 {
-    //initialize the usip_uart
+    // initialize the usip_uart
     usip_uart_handle.Instance = s_pUSART;
     usip_uart_handle.Init.BaudRate = 115200;
     usip_uart_handle.Init.WordLength = UART_WORDLENGTH_8B;
@@ -66,18 +65,17 @@ void usip_uart_init(void)
     usip_uart_handle.Init.Mode = UART_MODE_TX_RX;
     usip_uart_handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     usip_uart_handle.Init.OverSampling = UART_OVERSAMPLING_16;
-    if (HAL_UART_Init(&usip_uart_handle) != HAL_OK)
-    {
+    if (HAL_UART_Init(&usip_uart_handle) != HAL_OK) {
         _Error_Handler(__FILE__, __LINE__);
     }
 
-    //create a hardware interrupt to deal usip_uart_irq
+    // create a hardware interrupt to deal usip_uart_irq
     LOS_HwiCreate(s_uwIRQn, 3, 0, usip_uart_irq, 0);
 
-    __HAL_UART_CLEAR_FLAG(&usip_uart_handle,UART_FLAG_TC);
+    __HAL_UART_CLEAR_FLAG(&usip_uart_handle, UART_FLAG_TC);
 
-    //enable usip_uart UART_IT_RXNE interrupt
-    __HAL_UART_ENABLE_IT(&usip_uart_handle,UART_IT_RXNE);//Receive Data register not empty interrupt
+    // enable usip_uart UART_IT_RXNE interrupt
+    __HAL_UART_ENABLE_IT(&usip_uart_handle, UART_IT_RXNE); // Receive Data register not empty interrupt
 
     __HAL_UART_ENABLE(&usip_uart_handle);
 
@@ -86,6 +84,5 @@ void usip_uart_init(void)
 
 void send_one_byte(unsigned char data)
 {
-    HAL_UART_Transmit(&usip_uart_handle,&data,1,g_send_timeout);
+    HAL_UART_Transmit(&usip_uart_handle, &data, 1, g_send_timeout);
 }
-

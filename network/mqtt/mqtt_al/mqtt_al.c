@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistributopsn and use in source and binary forms, with or without modificatopsn,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulatopsns, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulatopsns.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #include <stdint.h>
 #include <stddef.h>
@@ -43,26 +43,21 @@ extern "C" {
 #endif /* __cplusplus */
 #endif /* __cplusplus */
 
-
 #include "mqtt_al.h"
 
+typedef struct {
+    mqtt_al_op_t *ops;
+    mqtt_al_op_t mem;
+} mqtt_al_op_cb_t;
 
-typedef struct
-{
-    mqtt_al_op_t  *ops;
-    mqtt_al_op_t   mem;
-}mqtt_al_op_cb_t;
+static mqtt_al_op_cb_t s_mqtt_al_op_cb;
 
-static mqtt_al_op_cb_t   s_mqtt_al_op_cb;
-
-
-/////////////////CREATE THE API FOR THE MQTT LIB////////////////////////////////
+// ///////////////CREATE THE API FOR THE MQTT LIB////////////////////////////////
 int mqtt_al_install(mqtt_al_op_t *op)
 {
     int ret = -1;
-    if((NULL != op)&&(NULL == s_mqtt_al_op_cb.ops))
-    {
-        s_mqtt_al_op_cb.mem  = *op;
+    if ((NULL != op) && (NULL == s_mqtt_al_op_cb.ops)) {
+        s_mqtt_al_op_cb.mem = *op;
         s_mqtt_al_op_cb.ops = &s_mqtt_al_op_cb.mem;
 
         ret = 0;
@@ -74,8 +69,7 @@ int mqtt_al_install(mqtt_al_op_t *op)
 int mqtt_al_uninstall(void)
 {
     int ret = -1;
-    if(NULL != s_mqtt_al_op_cb.ops)
-    {
+    if (NULL != s_mqtt_al_op_cb.ops) {
         s_mqtt_al_op_cb.ops = NULL;
 
         ret = 0;
@@ -84,11 +78,11 @@ int mqtt_al_uninstall(void)
     return ret;
 }
 
-//////////////////////////CREATE THE API FOR THE MQTT APPLICATopsN///////////////
+// ////////////////////////CREATE THE API FOR THE MQTT APPLICATopsN///////////////
 
-__attribute__((weak))  int mqtt_imp_init(void)
+__attribute__((weak)) int mqtt_imp_init(void)
 {
-    LINK_LOG_DEBUG("%s:###please implement mqtt by yourself####",__FUNCTION__);
+    LINK_LOG_DEBUG("%s:###please implement mqtt by yourself####", __FUNCTION__);
     return -1;
 }
 
@@ -97,118 +91,91 @@ int mqtt_al_init(void)
     int ret;
 
     ret = mqtt_imp_init();
-    LINK_LOG_DEBUG("IOT_LINK:DO MQTT LOAD-IMPLEMENT RET:%d",ret);
+    LINK_LOG_DEBUG("IOT_LINK:DO MQTT LOAD-IMPLEMENT RET:%d", ret);
 
     return ret;
 }
 
-int  mqtt_al_deinit(void)
+int mqtt_al_deinit(void)
 {
-
     int ret = 0;
 
-    //maybe need special code here
+    // maybe need special code here
 
     return ret;
 }
 
-void * mqtt_al_connect( mqtt_al_conpara_t *conpara)
+void *mqtt_al_connect(mqtt_al_conpara_t *conpara)
 {
-
     void *ret = NULL;
 
-    if((NULL != conpara) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->connect))
-    {
+    if ((NULL != conpara) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->connect)) {
         ret = s_mqtt_al_op_cb.ops->connect(conpara);
     }
 
     return ret;
-
 }
-
 
 int mqtt_al_disconnect(void *handle)
 {
-
     int ret = -1;
 
-    if((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->disconnect))
-    {
+    if ((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->disconnect)) {
         ret = s_mqtt_al_op_cb.ops->disconnect(handle);
     }
 
     return ret;
-
 }
-
 
 int mqtt_al_publish(void *handle, mqtt_al_pubpara_t *pubpara)
 {
-
     int ret = -1;
 
-    if((NULL != handle) && (NULL != pubpara) &&\
-       (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->publish))
-    {
-        ret = s_mqtt_al_op_cb.ops->publish(handle,pubpara);
+    if ((NULL != handle) && (NULL != pubpara) && (NULL != s_mqtt_al_op_cb.ops) &&
+        (NULL != s_mqtt_al_op_cb.ops->publish)) {
+        ret = s_mqtt_al_op_cb.ops->publish(handle, pubpara);
     }
 
     return ret;
-
 }
-
 
 int mqtt_al_subscribe(void *handle, mqtt_al_subpara_t *subpara)
 {
-
     int ret = -1;
 
-    if((NULL != handle) && (NULL != subpara) &&\
-       (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->subscribe))
-    {
-        ret = s_mqtt_al_op_cb.ops->subscribe(handle,subpara);
+    if ((NULL != handle) && (NULL != subpara) && (NULL != s_mqtt_al_op_cb.ops) &&
+        (NULL != s_mqtt_al_op_cb.ops->subscribe)) {
+        ret = s_mqtt_al_op_cb.ops->subscribe(handle, subpara);
     }
 
     return ret;
-
 }
-
 
 int mqtt_al_unsubscribe(void *handle, mqtt_al_unsubpara_t *unsubpara)
 {
-
     int ret = -1;
 
-    if((NULL != handle) && (NULL != unsubpara) && \
-        (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->unsubscribe))
-    {
-        ret = s_mqtt_al_op_cb.ops->unsubscribe(handle,unsubpara);
+    if ((NULL != handle) && (NULL != unsubpara) && (NULL != s_mqtt_al_op_cb.ops) &&
+        (NULL != s_mqtt_al_op_cb.ops->unsubscribe)) {
+        ret = s_mqtt_al_op_cb.ops->unsubscribe(handle, unsubpara);
     }
 
     return ret;
-
 }
 
 en_mqtt_al_connect_state mqtt_al_check_status(void *handle)
 {
-
     en_mqtt_al_connect_state ret = en_mqtt_al_connect_err;
 
-    if((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->check_status))
-    {
+    if ((NULL != handle) && (NULL != s_mqtt_al_op_cb.ops) && (NULL != s_mqtt_al_op_cb.ops->check_status)) {
         ret = s_mqtt_al_op_cb.ops->check_status(handle);
     }
 
     return ret;
 }
 
-
-
-
 #ifdef __cplusplus
 #if __cplusplus
 }
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
-
-

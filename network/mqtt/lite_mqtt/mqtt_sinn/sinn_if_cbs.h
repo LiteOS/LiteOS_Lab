@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,27 +22,27 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-
-#ifndef __SINN_IF_CBS_H__
-#define __SINN_IF_CBS_H__
+#ifndef SINN_IF_CBS_H
+#define SINN_IF_CBS_H
 
 #include "sinn_client.h"
 
-void sinn_dispatch_event(sinn_connection_t *nc, sinn_event_handler event_handler, void *user_data, int event, void *event_data);
+void sinn_dispatch_event(sinn_connection_t *nc, sinn_event_handler event_handler, void *user_data, int event,
+    void *event_data);
 void sinn_nc_connect_cb(sinn_connection_t *nc);
 void sinn_nc_can_write_cb(sinn_connection_t *nc);
 void sinn_nc_can_read_cb(sinn_connection_t *nc);
 int sinn_nc_poll_cb(sinn_connection_t *nc);
 void sinn_mgr_handle_conn(sinn_connection_t *nc);
 
-#endif /* __SINN_IF_CBS_H__ */
+#endif /* SINN_IF_CBS_H */
