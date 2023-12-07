@@ -1,7 +1,3 @@
-/*
- * sal_imp.h
- */
-
 #ifndef SAL_IMP_H
 #define SAL_IMP_H
 

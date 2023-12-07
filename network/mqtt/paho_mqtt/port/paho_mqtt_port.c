@@ -69,8 +69,7 @@ typedef struct {
     int stoped;
 } paho_mqtt_cb_t;
 
-// /< waring: the paho mqtt has the opposite return code with normal socket read and write
-
+// waring: the paho mqtt has the opposite return code with normal socket read and write
 static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret = -1;
@@ -92,6 +91,7 @@ static int __tls_read(void *ssl, unsigned char *buffer, int len, int timeout)
 
     return ret;
 }
+
 static int __tls_write(void *ssl, unsigned char *buffer, int len, int timeout)
 {
     int ret = -1;
@@ -141,7 +141,6 @@ static int __tls_connect(Network *n, const char *addr, int port)
     ret = dtls_al_connect(handle, addr, port_buf, CONFIG_PAHO_CONNECT_TIMEOUT);
     if (ret != EN_DTLS_AL_ERR_OK) {
         dtls_al_destroy(handle);
-
         ret = -1;
         return ret;
     } else {
@@ -161,7 +160,7 @@ static void __tls_disconnect(void *ctx)
     return;
 }
 
-// /< receve function: return code:0 means timeout -1:failed  > receive length
+// receve function: return code:0 means timeout -1:failed  > receive length
 static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
 {
     int fd;
@@ -174,12 +173,12 @@ static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
         return ret;
     }
 
-    fd = (int)(intptr_t)ctx; // /< socket could be zero
+    fd = (int)(intptr_t)ctx; // socket could be zero
 
     timedelay.tv_sec = timeout / 1000;
     timedelay.tv_usec = (timeout % 1000) * 1000;
 
-    // /< set the recv timeout
+    // set the recv timeout
     if (0 != sal_setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timedelay, sizeof(timedelay))) {
         return ret; // could not support the rcv timeout
     }
@@ -195,7 +194,7 @@ static int __socket_read(void *ctx, unsigned char *buf, int len, int timeout)
     return ret;
 }
 
-// /< receve function: return code:0 means timeout -1:failed  > receive length
+// receve function: return code:0 means timeout -1:failed  > receive length
 static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
 {
     int fd;
@@ -208,12 +207,12 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
         return ret;
     }
 
-    fd = (int)(intptr_t)ctx; // /< THE SOCKET COULD BE ZERO
+    fd = (int)(intptr_t)ctx; // THE SOCKET COULD BE ZERO
 
     timedelay.tv_sec = timeout / 1000;
     timedelay.tv_usec = (timeout % 1000) * 1000;
 
-    // /< set the recv timeout
+    // set the recv timeout
     if (0 != sal_setsockopt(fd, SOL_SOCKET, SO_SNDTIMEO, &timedelay, sizeof(timedelay))) {
         return ret; // could not support the rcv timeout
     }
@@ -228,18 +227,20 @@ static int __socket_write(void *ctx, unsigned char *buf, int len, int timeout)
     }
     return ret;
 }
+
 static void __socket_disconnect(void *ctx)
 {
     (void)sal_closesocket((int)(intptr_t)ctx);
     return;
 }
+
 static int __socket_connect(Network *n, const char *host, int port)
 {
     int ret = -1;
     int fd = -1;
     struct sockaddr_in addr;
 
-    // /< first we try use the gethostbyname to get the ip address, the host maybe a domain name
+    // first we try use the gethostbyname to get the ip address, the host maybe a domain name
     struct hostent *entry = NULL;
     entry = sal_gethostbyname(host);
     if (!(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET))) {
@@ -320,7 +321,7 @@ static void __io_disconnect(Network *n)
     return;
 }
 
-// /< make the mqtt io loop read or write
+// make the mqtt io loop read or write
 static int mqtt_io_read(Network *n, unsigned char *buffer, int len, int timeout_ms)
 {
     int ret = -1;
@@ -372,7 +373,8 @@ static int mqtt_io_write(Network *n, unsigned char *buffer, int len, int timeout
 
     return ret;
 }
-// /////////////////////CREATE THE API FOR THE MQTT_AL///////////////////////////
+
+///////////////////////CREATE THE API FOR THE MQTT_AL///////////////////////////
 void __mqtt_cb_stop(paho_mqtt_cb_t *cb)
 {
     if (NULL != cb) {
@@ -391,9 +393,8 @@ static int __loop_entry(void *arg)
         if ((NULL != cb) && MQTTIsConnected(&cb->client)) {
             (void)MQTTYield(&cb->client, CONFIG_PAHO_LOOPTIMEOUT);
         }
-        // /< for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
-
-        osal_task_sleep(1); // /< when disconnect, this has been killed
+        // for some operation system ,the task could not be awake when release,so do some wait to give up the cpu
+        osal_task_sleep(100); // when disconnect, this has been killed
     }
     cb->stoped = 1;
 
@@ -536,7 +537,7 @@ static int __disconnect(void *handle)
     LINK_LOG_DEBUG("PAHO MAKE THE TASK TO EXIT");
     __mqtt_cb_stop(cb);
 
-    while (0 == cb->stoped) { // /< wait for the loop to exit
+    while (0 == cb->stoped) { // wait for the loop to exit
         osal_task_sleep(1000);
     }
     osal_task_kill(cb->task);
@@ -561,7 +562,7 @@ static int __disconnect(void *handle)
  * Copyright (c) 2009-2018 Roger Light <roger@atchoo.org>
  * licensed under the Eclipse Public License 1.0 and the Eclipse Distribution License 1.0
  */
-// /< we changge the lib to support the args
+// we changge the lib to support the args
 static void general_dealer(MessageData *data)
 {
     mqtt_al_msgrcv_t msg;
@@ -582,11 +583,11 @@ static void general_dealer(MessageData *data)
 
     if (NULL != data->arg) {
         dealer = data->arg;
-        dealer((void *)data->arg, &msg); // /<   the args not implement yet
+        dealer((void *)data->arg, &msg); // the args not implement yet
     }
 }
 
-// ////////////////////END --PATCH FOR PAHO MQTT/////////////////////////////////
+//////////////////////END --PATCH FOR PAHO MQTT/////////////////////////////////
 static int __subscribe(void *handle, mqtt_al_subpara_t *para)
 {
     int ret = -1;
@@ -681,8 +682,6 @@ static en_mqtt_al_connect_state __check_status(void *handle)
 
 int mqtt_imp_init()
 {
-    int ret = -1;
-
     mqtt_al_op_t paho_mqtt_op = {
         .connect = __connect,
         .disconnect = __disconnect,
@@ -692,7 +691,5 @@ int mqtt_imp_init()
         .check_status = __check_status,
     };
 
-    ret = mqtt_al_install(&paho_mqtt_op);
-
-    return ret;
+    return mqtt_al_install(&paho_mqtt_op);
 }

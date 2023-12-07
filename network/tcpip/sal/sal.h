@@ -1,5 +1,5 @@
-#ifndef __SAL_H
-#define __SAL_H
+#ifndef SAL_H
+#define SAL_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -48,4 +48,4 @@ char *inet_ntoa(struct in_addr addr);
 int inet_aton(const char *string, struct in_addr *addr);
 const char *inet_ntop(int af, const void *src, char *dst, socklen_t cnt);
 
-#endif /* __SAL_H */
+#endif /* SAL_H */

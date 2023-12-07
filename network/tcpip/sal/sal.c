@@ -1,8 +1,3 @@
-/*
- * sal.c
- */
-
-// /< attention that this file is the main implement
 #include "osal.h"
 #include "sal.h"
 #include "sal_imp.h"
