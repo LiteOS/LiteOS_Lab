@@ -52,10 +52,9 @@ static oc_mqtt_profile_cb_t s_oc_mqtt_profile_cb;
  *
  *
  * @return: 0 success while -1 failed, not used yet
- *   */
+ *  */
 
 // use this function to push all the message to the buffer
-
 #define CN_OC_MQTT_PROFILE_REQUESTID_INDEX "request_id="
 #define CN_OC_MQTT_PROFILE_MSGDOWN_INDEX "/sys/messages/down"
 #define CN_OC_MQTT_PROFILE_SETPROPERTY_INDEX "/sys/properties/set/"
@@ -156,7 +155,7 @@ int oc_mqtt_profile_connect(oc_mqtt_profile_connect_t *payload)
     return ret;
 }
 
-//  use this function to disconnect from the cloudplatform
+// use this function to disconnect from the cloudplatform
 int oc_mqtt_profile_disconnect(void)
 {
     int ret;
@@ -171,8 +170,8 @@ int oc_mqtt_profile_disconnect(void)
     return ret;
 }
 
-//  use this function to make a topic to publish
-//  if request_id  is needed depends on the fmt
+// use this function to make a topic to publish
+// if request_id  is needed depends on the fmt
 static char *topic_make(char *fmt, char *device_id, char *request_id)
 {
     int len;
@@ -193,7 +192,7 @@ static char *topic_make(char *fmt, char *device_id, char *request_id)
     return ret;
 }
 
-//  use this function to report the messsage
+// use this function to report the messsage
 #define CN_OC_MQTT_PROFILE_MSGUP_TOPICFMT "$oc/devices/%s/sys/messages/up"
 int oc_mqtt_profile_msgup(char *deviceid, oc_mqtt_profile_msgup_t *payload)
 {

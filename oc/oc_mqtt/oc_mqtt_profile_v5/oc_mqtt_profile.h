@@ -38,26 +38,26 @@
 #include <stdint.h>
 #include "oc_mqtt_al.h"
 
-//  define all the json key will be used in the profile
-#define CN_OC_JSON_KEY_SERVICEID "service_id"
-#define CN_OC_JSON_KEY_OBJECTDEVICEID "object_device_id"
-#define CN_OC_JSON_KEY_NAME "name"
-#define CN_OC_JSON_KEY_ID "id"
-#define CN_OC_JSON_KEY_CONTENT "content"
-#define CN_OC_JSON_KEY_PROPERTIES "properties"
-#define CN_OC_JSON_KEY_EVENTTIME "event_time"
-#define CN_OC_JSON_KEY_EVENTTYPE "event_type"
-#define CN_OC_JSON_KEY_DEVICES "devices"
-#define CN_OC_JSON_KEY_DEVICEID "device_id"
-#define CN_OC_JSON_KEY_RESULTCODE "result_code"
-#define CN_OC_JSON_KEY_RESPONSENAME "response_name"
-#define CN_OC_JSON_KEY_PARAS "paras"
-#define CN_OC_JSON_KEY_RESULTDESC "result_desc"
-#define CN_OC_JSON_KEY_SERVICES "services"
-#define CN_OC_JSON_KEY_SWVERSION "sw_version"
-#define CN_OC_JSON_KEY_FWVERSION "fw_version"
-#define CN_OC_JSON_KEY_VERSION "version"
-#define CN_OC_JSON_KEY_PROGRESS "progress"
+// define all the json key will be used in the profile
+#define CN_OC_JSON_KEY_SERVICEID        "service_id"
+#define CN_OC_JSON_KEY_OBJECTDEVICEID   "object_device_id"
+#define CN_OC_JSON_KEY_NAME             "name"
+#define CN_OC_JSON_KEY_ID               "id"
+#define CN_OC_JSON_KEY_CONTENT          "content"
+#define CN_OC_JSON_KEY_PROPERTIES       "properties"
+#define CN_OC_JSON_KEY_EVENTTIME        "event_time"
+#define CN_OC_JSON_KEY_EVENTTYPE        "event_type"
+#define CN_OC_JSON_KEY_DEVICES          "devices"
+#define CN_OC_JSON_KEY_DEVICEID         "device_id"
+#define CN_OC_JSON_KEY_RESULTCODE       "result_code"
+#define CN_OC_JSON_KEY_RESPONSENAME     "response_name"
+#define CN_OC_JSON_KEY_PARAS            "paras"
+#define CN_OC_JSON_KEY_RESULTDESC       "result_desc"
+#define CN_OC_JSON_KEY_SERVICES         "services"
+#define CN_OC_JSON_KEY_SWVERSION        "sw_version"
+#define CN_OC_JSON_KEY_FWVERSION        "fw_version"
+#define CN_OC_JSON_KEY_VERSION          "version"
+#define CN_OC_JSON_KEY_PROGRESS         "progress"
 
 //  UP means the device send data to the cloud
 typedef enum {
@@ -82,7 +82,7 @@ typedef enum {
     EN_OC_MQTT_PROFILE_MSG_TYPE_DOWN_LAST,
 } en_oc_mqtt_profile_msg_type_down_t;
 
-// //< enum all the data type for the oc profile
+// enum all the data type for the oc profile
 typedef enum {
     EN_OC_MQTT_PROFILE_VALUE_INT = 0,
     EN_OC_MQTT_PROFILE_VALUE_LONG,

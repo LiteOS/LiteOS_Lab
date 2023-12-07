@@ -99,7 +99,7 @@ static int raw_queue_pushdata(queue_t *queue, void *data)
     return ret;
 }
 
-// /< push a data to the queue, 0 success while -1 failed
+// push a data to the queue, 0 success while -1 failed
 int queue_push(queue_t *queue, void *data, int timeout)
 {
     int ret = -1;
@@ -124,7 +124,7 @@ int queue_push(queue_t *queue, void *data, int timeout)
     return ret;
 }
 
-// /< pop a data from the queue
+// pop a data from the queue
 static int raw_queue_pop(queue_t *queue, void **buf)
 {
     int ret = -1;
@@ -160,7 +160,7 @@ int queue_pop(queue_t *queue, void **buf, int timeout)
     return ret;
 }
 
-// /< delete the queue,if any data in the queue, which means could not kill it
+// delete the queue,if any data in the queue, which means could not kill it
 int queue_delete(queue_t *queue)
 {
     int ret = -1;

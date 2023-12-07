@@ -372,8 +372,8 @@ typedef struct {
     fn_ocmqttv5_demofunc func;
     int failtimes;
 } ocmqttv5_democase_t;
-static ocmqttv5_democase_t g_ocmqttv5_testarray []=
-{
+
+static ocmqttv5_democase_t g_ocmqttv5_testarray [] = {
     {"USERSUB", demo_usersub_topic},
     {"USERPUB", demo_userpub},
     {"USERUNSUB", demo_userunsub_topic},
@@ -452,8 +452,8 @@ static int task_reportmsg_entry(void *args)
     connect_para.security.u.cert.client_pk_len = sizeof(s_client_pk);
     connect_para.security.u.cert.client_pk_pwd = (uint8_t *)s_client_pk_pwd;
     connect_para.security.u.cert.client_pk_pwd_len = strlen(s_client_pk_pwd);
-#endif // /<endfor bidirection
-#endif // /<endfor tls
+#endif // endfor bidirection
+#endif // endfor tls
     ret = oc_mqtt_profile_connect(&connect_para);
     if ((ret != (int)en_oc_mqtt_err_ok)) {
         (void)printf("config:err :code:%d\r\n", ret);

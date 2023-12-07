@@ -42,17 +42,17 @@
 // //////////////////////////////////////////////////////////////////////////////
 
 typedef struct {
-    const char *name; // /< queue name
-    int msg_buflen;   // /< how many message could be cached
-    void **msg_buf;   // /< the message buf
-    int cur_write;    // /< point to the position to write
-    int cur_read;     // /< point to the position to read
-    int msg_num;      // /< how many message has been cached
-    // /< the multi thread  dealer, you could config it or not
-    int sync_mode;          // /< which means we do the sync or not
-    osal_semp_t sync_read;  // /< read will pend here if no message here
-    osal_semp_t sync_write; // /< write will pend here if no space here
-    osal_mutex_t lock;      // /< used to lock the queue operation
+    const char *name; // queue name
+    int msg_buflen;   // how many message could be cached
+    void **msg_buf;   // the message buf
+    int cur_write;    // point to the position to write
+    int cur_read;     // point to the position to read
+    int msg_num;      // how many message has been cached
+    // the multi thread  dealer, you could config it or not
+    int sync_mode;          // which means we do the sync or not
+    osal_semp_t sync_read;  // read will pend here if no message here
+    osal_semp_t sync_write; // write will pend here if no space here
+    osal_mutex_t lock;      // used to lock the queue operation
 } queue_t;
 
 /**

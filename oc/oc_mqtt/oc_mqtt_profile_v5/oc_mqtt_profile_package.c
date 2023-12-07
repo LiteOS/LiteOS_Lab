@@ -32,7 +32,7 @@
  * applicable export control laws and regulations.
  * --------------------------------------------------------------------------- */
 
-// //< this file used to package the data for the profile and you must make sure the data format is right
+// this file used to package the data for the profile and you must make sure the data format is right
 #include "oc_mqtt_profile.h"
 #include "cJSON.h"
 #include "oc_mqtt_profile_package.h"
@@ -521,7 +521,6 @@ Topic: $oc/devices/{device_id}/sys/events/down
     }]
 }
 */
-
 char *oc_mqtt_profile_package_event(oc_mqtt_profile_event_t *payload)
 {
     char *ret = NULL;

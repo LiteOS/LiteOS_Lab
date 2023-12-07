@@ -142,7 +142,6 @@
         MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
 #endif
 
-
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_DEPRECATE)
 #define _CRT_SECURE_NO_DEPRECATE 1
 #endif

@@ -42,6 +42,3 @@ ifeq ($(CONFIG_LINKDEMO_ENABLE), y)
     C_SOURCES += $(iot_link_root)/demos/app_demo_main.c
         
 endif
-
-
-

@@ -37,7 +37,6 @@
 
 #include <stdint.h>
 #include <stddef.h>
-
 #include "link_log.h"
 #include "link_misc.h"
 #include "osal_types.h"

@@ -102,6 +102,5 @@ int hmac_generate_passwd(char *content, int contentlen, char *key, int keylen, u
     hmac.hmac_type = MBEDTLS_MD_SHA256;
 
     ret = mbedtls_hmac_calc(&hmac);
-
     return ret;
 }
