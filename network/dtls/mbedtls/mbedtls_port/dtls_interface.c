@@ -162,7 +162,7 @@ mbedtls_ssl_context *dtls_ssl_new(dtls_establish_info_s *info, char plat_type)
         mbedtls_ssl_conf_authmode(conf, MBEDTLS_SSL_VERIFY_REQUIRED);
         mbedtls_ssl_conf_ca_chain(conf, cacert, NULL);
 
-        if (NULL != info->v.c.client_ca) { // /< setup the client key and ca
+        if (NULL != info->v.c.client_ca) { // setup the client key and ca
             ret = mbedtls_x509_crt_parse(client_ca, info->v.c.client_ca, info->v.c.client_ca_len);
             if (ret < 0) {
                 goto exit_fail;
@@ -275,7 +275,7 @@ int dtls_shakehand(mbedtls_ssl_context *ssl, const dtls_shakehand_info_s *info)
         }
     } else {
         // server_fd = (mbedtls_net_context*)atiny_net_bind(NULL, info->u.s.local_port, MBEDTLS_NET_PROTO_UDP);
-        // /< --TODO ,not implement yet
+        // --TODO ,not implement yet
     }
 
     mbedtls_ssl_set_bio(ssl, server_fd, mbedtls_net_send, mbedtls_net_recv, mbedtls_net_recv_timeout);
@@ -364,7 +364,6 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
         ret = mbedtls_ssl_close_notify(ssl);
     while (ret == MBEDTLS_ERR_SSL_WANT_WRITE);
 
-
     if (NULL != conf) {
         ctr_drbg = conf->p_rng;
 
@@ -432,19 +431,16 @@ void dtls_ssl_destroy(mbedtls_ssl_context *ssl)
 int dtls_write(mbedtls_ssl_context *ssl, const unsigned char *buf, size_t len)
 {
     int ret;
-
     ret = mbedtls_ssl_write(ssl, (unsigned char *)buf, len);
-
     if ((ret == MBEDTLS_ERR_SSL_WANT_WRITE) || (ret == MBEDTLS_ERR_SSL_TIMEOUT)) {
         ret = -1;
     } else if (ret <= 0) {
         ret = 0;
     }
-
     return ret;
 }
 
-// /< make it return as normal socket return
+// make it return as normal socket return
 int dtls_read(mbedtls_ssl_context *ssl, unsigned char *buf, size_t len, uint32_t timeout)
 {
     int ret;
@@ -452,7 +448,6 @@ int dtls_read(mbedtls_ssl_context *ssl, unsigned char *buf, size_t len, uint32_t
     mbedtls_ssl_conf_read_timeout((mbedtls_ssl_config *)ssl->conf, timeout);
 
     ret = mbedtls_ssl_read(ssl, buf, len);
-
     if ((ret == MBEDTLS_ERR_SSL_WANT_READ) || (ret == MBEDTLS_ERR_SSL_TIMEOUT)) {
         ret = -1;
     } else if (ret <= 0) {

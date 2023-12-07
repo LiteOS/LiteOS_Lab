@@ -32,7 +32,6 @@
  * applicable export control laws and regulations.
  * --------------------------------------------------------------------------- */
 
-
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>

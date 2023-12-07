@@ -102,7 +102,6 @@ static at_cb_t g_at_cb; // this is the at controller here
 static void print_ascii(const char *index, const uint8_t *data, int len)
 {
     int i = 0;
-
     link_printf("%s:%d bytes:", index, len);
     for (i = 0; i < len; i++) {
         link_printf("%c", (char)data[i]);
@@ -135,7 +134,6 @@ static void print_payload(const char *index, const uint8_t *data, int len, en_at
 static int __cmd_send(const void *buf, size_t buflen, uint32_t timeout)
 {
     ssize_t ret = 0;
-
     ret = los_dev_write(g_at_cb.devhandle, 0, buf, buflen, timeout);
     if (ret > 0) {
         print_payload("ATSND", buf, buflen, g_at_cb.txdebugmode);
@@ -150,7 +148,6 @@ static int __cmd_send(const void *buf, size_t buflen, uint32_t timeout)
 static int __resp_rcv(void *buf, size_t buflen, uint32_t timeout)
 {
     ssize_t ret = 0;
-
     ret = los_dev_read(g_at_cb.devhandle, 0, buf, buflen, timeout);
     if (ret > 0) {
         print_payload("ATRCV", buf, ret, g_at_cb.rxdebugmode);
@@ -164,7 +161,6 @@ static int __cmd_create(const void *cmdbuf, size_t cmdlen, const char *index, vo
 {
     int ret = -1;
     at_cmd_item *cmd;
-
     cmd = &g_at_cb.cmd;
     if (osal_semp_pend(cmd->cmdsync, timeout)) {
         if (osal_mutex_lock(cmd->cmdlock)) {
@@ -185,7 +181,6 @@ static int __cmd_create(const void *cmdbuf, size_t cmdlen, const char *index, vo
 static int __cmd_clear(void)
 {
     at_cmd_item *cmd;
-
     cmd = &g_at_cb.cmd;
     if (osal_mutex_lock(cmd->cmdlock)) {
         cmd->cmd = NULL;
@@ -206,7 +201,6 @@ static int __cmd_match(const void *data, size_t len)
     int ret = -1;
     int cpylen;
     at_cmd_item *cmd = NULL;
-
     cmd = &g_at_cb.cmd;
     if (osal_mutex_lock(cmd->cmdlock)) {
         if ((NULL != cmd->index) && (NULL != strstr((const char *)data, cmd->index))) {
@@ -252,7 +246,6 @@ instruction  :this task read the device continousely and blocked by the read fun
 static int __rcv_task_entry(void *args)
 {
     int rcvlen = 0;
-
     g_at_cb.devhandle = los_dev_open(g_at_cb.devname, O_RDWR);
     if (NULL == g_at_cb.devhandle) {
         LINK_LOG_DEBUG("%s:open %s err\n\r", __FUNCTION__, g_at_cb.devname);

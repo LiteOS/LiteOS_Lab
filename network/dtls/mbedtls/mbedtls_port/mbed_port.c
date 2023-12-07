@@ -32,7 +32,6 @@
  * applicable export control laws and regulations.
  * --------------------------------------------------------------------------- */
 
-
 #include <string.h>
 #include "osal.h"
 #include "dtls_al.h"
@@ -82,7 +81,6 @@ en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
         einfo.udp_or_tcp = MBEDTLS_NET_PROTO_UDP;
     }
 
-
     if (para->isclient) {
         plat_type = MBEDTLS_SSL_IS_CLIENT;
     } else {
@@ -104,7 +102,6 @@ en_dtls_al_err_t mbed_new(dtls_al_para_t *para, void **handle)
     return ret;
 }
 
-
 en_dtls_al_err_t mbed_destroy(void *handle)
 {
     en_dtls_al_err_t ret = EN_DTLS_AL_ERR_PARA;
@@ -115,14 +112,11 @@ en_dtls_al_err_t mbed_destroy(void *handle)
     return ret;
 }
 
-
-// /< make it return as normal socket return
-
+// make it return as normal socket return
 int mbed_write(void *handle, uint8_t *buf, size_t len, int timeout)
 {
     return dtls_write(handle, buf, len);
 }
-
 
 int mbed_read(void *handle, unsigned char *buf, size_t len, int timeout)
 {
@@ -145,7 +139,6 @@ int mbed_connect(void *handle, const char *server_ip, const char *server_port, i
     sinfo.timeout = timeout;
 
     ret = dtls_shakehand(handle, &sinfo);
-
     return ret;
 }
 
@@ -160,7 +153,6 @@ static const dtls_al_t  s_mbedtls_io =
         .io_destroy = mbed_destroy,
     },
 };
-
 
 int dtls_imp_init(void)
 {

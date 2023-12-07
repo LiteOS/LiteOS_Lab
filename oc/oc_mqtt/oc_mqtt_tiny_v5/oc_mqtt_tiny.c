@@ -242,7 +242,7 @@ static void bs_msg_default_deal(void *arg, mqtt_al_msgrcv_t *msg)
         cJSON_Delete(root);
     }
     osal_free(json_buf);
-    // /<any way, we still pass this message to the client and let the client known this message
+    // any way, we still pass this message to the client and let the client known this message
     if ((msg != NULL) && (msg->msg.data != NULL) && (msg->msg.len > 0) &&
         (NULL != s_oc_mqtt_tiny_cb->config.msg_deal)) {
         s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg, msg);
@@ -383,7 +383,7 @@ static int config_parameter_clone(oc_mqtt_tiny_cb_t *cb, oc_mqtt_config_t *confi
     }
     mem_len += strlen(config->server_addr) + 1;
     mem_len += strlen(config->server_port) + 1;
-    // //< now we
+    // now we
     mem_buf = osal_malloc(mem_len);
     if (NULL == mem_buf) {
         return ret;

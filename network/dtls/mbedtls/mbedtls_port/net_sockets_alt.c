@@ -37,14 +37,14 @@
 #include "sal.h"
 #include "mbedtls/net_sockets.h"
 
-// /< attention that we only port the ip dot mode and only think about the ipv4
+// attention that we only port the ip dot mode and only think about the ipv4
 
 void mbedtls_net_init(mbedtls_net_context *ctx)
 {
     ctx->fd = -1;
 }
 
-// /< resovled the host name
+// resovled the host name
 int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *port, int proto)
 {
     int ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
@@ -54,7 +54,7 @@ int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *
         return ret;
     }
 
-    // /< first we try use the gethostbyname to get the ip address, the host maybe a domain name
+    // first we try use the gethostbyname to get the ip address, the host maybe a domain name
     struct hostent *entry = NULL;
     entry = sal_gethostbyname(host);
     if (!(entry && entry->h_addr_list[0] && (entry->h_addrtype == AF_INET))) {
@@ -67,7 +67,6 @@ int mbedtls_net_connect(mbedtls_net_context *ctx, const char *host, const char *
         ctx->fd = sal_socket(AF_INET, SOCK_STREAM, 0);
     } else if (proto == MBEDTLS_NET_PROTO_UDP) {
         ctx->fd = sal_socket(AF_INET, SOCK_DGRAM, 0);
-    } else {
     }
 
     if (ctx->fd == -1) {
@@ -133,7 +132,7 @@ int mbedtls_net_recv_timeout(void *ctx, unsigned char *buf, size_t len, uint32_t
     timedelay.tv_sec = timeout / 1000;
     timedelay.tv_usec = (timeout % 1000) * 1000;
 
-    // /< set the recv timeout
+    // set the recv timeout
     if (0 != sal_setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &timedelay, sizeof(timedelay))) {
         return ret; // could not support the rcv timeout
     }

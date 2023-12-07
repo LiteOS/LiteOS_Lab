@@ -58,7 +58,6 @@ int oc_mqtt_report_version(const char *deviceID, const char *objectDeviceID, con
     const char *firmVersion);
 
 typedef enum {
-
     EN_OC_MQTT_UPGRADERET_SUCCESS = 0,
     EN_OC_MQTT_UPGRADERET_BUSY,
     EN_OC_MQTT_UPGRADERET_WEAKSIGNAL,

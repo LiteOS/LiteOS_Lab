@@ -117,6 +117,7 @@ typedef struct {
     const char *name; //  this is the name for the ops
     oc_mqtt_op_t op;
 } oc_mqtt_t;
+
 /**
  * @brief the mqtt agent should use this function to register the method for the application
  *
@@ -126,6 +127,7 @@ typedef struct {
  */
 int oc_mqtt_register(const oc_mqtt_t *opt);
 int oc_mqtt_unregister(const char *name);
+
 // ///////////////////////THE APPLICATION USER DEVELOPER INTERFACE//////////////
 //  return code defines by en_oc_mqtt_err_code
 /**
@@ -149,12 +151,14 @@ int oc_mqtt_config(oc_mqtt_config_t *param);
  * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
 int oc_mqtt_report(uint8_t *msg, int len, int qos);
+
 /**
  * @brief: the application use this function to deconfigure the mqtt agent
  *
  * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
 int oc_mqtt_deconfig(void);
+
 /**
  * @brief the application use this function to publish message to specified topic
  *
@@ -167,6 +171,7 @@ int oc_mqtt_deconfig(void);
  * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
 int oc_mqtt_publish(char *topic, uint8_t *msg, int msg_len, int qos);
+
 /**
  * @brief the application use this function to subscribe the specified topic
  *
@@ -177,6 +182,7 @@ int oc_mqtt_publish(char *topic, uint8_t *msg, int msg_len, int qos);
  * @return code: define by en_oc_mqtt_err_code while 0 means success
  */
 int oc_mqtt_subscribe(char *topic, int qos);
+
 /**
  * @brief the application use this function to unsubscribe the specified topic
  *
@@ -196,6 +202,7 @@ int oc_mqtt_unsubscribe(char *topic);
  * @return 0 success while <0 failed
  */
 int oc_mqtt_init(void);
+
 /**
  * @brief use this function to get the errcode for the oc mqtt
  *

@@ -37,7 +37,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-
 #include "osal_imp.h"
 #include "osal.h"
 

@@ -90,7 +90,6 @@ function     :bsp developer use this function to add a device to the system
 parameters   :
 instruction  :NULL if failed else return the device handle
 ****************************************************************************** */
-
 los_driv_t los_driv_register(os_driv_para_t *para)
 {
     struct driv_cb *driv = NULL;

@@ -54,7 +54,7 @@ __attribute__((weak)) void hwoc_mqtt_recvpub(const char *topic, int topiclen, ui
     return;
 }
 
-// /<ATCOMMAND:
+// ATCOMMAND:
 __attribute__((weak)) void hwoc_mqtt_log(en_oc_mqtt_log_t logtype)
 {
     if (logtype == en_oc_mqtt_log_connected) {
