@@ -1,8 +1,3 @@
-/*
- * sal_types.h
- *
- */
-
 #ifndef SAL_TYPES_H
 #define SAL_TYPES_H
 
