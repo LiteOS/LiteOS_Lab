@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,55 +22,47 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
-
+ * --------------------------------------------------------------------------- */
 
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
-
-#include <sal_imp.h>   ///< register the lwip to sal
 #include <sys/time.h>
+#include "sal_imp.h" // register the lwip to sal
 
-///< map the level and option
+// map the level and option
 static int __linux_setsockopt(int fd, int level, int option, const void *option_value, int option_len)
 {
     struct timeval *time_delay;
 
-    if(level == 0xffff)
-    {
+    if (level == 0xffff) {
         level = SOL_SOCKET;
-        if(option == 0x1006)
-        {
+        if (option == 0x1006) {
             option = SO_RCVTIMEO;
 
             time_delay = (struct timeval *)option_value;
-            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
-            {
-                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+            if ((time_delay->tv_sec == 0) && (time_delay->tv_usec == 0)) {
+                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r", __FUNCTION__);
                 time_delay->tv_usec = 1000;
             }
         }
-        if(option == 0x1005)
-        {
+        if (option == 0x1005) {
             option = SO_SNDTIMEO;
 
             time_delay = (struct timeval *)option_value;
-            if((time_delay->tv_sec == 0)&&(time_delay->tv_usec == 0))
-            {
-                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r",__FUNCTION__);
+            if ((time_delay->tv_sec == 0) && (time_delay->tv_usec == 0)) {
+                LINK_LOG_DEBUG("%s:log:::::::timeout should be mapped:::::modified it 1000 us\n\r", __FUNCTION__);
                 time_delay->tv_usec = 1000;
             }
         }
@@ -79,9 +71,7 @@ static int __linux_setsockopt(int fd, int level, int option, const void *option_
     return setsockopt(fd, level, option, option_value, option_len);
 }
 
-
-static const tag_tcpip_ops s_tcpip_socket_ops =
-{
+static const tag_tcpip_ops s_tcpip_socket_ops = {
     .socket = (fn_sal_socket)socket,
     .bind = (fn_sal_bind)bind,
     .listen = (fn_sal_listen)listen,
@@ -93,21 +83,19 @@ static const tag_tcpip_ops s_tcpip_socket_ops =
     .recvfrom = (fn_sal_recvfrom)recvfrom,
     .setsockopt = (fn_sal_setsockopt)__linux_setsockopt,
     .getsockopt = (fn_sal_getsockopt)getsockopt,
-    .shutdown =(fn_sal_shutdown)shutdown,
-    .closesocket =(fn_sal_closesocket)close,
-    .getpeername =(fn_sal_getpeername)getpeername,
+    .shutdown = (fn_sal_shutdown)shutdown,
+    .closesocket = (fn_sal_closesocket)close,
+    .getpeername = (fn_sal_getpeername)getpeername,
     .getsockname = (fn_sal_getsockname)getsockname,
     .gethostbyname = (fn_sal_gethostbyname)gethostbyname,
     .select = (fn_sal_select)select,
 };
 
-static const tag_tcpip_domain s_tcpip_socket =
-{
+static const tag_tcpip_domain s_tcpip_socket = {
     .name = "socket",
     .domain = AF_INET,
     .ops = &s_tcpip_socket_ops,
 };
-
 
 int link_tcpip_imp_init(void)
 {
@@ -115,20 +103,11 @@ int link_tcpip_imp_init(void)
 
     ret = link_sal_install(&s_tcpip_socket);
 
-    if(0 == ret)
-    {
+    if (0 == ret) {
         LINK_LOG_DEBUG("sal:install socket success\r\n");
-    }
-    else
-    {
+    } else {
         LINK_LOG_DEBUG("sal:install socket failed\r\n");
     }
 
     return ret;
 }
-
-
-
-
-
-

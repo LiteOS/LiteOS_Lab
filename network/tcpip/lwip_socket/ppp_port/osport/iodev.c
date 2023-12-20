@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,27 +22,26 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 #include "osport.h"
 #include <link_log.h>
 
 
-typedef struct
-{
-    u32_t  debugrxmode: 2;  //1means ascii 2 hex while others means no debug
-    u32_t  debugtxmode: 2;  //1means ascii 2 hex while others means no debug
+typedef struct {
+    u32_t debugrxmode : 2; // 1means ascii 2 hex while others means no debug
+    u32_t debugtxmode : 2; // 1means ascii 2 hex while others means no debug
 } tagIOCB;
 
-static tagIOCB  gIOCB;
-//import the uart here
+static tagIOCB gIOCB;
+// import the uart here
 extern s32_t uart_read(u8_t *buf, s32_t len, s32_t timeout);
 extern s32_t uart_write(u8_t *buf, s32_t len, s32_t timeout);
 
@@ -59,7 +58,7 @@ s32_t uart_write(u8_t *buf, s32_t len, s32_t timeout)
 }
 
 
-//we do some port here:we port the uart
+// we do some port here:we port the uart
 s32_t iodev_open(const char *name, s32_t flags, s32_t mode)
 {
     s32_t fd = 1;
@@ -71,22 +70,14 @@ s32_t iodev_read(s32_t fd, u8_t *buf, s32_t len, s32_t timeout)
     s32_t i = 0;
     s32_t ret;
     ret = uart_read(buf, len, timeout);
-    if(ret > 0)
-    {
+    if (ret > 0) {
         LINK_LOG_DEBUG("RCV:%02x Bytes:", ret);
-        for(i = 0; i < ret; i++)
-        {
-            if(gIOCB.debugrxmode == 1)
-            {
+        for (i = 0; i < ret; i++) {
+            if (gIOCB.debugrxmode == 1) {
                 LINK_LOG_DEBUG("%c", buf[i]);
-            }
-            else if(gIOCB.debugrxmode  == 2)
-            {
+            } else if (gIOCB.debugrxmode == 2) {
                 LINK_LOG_DEBUG(" %02x", buf[i]);
-            }
-            else
-            {
-
+            } else {
             }
         }
         LINK_LOG_DEBUG("\n\r");
@@ -98,19 +89,12 @@ s32_t iodev_write(s32_t fd, u8_t *buf, s32_t len, s32_t timeout)
     s32_t ret;
     s32_t i;
     LINK_LOG_DEBUG("SND:%02x Bytes:", len);
-    for(i = 0; i < len; i++)
-    {
-        if(gIOCB.debugtxmode == 1)
-        {
+    for (i = 0; i < len; i++) {
+        if (gIOCB.debugtxmode == 1) {
             LINK_LOG_DEBUG("%c", buf[i]);
-        }
-        else if(gIOCB.debugtxmode == 2)
-        {
+        } else if (gIOCB.debugtxmode == 2) {
             LINK_LOG_DEBUG(" %02x", buf[i]);
-        }
-        else
-        {
-
+        } else {
         }
     }
     LINK_LOG_DEBUG("\n\r");
@@ -125,31 +109,21 @@ s32_t iodev_flush(s32_t fd)
 {
     unsigned char buf;
     s32_t ret;
-    do
-    {
+    do {
         ret = iodev_read(fd, &buf, 1, 0);
-    }
-    while(ret > 0);
+    } while (ret > 0);
     return 0;
 }
-void  iodev_debugmode(s32_t rxtx, u32_t mode)
+void iodev_debugmode(s32_t rxtx, u32_t mode)
 {
-    if(rxtx == 0)
-    {
+    if (rxtx == 0) {
         gIOCB.debugrxmode = mode;
-    }
-    else if(rxtx == 1)
-    {
+    } else if (rxtx == 1) {
         gIOCB.debugtxmode = mode;
-    }
-    else if(rxtx == 2)
-    {
+    } else if (rxtx == 2) {
         gIOCB.debugrxmode = mode;
         gIOCB.debugtxmode = mode;
-    }
-    else  //do nothing here
-    {
+    } else { // do nothing here
     }
     return;
 }
-

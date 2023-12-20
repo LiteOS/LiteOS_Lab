@@ -8,12 +8,12 @@
  * are permitted provided that the following conditions are met:
  *
  * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
+ * this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
  * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
+ * derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
  * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -32,7 +32,7 @@
  *
  */
 
-/**********************************************************************************
+/* *********************************************************************************
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which
@@ -40,7 +40,7 @@
  * are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance
  * with such applicable export control laws and regulations.
- **********************************************************************************/
+ * ******************************************************************************** */
 
 #ifndef __LWIP_PERF_H__
 #define __LWIP_PERF_H__
@@ -49,36 +49,33 @@
 #include "lwip/opt.h"
 #include "lwip/def.h"
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 /* PERF_START and PERF_STOP are called in code so its kept as empty here always */
 
-#define PERF_START    /* null definition */
-#define PERF_STOP(x)  /* null definition */
+#define PERF_START   /* null definition */
+#define PERF_STOP(x) /* null definition */
 
 #if LWIP_PERF
 
-void
-perf_print(u32_t start_ms, u32_t end_ms, char *key);
+void perf_print(u32_t start_ms, u32_t end_ms, char *key);
 
 #define LWIP_PERF_DECLARATION u32_t start_ms, end_ms
-#define LWIP_PERF_START  start_ms = sys_now()
-#define LWIP_PERF_STOP(x)  end_ms = sys_now(); \
-                       perf_print(start_ms, end_ms, x)
+#define LWIP_PERF_START start_ms = sys_now()
+#define LWIP_PERF_STOP(x) \
+    end_ms = sys_now();   \
+    perf_print(start_ms, end_ms, x)
 
-void
-perf_init(void *data);
+void perf_init(void *data);
 
-void
-perf_fini(void *data);
+void perf_fini(void *data);
 
 #endif /* LWIP_PERF */
 
-#ifdef  __cplusplus
+#ifdef __cplusplus
 }
 #endif
 
 #endif /* __LWIP_PERF_H__ */
-

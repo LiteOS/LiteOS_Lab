@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,15 +22,15 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
 #include "mbedtls/config.h"
@@ -38,18 +38,15 @@
 #include MBEDTLS_CONFIG_FILE
 #endif
 
-
-#include <osal.h>
-
-#include <timing_alt.h>
+#include "osal.h"
+#include "timing_alt.h"
 
 unsigned long mbedtls_timing_get_timer(struct mbedtls_timing_hr_time *val, int reset)
 {
     struct mbedtls_timing_hr_time now;
     now.timer_ms = osal_sys_time();
 
-    if (reset)
-    {
+    if (reset) {
         val->timer_ms = now.timer_ms;
     }
 
@@ -61,13 +58,12 @@ unsigned long mbedtls_timing_get_timer(struct mbedtls_timing_hr_time *val, int r
  */
 void mbedtls_timing_set_delay(void *data, uint32_t int_ms, uint32_t fin_ms)
 {
-    mbedtls_timing_delay_context *ctx = (mbedtls_timing_delay_context *) data;
+    mbedtls_timing_delay_context *ctx = (mbedtls_timing_delay_context *)data;
 
     ctx->int_ms = int_ms;
     ctx->fin_ms = fin_ms;
 
-    if (fin_ms != 0)
-    {
+    if (fin_ms != 0) {
         (void)mbedtls_timing_get_timer(&ctx->timer, 1);
     }
 }
@@ -80,23 +76,19 @@ int mbedtls_timing_get_delay(void *data)
     mbedtls_timing_delay_context *ctx = (mbedtls_timing_delay_context *)data;
     unsigned long elapsed_ms;
 
-    if (ctx->fin_ms == 0)
-    {
+    if (ctx->fin_ms == 0) {
         return -1;
     }
 
     elapsed_ms = mbedtls_timing_get_timer(&ctx->timer, 0);
 
-    if (elapsed_ms >= ctx->fin_ms)
-    {
+    if (elapsed_ms >= ctx->fin_ms) {
         return 2;
     }
 
-    if (elapsed_ms >= ctx->int_ms)
-    {
+    if (elapsed_ms >= ctx->int_ms) {
         return 1;
     }
 
     return 0;
 }
-

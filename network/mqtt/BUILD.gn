@@ -1,0 +1,79 @@
+#----------------------------------------------------------------------------
+# Copyright (c) <2016-2018>, <Huawei Technologies Co., Ltd>
+# All rights reserved.
+# Redistribution and use in source and binary forms, with or without modification,
+# are permitted provided that the following conditions are met:
+# 1. Redistributions of source code must retain the above copyright notice, this list of
+# conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright notice, this list
+# of conditions and the following disclaimer in the documentation and/or other materials
+# provided with the distribution.
+# 3. Neither the name of the copyright holder nor the names of its contributors may be used
+# to endorse or promote products derived from this software without specific prior written
+# permission.
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#---------------------------------------------------------------------------#/
+#----------------------------------------------------------------------------
+# Notice of Export Control Law
+# ===============================================
+# Huawei LiteOS may be subject to applicable export control laws and regulations, which might
+# include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
+# Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
+# applicable export control laws and regulations.
+#---------------------------------------------------------------------------
+
+mqtt_paho_inc = [
+    "paho_mqtt/paho/MQTTClient-C/src",
+    "paho_mqtt/paho/MQTTPacket/src",
+    "paho_mqtt/port",
+    "../../inc",
+    "../../os/osal",
+    "../../link_misc",
+    "../../iot_device_sdk_tiny_config",
+    "../../queue",
+    "../../network/mqtt/mqtt_al",
+    "../../network/dtls/dtls_al",
+]
+
+mqtt_paho_src = [
+    "mqtt_al/mqtt_al.c",
+    "paho_mqtt/port/paho_mqtt_port.c",
+    "paho_mqtt/paho/MQTTClient-C/src/MQTTClient.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTConnectClient.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTConnectServer.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTDeserializePublish.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTFormat.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTPacket.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTSerializePublish.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTSubscribeClient.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTSubscribeServer.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTUnsubscribeClient.c",
+    "paho_mqtt/paho/MQTTPacket/src/MQTTUnsubscribeServer.c",
+]
+
+mqtt_paho_defs = [
+    "MQTTCLIENT_PLATFORM_HEADER=paho_osdepends.h",
+]
+
+mqtt_cflags = [
+    "-Wno-sign-compare",
+    "-Wno-unused-parameter",
+    "-Wno-unused-function",
+]
+
+static_library("mqtt") {
+    cflags = mqtt_cflags
+    defines = mqtt_paho_defs
+    sources = mqtt_paho_src
+    include_dirs = mqtt_paho_inc
+}

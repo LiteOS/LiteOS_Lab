@@ -16,4 +16,3 @@ include $(iot_link_root)/network/lwm2m/lwm2m.mk
 #configure the coap
 include $(iot_link_root)/network/coap/coap.mk
 
-

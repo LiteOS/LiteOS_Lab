@@ -12,6 +12,7 @@ SDK提供端云协同能力，集成了MQTT、LwM2M、CoAP、mbedtls、LwIP 全�
 * [极简版本SDK移植指南](./docs/Light_SDK_Developer_Guide.md)
 * [SDK移植案例](./docs/SDK_Demos_List.md)
 * [上电即上华为云IoT开发板列表](https://bbs.huaweicloud.com/blogs/301160)
+* [基于OpenHarmony对接华为云](./docs/OHOSBUILD.md)
 
 ## 开源协议
 

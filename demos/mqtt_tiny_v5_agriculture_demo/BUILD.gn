@@ -1,0 +1,43 @@
+# Copyright (c) 2020 Nanjing Xiaoxiongpai Intelligent Technology Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+static_library("mqtt_tiny_v5_agriculture_demo") {
+  sources = [
+    "mqtt_v5_oc_agriculture_sample.c",
+    "src/E53_IA1.c",
+    "src/wifi_connect.c",
+  ]
+
+  include_dirs = [
+    "//base/iot_hardware/peripheral/interfaces/kits",
+    "//device/board/bearpi/bearpi_hm_nano/iot_hardware_hals/include",
+    "//foundation/communication/wifi_lite/interfaces/wifiservice",
+    "//third_party/cJSON",
+    "//third_party/iot_device_sdk_c_tiny/oc/oc_mqtt/oc_mqtt_al",
+    "//third_party/iot_device_sdk_c_tiny/oc/oc_mqtt/oc_mqtt_profile_v5",
+    "//third_party/iot_device_sdk_c_tiny/inc",
+    "//third_party/iot_device_sdk_c_tiny/os/osal",
+    "//third_party/iot_device_sdk_c_tiny/os/ohos",
+    "include",
+    "//third_party/iot_device_sdk_c_tiny/iot_device_sdk_tiny_config",
+    "//third_party/iot_device_sdk_c_tiny/queue",
+    "//third_party/iot_device_sdk_c_tiny/link_misc",
+    "../demo",
+    "../../network/mqtt/mqtt_al",
+    "../../network/dtls/dtls_al",
+  ]
+
+  deps = [
+    "//third_party/iot_device_sdk_c_tiny:iot_device_sdk_c_tiny",
+  ]
+}

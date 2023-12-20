@@ -10,4 +10,3 @@ include $(iot_link_root)/oc/oc_lwm2m/oc_lwm2m.mk
 #configure the oc coap
 include $(iot_link_root)/oc/oc_coap/oc_coap.mk
 
-

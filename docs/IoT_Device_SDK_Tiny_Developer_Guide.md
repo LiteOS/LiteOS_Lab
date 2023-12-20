@@ -235,17 +235,17 @@
 ```c
 typedef struct
 {
-   ///< connect to the server
+   // connect to the server
    void* (* connect)   (mqtt_al_conpara_t *param);
-   ///< disconnect from the server
+   // disconnect from the server
    int    (* disconnect)(void *handle );
-   ///< publish a message to the server
+   // publish a message to the server
    int	   (* publish)    (void *handle, mqtt_al_pubpara_t *msg);
-   ///< subscribe a topic to the server
+   // subscribe a topic to the server
    int    (* subscribe)   (void *handle, mqtt_al_subpara_t *subpara);
-   ///< unsubscribe a topic to the server
+   // unsubscribe a topic to the server
    int    (* unsubscribe) (void *handle, mqtt_al_unsubpara_t *unsubpara);
-   ///< check the mqtt engine status
+   // check the mqtt engine status
    en_mqtt_al_connect_state (* check_status) (void *handle);
 }mqtt_al_op_t;
 int mqtt_al_install(mqtt_al_op_t *op);
@@ -314,17 +314,17 @@ typedef struct
 ```c
 typedef struct
 {
-   ///< coap init, prepare context, session, etc
+   // coap init, prepare context, session, etc
    int    (* init)     (coap_al_initpara_t *initparam);
-   ///< coap deinit
+   // coap deinit
    int    (* deinit)   (void *handle);
-   ///< coap add option
+   // coap add option
    void*  (* add_opt)  (coap_al_optpara_t *optparam);
-   ///< new coap request
+   // new coap request
    void*  (* request)  (coap_al_reqpara_t *reqparam);
-   ///< send a request to server
+   // send a request to server
    int	   (* send)     (coap_al_sndpara_t *sndparam);
-   ///< recv and handle response from server
+   // recv and handle response from server
    int    (* recv)     (coap_al_rcvpara_t *rcvparam);
 }coap_al_op_t;
 int coap_al_install(coap_al_op_t *op);

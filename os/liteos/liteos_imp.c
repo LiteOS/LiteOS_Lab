@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------
+/* ----------------------------------------------------------------------------
  * Copyright (c) <2018>, <Huawei Technologies Co., Ltd>
  * All rights reserved.
  * Redistribution and use in source and binary forms, with or without modification,
@@ -22,46 +22,46 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *---------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------
+ * --------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
  * Notice of Export Control Law
  * ===============================================
  * Huawei LiteOS may be subject to applicable export control laws and regulations, which might
  * include those applicable to Huawei LiteOS of U.S. and the country in which you are located.
  * Import, export and usage of Huawei LiteOS in any manner by you shall be in compliance with such
  * applicable export control laws and regulations.
- *---------------------------------------------------------------------------*/
+ * --------------------------------------------------------------------------- */
 
-//include the file which implement the function
-#include  <string.h>
-#include  <osal_imp.h>
+// include the file which implement the function
+#include <string.h>
+#include "osal_imp.h"
 
-///< this is implement for the task
-#include <los_task.ph>
-#include <los_queue.h>
+//  this is implement for the task
+#include "los_task.ph"
+#include "los_queue.h"
 static void __task_sleep(int ms)
 {
-    (void)LOS_TaskDelay(ms);//which tick is ms
+    (void)LOS_TaskDelay(ms); // which tick is ms
     return;
 }
 
-static void *__task_create(const char *name,int (*task_entry)(void *args),\
-        void *args,int stack_size,void *stack,int prior)
+static void *__task_create(const char *name, int (*task_entry)(void *args), void *args, int stack_size, void *stack,
+    int prior)
 {
     void *ret = NULL;
     UINT32 uwRet = LOS_OK;
-    UINT32  handle;
+    UINT32 handle;
     TSK_INIT_PARAM_S task_init_param;
 
-    memset (&task_init_param, 0, sizeof (TSK_INIT_PARAM_S));
+    memset(&task_init_param, 0, sizeof(TSK_INIT_PARAM_S));
 
     task_init_param.uwArg = (unsigned int)(uintptr_t)args;
     task_init_param.usTaskPrio = (unsigned short)prior;
-    task_init_param.pcName =(char *) name;
+    task_init_param.pcName = (char *)name;
     task_init_param.pfnTaskEntry = (TSK_ENTRY_FUNC)task_entry;
     task_init_param.uwStackSize = stack_size;
     uwRet = LOS_TaskCreate(&handle, &task_init_param);
-    if(LOS_OK != uwRet){
+    if (LOS_OK != uwRet) {
         return ret;
     }
     ret = (void *)(uintptr_t)handle;
@@ -72,11 +72,9 @@ static int __task_kill(void *task)
 {
     int ret = -1;
     UINT32 handle;
-    if(NULL != task)
-    {
-        handle = (UINT32) (uintptr_t)task;
-        if(LOS_OK == LOS_TaskDelete(handle))
-        {
+    if (NULL != task) {
+        handle = (UINT32)(uintptr_t)task;
+        if (LOS_OK == LOS_TaskDelete(handle)) {
             ret = 0;
         }
     }
@@ -89,182 +87,98 @@ static void __task_exit()
     UINT32 handle;
     handle = LOS_CurTaskIDGet();
 
-    (void) LOS_TaskDelete(handle);
+    (void)LOS_TaskDelete(handle);
 
     return;
 }
 
-///< this is implement for the mutex
+//  this is implement for the mutex
 #include <los_mux.h>
-//creat a mutex for the os
-static bool_t  __mutex_create(osal_mutex_t *mutex)
+// creat a mutex for the os
+static bool_t __mutex_create(osal_mutex_t *mutex)
 {
-    if(LOS_OK == LOS_MuxCreate((UINT32 *)mutex))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-//lock the mutex
-static bool_t  __mutex_lock(osal_mutex_t mutex)
-{
-    if(LOS_OK == LOS_MuxPend((UINT32)(uintptr_t)mutex,LOS_WAIT_FOREVER))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (LOS_OK == LOS_MuxCreate((UINT32 *)mutex));
 }
 
-//unlock the mutex
-static bool_t  __mutex_unlock(osal_mutex_t mutex)
+// lock the mutex
+static bool_t __mutex_lock(osal_mutex_t mutex)
 {
-    if(LOS_OK == LOS_MuxPost((UINT32)(uintptr_t)mutex))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-//delete the mutex
-static bool_t  __mutex_del(osal_mutex_t mutex)
-{
-    if(LOS_OK == LOS_MuxDelete((UINT32)(uintptr_t)mutex))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (LOS_OK == LOS_MuxPend((UINT32)(uintptr_t)mutex, LOS_WAIT_FOREVER));
 }
 
+// unlock the mutex
+static bool_t __mutex_unlock(osal_mutex_t mutex)
+{
+    return (LOS_OK == LOS_MuxPost((UINT32)(uintptr_t)mutex));
+}
+// delete the mutex
+static bool_t __mutex_del(osal_mutex_t mutex)
+{
+    return (LOS_OK == LOS_MuxDelete((UINT32)(uintptr_t)mutex));
+}
 
-///< this is implement for the semp
+//  this is implement for the semp
 #include <los_sem.h>
 
-
-//semp of the os
-static bool_t  __semp_create(osal_semp_t *semp,int limit,int initvalue)
+// semp of the os
+static bool_t __semp_create(osal_semp_t *semp, int limit, int initvalue)
 {
-    extern UINT32 osSemCreate (UINT16 usCount, UINT16 usMaxCount, UINT32 *puwSemHandle);
-    if(LOS_OK == osSemCreate(initvalue,limit,(UINT32 *)semp))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    extern UINT32 osSemCreate(UINT16 usCount, UINT16 usMaxCount, UINT32 * puwSemHandle);
+    return (LOS_OK == osSemCreate(initvalue, limit, (UINT32 *)semp));
 }
-static bool_t  __semp_pend(osal_semp_t semp,unsigned int timeout)
+static bool_t __semp_pend(osal_semp_t semp, unsigned int timeout)
 {
-    if(timeout == cn_osal_timeout_forever)
-    {
+    if (timeout == cn_osal_timeout_forever) {
         timeout = LOS_WAIT_FOREVER;
     }
 
-    if(LOS_OK == LOS_SemPend((unsigned int)(UINT32)(uintptr_t)semp,(UINT32)timeout))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-static bool_t  __semp_post(osal_semp_t semp)
-{
-    if(LOS_OK == LOS_SemPost((UINT32)(uintptr_t)semp))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (LOS_OK == LOS_SemPend((unsigned int)(UINT32)(uintptr_t)semp, (UINT32)timeout));
 }
 
-static bool_t  __semp_del(osal_semp_t semp)
+static bool_t __semp_post(osal_semp_t semp)
 {
-    if(LOS_OK == LOS_SemDelete((UINT32)(uintptr_t)semp))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (LOS_OK == LOS_SemPost((UINT32)(uintptr_t)semp));
 }
 
+static bool_t __semp_del(osal_semp_t semp)
+{
+    return (LOS_OK == LOS_SemDelete((UINT32)(uintptr_t)semp));
+}
 
 #include "los_queue.h"
 
-static bool_t __queue_create(osal_queue_t *queue,int len,int msgsize)
+static bool_t __queue_create(osal_queue_t *queue, int len, int msgsize)
 {
-    if(LOS_QueueCreate("osal_queue",len,(UINT32 *)queue,0,msgsize)==LOS_OK)
-        return true;
-    else
-        return false;
+    return (LOS_QueueCreate("osal_queue", len, (UINT32 *)queue, 0, msgsize) == LOS_OK);
 }
 
 static bool_t __queue_send(osal_queue_t queue, void *pbuf, unsigned int bufsize, unsigned int timeout)
 {
-    UINT32 ret = LOS_OK;
-
-    if(timeout == cn_osal_timeout_forever)
+    if (timeout == cn_osal_timeout_forever)
         timeout = LOS_WAIT_FOREVER;
 
-    ret=LOS_QueueWriteCopy((UINT32)queue, pbuf, bufsize, timeout);
-
-    if(ret==LOS_OK)
-        return  true;
-    else
-        return false;
+    return (LOS_QueueWriteCopy((UINT32)queue, pbuf, bufsize, timeout) == LOS_OK);
 }
-
 
 static bool_t __queue_recv(osal_queue_t queue, void *pbuf, unsigned int *bufsize, unsigned int timeout)
 {
-    UINT32 ret = LOS_OK;
-
-    ret = LOS_QueueReadCopy((UINT32)queue, pbuf, bufsize, timeout);
-    if(ret==LOS_OK){
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return (LOS_QueueReadCopy((UINT32)queue, pbuf, bufsize, timeout) == LOS_OK);
 }
 
 static bool_t __queue_del(osal_queue_t queue)
 {
-    if(LOS_QueueDelete((int)queue)==LOS_OK)
-        return true;
-    else
-        return false;
+    return (LOS_QueueDelete((int)queue) == LOS_OK);
 }
 
-
-///< this implement for the memory management
+//  this implement for the memory management
 #include <los_memory.h>
-
 
 static void *__mem_malloc(int size)
 {
     void *ret = NULL;
 
-    if(size > 0)
-    {
-        ret = LOS_MemAlloc(m_aucSysMem0,size);
+    if (size > 0) {
+        ret = LOS_MemAlloc(m_aucSysMem0, size);
     }
 
     return ret;
@@ -272,47 +186,40 @@ static void *__mem_malloc(int size)
 
 static void __mem_free(void *addr)
 {
-    (void) LOS_MemFree(m_aucSysMem0,addr);
+    (void)LOS_MemFree(m_aucSysMem0, addr);
 }
 
 void *los_mem_realloc(void *old, int newlen)
 {
-
     return LOS_MemRealloc(m_aucSysMem0, old, newlen);
 }
 
-
-///< sys time
+//  sys time
 #include <los_sys.ph>
 
-extern UINT64 osKernelGetTickCount (void);
-static unsigned long long __get_sys_time()
+extern UINT64 osKernelGetTickCount(void);
+static unsigned long long __get_sys_time(void)
 {
     return osKernelGetTickCount() * (OS_SYS_MS_PER_SECOND / LOSCFG_BASE_CORE_TICK_PER_SECOND);
 }
 
 __attribute__((weak)) int liteos_reboot()
 {
-    ///< waiting for the dog if not impelment. you could implement it your self
+    //  waiting for the dog if not impelment. you could implement it your self
     return 0;
 }
 
-
-//interrupt
-//#include <los_hwi.h>
-static int __int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void* arg)
+// interrupt
+// #include <los_hwi.h>
+static int __int_connect(int intnum, int prio, int mode, fn_interrupt_handle callback, void *arg)
 {
-	extern UINT32 LOS_HwiCreate(HWI_HANDLE_T  uwHwiNum, \
-	                            HWI_PRIOR_T   usHwiPrio, \
-	                            HWI_MODE_T    usMode, \
-	                            HWI_PROC_FUNC pfnHandler, \
-	                            HWI_ARG_T     uwArg \
-	                            );
-	return LOS_HwiCreate((HWI_HANDLE_T)intnum, (HWI_PRIOR_T)prio,(HWI_MODE_T) mode, (HWI_PROC_FUNC)callback, (HWI_ARG_T)(uintptr_t)arg);
+    extern UINT32 LOS_HwiCreate(HWI_HANDLE_T uwHwiNum, HWI_PRIOR_T usHwiPrio, HWI_MODE_T usMode,
+        HWI_PROC_FUNC pfnHandler, HWI_ARG_T uwArg);
+    return LOS_HwiCreate((HWI_HANDLE_T)intnum, (HWI_PRIOR_T)prio, (HWI_MODE_T)mode, (HWI_PROC_FUNC)callback,
+        (HWI_ARG_T)(uintptr_t)arg);
 }
 
-static const tag_os_ops s_liteos_ops =
-{
+static const tag_os_ops s_liteos_ops = {
     .task_sleep = __task_sleep,
     .task_create = __task_create,
     .task_kill = __task_kill,
@@ -339,28 +246,15 @@ static const tag_os_ops s_liteos_ops =
     .get_sys_time = __get_sys_time,
     .reboot = liteos_reboot,
 
-	.int_connect = __int_connect,
+    .int_connect = __int_connect,
 };
 
-
-
-static const tag_os s_link_liteos =
-{
+static const tag_os s_link_liteos = {
     .name = "LiteOS",
     .ops = &s_liteos_ops,
 };
 
 int os_imp_init(void)
 {
-    int ret = -1;
-
-    ret = osal_install(&s_link_liteos);
-
-    return ret;
+    return osal_install(&s_link_liteos);
 }
-
-
-
-
-
-

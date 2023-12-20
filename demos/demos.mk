@@ -43,5 +43,3 @@ ifeq ($(CONFIG_LINKDEMO_ENABLE), y)
         
 endif
 
-
-

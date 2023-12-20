@@ -45,8 +45,8 @@ include_common = [
   "src",
 ]
 
-static_library("libHWSecureC") {
+static_library("HWSecureC") {
   sources = src_libHWSecureC
   include_dirs = include_common
-  output_dir = "${root_out_dir}/lib/${HOST_ARCH}"
+  #output_dir = "${root_out_dir}/lib/${HOST_ARCH}"
 }
