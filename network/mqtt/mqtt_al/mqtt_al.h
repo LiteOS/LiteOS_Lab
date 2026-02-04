@@ -70,6 +70,18 @@ typedef enum {
     en_mqtt_al_version_3_1_1,
 } en_mqtt_al_verison;
 
+/* * @brief  defines for the message will be passed to the application dealer */
+typedef struct {
+    mqtt_al_string_t topic; // message topic
+    mqtt_al_string_t msg;   // the topic message payload
+    en_mqtt_al_qos_t qos;   // message qos
+    int dup;                // message dup times
+    int retain;             // retain or not
+} mqtt_al_msgrcv_t;
+
+/* * @brief  defines the mqtt received message dealer, called by mqtt engine */
+typedef void (*fn_mqtt_al_msg_dealer)(void *arg, mqtt_al_msgrcv_t *msg);
+
 /* * @brief defines the paramter for the mqtt connect */
 typedef struct {
     mqtt_al_string_t serveraddr;  // mqtt server:support domain name and dot format
@@ -84,6 +96,7 @@ typedef struct {
     unsigned short keepalivetime; // keep alive time
     char conret;                  // mqtt connect code, return by server
     int timeout;                  // how much time will be blocked
+    fn_mqtt_al_msg_dealer defaultdealer; // default message handler: used to deal the unsubscribed messages
 } mqtt_al_conpara_t;
 
 /* * @brief defines for the mqtt publish */
@@ -94,18 +107,6 @@ typedef struct {
     int retain;             // message retain :1 retain while 0 not
     int timeout;            // how much time will blocked
 } mqtt_al_pubpara_t;
-
-/* * @brief  defines for the message will be passed to the application dealer */
-typedef struct {
-    mqtt_al_string_t topic; // message topic
-    mqtt_al_string_t msg;   // the topic message payload
-    en_mqtt_al_qos_t qos;   // message qos
-    int dup;                // message dup times
-    int retain;             // retain or not
-} mqtt_al_msgrcv_t;
-
-/* * @brief  defines the mqtt received message dealer, called by mqtt engine */
-typedef void (*fn_mqtt_al_msg_dealer)(void *arg, mqtt_al_msgrcv_t *msg);
 
 /* * @brief defines the mqtt subscribe parameter */
 typedef struct {

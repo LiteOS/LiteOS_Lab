@@ -67,7 +67,7 @@ int MQTTClientInit(MQTTClient* c, Network* network, unsigned int command_timeout
     c->isconnected = 0;
     c->cleansession = 0;
     c->ping_outstanding = 0;
-    c->defaultMessageHandler = NULL;
+    c->defaultMessageHandler.fp = NULL;
 	c->next_packetid = 1;
     TimerInit(&c->last_sent);
     TimerInit(&c->last_received);
@@ -326,10 +326,12 @@ int deliverMessage(MQTTClient* c, MQTTString* topicName, MQTTMessage* message)
         }
     }
 
-    if (rc == FAILURE && c->defaultMessageHandler != NULL)
+    if (rc == FAILURE && c->defaultMessageHandler.fp != NULL)
     {
         MessageData md;
         NewMessageData(&md, topicName, message);
+        md.arg = c->defaultMessageHandler.arg;   ///< --modified,we need a args for the handler
+        LINK_LOG_DEBUG("goto default message handler...");
         c->defaultMessageHandler(&md);
         rc = MQTT_SUCCESS;
     }

@@ -104,6 +104,13 @@ typedef struct MQTTSubackData
 
 typedef void (*messageHandler)(MessageData*);
 
+struct MessageHandler
+{
+    const char* topicFilter;
+    void (*fp) (MessageData*);
+    void  *arg;
+} messageHandler;
+
 typedef struct MQTTClient
 {
     unsigned int next_packetid,
@@ -117,14 +124,9 @@ typedef struct MQTTClient
     int isconnected;
     int cleansession;
 
-    struct MessageHandlers
-    {
-        const char* topicFilter;
-        void (*fp) (MessageData*);
-        void  *arg;
-    } messageHandlers[MAX_MESSAGE_HANDLERS];      /* Message handlers are indexed by subscription topic */
+    MessageHandler messageHandlers[MAX_MESSAGE_HANDLERS];      /* Message handlers are indexed by subscription topic */
 
-    void (*defaultMessageHandler) (MessageData*);
+    MessageHandler defaultMessageHandler;      /* Used to process messages of unsubscribed topics */
 
     Network* ipstack;
     Timer last_sent, last_received;
