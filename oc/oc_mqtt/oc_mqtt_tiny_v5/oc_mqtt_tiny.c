@@ -186,18 +186,18 @@ typedef struct {
 
 //  here we implement the hub and bootstrap server command dealer
 //  the bs not debug yet
-static void hub_msg_default_deal(void *arg, mqtt_al_msgrcv_t *msg)
+static int hub_msg_default_deal(void *arg, mqtt_al_msgrcv_t *msg)
 {
     //  we pass this message to the client, and let the client to deal with
     if ((msg != NULL) && (msg->msg.data != NULL) && (msg->msg.len > 0) &&
         (NULL != s_oc_mqtt_tiny_cb->config.msg_deal)) {
         s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg, msg);
     }
-    return;
+    return (int)en_oc_mqtt_err_ok;
 }
 
 //  deal the bootstrap server messages
-static void bs_msg_default_deal(void *arg, mqtt_al_msgrcv_t *msg)
+static int bs_msg_default_deal(void *arg, mqtt_al_msgrcv_t *msg)
 {
     cJSON *root = NULL;
     cJSON *addr_item = NULL;
@@ -210,7 +210,7 @@ static void bs_msg_default_deal(void *arg, mqtt_al_msgrcv_t *msg)
 
     json_buf = osal_malloc(msg->msg.len + 1);
     if (NULL == json_buf) {
-        return;
+        return (int)en_oc_mqtt_err_sysmem;
     }
 
     (void)memcpy(json_buf, msg->msg.data, msg->msg.len);
@@ -247,7 +247,7 @@ static void bs_msg_default_deal(void *arg, mqtt_al_msgrcv_t *msg)
         (NULL != s_oc_mqtt_tiny_cb->config.msg_deal)) {
         s_oc_mqtt_tiny_cb->config.msg_deal(s_oc_mqtt_tiny_cb->config.msg_deal_arg, msg);
     }
-    return;
+    return (int)en_oc_mqtt_err_ok;
 }
 
 static char *topic_fmt(const char *fmt, const char *id)
@@ -605,6 +605,7 @@ static int dmp_connect(oc_mqtt_tiny_cb_t *cb)
     conpara.timeout = CN_OC_MQTT_TIMEOUT;
     conpara.version = en_mqtt_al_version_3_1_1;
     conpara.willmsg = NULL;
+    conpara.defaultdealer = hub_msg_default_deal; // add to deal default messages
 
     LINK_LOG_DEBUG("oc_mqtt_connect:server:%s port:%s", cb->mqtt_para.server_addr, cb->mqtt_para.server_port);
     LINK_LOG_DEBUG("oc_mqtt_connect:client_id:%s", cb->mqtt_para.mqtt_clientid);

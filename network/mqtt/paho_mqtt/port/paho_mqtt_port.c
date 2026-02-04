@@ -401,6 +401,7 @@ static int __loop_entry(void *arg)
     return 0;
 }
 
+static void general_dealer(MessageData *data);
 static void *__connect(mqtt_al_conpara_t *conparam)
 {
     void *ret = NULL;
@@ -488,6 +489,11 @@ static void *__connect(mqtt_al_conpara_t *conparam)
     } else {
         conparam->conret = conack.rc;
     }
+    // set default message handler
+    LINK_LOG_DEBUG("set default message handler");
+    c->defaultMessageHandler.fp = general_dealer;
+    c->defaultMessageHandler.arg = conparam->defaultdealer;
+
     // create the loop task here
     cb->task = osal_task_create("paho", __loop_entry, cb, 0x800, NULL, 4);
     if (NULL == cb->task) {

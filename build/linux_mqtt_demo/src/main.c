@@ -345,6 +345,8 @@ static int msg_rcv_callback(oc_mqtt_profile_msgrcv_t *msg)
     memcpy_s(app_msg->msg.cmd.payload, buf_len, msg->msg, buf_len);
     app_msg->msg.cmd.payload[buf_len] = '\0';
 
+	printf("recv msg_type:%d, msg_len:%d...\r\n", msg->type, msg->msg_len);
+
     ret = queue_push(g_app_cb.app_msg, app_msg, CONFIG_QUEUE_TIMEOUT);
     if (ret != 0) {
         free(app_msg);
